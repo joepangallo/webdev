@@ -2,7 +2,7 @@
 
 A handout for instructors and students. The interactive version of this page, with theme picker, saved checklists, planning tools and a project checker, is [`project/index.html`](index.html). Open it in a browser; it works from a downloaded folder as well as online.
 
-Each student builds **one multi-page website** across Chapters 2–5. Every chapter ends with a milestone that adds to the same site. The project covers only the material in those four chapters, not the whole course. Section numbers and chapter references follow *Fundamentals of Web Development*, 3rd ed. (Connolly & Hoar).
+Each student builds **one multi-page website** that grows with the class. Every chapter we cover ends with a milestone that adds to the same site, so the project only ever uses material that has been discussed. It covers Chapters 2–5 so far; a new milestone is added as each new chapter is covered. Section numbers and chapter references follow *Fundamentals of Web Development*, 3rd ed. (Connolly & Hoar).
 
 ## Contents
 
@@ -31,11 +31,11 @@ Each milestone has a checklist of required tasks, optional stretch goals, delive
 
 ## How the project works
 
-1. **Pick a theme** from the ten ideas below, or propose your own. The same site grows through all four milestones, so choose something you will enjoy working on.
+1. **Pick a theme** from the ten ideas below, or propose your own. The same site grows through every milestone, so choose something you will enjoy working on.
 2. **Publish early.** By the end of Milestone 1 a placeholder page is live on GitHub Pages. Every later milestone is pushed to the same repository and shows up at the same address.
 3. **Build a milestone after each chapter:** plan and publish (Chapter 2), semantic HTML (Chapter 3), one stylesheet (Chapter 4), and a data table and a form (Chapter 5).
 4. **Check as you go.** Tick off tasks on the hub page (saved in your browser), run your pages through the project checker and the W3C validator, and update the milestone log in your README.
-5. **Submit.** After Milestone 4, check every page, push the final version and submit your two links.
+5. **Submit.** Submit your repository and live site links when your instructor asks. Every milestone is pushed to the same repository, so the same two links always show your latest work.
 
 ## Theme ideas
 
@@ -194,7 +194,7 @@ Present real data in an accessible table, and collect input with a form that a k
 
 ## Rubrics
 
-Each row lists what Excellent, Proficient and Developing work looks like, with the points in *italics*. Excellent earns the row's full points, Proficient about three quarters and Developing about half (rounded to the nearest half point); missing work earns 0. The four rubrics total **100 points**, 25 per milestone. Your instructor decides how the project counts toward the course grade.
+Each row lists what Excellent, Proficient and Developing work looks like, with the points in *italics*. Excellent earns the row's full points, Proficient about three quarters and Developing about half (rounded to the nearest half point); missing work earns 0. Each milestone rubric is worth **25 points**. Your instructor decides how the project counts toward the course grade.
 
 The hub page has a self-check column on every rubric so students can estimate their score before submitting.
 

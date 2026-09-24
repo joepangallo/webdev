@@ -16,7 +16,7 @@ Every section pairs a short explanation with something to do: live code playgrou
 | [`ch4/`](ch4/index.html) | Chapter 4 · CSS 1: Selectors and Basic Styling (syntax, selectors, cascade, box model, text, variables and frameworks) |
 | [`ch5/`](ch5/index.html) | Chapter 5 · HTML 2: Tables and Forms (tables, forms, controls, accessibility, styling, validation) |
 | [`levelup/`](levelup/index.html) | Level Up · Responsive Layout & JavaScript (flexbox, grid, responsive design, JS, DOM and events, tools) |
-| [`project/`](project/index.html) | The course project for Chapters 2–5: ten theme ideas, four milestones, rubrics, starter files and an HTML checker |
+| [`project/`](project/index.html) | The incremental course project: one milestone per chapter covered so far (Chapters 2–5), ten theme ideas, rubrics, starter files and an HTML checker |
 | [`tools/playground.html`](tools/playground.html) | Full-page HTML/CSS/JS playground with templates, console, device widths and download |
 | [`glossary.html`](glossary.html) | 200+ searchable terms linked to the section that teaches each one, with a flashcard mode |
 | [`docs/`](docs/AUTHORING.md) | Authoring guide and a live component gallery for adding or editing lessons |
@@ -41,7 +41,7 @@ The dashboard shows the same map interactively, with each student's progress per
 
 ## The course project
 
-Students build **one website across Chapters 2–5**, one milestone per chapter (25 points each, 100 in total). The project covers only the material taught in those four chapters, not the whole course. After Milestone 4, students submit their repository URL and their live GitHub Pages URL. See [`project/README.md`](project/README.md) for the full handout.
+Students build **one website that grows with the class**: one milestone after each chapter discussed, each worth 25 points. The project only uses material that has been covered, which is Chapters 2–5 so far, and a new milestone is added as each new chapter is covered. Students submit their repository URL and live GitHub Pages URL when the instructor asks; every milestone is pushed to the same repository, so the same two links always show the latest work. See [`project/README.md`](project/README.md) for the full handout.
 
 | Milestone | After | Adds |
 |-----------|-------|------|
