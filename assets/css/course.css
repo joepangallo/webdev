@@ -937,3 +937,6 @@ pre.bare { background: var(--code-bg); border: 1px solid var(--code-line); borde
   .topbar, .sidebar, .section-foot, .module-foot, .widget-actions { display: none !important; }
   .page { display: block; }
 }
+
+/* A code block after other content inside a widget needs room for its floating language label */
+.widget-body .code-block:not(:first-child) { margin-top: 14px; }
