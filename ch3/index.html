@@ -275,6 +275,7 @@
     .c3-ent-btn:hover { border-color: var(--mod); }
     .c3-ent-btn .ch { font-size: 1.25rem; line-height: 1.2; min-height: 1.2em; }
     .c3-ent-btn .nm { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
+    #c3-ent-out { white-space: pre-wrap; overflow-wrap: anywhere; margin-bottom: 12px; }
     .c3-ent-render { padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); min-height: 2.6em; overflow-wrap: anywhere; margin: 0 0 12px; }
     .c3-ent-render.bad { background: var(--bad-soft); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--line)); }
     .c3-ent-info { margin-top: 10px; font-size: .9rem; min-height: 1.6em; }
@@ -966,7 +967,7 @@ Open   late!</textarea>
       <div class="c3-split">
         <div>
           <label class="c3-label" for="c3-ent-in">Text you want to show on a page</label>
-          <textarea id="c3-ent-in" class="input mono" rows="3" spellcheck="false">Use <p> for paragraphs & "quotes" © 2026 — 10 km</textarea>
+          <textarea id="c3-ent-in" class="input mono" rows="3" spellcheck="false">Use <p> for paragraphs & "quotes" © 2026 — 10&nbsp;km</textarea>
           <label class="check-row c3-mt"><input type="checkbox" id="c3-ent-named"> Also turn symbols (©, —, é…) into entities</label>
         </div>
         <div>
@@ -1322,7 +1323,7 @@ Open   late!</textarea>
     </div>
 
     <h3>Culminating activity: mark up a real page</h3>
-    <p>Below is the plain text of a blog post for a community bike shop. Turn it into a complete, valid, semantic HTML page. Everything you need is in this chapter. Work through the checklist under the preview; if you get stuck, reread the section named in each check's wording.</p>
+    <p>Below is the plain text of a blog post for a community bike shop. Turn it into a complete, valid, semantic HTML page. Everything you need is in this chapter. The CSS tab already styles <code>header</code>, <code>nav</code>, <code>main</code>, <code>figure</code> and <code>footer</code>, so the page takes shape as you add the right elements. Work through the checklist under the preview.</p>
 
     <div class="playground" data-id="c3-pg-final" data-title="Build a semantic blog post page" data-height="460" data-layout="stacked" data-challenge="Build the page until every check passes">
       <textarea data-lang="html"><!-- Turn this plain text into a complete, semantic page. -->
@@ -1359,6 +1360,17 @@ Still stuck? Visit our repair clinic page.
 
 </body>
 </html></textarea>
+      <textarea data-lang="css">/* Already written for you: these rules only kick in
+   once the matching semantic elements exist. */
+body { font-family: system-ui, sans-serif; line-height: 1.5; margin: 0; color: #1d2330; }
+header { background: #1d4e5f; color: #fff; padding: 12px 16px; }
+header a { color: #fff; }
+nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 14px; padding: 0; margin: 6px 0 0; }
+main { max-width: 640px; margin: 0 auto; padding: 8px 16px; }
+time { color: #5a6273; }
+figure { margin: 16px 0; }
+figcaption { font-size: .85rem; color: #5a6273; }
+footer { border-top: 1px solid #d9dee7; padding: 10px 16px; font-size: .85rem; color: #5a6273; }</textarea>
       <script type="application/json" class="checks">
       [
         {"label": "Starts with `<!DOCTYPE html>`, and `<html>` has a `lang` attribute", "test": "return !!doc.doctype && !!doc.documentElement.getAttribute('lang')"},
@@ -1754,7 +1766,8 @@ WD1.ready(() => {
         xStat.className = 'pill bad'; xStat.textContent = 'parse error';
         put(xOut,
           h('p', { style: { margin: 0 }, html: '<strong>Parsing stopped.</strong> A browser showing this as XHTML would display an error instead of your page:' }),
-          h('pre', { class: 'c3-xerr', text: msg }));
+          h('pre', { class: 'c3-xerr', text: msg }),
+          /\b(body|html)\b/.test(msg) ? h('p', { class: 'small muted', style: { margin: '6px 0 0' }, html: fmt('Your code is wrapped in `<html><body>` before parsing, which is why the message mentions them.') }) : null);
       } else {
         xStat.className = 'pill good'; xStat.textContent = 'well-formed';
         put(xOut, h('div', { class: 'c3-xok', html: '<strong>Well-formed.</strong> Every element is closed, correctly nested and quoted, so even the strict XML parser accepts it.' }));
@@ -2395,6 +2408,7 @@ WD1.ready(() => {
       const alt = m === 'write' ? v : m === 'empty' ? '' : null;
       let said;
       if (alt === null) said = s.link ? 'Link, ' + s.file.replace(/\.\w+$/, '') : s.file.replace(/\.\w+$/, '').replace(/[_-]/g, ' ') + ', image';
+      else if (!alt && m === 'write') said = '(type some alt text)';
       else if (!alt) said = s.link ? 'Link, ' + s.link : '(nothing: the image is skipped)';
       else said = s.link ? 'Link, ' + alt : alt + ', image';
       $('#c3-alt-say').innerHTML = '<b>SAYS</b>' + esc(said);

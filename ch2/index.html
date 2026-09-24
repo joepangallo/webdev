@@ -96,7 +96,9 @@
     .c2-slot.lost { border-color: var(--bad); } .c2-slot.lost b { background: var(--bad); color: var(--surface); }
     .c2-slot.re { border-color: var(--warn); } .c2-slot.re b { background: var(--warn); color: var(--surface); }
     .c2-log { list-style: none; padding: 10px 12px; margin: 12px 0 0; font-family: var(--font-mono); font-size: .78rem; line-height: 1.5; background: var(--code-bg); border: 1px solid var(--code-line); border-radius: 8px; max-height: 170px; overflow: auto; color: var(--code-ink); }
+    .c2-log:empty { display: none; }
     .c2-log li { margin: 0; }
+    .c2-layer-t th[scope="row"] { white-space: nowrap; }
     .c2-log li + li { margin-top: 2px; }
     .c2-log .bad { color: var(--bad); } .c2-log .good { color: var(--good); } .c2-log .warn { color: var(--warn); }
 
@@ -179,7 +181,7 @@
     .c2-u-frag { color: var(--chl); background: color-mix(in srgb, var(--chl) 14%, transparent); }
     .c2-url .c2-u-sep { color: var(--ink-3); background: none; }
     .c2-parts td:first-child { white-space: nowrap; font-weight: 700; }
-    .c2-parts td:nth-child(2) { font-family: var(--font-mono); font-size: .85rem; overflow-wrap: anywhere; min-width: 120px; }
+    .c2-parts td:nth-child(2) { font-family: var(--font-mono); font-size: .85rem; overflow-wrap: anywhere; min-width: 150px; }
 
     /* 2.3 Relative URL challenge */
     .c2-rel { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
@@ -265,6 +267,7 @@
     /* 2.5 Source vs DOM */
     .c2-sd { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
     @media (max-width: 760px) { .c2-sd { grid-template-columns: minmax(0, 1fr); } }
+    .c2-sd .field { grid-template-rows: auto 1fr; }
     .c2-sd textarea.input { font-family: var(--font-mono); font-size: .78rem; line-height: 1.55; min-height: 300px; resize: vertical; white-space: pre; overflow-wrap: normal; overflow-x: auto; }
     .c2-tree { margin: 0; font-family: var(--font-mono); font-size: .76rem; line-height: 1.6; background: var(--code-bg); border: 1px solid var(--code-line); border-radius: 8px; padding: 10px 12px; min-height: 300px; overflow: auto; white-space: pre; color: var(--code-ink); }
     .c2-tree .tg { color: var(--tk-tag); } .c2-tree .at { color: var(--tk-attr); } .c2-tree .tx { color: var(--ink-3); } .c2-tree .cm { color: var(--tk-com); font-style: italic; }
@@ -355,7 +358,7 @@
     <h3>The four layers of TCP/IP</h3>
     <p>Networking is split into <strong>layers</strong>. Each layer solves one problem and relies on the layer below it, so Wi-Fi engineers never think about web pages and web developers rarely think about radio signals. The internet's family of protocols is called <strong>TCP/IP</strong>, after its two most famous members, and it's usually described with four layers:</p>
     <div class="table-wrap">
-      <table class="data-table">
+      <table class="data-table c2-layer-t">
         <thead><tr><th scope="col">Layer</th><th scope="col">Its job</th><th scope="col">Examples</th><th scope="col">Unit of data</th></tr></thead>
         <tbody>
           <tr><th scope="row"><span class="c2-dot l0"></span>4 · Application</th><td>The conversation between programs: what is actually being said</td><td>HTTP, HTTPS, DNS, SMTP, IMAP, SSH, FTP</td><td>message</td></tr>
@@ -546,40 +549,40 @@
             <marker id="c2-mk-dns3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ok"/></marker>
           </defs>
           <!-- arrows first so boxes sit on top -->
-          <g data-on="2-8" data-active="2"><line x1="140" y1="98" x2="140" y2="240" class="arrow" marker-end="url(#c2-mk-dns)"/><text x="148" y="172" class="t-mono lbl-mod halo">www.example.com?</text></g>
+          <g data-on="2-8" data-active="2"><line x1="140" y1="98" x2="140" y2="240" class="arrow" marker-end="url(#c2-mk-dns)"/><text transform="translate(153 169) rotate(90)" text-anchor="middle" class="t-mono lbl-mod halo">www.example.com?</text></g>
           <g data-on="3-8" data-active="3"><line x1="172" y1="258" x2="266" y2="196" class="arrow" marker-end="url(#c2-mk-dns)"/></g>
           <g data-on="4-8" data-active="4">
-            <line x1="432" y1="158" x2="526" y2="66" class="arrow" marker-end="url(#c2-mk-dns)"/>
-            <line x1="528" y1="80" x2="440" y2="166" class="arrow alt" marker-end="url(#c2-mk-dns2)"/>
-            <text x="600" y="98" text-anchor="middle" class="t-mono lbl-alt halo">↩ referral to .com servers</text>
+            <line x1="432" y1="158" x2="516" y2="70" class="arrow" marker-end="url(#c2-mk-dns)"/>
+            <line x1="518" y1="84" x2="440" y2="166" class="arrow alt" marker-end="url(#c2-mk-dns2)"/>
+            <text x="605" y="106" text-anchor="middle" class="t-mono lbl-alt halo">↩ referral: .com servers</text>
           </g>
           <g data-on="5-8" data-active="5">
-            <line x1="432" y1="170" x2="526" y2="170" class="arrow" marker-end="url(#c2-mk-dns)"/>
-            <line x1="528" y1="186" x2="436" y2="186" class="arrow alt" marker-end="url(#c2-mk-dns2)"/>
-            <text x="600" y="228" text-anchor="middle" class="t-mono lbl-alt halo">↩ referral to example.com</text>
+            <line x1="432" y1="170" x2="516" y2="170" class="arrow" marker-end="url(#c2-mk-dns)"/>
+            <line x1="518" y1="186" x2="436" y2="186" class="arrow alt" marker-end="url(#c2-mk-dns2)"/>
+            <text x="605" y="230" text-anchor="middle" class="t-mono lbl-alt halo">↩ referral: example.com</text>
           </g>
           <g data-on="6-8" data-active="6">
-            <line x1="432" y1="192" x2="526" y2="290" class="arrow" marker-end="url(#c2-mk-dns)"/>
-            <line x1="528" y1="306" x2="436" y2="204" class="arrow ok" marker-end="url(#c2-mk-dns3)"/>
+            <line x1="432" y1="194" x2="516" y2="290" class="arrow" marker-end="url(#c2-mk-dns)"/>
+            <line x1="518" y1="310" x2="438" y2="210" class="arrow ok" marker-end="url(#c2-mk-dns3)"/>
             <text x="598" y="354" text-anchor="middle" class="t-mono lbl-ok halo">✓ A 203.0.113.80 · TTL 3600</text>
           </g>
           <g data-on="7-8" data-active="7">
             <line x1="266" y1="208" x2="174" y2="270" class="arrow ok" marker-end="url(#c2-mk-dns3)"/>
             <line x1="62" y1="240" x2="62" y2="100" class="arrow ok" marker-end="url(#c2-mk-dns3)"/>
-            <text transform="translate(52 172) rotate(-90)" text-anchor="middle" class="t-mono lbl-ok halo">203.0.113.80</text>
+            <text transform="translate(50 170) rotate(-90)" text-anchor="middle" class="t-mono lbl-ok halo">203.0.113.80</text>
           </g>
-          <g data-on="8" data-active="8"><line x1="172" y1="84" x2="300" y2="288" class="arrow ok" marker-end="url(#c2-mk-dns3)"/><text x="300" y="282" text-anchor="end" class="t-mono lbl-ok halo">connect to :443</text></g>
+          <g data-on="8" data-active="8"><line x1="172" y1="84" x2="300" y2="288" class="arrow ok" marker-end="url(#c2-mk-dns3)"/><text x="296" y="280" text-anchor="end" class="t-mono lbl-ok halo">connect to :443</text></g>
           <!-- nodes -->
           <g class="node" data-active="1,8"><rect class="box" x="20" y="42" width="150" height="54" rx="10"/><text x="95" y="66" text-anchor="middle" class="t-strong">Browser</text><text x="95" y="84" text-anchor="middle" class="t-sub">its own DNS cache</text></g>
           <g class="node" data-active="2"><rect class="box" x="20" y="242" width="150" height="54" rx="10"/><text x="95" y="266" text-anchor="middle" class="t-strong">Operating system</text><text x="95" y="284" text-anchor="middle" class="t-sub">stub resolver + hosts file</text></g>
           <g class="node" data-active="3,7"><rect class="box" x="270" y="150" width="160" height="56" rx="10"/><text x="350" y="175" text-anchor="middle" class="t-strong">Recursive resolver</text><text x="350" y="193" text-anchor="middle" class="t-sub">ISP, school, or 1.1.1.1</text></g>
-          <g class="node" data-active="4"><rect class="box" x="530" y="22" width="150" height="54" rx="10"/><text x="605" y="46" text-anchor="middle" class="t-strong">Root server</text><text x="605" y="64" text-anchor="middle" class="t-sub">knows every TLD</text></g>
-          <g class="node" data-active="5"><rect class="box" x="530" y="150" width="150" height="56" rx="10"/><text x="605" y="175" text-anchor="middle" class="t-strong">.com TLD server</text><text x="605" y="193" text-anchor="middle" class="t-sub">run by the registry</text></g>
-          <g class="node" data-active="6"><rect class="box" x="530" y="280" width="150" height="54" rx="10"/><text x="605" y="304" text-anchor="middle" class="t-strong">Authoritative server</text><text x="605" y="322" text-anchor="middle" class="t-sub">for example.com</text></g>
+          <g class="node" data-active="4"><rect class="box" x="520" y="22" width="170" height="54" rx="10"/><text x="605" y="46" text-anchor="middle" class="t-strong">Root server</text><text x="605" y="64" text-anchor="middle" class="t-sub">knows every TLD</text></g>
+          <g class="node" data-active="5"><rect class="box" x="520" y="150" width="170" height="56" rx="10"/><text x="605" y="175" text-anchor="middle" class="t-strong">.com TLD server</text><text x="605" y="193" text-anchor="middle" class="t-sub">run by the registry</text></g>
+          <g class="node" data-active="6"><rect class="box" x="520" y="280" width="170" height="54" rx="10"/><text x="605" y="304" text-anchor="middle" class="t-strong">Authoritative server</text><text x="605" y="322" text-anchor="middle" class="t-sub">for example.com</text></g>
           <g class="node" data-on="8" data-active="8"><rect class="box" x="300" y="292" width="140" height="54" rx="10"/><text x="370" y="316" text-anchor="middle" class="t-strong">Web server</text><text x="370" y="334" text-anchor="middle" class="t-mono t-sub">203.0.113.80</text></g>
           <!-- cache tags, updated by the page script -->
           <text id="c2-dt-b" x="95" y="32" text-anchor="middle" class="tag"></text>
-          <text id="c2-dt-o" x="95" y="234" text-anchor="middle" class="tag"></text>
+          <text id="c2-dt-o" x="95" y="318" text-anchor="middle" class="tag"></text>
           <text id="c2-dt-r" x="350" y="140" text-anchor="middle" class="tag"></text>
         </svg>
       </div>
@@ -915,7 +918,7 @@
 
     <h3>Fetching a page</h3>
     <p>The browser requests the HTML document first. As it reads the HTML, it discovers other resources (stylesheets in <code>&lt;link&gt;</code> elements, scripts, images, and fonts named inside the CSS) and requests each one. How many requests can travel at once depends on the protocol. With HTTP/1.1, browsers open up to <strong>six connections per host</strong>, and each connection carries one request at a time, so extra requests wait in line. HTTP/2 and HTTP/3 <strong>multiplex</strong> many requests over a single connection. On top of that, the <strong>browser cache</strong> keeps copies of files, so a repeat visit can skip the network for anything that hasn't expired.</p>
-    <p>DevTools draws this as a <strong>waterfall</strong>: one row per request, with time running left to right. Load the same 11-file page under different conditions and compare:</p>
+    <p>DevTools draws this as a <strong>waterfall</strong>: one row per request, with time running left to right. Load the same 17-file page under different conditions and compare:</p>
 
     <div class="widget" data-kind="Simulator" data-title="Page-load waterfall">
       <div class="c2-wf-controls">
@@ -933,7 +936,7 @@
           <tbody id="c2-wf-cmp"></tbody>
         </table>
       </div>
-      <p class="small muted">A simplified model: each network has a fixed round-trip time and bandwidth, and TCP + TLS 1.3 setup costs two round trips. Real browsers also start fetching early with a "preload scanner," but the patterns you see here match what DevTools shows.</p>
+      <p class="small muted">A simplified model: each network has a fixed round-trip time and bandwidth, TCP + TLS 1.3 setup costs two round trips, and HTTP/2 gives HTML and CSS priority over images, as browsers do. Real browsers also start fetching early with a "preload scanner," but the patterns you see here match what DevTools shows.</p>
     </div>
 
     <h3>From HTML to pixels</h3>
@@ -1077,15 +1080,15 @@ downloads, then runs…
           <g data-on="3,7" data-active="3,7"><line x1="238" y1="142" x2="134" y2="142" class="arrow ok" marker-end="url(#c2-mk-sv2)"/><text id="c2-sv-res" x="184" y="178" text-anchor="middle" class="t-mono lbl-ok halo">200 OK</text></g>
           <g data-on="2-3" data-active="2"><line x1="392" y1="100" x2="452" y2="58" class="arrow" marker-end="url(#c2-mk-sv)"/><text x="410" y="66" text-anchor="end" class="t-mono lbl-mod halo">read file</text></g>
           <g data-on="4-7" data-active="4"><line x1="392" y1="146" x2="452" y2="196" class="arrow" marker-end="url(#c2-mk-sv)"/><text x="408" y="190" text-anchor="end" class="t-mono lbl-mod halo">run script</text></g>
-          <g data-on="5-6" data-active="5"><line x1="560" y1="202" x2="588" y2="202" class="arrow" marker-end="url(#c2-mk-sv)"/><line x1="590" y1="222" x2="562" y2="222" class="arrow ok" marker-end="url(#c2-mk-sv2)"/></g>
+          <g data-on="5-6" data-active="5"><line x1="556" y1="203" x2="598" y2="203" class="arrow" marker-end="url(#c2-mk-sv)"/><line x1="600" y1="223" x2="558" y2="223" class="arrow ok" marker-end="url(#c2-mk-sv2)"/></g>
           <text data-on="5" x="690" y="264" text-anchor="end" class="t-mono lbl-mod halo">SELECT … WHERE id = 7</text>
           <text data-on="6" x="690" y="282" text-anchor="end" class="t-mono lbl-ok halo">row: "Trail Runner", 89.99</text>
           <g data-on="7" data-active="7"><line x1="452" y1="232" x2="394" y2="156" class="arrow ok" marker-end="url(#c2-mk-sv2)"/><text x="410" y="236" text-anchor="end" class="t-mono lbl-ok halo">new HTML</text></g>
           <g class="node" data-active="1,3,7"><rect class="box" x="10" y="95" width="120" height="62" rx="10"/><text x="70" y="122" text-anchor="middle" class="t-strong">Browser</text><text x="70" y="141" text-anchor="middle" class="t-sub">the client</text></g>
           <g class="node" data-active="1,2,4,7"><rect class="box" x="240" y="95" width="150" height="62" rx="10"/><text x="315" y="122" text-anchor="middle" class="t-strong">Web server</text><text x="315" y="141" text-anchor="middle" class="t-mono t-sub">nginx · port 443</text></g>
-          <g class="node" data-on="1-3" data-active="2"><rect class="box" x="454" y="20" width="170" height="58" rx="10"/><text x="539" y="45" text-anchor="middle" class="t-strong">Disk</text><text x="539" y="63" text-anchor="middle" class="t-mono t-sub">/var/www/html/about.html</text></g>
-          <g class="node" data-on="4-7" data-active="5,6"><rect class="box" x="454" y="184" width="104" height="58" rx="10"/><text x="506" y="209" text-anchor="middle" class="t-strong">PHP</text><text x="506" y="227" text-anchor="middle" class="t-mono t-sub">products.php</text></g>
-          <g class="node" data-on="4-7" data-active="5,6"><rect class="box" x="592" y="184" width="98" height="58" rx="10"/><text x="641" y="209" text-anchor="middle" class="t-strong">MySQL</text><text x="641" y="227" text-anchor="middle" class="t-sub">database</text></g>
+          <g class="node" data-on="1-3" data-active="2"><rect class="box" x="454" y="20" width="236" height="58" rx="10"/><text x="572" y="45" text-anchor="middle" class="t-strong">Disk</text><text x="572" y="63" text-anchor="middle" class="t-mono t-sub">/var/www/html/about.html</text></g>
+          <g class="node" data-on="4-7" data-active="5,6"><rect class="box" x="454" y="184" width="100" height="58" rx="10"/><text x="504" y="209" text-anchor="middle" class="t-strong">PHP</text><text x="504" y="227" text-anchor="middle" class="t-mono t-sub">products.php</text></g>
+          <g class="node" data-on="4-7" data-active="5,6"><rect class="box" x="602" y="184" width="88" height="58" rx="10"/><text x="646" y="209" text-anchor="middle" class="t-strong">MySQL</text><text x="646" y="227" text-anchor="middle" class="t-sub">database</text></g>
         </svg>
       </div>
       <ol class="steps">
@@ -1113,9 +1116,9 @@ downloads, then runs…
       <div class="c2-sb">
         <div class="c2-sb-form">
           <div class="field"><label for="c2-sb-os">Operating system</label><select id="c2-sb-os"><option value="linux">Linux</option><option value="windows">Windows Server</option><option value="macos">macOS</option><option value="any">Doesn't matter (managed hosting / CDN)</option></select></div>
-          <div class="field"><label for="c2-sb-web">Web server software</label><select id="c2-sb-web"><option value="apache">Apache HTTP Server</option><option value="nginx">Nginx</option><option value="iis">Microsoft IIS</option><option value="express">Node.js with Express</option><option value="static">None: static file host or CDN</option></select></div>
-          <div class="field"><label for="c2-sb-db">Database</label><select id="c2-sb-db"><option value="mysql">MySQL / MariaDB</option><option value="postgres">PostgreSQL</option><option value="mssql">Microsoft SQL Server</option><option value="mongo">MongoDB</option><option value="none">None</option></select></div>
-          <div class="field"><label for="c2-sb-lang">Server-side language</label><select id="c2-sb-lang"><option value="php">PHP</option><option value="node">JavaScript (Node.js)</option><option value="csharp">C# (ASP.NET)</option><option value="python">Python</option><option value="none">None (just HTML, CSS and JS files)</option></select></div>
+          <div class="field"><label for="c2-sb-web">Web server software</label><select id="c2-sb-web"><option value="apache">Apache HTTP Server</option><option value="nginx" selected>Nginx</option><option value="iis">Microsoft IIS</option><option value="express">Node.js with Express</option><option value="static">None: static file host or CDN</option></select></div>
+          <div class="field"><label for="c2-sb-db">Database</label><select id="c2-sb-db"><option value="mysql">MySQL / MariaDB</option><option value="postgres" selected>PostgreSQL</option><option value="mssql">Microsoft SQL Server</option><option value="mongo">MongoDB</option><option value="none">None</option></select></div>
+          <div class="field"><label for="c2-sb-lang">Server-side language</label><select id="c2-sb-lang"><option value="php">PHP</option><option value="node">JavaScript (Node.js)</option><option value="csharp">C# (ASP.NET)</option><option value="python" selected>Python</option><option value="none">None (just HTML, CSS and JS files)</option></select></div>
           <div class="field"><label for="c2-sb-fe">Front-end framework in the browser</label><select id="c2-sb-fe"><option value="plain">Plain HTML, CSS and JavaScript</option><option value="react">React</option><option value="angular">Angular</option><option value="vue">Vue</option></select></div>
         </div>
         <div>
@@ -2325,9 +2328,16 @@ downloads, then runs…
         { n: 'photo-3.webp', t: 'img', kb: 71, by: 'index.html', cache: true },
         { n: 'photo-4.webp', t: 'img', kb: 49, by: 'index.html', cache: true },
         { n: 'icons.svg', t: 'img', kb: 12, by: 'index.html', cache: true },
+        { n: 'thumb-1.webp', t: 'img', kb: 14, by: 'index.html', cache: true },
+        { n: 'thumb-2.webp', t: 'img', kb: 18, by: 'index.html', cache: true },
+        { n: 'thumb-3.webp', t: 'img', kb: 12, by: 'index.html', cache: true },
+        { n: 'thumb-4.webp', t: 'img', kb: 16, by: 'index.html', cache: true },
+        { n: 'thumb-5.webp', t: 'img', kb: 21, by: 'index.html', cache: true },
+        { n: 'thumb-6.webp', t: 'img', kb: 15, by: 'index.html', cache: true },
         { n: 'font.woff2', t: 'font', kb: 38, by: 'styles.css', cache: true }
       ];
-      const NETS = { fast: { rtt: 20, mbps: 100, label: 'broadband' }, mobile: { rtt: 70, mbps: 12, label: '4G' }, slow: { rtt: 300, mbps: 1.6, label: 'a slow connection' } };
+      const PRIORITY = { html: 64, css: 64, font: 24, js: 8, img: 1 };
+      const NETS = { fast: { rtt: 20, mbps: 100, label: 'broadband' }, mobile: { rtt: 90, mbps: 20, label: '4G' }, slow: { rtt: 300, mbps: 1.6, label: 'a slow connection' } };
 
       function simulate(proto, visit, netKey) {
         const net = NETS[netKey], rtt = net.rtt, bw = net.mbps / 8; // kilobytes per millisecond
@@ -2360,10 +2370,13 @@ downloads, then runs…
           R.forEach((r) => {
             if (r.st === 'req' && t >= r.fbAt) { r.st = 'dl'; r.fb = t; r.left = visit === 'repeat' && r.t === 'html' ? 0.4 : r.kb; r.revalidated = visit === 'repeat' && r.t === 'html'; }
           });
+          // Bandwidth is shared. HTTP/1.1 connections compete equally; HTTP/2 streams are
+          // prioritized the way browsers do it (HTML and CSS first, then fonts, scripts, images).
           const dl = R.filter((r) => r.st === 'dl');
           if (dl.length) {
-            const share = bw / dl.length;
-            dl.forEach((r) => { r.left -= share; if (r.left <= 0) { r.st = 'done'; r.end = t + 1; conns[r.conn].busy--; } });
+            const weight = (r) => (proto === 'h2' ? PRIORITY[r.t] : 1);
+            const sumW = dl.reduce((a, r) => a + weight(r), 0);
+            dl.forEach((r) => { r.left -= bw * weight(r) / sumW; if (r.left <= 0) { r.st = 'done'; r.end = t + 1; conns[r.conn].busy--; } });
           }
           if (R.every((r) => r.st === 'done' && r.end <= t + 1)) break;
         }

@@ -780,7 +780,7 @@ footer { background: #e9d3f0; }
       [
         {"q": "An 800px-wide grid (no gap) has `grid-template-columns: 1fr 2fr 1fr`. How wide is the middle column?", "choices": ["400px", "200px", "about 267px", "533px"], "answer": 0, "explain": "There are 1 + 2 + 1 = 4 fractions. Each is 800 / 4 = 200px, so the middle column gets 2 × 200 = 400px."},
         {"q": "Which value makes an item stretch across **every** column, however many there are?", "choices": ["`grid-column: 1 / -1`", "`grid-column: span 1`", "`grid-column: 1 / 1`", "`grid-column: all`"], "answer": 0, "explain": "Line 1 is the start edge and line -1 is the end edge, so `1 / -1` always spans the full width."},
-        {"q": "What does `grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))` do?", "choices": ["Fits as many columns at least 220px wide as the container allows, and stretches them to fill the row", "Always creates exactly 220 columns", "Makes every column exactly 220px wide", "Only works inside a media query"], "answer": 0, "explain": "It is the classic media-query-free responsive grid: 1 column on a phone, 2 on a tablet, 4 or 5 on a wide screen."},
+        {"q": "What does `grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))` do?", "choices": ["Fits as many columns at least 220px wide as the container allows, and stretches them to fill the row", "Always creates exactly 220 columns", "Makes every column exactly 220px wide", "Only works inside a media query"], "answer": 0, "explain": "It is the classic media-query-free responsive grid: one column on a phone, and another column appears each time there is room for 220px more."},
         {"q": "True or false: in `grid-template-areas`, an area may be L-shaped.", "answer": false, "explain": "Every named area must be a single rectangle. If one isn't, the whole declaration is invalid and the browser ignores it."},
         {"q": "Type the unit that means \"a fraction of the leftover space\" in a grid track.", "answer": ["fr"], "explain": "`fr` is short for fraction. `1fr 1fr` splits the free space in half."}
       ]
@@ -1247,7 +1247,7 @@ console.log(`${name} has visited ${visits} times`);  // a template literal
         <button type="button" data-v="2" aria-pressed="false">for...of + if</button>
       </div>
       <div class="lu-tr-layout">
-        <div class="lu-tr-code" id="lu-tr-code" aria-label="Program listing"></div>
+        <div class="lu-tr-code" id="lu-tr-code" role="region" aria-label="Program listing, current line highlighted"></div>
         <div>
           <span class="lu-label">Variables</span>
           <table class="lu-vars"><thead><tr><th scope="col">Name</th><th scope="col">Value</th></tr></thead><tbody id="lu-tr-vars"></tbody></table>
