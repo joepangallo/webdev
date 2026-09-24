@@ -3,16 +3,15 @@
    One stylesheet for every page. The sections follow the course milestones:
 
      1. Design tokens ............ Milestone 3
-     2. Base styles .............. Milestones 3 and 5
-     3. Layout: header, nav ...... Milestones 3 and 5
+     2. Base styles .............. Milestone 3
+     3. Layout: header, nav ...... Milestone 3
      4. Components ............... Milestone 3
      5. Tables ................... Milestone 4
      6. Forms .................... Milestone 4
-     7. Responsive ............... Milestone 5
 
-   Mobile first: every rule OUTSIDE a media query is for small screens.
-   The @media (min-width: ...) rules at the bottom add layout as screens
-   get wider.
+   The layout uses only the box model: main is a centered column (max-width
+   plus auto margins), nav links are display: inline-block with padding, and
+   cards are ordinary blocks stacked with a margin between them.
    ========================================================================== */
 
 
@@ -45,7 +44,9 @@
 }
 
 
-/* 2. Base styles ------------------------------------------------------------ */
+/* 2. Base styles (Milestone 3) ---------------------------------------------- */
+
+/* width and max-width include padding and border, so boxes add up as expected */
 *,
 *::before,
 *::after {
@@ -96,36 +97,32 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* Responsive images (Milestone 5): never wider than their container */
+/* Images (box model): never wider than the box that contains them.
+   height: auto keeps the width-to-height ratio from the HTML attributes. */
 img {
   display: block;
   max-width: 100%;
   height: auto;
 }
 
-/* "Skip to main content" link: hidden until it receives keyboard focus */
+/* "Skip to main content" link: a box with no height until it receives
+   keyboard focus, then it opens up at the top of the page */
 .skip-link {
-  position: absolute;
-  top: -100px;
-  left: var(--space-s);
-  z-index: 10;
-  padding: var(--space-s) var(--space-m);
+  display: block;
+  height: 0;
+  overflow: hidden;
   background-color: var(--color-surface);
   color: var(--color-text);
 }
 
 .skip-link:focus {
-  top: var(--space-s);
+  height: auto;
+  padding: var(--space-s) var(--space-m);
 }
 
 
-/* 3. Layout: header, nav, main, footer (Milestones 3 and 5) ---------------- */
+/* 3. Layout: header, nav, main, footer (Milestone 3) ----------------------- */
 .site-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-s);
   padding: var(--space-s) var(--space-m);
   background-color: var(--color-primary);
   color: var(--color-on-primary);
@@ -135,7 +132,12 @@ img {
   outline-color: var(--color-on-primary);
 }
 
+/* The logo and the nav are inline-block boxes: they sit side by side when
+   there is room and the nav drops to the next line when there is not. */
 .logo {
+  display: inline-block;
+  margin-right: var(--space-l);
+  padding: var(--space-s) 0;
   color: var(--color-on-primary);
   font-family: var(--font-heading);
   font-size: 1.25rem;
@@ -143,30 +145,8 @@ img {
   text-decoration: none;
 }
 
-/* The menu button only appears when JavaScript is running:
-   js/main.js adds class="js" to the <html> element. */
-.nav-toggle {
-  display: none;
-  padding: var(--space-xs) var(--space-m);
-  border: 2px solid var(--color-on-primary);
-  border-radius: var(--radius);
-  background-color: transparent;
-  color: var(--color-on-primary);
-  font: inherit;
-  cursor: pointer;
-}
-
-.js .nav-toggle {
-  display: inline-block;
-}
-
 .site-nav {
-  flex-basis: 100%;
-}
-
-/* Small screens with JavaScript: the menu stays closed until the button opens it */
-.js .site-nav:not(.is-open) {
-  display: none;
+  display: inline-block;
 }
 
 .site-nav ul {
@@ -175,9 +155,13 @@ img {
   padding: 0;
 }
 
+.site-nav li {
+  display: inline-block;
+}
+
 .site-nav a {
-  display: block;
-  padding: var(--space-s) 0;
+  display: inline-block;
+  padding: var(--space-s) var(--space-m);
   color: var(--color-on-primary);
   text-decoration: none;
 }
@@ -194,6 +178,7 @@ img {
   text-underline-offset: 0.3em;
 }
 
+/* A centered column: max-width stops it growing, auto margins center it */
 main {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -215,15 +200,15 @@ main {
   font-size: 1.2rem;
 }
 
-.card-grid {
-  display: grid;
-  gap: var(--space-m);
+.card-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* Each card is a block box: full width, stacked, a margin between cards */
 .card {
+  margin-bottom: var(--space-m);
   padding: var(--space-m);
   border-radius: var(--radius);
   background-color: var(--color-surface);
@@ -261,8 +246,8 @@ figcaption {
 
 
 /* 5. Tables (Milestone 4) ---------------------------------------------------
-   The wrapper lets a wide table scroll sideways on a phone instead of
-   stretching the whole page.
+   The wrapper lets a wide table scroll sideways inside its own box instead
+   of stretching the whole page.
    TODO Milestone 4: style your data table. Ideas:
      - padding on th and td, and border-collapse: collapse on the table
      - a bottom border on each row, or zebra stripes: tbody tr:nth-child(even)
@@ -275,13 +260,17 @@ figcaption {
 
 /* 6. Forms (Milestone 4) --------------------------------------------------- */
 .field {
-  display: grid;
-  gap: var(--space-xs);
   margin-bottom: var(--space-m);
 }
 
 label {
   font-weight: 700;
+}
+
+/* Inside a .field the label is a block, so the control sits under it */
+.field label {
+  display: block;
+  margin-bottom: var(--space-xs);
 }
 
 input,
@@ -300,6 +289,7 @@ textarea {
 input[type="checkbox"],
 input[type="radio"] {
   width: auto;
+  margin-right: var(--space-xs);
 }
 
 fieldset {
@@ -322,46 +312,3 @@ textarea:user-invalid {
 }
 
 /* TODO Milestone 4: style option rows, hints and error messages. */
-
-
-/* 7. Responsive (Milestone 5) -----------------------------------------------
-   40em is 640px and 64em is 1024px at the browser's default text size.
-   Choose breakpoints where YOUR content starts to look stretched. */
-@media (min-width: 40em) {
-  .js .nav-toggle {
-    display: none;
-  }
-
-  .site-nav,
-  .js .site-nav:not(.is-open) {
-    display: block;
-    flex-basis: auto;
-  }
-
-  .site-nav ul {
-    display: flex;
-    gap: var(--space-m);
-  }
-
-  .card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 64em) {
-  h1 {
-    font-size: 2.5rem;
-  }
-
-  .card-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* TODO Milestone 5: turn off animations for visitors who ask for less motion.
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    animation: none !important;
-  }
-} */

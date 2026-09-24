@@ -56,7 +56,7 @@ Content-Type: text/html; charset=utf-8
 
 ### 4. From HTML to a page on screen
 
-*The HTML arrives. What else does the browser request (CSS, JavaScript, images), and what does it do with them?*
+*The HTML arrives. What else does the browser request (CSS, images, fonts), and what does it do with them?*
 
 ---
 
@@ -70,8 +70,6 @@ One row per milestone: what you built, and one thing you learned or a problem yo
 | M2 · Semantic Structure | | | |
 | M3 · Style System | | | |
 | M4 · Tables and Forms | | | |
-| M5 · Responsive and Interactive | | | |
-| Final · Polish, Audit and Present | | | |
 
 ### Design notes (Milestone 3)
 
@@ -79,22 +77,16 @@ One row per milestone: what you built, and one thing you learned or a problem yo
 - Fonts: *(font stacks)*
 - Five selector types I used, with one example each: *(element, class, id, descendant or child, pseudo-class, attribute)*
 
-### Responsive plan (Milestone 5)
-
-- Breakpoints: *(for example 40em and 64em) and what changes at each*
-- JavaScript feature: *(what it does, which event it listens for, which elements it changes)*
-
-### Testing and audit (Final)
+### Testing (before you submit)
 
 | Check | Result | What I fixed |
 |-------|--------|--------------|
 | W3C HTML validator (every page) | | |
 | W3C CSS validator | | |
 | Project checker (every page) | | |
-| Lighthouse accessibility score | | |
-| Keyboard-only walkthrough | | |
-| Phone (model and browser) | | |
-| Desktop browsers tested | | |
+| Every nav link works on the live site | | |
+| Form tested with bad data (browser validation message appears) | | |
+| Keyboard-only walkthrough of the form | | |
 
 ---
 

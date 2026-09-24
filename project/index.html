@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Course Project · Web Dev I</title>
-  <meta name="description" content="One website, built all month: theme ideas, five milestones and a final, rubrics, planning tools, starter files and a project checker.">
+  <meta name="description" content="One website built across Chapters 2–5: theme ideas, four milestones, rubrics, planning tools, starter files and a project checker.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
@@ -18,8 +18,6 @@
     #m2, [data-ms="m2"] { --msc: var(--ch3); }
     #m3, [data-ms="m3"] { --msc: var(--ch4); }
     #m4, [data-ms="m4"] { --msc: var(--ch5); }
-    #m5, [data-ms="m5"] { --msc: var(--chl); }
-    #final, [data-ms="final"] { --msc: var(--visited); }
     .pj-ms { --mod: var(--msc); }
 
     .pj-hero-card {
@@ -56,26 +54,8 @@
     .pj-jp.full { color: var(--visited); font-weight: 700; }
     .pj-jump a[aria-current] .pj-jp { color: inherit; }
 
-    /* Timeline */
-    .pj-planrow { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 16px; margin-bottom: 14px; }
-    .pj-planrow .field { width: min(100%, 220px); }
-    .pj-planrow p { margin: 0; flex: 1 1 240px; }
-    .pj-weeks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-    .pj-week { display: grid; gap: 8px; align-content: start; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); min-width: 0; }
-    .pj-week.now { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent); }
-    .pj-week-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
-    .pj-week h4 { margin: 0; font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
-    .pj-week-focus { margin: 0; font-size: .82rem; color: var(--ink-3); line-height: 1.4; }
-    .pj-stop {
-      display: grid; gap: 4px; padding: 10px 12px; border-radius: 8px; background: var(--surface);
-      border: 1px solid var(--line); border-left: 4px solid var(--msc); color: var(--ink); text-decoration: none;
-    }
-    .pj-stop:hover { border-color: var(--line-2); border-left-color: var(--msc); box-shadow: var(--shadow-1); color: var(--ink); }
+    /* Milestone code label (checker headings) */
     .pj-stop-code { font-family: var(--font-mono); font-size: .75rem; font-weight: 700; color: var(--msc); }
-    .pj-stop-title { font-family: var(--font-display); font-weight: 700; line-height: 1.25; }
-    .pj-stop-meta { font-size: .78rem; color: var(--ink-3); line-height: 1.35; }
-    .pj-stop.done .pj-stop-code::after { content: " · done ✓"; color: var(--visited); }
-    @media (max-width: 760px) { .pj-weeks { grid-template-columns: minmax(0, 1fr); } }
 
     .pj-bar { display: block; height: 6px; border-radius: 99px; background: var(--surface-3); overflow: hidden; flex: 1 1 80px; min-width: 60px; }
     .pj-bar > span { display: block; height: 100%; width: 0; background: var(--visited); border-radius: 99px; transition: width .35s ease; }
@@ -257,32 +237,6 @@
     .pj-tb-prev caption { caption-side: top; text-align: left; padding: 10px 14px; font-weight: 700; border-bottom: 1px solid var(--line); }
     .pj-tb-prev .pj-num { text-align: right; font-variant-numeric: tabular-nums; }
 
-    /* Breakpoint planner */
-    .pj-bp-presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
-    .pj-bp-stage { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); margin-bottom: 10px; }
-    .pj-bp-page { transform-origin: 0 0; background: var(--surface); padding: 12px; display: grid; gap: 12px; margin: 0 auto; }
-    .pj-mk-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 15px; }
-    .pj-mk-links { display: flex; gap: 16px; font-weight: 400; }
-    .pj-mk-btn { border: 2px solid currentColor; border-radius: 6px; padding: 2px 10px; }
-    .pj-mk-hero { height: 90px; border-radius: 8px; background: var(--accent-soft); display: grid; place-items: center; color: var(--accent); font-weight: 700; font-size: 18px; }
-    .pj-mk-grid { display: grid; gap: 10px; }
-    .pj-mk-card { height: 72px; border-radius: 8px; background: var(--surface-3); display: grid; place-items: center; color: var(--ink-3); font-family: var(--font-mono); font-size: 14px; }
-    .pj-mk-foot { height: 34px; border-radius: 8px; background: var(--surface-3); }
-    .pj-bp-status { margin: 0 0 12px; font-size: .92rem; }
-
-    /* Demo timer */
-    .pj-timer { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 18px; }
-    @media (max-width: 700px) { .pj-timer { grid-template-columns: minmax(0, 1fr); } }
-    .pj-clock { font-family: var(--font-mono); font-size: clamp(2.4rem, 9vw, 3.6rem); font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; margin: 6px 0 10px; }
-    .pj-clock.over { color: var(--bad); }
-    .pj-seg-now { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; margin: 0; }
-    .pj-seg-prompt { color: var(--ink-2); margin: 4px 0 12px; }
-    .pj-seglist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
-    .pj-seglist li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 6px 10px; border-radius: 7px; border: 1px solid var(--line); margin: 0; font-size: .9rem; }
-    .pj-seglist li.now { border-color: var(--msc); background: var(--visited-soft); font-weight: 700; }
-    .pj-seglist li.past { color: var(--ink-3); }
-    .pj-seglist .num { font-family: var(--font-mono); font-size: .82rem; }
-
     /* Checker */
     .pj-ck-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); }
     .pj-ck-bar .field { flex: 1 1 200px; max-width: 320px; }
@@ -338,9 +292,9 @@
 <body data-page="project">
 <main id="main">
   <header class="module-hero" id="top">
-    <p class="eyebrow"><span class="tag">Course project</span><span>One website · 5 milestones + final</span><span>About 4 weeks</span></p>
-    <h1>Build one website, all month</h1>
-    <p class="lede">You plan, build, style, extend and publish a single multi-page site, one milestone after each chapter. By the end of the month it is live on the web, and it is your final project.</p>
+    <p class="eyebrow"><span class="tag">Course project</span><span>One website · 4 milestones</span><span>Chapters 2–5</span></p>
+    <h1>Build one website, chapter by chapter</h1>
+    <p class="lede">You plan, build, style and publish a single multi-page site, one milestone after each of Chapters 2–5. The project covers only the material in those chapters, and by the last milestone your site is live on the web.</p>
     <div class="pj-hero-card">
       <div>
         <span class="pj-kicker">Your theme</span>
@@ -370,8 +324,6 @@
       <li><a href="#m2" data-ms="m2"><b>M2</b> HTML <span class="pj-jp" data-ms-pct="m2">0%</span></a></li>
       <li><a href="#m3" data-ms="m3"><b>M3</b> CSS <span class="pj-jp" data-ms-pct="m3">0%</span></a></li>
       <li><a href="#m4" data-ms="m4"><b>M4</b> Tables &amp; forms <span class="pj-jp" data-ms-pct="m4">0%</span></a></li>
-      <li><a href="#m5" data-ms="m5"><b>M5</b> Responsive &amp; JS <span class="pj-jp" data-ms-pct="m5">0%</span></a></li>
-      <li><a href="#final" data-ms="final"><b>Final</b> <span class="pj-jp" data-ms-pct="final">0%</span></a></li>
       <li><a href="#checker">Checker</a></li>
       <li><a href="#submit">Submit</a></li>
       <li><a href="#starter">Starter files</a></li>
@@ -381,28 +333,17 @@
   <!-- ================================================================ -->
   <section class="lesson" id="how" aria-labelledby="how-h">
     <h2 id="how-h">How the project works</h2>
-    <p>Instead of a pile of unrelated exercises, you build <strong>one website</strong> all month. Each chapter ends with a milestone that applies it to your site, so every lesson turns into something you can see live on the web. The finished site is your final project.</p>
+    <p>Instead of a pile of unrelated exercises, you build <strong>one website</strong> across Chapters 2–5. Each chapter ends with a milestone that applies it to your site, so every lesson turns into something you can see live on the web. The project uses only what those four chapters teach.</p>
 
     <div class="cards">
       <div class="card"><h3>One site</h3><p>Pick a theme below. Every milestone adds to the same site, so nothing you build is thrown away.</p></div>
-      <div class="card"><h3>A milestone per chapter</h3><p>Plan and publish after Chapter 2, HTML after Chapter 3, CSS after Chapter 4, tables and forms after Chapter 5, layout and JavaScript after Level Up.</p></div>
-      <div class="card"><h3>Live from week one</h3><p>Your site is on GitHub Pages by day three, so every commit shows up at a real web address.</p></div>
+      <div class="card"><h3>A milestone per chapter</h3><p>Plan and publish after Chapter 2, HTML after Chapter 3, CSS after Chapter 4, and tables and forms after Chapter 5.</p></div>
+      <div class="card"><h3>Live from Milestone 1</h3><p>Your site is on GitHub Pages from the first milestone, so every commit shows up at a real web address.</p></div>
       <div class="card"><h3>Check as you go</h3><p>Tick off tasks here (saved in this browser), paste pages into the <a href="#checker">project checker</a>, and push to GitHub after every work session.</p></div>
     </div>
 
-    <div class="widget" data-kind="Plan" data-title="Suggested four-week pacing">
-      <div class="pj-planrow">
-        <div class="field">
-          <label for="pj-start">Course start date (optional)</label>
-          <input type="date" id="pj-start">
-        </div>
-        <p class="small muted" id="pj-start-note">Add your start date to see a target date for each milestone. Your instructor's due dates always come first.</p>
-      </div>
-      <div class="pj-weeks" id="pj-weeks"></div>
-    </div>
-
     <h3>What each milestone practices</h3>
-    <p>Every course objective shows up in the project at least once. Dots show where each objective is practiced.</p>
+    <p>Dots show which course objectives each milestone practices. Objectives that Chapters 2–5 do not cover are left out.</p>
     <div class="table-wrap" id="pj-objmap"></div>
 
     <aside class="callout warn">
@@ -413,12 +354,12 @@
     <details class="reveal">
       <summary>For instructors: running the project</summary>
       <ul>
-        <li><strong>Pacing.</strong> Each milestone lines up with the end of a chapter. The week columns are a suggestion for a one-month module; set real due dates in your LMS. Students can enter a start date above to see suggested targets.</li>
-        <li><strong>Points.</strong> The rubrics total 100 points (M1 10, M2 15, M3 15, M4 15, M5 20, Final 25). Scale them to however the project counts in your course.</li>
-        <li><strong>Grading flow.</strong> Open the student's live URL at phone and desktop widths, load their repository folder into the <a href="#checker">project checker</a> and press <em>Check every page</em>, then score with the milestone rubric.</li>
+        <li><strong>Pacing.</strong> Each milestone lines up with the end of a chapter, from Chapter 2 to Chapter 5. Set real due dates in your LMS.</li>
+        <li><strong>Points.</strong> The rubrics total 100 points, 25 per milestone. Scale them to however the project counts in your course.</li>
+        <li><strong>Grading flow.</strong> Open the student's live URL, load their repository folder into the <a href="#checker">project checker</a> and press <em>Check every page</em>, then score with the milestone rubric.</li>
         <li><strong>Evidence of learning.</strong> The README template asks for a milestone log, the Milestone 1 "How my site reaches your browser" explanation, a testing table and an AI use log. A two-minute conversation about one piece of their code is a quick originality check.</li>
         <li><strong>Privacy.</strong> Checklists, theme choice and tool settings on this page live only in the student's browser (localStorage). They are a planning aid, not a submission.</li>
-        <li><strong>Handout.</strong> <code>project/README.md</code> in the course repository has the full handout: themes, requirements, rubrics, pacing and submission steps.</li>
+        <li><strong>Handout.</strong> <code>project/README.md</code> in the course repository has the full handout: themes, requirements, rubrics and submission steps.</li>
       </ul>
     </details>
   </section>
@@ -426,7 +367,7 @@
   <!-- ================================================================ -->
   <section class="lesson" id="themes" aria-labelledby="themes-h">
     <h2 id="themes-h">Choose your theme</h2>
-    <p>Pick an idea you would enjoy for a month. Each one is sized for this course: 4–5 pages, one real data table, one form and one JavaScript feature. Your choice is saved in this browser and personalizes every milestone checklist below.</p>
+    <p>Pick an idea you would enjoy building. Each one is sized for Chapters 2–5: 4–5 pages, one real data table and one form. Your choice is saved in this browser and personalizes every milestone checklist below.</p>
     <div class="btn-row" style="margin-bottom: 14px">
       <button type="button" class="btn small" id="pj-surprise">Surprise me</button>
       <button type="button" class="btn small ghost" id="pj-clear-theme">Clear my choice</button>
@@ -436,13 +377,13 @@
     <div id="pj-detail"></div>
     <aside class="callout tip">
       <strong>Your own idea is welcome</strong>
-      It just needs the same four ingredients: 4–5 pages, data that belongs in a table, a reason for visitors to fill in a form, and one interactive feature. Run it past your instructor in week one.
+      It just needs the same three ingredients: 4–5 pages, data that belongs in a table, and a reason for visitors to fill in a form. Run it past your instructor before you start Milestone 1.
     </aside>
   </section>
 
   <!-- ================================================================ -->
   <section class="lesson pj-ms" id="m1" aria-labelledby="m1-h">
-    <p class="section-eyebrow"><span class="s-num">M1</span><span>Week 1</span><span>After Chapter 2</span><span>10 points</span><span class="s-done pj-ms-status" data-ms-status="m1"></span></p>
+    <p class="section-eyebrow"><span class="s-num">M1</span><span>After Chapter 2</span><span>25 points</span><span class="s-done pj-ms-status" data-ms-status="m1"></span></p>
     <h2 id="m1-h">Milestone 1 · Plan and Publish</h2>
     <p class="lede" data-goal="m1"></p>
     <p class="pj-builds" data-refs="m1"></p>
@@ -485,7 +426,7 @@
       <div data-tab="On github.com">
         <ol>
           <li>Sign in at github.com and choose <strong>New repository</strong>. Give it a short lowercase name (for example <code>corner-cup-coffee</code>), make it <strong>Public</strong>, and create it.</li>
-          <li>On the empty repository page, choose <strong>uploading an existing file</strong>. Drag in the <em>contents</em> of your project folder (<code>index.html</code>, <code>css</code>, <code>js</code>, <code>images</code>…), not the folder itself, then <strong>Commit changes</strong>.</li>
+          <li>On the empty repository page, choose <strong>uploading an existing file</strong>. Drag in the <em>contents</em> of your project folder (<code>index.html</code>, <code>css</code>, <code>images</code>…), not the folder itself, then <strong>Commit changes</strong>.</li>
           <li>Open <strong>Settings → Pages</strong>. Under <em>Build and deployment</em>, set Source to <strong>Deploy from a branch</strong>, Branch to <strong>main</strong> and folder to <strong>/ (root)</strong>, then <strong>Save</strong>.</li>
           <li>Wait a minute or two and refresh the Pages settings: the address of your live site appears at the top. Open it in a private window to be sure.</li>
         </ol>
@@ -522,7 +463,7 @@
 
   <!-- ================================================================ -->
   <section class="lesson pj-ms" id="m2" aria-labelledby="m2-h">
-    <p class="section-eyebrow"><span class="s-num">M2</span><span>Week 1</span><span>After Chapter 3</span><span>15 points</span><span class="s-done pj-ms-status" data-ms-status="m2"></span></p>
+    <p class="section-eyebrow"><span class="s-num">M2</span><span>After Chapter 3</span><span>25 points</span><span class="s-done pj-ms-status" data-ms-status="m2"></span></p>
     <h2 id="m2-h">Milestone 2 · Semantic Structure</h2>
     <p class="lede" data-goal="m2"></p>
     <p class="pj-builds" data-refs="m2"></p>
@@ -561,7 +502,7 @@
 
   <!-- ================================================================ -->
   <section class="lesson pj-ms" id="m3" aria-labelledby="m3-h">
-    <p class="section-eyebrow"><span class="s-num">M3</span><span>Week 2</span><span>After Chapter 4</span><span>15 points</span><span class="s-done pj-ms-status" data-ms-status="m3"></span></p>
+    <p class="section-eyebrow"><span class="s-num">M3</span><span>After Chapter 4</span><span>25 points</span><span class="s-done pj-ms-status" data-ms-status="m3"></span></p>
     <h2 id="m3-h">Milestone 3 · Style System</h2>
     <p class="lede" data-goal="m3"></p>
     <p class="pj-builds" data-refs="m3"></p>
@@ -614,12 +555,12 @@
       /* 2. Class: any element with class="card" */
       .card { padding: var(--space-m); }
 
-      /* 3. Id: the one element with id="site-nav" */
-      #site-nav ul { list-style: none; }
+      /* 3. Id: the one element with id="main" */
+      #main { padding: var(--space-l) 0; }
 
       /* 4. Descendant (space) and child (>) combinators */
       .site-footer a { color: var(--color-muted); }
-      .card-grid > li { margin: 0; }
+      .card-list > li { margin: 0; }
 
       /* 5. Pseudo-classes: states and positions */
       a:hover, a:focus-visible { text-decoration-thickness: 3px; }
@@ -640,7 +581,7 @@
 
   <!-- ================================================================ -->
   <section class="lesson pj-ms" id="m4" aria-labelledby="m4-h">
-    <p class="section-eyebrow"><span class="s-num">M4</span><span>Week 3</span><span>After Chapter 5</span><span>15 points</span><span class="s-done pj-ms-status" data-ms-status="m4"></span></p>
+    <p class="section-eyebrow"><span class="s-num">M4</span><span>After Chapter 5</span><span>25 points</span><span class="s-done pj-ms-status" data-ms-status="m4"></span></p>
     <h2 id="m4-h">Milestone 4 · Tables and Forms</h2>
     <p class="lede" data-goal="m4"></p>
     <p class="pj-builds" data-refs="m4"></p>
@@ -742,282 +683,14 @@
     </div>
     <h3>Rubric</h3>
     <div class="pj-rubric-wrap" data-ms="m4"></div>
-    <p class="pj-next"><a href="#m5">Next: Milestone 5 · Responsive and Interactive →</a></p>
-  </section>
-
-  <!-- ================================================================ -->
-  <section class="lesson pj-ms" id="m5" aria-labelledby="m5-h">
-    <p class="section-eyebrow"><span class="s-num">M5</span><span>Week 4</span><span>After Level Up</span><span>20 points</span><span class="s-done pj-ms-status" data-ms-status="m5"></span></p>
-    <h2 id="m5-h">Milestone 5 · Responsive and Interactive</h2>
-    <p class="lede" data-goal="m5"></p>
-    <p class="pj-builds" data-refs="m5"></p>
-
-    <div class="pj-checklist" data-ms="m5"></div>
-
-    <div class="widget" data-kind="Planner" data-title="Breakpoint planner">
-      <div class="range-row"><label for="pj-bp-w">Screen width</label><input type="range" id="pj-bp-w" min="320" max="1440" step="10"><output id="pj-bp-wout" for="pj-bp-w"></output></div>
-      <div class="pj-bp-presets" id="pj-bp-presets" role="group" aria-label="Common screen widths"></div>
-      <div class="pj-row">
-        <div class="field">
-          <label for="pj-bp-1">Breakpoint 1 (em)</label>
-          <input type="number" id="pj-bp-1" min="20" max="90" step="1">
-        </div>
-        <div class="field">
-          <label for="pj-bp-2">Breakpoint 2 (em)</label>
-          <input type="number" id="pj-bp-2" min="21" max="120" step="1">
-        </div>
-        <div class="field">
-          <label for="pj-bp-nav">Nav becomes a row at</label>
-          <select id="pj-bp-nav"><option value="1">Breakpoint 1</option><option value="2">Breakpoint 2</option></select>
-        </div>
-      </div>
-      <div class="pj-row">
-        <div class="field"><label for="pj-bp-c0">Card columns: base</label><select id="pj-bp-c0"></select></div>
-        <div class="field"><label for="pj-bp-c1">At breakpoint 1</label><select id="pj-bp-c1"></select></div>
-        <div class="field"><label for="pj-bp-c2">At breakpoint 2</label><select id="pj-bp-c2"></select></div>
-      </div>
-      <p class="pj-bp-status" id="pj-bp-status" aria-live="polite"></p>
-      <div class="pj-bp-stage" id="pj-bp-stage"><div class="pj-bp-page" id="pj-bp-page" aria-hidden="true"></div></div>
-      <p class="pj-sub" style="margin-top: 16px">Mobile-first CSS for these choices</p>
-      <div id="pj-bp-code"></div>
-    </div>
-
-    <h3>JavaScript pattern library</h3>
-    <p>Almost every theme feature is one of these five patterns: <strong>select</strong> elements, <strong>listen</strong> for an event, <strong>update</strong> the page. The closest pattern for <span data-raw="{theme}"></span> is selected for you. Read it, understand it, then write your own version for your content.</p>
-    <div class="tabs" id="pj-patterns">
-      <div data-tab="Filter or search" data-pattern="filter">
-        <p>Show and hide cards by category, for portfolio projects, pets or characters. For a search box, listen for <code>input</code> instead of <code>click</code> and test <code>card.textContent.toLowerCase().includes(query)</code>.</p>
-        <script type="text/plain" class="code" data-lang="html">
-          <div role="group" aria-label="Filter projects">
-            <button type="button" data-filter="all" aria-pressed="true">All</button>
-            <button type="button" data-filter="css" aria-pressed="false">CSS</button>
-            <button type="button" data-filter="js" aria-pressed="false">JavaScript</button>
-          </div>
-          <p id="filter-status" aria-live="polite"></p>
-          <ul class="card-grid">
-            <li class="card" data-category="css">…</li>
-            <li class="card" data-category="js">…</li>
-          </ul>
-        </script>
-        <script type="text/plain" class="code" data-lang="js" data-title="js/main.js">
-          const filterButtons = document.querySelectorAll('[data-filter]');
-          const cards = document.querySelectorAll('.card[data-category]');
-          const filterStatus = document.querySelector('#filter-status');
-
-          filterButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-              const filter = button.dataset.filter;
-              let shown = 0;
-              cards.forEach((card) => {
-                const match = filter === 'all' || card.dataset.category === filter;
-                card.hidden = !match;          // hidden removes it from view and from screen readers
-                if (match) shown++;
-              });
-              filterButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
-              filterStatus.textContent = `Showing ${shown} of ${cards.length}`;
-            });
-          });
-        </script>
-      </div>
-      <div data-tab="Time and dates" data-pattern="time">
-        <p>Compare the current time with a schedule: an "Open now" badge, a countdown, today's classes. The <code>change</code> listener is the user-event part. A countdown works the same way: subtract <code>Date.now()</code> from the event's time and convert milliseconds into days, hours and minutes.</p>
-        <script type="text/plain" class="code" data-lang="html">
-          <p>Right now we are <strong id="open-status">…</strong></p>
-          <label for="day-picker">See hours for</label>
-          <select id="day-picker">
-            <option value="1">Monday</option>
-            <option value="6">Saturday</option>
-            <option value="0">Sunday</option>
-          </select>
-          <p id="day-hours" aria-live="polite"></p>
-        </script>
-        <script type="text/plain" class="code" data-lang="js" data-title="js/main.js">
-          // Index 0 is Sunday. [open, close] in 24-hour time, or null when closed.
-          const hours = [null, [7, 18], [7, 18], [7, 18], [7, 18], [7, 20], [8, 20]];
-          const openStatus = document.querySelector('#open-status');
-          const dayPicker = document.querySelector('#day-picker');
-          const dayHours = document.querySelector('#day-hours');
-
-          const formatHour = (h) => `${h % 12 || 12} ${h < 12 ? 'AM' : 'PM'}`;
-
-          function showOpenStatus() {
-            const now = new Date();
-            const today = hours[now.getDay()];
-            const time = now.getHours() + now.getMinutes() / 60;
-            const open = today !== null && time >= today[0] && time < today[1];
-            openStatus.textContent = open ? 'open' : 'closed';
-          }
-
-          dayPicker.addEventListener('change', () => {
-            const h = hours[Number(dayPicker.value)];
-            dayHours.textContent = h ? `${formatHour(h[0])} to ${formatHour(h[1])}` : 'Closed';
-          });
-
-          showOpenStatus();
-          setInterval(showOpenStatus, 60 * 1000);   // check again every minute
-        </script>
-      </div>
-      <div data-tab="Live calculation" data-pattern="calc">
-        <p>Read an input, calculate, write the answer: a serving scaler, a BMI calculator, a donation total. For a progress bar, update a <code>&lt;progress value max&gt;</code> element's <code>value</code>.</p>
-        <script type="text/plain" class="code" data-lang="html">
-          <label for="servings">Servings</label>
-          <input type="number" id="servings" min="1" max="24" value="4">
-          <ul>
-            <li><span class="qty" data-base="1">1</span> lb ground turkey</li>
-            <li><span class="qty" data-base="0.5">0.5</span> cup chopped onion</li>
-          </ul>
-        </script>
-        <script type="text/plain" class="code" data-lang="js" data-title="js/main.js">
-          const servingsInput = document.querySelector('#servings');
-          const amounts = document.querySelectorAll('.qty');
-          const BASE_SERVINGS = 4;
-
-          servingsInput.addEventListener('input', () => {
-            const servings = Number(servingsInput.value);
-            if (!servings || servings < 1) return;   // ignore empty or invalid input
-            amounts.forEach((span) => {
-              const scaled = (Number(span.dataset.base) * servings) / BASE_SERVINGS;
-              span.textContent = Math.round(scaled * 100) / 100;   // at most two decimals
-            });
-          });
-        </script>
-      </div>
-      <div data-tab="Tabs" data-pattern="tabs">
-        <p>Show one panel at a time: neighborhoods, menu sections, class types. Arrow-key support between tabs is a good stretch goal.</p>
-        <script type="text/plain" class="code" data-lang="html">
-          <div role="tablist" aria-label="Neighborhoods">
-            <button type="button" role="tab" id="tab-downtown" aria-controls="downtown" aria-selected="true">Downtown</button>
-            <button type="button" role="tab" id="tab-old-town" aria-controls="old-town" aria-selected="false" tabindex="-1">Old Town</button>
-          </div>
-          <section id="downtown" role="tabpanel" aria-labelledby="tab-downtown">…</section>
-          <section id="old-town" role="tabpanel" aria-labelledby="tab-old-town" hidden>…</section>
-        </script>
-        <script type="text/plain" class="code" data-lang="js" data-title="js/main.js">
-          const tabs = document.querySelectorAll('[role="tab"]');
-
-          tabs.forEach((tab) => {
-            tab.addEventListener('click', () => {
-              tabs.forEach((t) => {
-                const selected = t === tab;
-                t.setAttribute('aria-selected', String(selected));
-                t.tabIndex = selected ? 0 : -1;
-                document.getElementById(t.getAttribute('aria-controls')).hidden = !selected;
-              });
-            });
-          });
-        </script>
-      </div>
-      <div data-tab="Sort a table" data-pattern="sort">
-        <p>Reorder table rows when a button is clicked. Numbers sort high to low; text sorts A to Z.</p>
-        <script type="text/plain" class="code" data-lang="html">
-          <button type="button" data-sort="4">Sort by rating</button>
-          <button type="button" data-sort="0">Sort by title</button>
-          <table id="ratings">
-            <caption>Ratings, out of 5</caption>
-            <thead>…</thead>
-            <tbody>…</tbody>
-          </table>
-        </script>
-        <script type="text/plain" class="code" data-lang="js" data-title="js/main.js">
-          const tbody = document.querySelector('#ratings tbody');
-
-          document.querySelectorAll('[data-sort]').forEach((button) => {
-            button.addEventListener('click', () => {
-              const col = Number(button.dataset.sort);
-              const rows = Array.from(tbody.rows);
-              rows.sort((a, b) => {
-                const x = a.cells[col].textContent.trim();
-                const y = b.cells[col].textContent.trim();
-                const nx = parseFloat(x), ny = parseFloat(y);
-                return !isNaN(nx) && !isNaN(ny) ? ny - nx : x.localeCompare(y);
-              });
-              rows.forEach((row) => tbody.append(row));   // append moves each row into the new order
-            });
-          });
-        </script>
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="card"><h3>Deliverables</h3><ul data-deliv="m5"></ul></div>
-      <div class="card pj-optional"><h3>Stretch goals</h3><p class="small muted">Optional. Tick them off for your own record.</p><div class="pj-stretch" data-ms="m5"></div></div>
-    </div>
-    <h3>Rubric</h3>
-    <div class="pj-rubric-wrap" data-ms="m5"></div>
-    <p class="pj-next"><a href="#final">Next: Final · Polish, Audit and Present →</a></p>
-  </section>
-
-  <!-- ================================================================ -->
-  <section class="lesson pj-ms" id="final" aria-labelledby="final-h">
-    <p class="section-eyebrow"><span class="s-num">Final</span><span>End of week 4</span><span>25 points</span><span class="s-done pj-ms-status" data-ms-status="final"></span></p>
-    <h2 id="final-h">Final · Polish, Audit and Present</h2>
-    <p class="lede" data-goal="final"></p>
-    <p class="pj-builds" data-refs="final"></p>
-
-    <div class="pj-checklist" data-ms="final"></div>
-
-    <h3>Audit toolkit</h3>
-    <div class="table-wrap">
-      <table class="data-table">
-        <caption class="sr-only">Tools for the final audit</caption>
-        <thead><tr><th scope="col">Check</th><th scope="col">Tool</th><th scope="col">What "done" looks like</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">HTML</th><td><a href="https://validator.w3.org/nu/">W3C Nu HTML Checker</a></td><td>No errors on any page (warnings are worth reading)</td></tr>
-          <tr><th scope="row">CSS</th><td><a href="https://jigsaw.w3.org/css-validator/">W3C CSS Validator</a></td><td>No errors in <code>styles.css</code></td></tr>
-          <tr><th scope="row">Course requirements</th><td><a href="#checker">Project checker</a> (below)</td><td>No red fails on any page</td></tr>
-          <tr><th scope="row">Accessibility</th><td>DevTools → Lighthouse → Accessibility; keyboard only (Tab, Shift + Tab, Enter, Space)</td><td>Every control reachable and visible when focused; Lighthouse issues fixed</td></tr>
-          <tr><th scope="row">Responsive</th><td>DevTools device mode (Ctrl + Shift + M, or Cmd + Shift + M on a Mac), plus a real phone</td><td>No sideways scrolling at 320–390px; nothing cut off</td></tr>
-          <tr><th scope="row">Images</th><td>DevTools → Network → filter Img; <a href="https://squoosh.app/">Squoosh</a> to resize and compress</td><td>Each image close to its display size, typically under 200 KB</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="widget" data-kind="Practice" data-title="Demo rehearsal timer">
-      <div class="pj-timer">
-        <div>
-          <div class="field" style="max-width: 220px; margin-bottom: 8px">
-            <label for="pj-tm-len">Demo length</label>
-            <select id="pj-tm-len"><option value="180">3 minutes</option><option value="240" selected>4 minutes</option><option value="300">5 minutes</option></select>
-          </div>
-          <p class="pj-seg-now" id="pj-tm-seg"></p>
-          <p class="pj-seg-prompt" id="pj-tm-prompt"></p>
-          <div class="pj-clock" id="pj-tm-clock" role="timer" aria-label="Time left in this part">0:00</div>
-          <span class="pj-bar" style="margin-bottom: 12px"><span id="pj-tm-bar"></span></span>
-          <div class="btn-row">
-            <button type="button" class="btn primary" id="pj-tm-go">Start</button>
-            <button type="button" class="btn" id="pj-tm-next">Next part</button>
-            <button type="button" class="btn ghost" id="pj-tm-reset">Reset</button>
-          </div>
-          <p class="sr-only" aria-live="polite" id="pj-tm-live"></p>
-        </div>
-        <ol class="pj-seglist" id="pj-tm-list"></ol>
-      </div>
-    </div>
-
-    <h3>Finishing touches</h3>
-    <script type="text/plain" class="code" data-lang="html" data-title="every page's head">
-      <title>Menu · Corner Cup Coffee</title>          <!-- page name · site name -->
-      <meta name="description" content="Coffee, tea and breakfast, with prices and dietary notes.">
-      <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
-      <!-- Stretch: a preview card when the link is shared -->
-      <meta property="og:title" content="Corner Cup Coffee">
-      <meta property="og:description" content="Small-batch coffee and catering.">
-    </script>
-
-    <div class="grid-2">
-      <div class="card"><h3>Deliverables</h3><ul data-deliv="final"></ul></div>
-      <div class="card pj-optional"><h3>Stretch goals</h3><p class="small muted">Optional. Tick them off for your own record.</p><div class="pj-stretch" data-ms="final"></div></div>
-    </div>
-    <h3>Rubric</h3>
-    <div class="pj-rubric-wrap" data-ms="final"></div>
     <p class="pj-next"><a href="#checker">Next: run the project checker →</a></p>
   </section>
 
   <!-- ================================================================ -->
   <section class="lesson" id="checker" aria-labelledby="checker-h">
     <h2 id="checker-h">Project checker</h2>
-    <p>Paste a page from your site (and its CSS and JavaScript), or load your files, and the checker runs the course requirements for every milestone. Each result explains what it found and how to fix it. Everything runs in your browser; nothing is uploaded.</p>
-    <p class="small muted">The checker is a helper, not a grade: it cannot judge design, content or whether your JavaScript works. Your instructor grades with the rubrics. Also run the <a href="https://validator.w3.org/nu/">W3C validator</a>, which checks HTML syntax in far more detail.</p>
+    <p>Paste a page from your site (and its CSS), or load your files, and the checker runs the course requirements for every milestone. Each result explains what it found and how to fix it. Everything runs in your browser; nothing is uploaded.</p>
+    <p class="small muted">The checker is a helper, not a grade: it cannot judge design or content. Your instructor grades with the rubrics. Also run the <a href="https://validator.w3.org/nu/">W3C validator</a>, which checks HTML syntax in far more detail.</p>
 
     <div class="widget pj-checker" id="pj-checker">
       <p class="pj-ck-banner" id="pj-ck-banner"></p>
@@ -1027,7 +700,7 @@
         <button type="button" class="btn small" id="pj-ck-folder">Load a folder…</button>
         <button type="button" class="btn small ghost" id="pj-ck-sample">Load sample</button>
         <button type="button" class="btn small ghost" id="pj-ck-clear">Clear</button>
-        <input type="file" id="pj-ck-input" multiple accept=".html,.htm,.css,.js,.mjs,.svg,.png,.jpg,.jpeg,.gif,.webp,.avif" hidden>
+        <input type="file" id="pj-ck-input" multiple accept=".html,.htm,.css,.svg,.png,.jpg,.jpeg,.gif,.webp,.avif" hidden>
         <input type="file" id="pj-ck-dir" multiple hidden>
       </div>
       <div class="pj-ck-bar" id="pj-ck-sitebar" hidden>
@@ -1091,13 +764,12 @@
   <!-- ================================================================ -->
   <section class="lesson" id="starter" aria-labelledby="starter-h">
     <h2 id="starter-h">Starter files</h2>
-    <p>A small, valid three-page site to copy on day one. It already has the shared header, a mobile-first stylesheet with a commented section for each milestone, a working menu button, and a README template with every section your instructor will look for.</p>
+    <p>A small, valid three-page site to copy when you start Milestone 1. It already has the shared header, a stylesheet with a commented section for each milestone, and a README template with every section your instructor will look for.</p>
     <ul class="pj-files">
-      <li><a href="starter/index.html">starter/index.html</a><span>Home page: skip link, header, nav with a menu button, main, a figure, footer.</span></li>
+      <li><a href="starter/index.html">starter/index.html</a><span>Home page: skip link, header, nav, main, a figure, footer.</span></li>
       <li><a href="starter/about.html">starter/about.html</a><span>An inner page with sections, a list and an address.</span></li>
       <li><a href="starter/contact.html">starter/contact.html</a><span>A deliberately small accessible form to grow in Milestone 4.</span></li>
-      <li><a href="starter/css/styles.css">starter/css/styles.css</a><span>Custom properties, a mobile-first base, and a commented section per milestone.</span></li>
-      <li><a href="starter/js/main.js">starter/js/main.js</a><span>The menu button script, commented line by line, and where your feature goes.</span></li>
+      <li><a href="starter/css/styles.css">starter/css/styles.css</a><span>Custom properties, base styles, and a commented section per milestone.</span></li>
       <li><a href="starter/images/README.md">starter/images/README.md</a><span>Image sizes, formats, file names and alt text.</span></li>
       <li><a href="starter/README.md">starter/README.md</a><span>Your repository's README: site map, how your site reaches the browser, milestone log, credits, AI use log.</span></li>
     </ul>
@@ -1114,12 +786,6 @@
 <!-- Project data: themes, milestones, rubrics. The page script and project/README.md are built from it. -->
 <script type="application/json" id="pj-data">
 {
- "weeks": [
-  "Chapters 2 and 3: plan, publish, then build real pages",
-  "Chapter 4: one stylesheet for the whole site",
-  "Chapter 5: a data table and a form",
-  "Level Up: responsive layout and JavaScript, then polish and present"
- ],
  "objmap": {
   "m1": [
    1,
@@ -1139,19 +805,6 @@
    2,
    3,
    6
-  ],
-  "m5": [
-   3,
-   4,
-   5,
-   6,
-   7
-  ],
-  "final": [
-   1,
-   2,
-   5,
-   8
   ]
  },
  "fallback": {
@@ -1160,7 +813,6 @@
   "pages": "Home plus three or four more pages",
   "table": "a data table that fits your theme",
   "form": "a form that fits your theme",
-  "js": "a JavaScript feature that fits your theme",
   "stretch": "a stretch feature of your choice",
   "tablePage": "the page of your choice",
   "formPage": "the page of your choice"
@@ -1170,11 +822,9 @@
    "id": "m1",
    "code": "M1",
    "title": "Plan and Publish",
-   "week": 1,
-   "day": 3,
    "after": "After Chapter 2",
    "ch": "ch2",
-   "points": 10,
+   "points": 25,
    "refs": [
     "s2-2",
     "s2-3",
@@ -1201,7 +851,7 @@
     },
     {
      "id": "m1-folders",
-     "t": "Set up the project folder: `index.html` at the top, plus `css/`, `js/` and `images/` folders. Use lowercase names with hyphens and no spaces.",
+     "t": "Set up the project folder: `index.html` at the top, plus `css/` and `images/` folders. Use lowercase names with hyphens and no spaces.",
      "how": "Start from the starter files linked at the bottom of this page. The web server treats `About.html` and `about.html` as different files, so lowercase everything now."
     },
     {
@@ -1238,21 +888,21 @@
    "rubric": [
     {
      "c": "Plan: purpose, audience and site map",
-     "p": 3,
+     "p": 8,
      "ex": "Clear purpose and audience; 4–5 pages with file names; wireframes for two pages.",
      "pr": "Site map and purpose present; one wireframe, or the audience is vague.",
      "dev": "Theme named, but the site map or wireframes are missing."
     },
     {
      "c": "Setup and publishing",
-     "p": 3,
+     "p": 8,
      "ex": "Lowercase, organized folders; placeholder live on GitHub Pages; several meaningful commits.",
      "pr": "Live, with minor naming or organization issues.",
      "dev": "Not live yet, or `index.html` is not at the top of the repository."
     },
     {
      "c": "How the web works explanation",
-     "p": 4,
+     "p": 9,
      "ex": "Accurately labels URL parts and explains DNS and the HTTP request and response using real values from DevTools.",
      "pr": "Mostly accurate; one step is missing or vague.",
      "dev": "Generic or inaccurate; no evidence from the live site."
@@ -1263,11 +913,9 @@
    "id": "m2",
    "code": "M2",
    "title": "Semantic Structure",
-   "week": 1,
-   "day": 7,
    "after": "After Chapter 3",
    "ch": "ch3",
-   "points": 15,
+   "points": 25,
    "refs": [
     "s3-2",
     "s3-3",
@@ -1327,35 +975,35 @@
    "rubric": [
     {
      "c": "Valid document structure",
-     "p": 3,
+     "p": 5,
      "ex": "Every page has a DOCTYPE, `lang`, charset and a unique title; the validator reports no errors.",
      "pr": "Minor validation errors on one page.",
      "dev": "Missing required document parts, or many validation errors."
     },
     {
      "c": "Semantic landmarks and headings",
-     "p": 4,
+     "p": 6,
      "ex": "header, nav, main and footer on every page; one h1; a logical outline with no skipped levels.",
      "pr": "Landmarks present; one heading issue.",
      "dev": "Mostly `<div>`s, or headings chosen for their size."
     },
     {
      "c": "Content elements",
-     "p": 4,
+     "p": 6,
      "ex": "Lists, links, images with meaningful alt text, and a figure with a caption, each used for the right reason.",
      "pr": "All present; alt text or list use could be more meaningful.",
      "dev": "Images without alt, or lists or figure missing."
     },
     {
      "c": "Navigation and links",
-     "p": 2,
+     "p": 4,
      "ex": "Every page reachable from a consistent nav; all links relative and working.",
      "pr": "One broken or inconsistent link.",
      "dev": "Pages not linked together, or links use paths on your computer."
     },
     {
      "c": "Real content",
-     "p": 2,
+     "p": 4,
      "ex": "Home and at least one inner page have real, well-written content.",
      "pr": "Some placeholder text remains.",
      "dev": "Mostly placeholder text."
@@ -1366,11 +1014,9 @@
    "id": "m3",
    "code": "M3",
    "title": "Style System",
-   "week": 2,
-   "day": 14,
    "after": "After Chapter 4",
    "ch": "ch4",
-   "points": 15,
+   "points": 25,
    "refs": [
     "s4-3",
     "s4-4",
@@ -1418,8 +1064,8 @@
    ],
    "stretch": [
     "Add a web font from Google Fonts with a matching fallback stack.",
-    "Offer a dark palette by redefining your custom properties inside `@media (prefers-color-scheme: dark)`.",
-    "Add subtle hover transitions and switch them off inside `@media (prefers-reduced-motion: reduce)`."
+    "Define a second palette by overriding your custom properties on one class (for example `.theme-night`) and apply it to a single section.",
+    "Use `:nth-child()` or `::first-letter` to add one styling detail that needs no extra HTML."
    ],
    "deliverables": [
     "`css/styles.css` linked from every page",
@@ -1429,35 +1075,35 @@
    "rubric": [
     {
      "c": "External stylesheet and organization",
-     "p": 3,
+     "p": 5,
      "ex": "One linked stylesheet for all pages; no inline or embedded styles; clearly commented sections.",
      "pr": "Linked stylesheet, with a few stray inline styles or little organization.",
      "dev": "Styles scattered across pages, or mostly inline."
     },
     {
      "c": "Custom properties",
-     "p": 3,
+     "p": 5,
      "ex": "Colors, fonts and spacing defined once in `:root` and reused with `var()` throughout.",
      "pr": "Some custom properties; many values still repeated.",
      "dev": "No custom properties."
     },
     {
      "c": "Typography and color",
-     "p": 3,
+     "p": 5,
      "ex": "Consistent type scale and font stacks; all text passes 4.5:1 contrast.",
      "pr": "Consistent overall; one contrast or sizing issue.",
      "dev": "Inconsistent fonts or sizes, or hard-to-read contrast."
     },
     {
      "c": "Box model and spacing",
-     "p": 3,
+     "p": 5,
      "ex": "Deliberate padding and margins, border-box sizing, readable line length.",
      "pr": "Mostly consistent spacing.",
      "dev": "Cramped or uneven spacing; text runs edge to edge."
     },
     {
      "c": "Selectors and navigation",
-     "p": 3,
+     "p": 5,
      "ex": "Five or more selector types used appropriately; nav has hover, focus and current-page styles.",
      "pr": "Four selector types, or the nav is missing one state.",
      "dev": "Three or fewer selector types; nav unstyled."
@@ -1468,11 +1114,9 @@
    "id": "m4",
    "code": "M4",
    "title": "Tables and Forms",
-   "week": 3,
-   "day": 21,
    "after": "After Chapter 5",
    "ch": "ch5",
-   "points": 15,
+   "points": 25,
    "refs": [
     "s5-1",
     "s5-2",
@@ -1530,7 +1174,8 @@
    "stretch": [
     "Add a `<tfoot>` with a total or summary row, or use `<colgroup>` to style a column.",
     "Suggest values with `<datalist>`, or pair a range slider with an `<output>`.",
-    "Write short hints under tricky fields and connect them with `aria-describedby`."
+    "Write short hints under tricky fields and connect them with `aria-describedby`.",
+    "Stretch idea for your theme: {stretch}."
    ],
    "deliverables": [
     "The table page and the form page, live and linked from the nav",
@@ -1540,264 +1185,38 @@
    "rubric": [
     {
      "c": "Table structure and accessibility",
-     "p": 4,
+     "p": 6,
      "ex": "caption, thead and tbody, th with the correct scope, real data, and no layout tables.",
      "pr": "Structure right; scope or caption missing.",
      "dev": "No header cells, or the table is used for layout."
     },
     {
      "c": "Table styling",
-     "p": 2,
+     "p": 4,
      "ex": "Readable, styled with the site's custom properties, and scrolls inside a wrapper on phones.",
      "pr": "Styled, but overflows or is hard to scan.",
      "dev": "Unstyled default table."
     },
     {
      "c": "Form structure and labels",
-     "p": 4,
+     "p": 6,
      "ex": "Every control labeled; fieldsets with legends; logical order; works with the keyboard alone.",
      "pr": "One unlabeled control or a missing fieldset.",
      "dev": "Several unlabeled controls, or placeholder-only labels."
     },
     {
      "c": "Input types, names and validation",
-     "p": 3,
+     "p": 5,
      "ex": "Appropriate types, every control named, and validation rules that match the data.",
      "pr": "Mostly appropriate; one missing name or rule.",
      "dev": "Everything is `type=\"text\"`; no validation."
     },
     {
      "c": "Form styling and usability",
-     "p": 2,
+     "p": 4,
      "ex": "Matches the site; clear focus and error states; comfortable on a phone.",
      "pr": "Styled, but focus or error states are missing.",
      "dev": "Default, cramped or overflowing form."
-    }
-   ]
-  },
-  {
-   "id": "m5",
-   "code": "M5",
-   "title": "Responsive and Interactive",
-   "week": 4,
-   "day": 26,
-   "after": "After Level Up",
-   "ch": "levelup",
-   "points": 20,
-   "refs": [
-    "sl-1",
-    "sl-2",
-    "sl-3",
-    "sl-4",
-    "sl-5"
-   ],
-   "goal": "Make the site work from a 320px phone to a wide monitor, and add JavaScript that responds to what the visitor does.",
-   "tasks": [
-    {
-     "id": "m5-viewport",
-     "t": "Make sure every page has `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">`."
-    },
-    {
-     "id": "m5-layout",
-     "t": "Lay out pages with Flexbox and/or Grid: the header bar, card or content grids, the footer. No floats or tables for layout."
-    },
-    {
-     "id": "m5-mobile",
-     "t": "Write the CSS mobile-first: base styles for small screens, then `@media (min-width: …)` queries that add columns as space allows.",
-     "how": "Use the breakpoint planner below. Pick breakpoints where your content starts to look stretched, not for specific phone models."
-    },
-    {
-     "id": "m5-nav",
-     "t": "Build a responsive nav: a real `<button>` with `aria-expanded` shows and hides the menu on small screens; the links sit in a row on wider screens.",
-     "how": "The starter's `js/main.js` has a working version. Read it line by line, adapt it, and be ready to explain every line."
-    },
-    {
-     "id": "m5-images",
-     "t": "Make images responsive (`max-width: 100%; height: auto;`), resize them to a sensible size, and give each one `width` and `height` attributes."
-    },
-    {
-     "id": "m5-js",
-     "t": "Add {js} in `js/main.js`, wired up with `addEventListener`.",
-     "how": "The pattern library below has a short example of the closest pattern for your theme. Adapt the idea to your own content; do not paste it unchanged."
-    },
-    {
-     "id": "m5-js-a11y",
-     "t": "Make the feature keyboard-friendly (real `<button>`s and form controls) and announce changing results with `aria-live` where it helps."
-    },
-    {
-     "id": "m5-test",
-     "t": "Test at 390px, 768px and 1280px in DevTools device mode: no sideways scrolling, nothing cut off, tap targets easy to hit."
-    }
-   ],
-   "stretch": [
-    "Stretch idea for your theme: {stretch}.",
-    "Use `srcset` and `sizes` (or `<picture>`) so phones download smaller images.",
-    "Remember a visitor's choice (a filter, a theme) with `localStorage`."
-   ],
-   "deliverables": [
-    "Live, responsive site with the JavaScript feature working",
-    "Screenshots at phone and desktop widths in your README",
-    "README: your breakpoints and a short explanation of what your script does"
-   ],
-   "rubric": [
-    {
-     "c": "Flexbox and Grid layout",
-     "p": 4,
-     "ex": "Layout built with Flexbox and Grid, each where it fits; no layout hacks.",
-     "pr": "Flexbox or Grid in some places; some awkward spacing.",
-     "dev": "Little or no Flexbox or Grid."
-    },
-    {
-     "c": "Mobile-first responsive design",
-     "p": 4,
-     "ex": "Mobile-first base with min-width queries; works from 320px to wide screens with no sideways scrolling.",
-     "pr": "Responsive, but desktop-first, or one breakpoint glitch.",
-     "dev": "Breaks or scrolls sideways on a phone."
-    },
-    {
-     "c": "Responsive navigation",
-     "p": 3,
-     "ex": "Menu button with `aria-expanded` on small screens, a row of links on wide screens; works by keyboard.",
-     "pr": "Works, but lacks `aria-expanded` or keyboard support.",
-     "dev": "Nav overflows or is unusable on a phone."
-    },
-    {
-     "c": "Responsive images",
-     "p": 2,
-     "ex": "Images scale, have width and height, and are reasonably sized files.",
-     "pr": "Images scale, but the files are large.",
-     "dev": "Images overflow or distort."
-    },
-    {
-     "c": "JavaScript feature",
-     "p": 5,
-     "ex": "The theme feature works reliably, uses `addEventListener` and DOM updates, is readable and commented, and you can explain it.",
-     "pr": "Works with a minor bug, or the code is hard to follow.",
-     "dev": "Incomplete, broken, or copied without understanding."
-    },
-    {
-     "c": "Accessible interactivity",
-     "p": 2,
-     "ex": "Keyboard operable, real buttons, and changes announced where needed.",
-     "pr": "Mostly keyboard operable.",
-     "dev": "Mouse-only (click handlers on `<div>`s)."
-    }
-   ]
-  },
-  {
-   "id": "final",
-   "code": "Final",
-   "title": "Polish, Audit and Present",
-   "week": 4,
-   "day": 28,
-   "after": "End of the month",
-   "ch": "levelup",
-   "points": 25,
-   "refs": [
-    "sl-6",
-    "s2-6",
-    "s5-5",
-    "sl-3"
-   ],
-   "goal": "Ship it like a professional: validate, audit, test on real devices, deploy the final version and show it off in a short demo.",
-   "tasks": [
-    {
-     "id": "f-validate",
-     "t": "Every page passes the W3C HTML validator, and your stylesheet passes the W3C CSS validator, with no errors."
-    },
-    {
-     "id": "f-checker",
-     "t": "Every page passes the project checker on this page with no red fails (load the whole site folder, then use **Check every page**)."
-    },
-    {
-     "id": "f-a11y",
-     "t": "Accessibility audit: run Lighthouse (DevTools → Lighthouse → Accessibility), do a keyboard-only walkthrough and a 200% zoom check, and fix what you find."
-    },
-    {
-     "id": "f-perf",
-     "t": "Image and performance check: every image resized to about its display size (2× for sharp screens) and compressed, typically under 200 KB each."
-    },
-    {
-     "id": "f-devices",
-     "t": "Cross-device test on a real phone and at least two desktop browsers; note what you fixed in your README."
-    },
-    {
-     "id": "f-links",
-     "t": "Click every link on the live site: no 404s. GitHub Pages treats `Photo.JPG` and `photo.jpg` as different files."
-    },
-    {
-     "id": "f-readme",
-     "t": "Finish the README: description, site map, how it reaches the browser, milestone log, credits for images and code ideas, and the AI use log."
-    },
-    {
-     "id": "f-deploy",
-     "t": "Push the final version and confirm the live site shows it (hard refresh: Ctrl + Shift + R, or Cmd + Shift + R on a Mac)."
-    },
-    {
-     "id": "f-present",
-     "t": "Give a 3–5 minute demo: purpose, a tour at phone size, one piece of code you are proud of, one problem you solved, and what you would add next.",
-     "how": "Rehearse with the demo timer below. Open the live site before you start, not your local files."
-    }
-   ],
-   "stretch": [
-    "Score 90 or more in every Lighthouse category.",
-    "Add Open Graph tags (`<meta property=\"og:title\" …>`) so shared links show a preview card.",
-    "Connect a custom domain to your GitHub Pages site (optional and never required)."
-   ],
-   "deliverables": [
-    "Final repository URL and live GitHub Pages URL, submitted as your instructor directs",
-    "Complete README, including the testing table, credits and AI use log",
-    "A 3–5 minute live demo"
-   ],
-   "rubric": [
-    {
-     "c": "Completeness",
-     "p": 6,
-     "ex": "Every milestone requirement is present and working on the live site.",
-     "pr": "One or two requirements missing or partly working.",
-     "dev": "Several requirements missing."
-    },
-    {
-     "c": "Code quality and validation",
-     "p": 5,
-     "ex": "No validator errors; consistent indentation; meaningful names and comments.",
-     "pr": "A few validator errors or inconsistent formatting.",
-     "dev": "Many errors; hard to read."
-    },
-    {
-     "c": "Accessibility",
-     "p": 4,
-     "ex": "Keyboard walkthrough works; labels, alt text, contrast and headings all correct; Lighthouse issues fixed.",
-     "pr": "One or two accessibility issues remain.",
-     "dev": "Several barriers: unlabeled controls, missing alt text, low contrast."
-    },
-    {
-     "c": "Responsive and cross-device",
-     "p": 3,
-     "ex": "Tested on a phone and two browsers; no layout breaks.",
-     "pr": "A minor issue on one device or browser.",
-     "dev": "Broken on phones, or untested."
-    },
-    {
-     "c": "Performance and polish",
-     "p": 2,
-     "ex": "Optimized images, no broken links, no leftover placeholder text.",
-     "pr": "One or two rough edges.",
-     "dev": "Large images, broken links or placeholder content."
-    },
-    {
-     "c": "README and AI use log",
-     "p": 2,
-     "ex": "Complete README with site map, explanation, milestone log, credits and an AI use log (or a statement that no AI was used).",
-     "pr": "README present; one section thin or missing.",
-     "dev": "README missing or minimal; no AI use statement."
-    },
-    {
-     "c": "Presentation",
-     "p": 3,
-     "ex": "Clear 3–5 minute demo that explains a code decision and a problem solved; answers questions confidently.",
-     "pr": "Clear demo, but thin on the code explanation.",
-     "dev": "Unprepared, or far over or under time."
     }
    ]
   }
@@ -1834,10 +1253,6 @@
   {
    "id": "s-links",
    "t": "I submitted both links, the repository URL and the live site URL, the way my instructor asked."
-  },
-  {
-   "id": "s-demo",
-   "t": "I rehearsed my demo with the timer and it fits in 3–5 minutes."
   }
  ],
  "defaults": {
@@ -1960,40 +1375,6 @@
    "heading": "ui-monospace, \"Cascadia Code\", Menlo, Consolas, monospace"
   }
  ],
- "demo": [
-  {
-   "t": "Hook and purpose",
-   "s": 30,
-   "p": "Who is the site for, and what can they do there?"
-  },
-  {
-   "t": "Live tour at phone size",
-   "s": 90,
-   "p": "Open the menu, show your table, submit your form, and use your JavaScript feature."
-  },
-  {
-   "t": "Code you are proud of",
-   "s": 60,
-   "p": "Show one snippet of HTML, CSS or JavaScript and explain why it works."
-  },
-  {
-   "t": "A problem you solved",
-   "s": 45,
-   "p": "What broke, how you found the cause (DevTools, validator, checker) and how you fixed it."
-  },
-  {
-   "t": "What is next",
-   "s": 15,
-   "p": "One thing you would add with another week. Then thank the audience and take questions."
-  }
- ],
- "patterns": {
-  "filter": "Filter or search",
-  "time": "Time and dates",
-  "calc": "Live calculation",
-  "tabs": "Tabs",
-  "sort": "Sort a table"
- },
  "themes": [
   {
    "id": "coffee",
@@ -2027,10 +1408,7 @@
    "fp": 3,
    "table": "a menu table (item, size, price and dietary notes)",
    "form": "a catering request form (contact details, event date, guest count, package and dietary needs)",
-   "js": "an \"Open now / Closed\" badge from the current day and time, plus a day picker that shows the hours for any day",
-   "level": "Moderate",
-   "pattern": "time",
-   "stretch": "an order builder that totals the menu items a visitor selects",
+   "stretch": "a second table for the weekly opening hours, with the days as row headers",
    "note": "Invent the business, or get permission from a real one, so you can use your own photos and prices.",
    "palette": [
     "#6B3E26",
@@ -2125,10 +1503,7 @@
    "fp": 4,
    "table": "a skills table (skill, level, where you used it and a project that shows it)",
    "form": "a contact form (name, email, reason for contact, preferred reply method and message)",
-   "js": "a project filter: buttons (All, HTML, CSS, JavaScript) that show and hide project cards",
-   "level": "Moderate",
-   "pattern": "filter",
-   "stretch": "a light and dark theme switch that remembers the visitor's choice with localStorage",
+   "stretch": "a `<figure>` for each project, with a screenshot and a caption that says what you built",
    "note": "Your repository is public: do not publish your home address or phone number. The contact form is enough.",
    "palette": [
     "#2B4C7E",
@@ -2207,10 +1582,7 @@
    "fp": 3,
    "table": "an event schedule (time, session, room and speaker, with times as row headers)",
    "form": "a registration form (name, email, attendee type, sessions to attend and accessibility needs)",
-   "js": "a countdown to the event the visitor picks from a list (days, hours and minutes, updating every second)",
-   "level": "Moderate",
-   "pattern": "time",
-   "stretch": "an FAQ accordion built with <details>, plus an \"Expand all\" button",
+   "stretch": "an FAQ built with `<details>` and `<summary>`",
    "note": "Keep people fictional or get permission: do not publish other students' names or photos without it.",
    "palette": [
     "#3D2C8D",
@@ -2291,10 +1663,7 @@
    "fp": 4,
    "table": "a stats table (character or item, class, health, attack and speed)",
    "form": "a submit-a-tip form (username, email, category, difficulty and the tip itself)",
-   "js": "a live search box that filters character cards as the visitor types",
-   "level": "Moderate",
-   "pattern": "filter",
-   "stretch": "sort the stats table when a visitor clicks a column's button",
+   "stretch": "a `<colgroup>` that highlights one stats column, plus zebra rows styled with `:nth-child()`",
    "note": "Write in your own words and credit the game's creators. Use screenshots sparingly and never copy another wiki's text.",
    "palette": [
     "#1F6F5C",
@@ -2378,10 +1747,7 @@
    "fp": 3,
    "table": "an ingredients table (amount, unit, ingredient and notes) or a nutrition facts table",
    "form": "a submit-a-recipe form (recipe name, category, prep time, difficulty, ingredients and steps)",
-   "js": "a serving-size scaler: pick the number of servings and every ingredient amount recalculates",
-   "level": "Moderate",
-   "pattern": "calc",
-   "stretch": "a shopping-list checklist that remembers checked items with localStorage",
+   "stretch": "a second table for nutrition facts, with a `<tfoot>` total row",
    "note": "Credit recipes you adapt from family, books or websites, and write the steps in your own words.",
    "palette": [
     "#A23E48",
@@ -2471,10 +1837,7 @@
    "fp": 4,
    "table": "an attractions table (name, neighborhood, hours, price and who it is good for)",
    "form": "a trip planner form (travel dates, group size, budget, interests and email)",
-   "js": "tabbed neighborhoods: buttons switch between neighborhood panels without reloading the page",
-   "level": "Moderate",
-   "pattern": "tabs",
-   "stretch": "a budget estimator that totals attraction prices for the group size",
+   "stretch": "a `<figure>` for each neighborhood, with a caption that says where the photo was taken",
    "note": "Check hours and prices on official sites and note the date you checked. Use your own photos or credit openly licensed ones.",
    "palette": [
     "#0B6E99",
@@ -2559,10 +1922,7 @@
    "fp": 3,
    "table": "an adoptable pets table (name, species, age, size, good with, and fee)",
    "form": "an adoption application (contact details, home type, yard, other pets, the pet you want and why)",
-   "js": "filter buttons that show only dogs, cats or other animals",
-   "level": "Starter",
-   "pattern": "filter",
-   "stretch": "a favorite button on each pet that remembers favorites with localStorage",
+   "stretch": "an adoption FAQ built with `<details>` and `<summary>`",
    "note": "Use your own pet photos or openly licensed ones, and invent the shelter's details.",
    "palette": [
     "#2E7D6B",
@@ -2658,11 +2018,8 @@
    "fp": 4,
    "table": "a weekly class timetable (days as column headers, times as row headers)",
    "form": "a membership sign-up form (contact details, plan, preferred classes, start date and an emergency contact)",
-   "js": "a BMI calculator or an interval workout timer with start, pause and reset buttons",
-   "level": "Moderate",
-   "pattern": "calc",
-   "stretch": "highlight today's column in the timetable using the Date object",
-   "note": "If you build a BMI calculator, present the result neutrally: it is a rough screening number, not a verdict.",
+   "stretch": "a membership price table that compares the plans, with the plan names as column headers",
+   "note": "Keep classes and instructors fictional, or get permission before you use real names and photos.",
    "palette": [
     "#B03226",
     "#2C3E50",
@@ -2741,10 +2098,7 @@
    "fp": 3,
    "table": "a ratings table (title, creator, year, genre and rating out of 5)",
    "form": "a review form with a star rating built from radio buttons in a fieldset, plus title, genre and review text",
-   "js": "sort buttons that reorder the ratings table by rating, title or year",
-   "level": "Ambitious",
-   "pattern": "sort",
-   "stretch": "an average rating calculated from the table data and shown above it",
+   "stretch": "a `<tfoot>` row that shows the average rating, worked out by hand from the table",
    "note": "Keep reviews in your own words; use cover images sparingly and credit their source.",
    "palette": [
     "#5B2A86",
@@ -2828,11 +2182,8 @@
    "fp": 3,
    "table": "a volunteer shifts table (day, time, task, location and spots left)",
    "form": "a volunteer sign-up form (contact details, shift, skills, age confirmation and t-shirt size)",
-   "js": "a donation progress bar (the <progress> element) that updates when a visitor makes a pretend pledge",
-   "level": "Starter",
-   "pattern": "calc",
-   "stretch": "a filter that shows only the shifts that still have spots left",
-   "note": "Never collect real payment details. The pledge is a demo, and the page should say so.",
+   "stretch": "a `<progress>` bar that shows how many of the shifts are already filled",
+   "note": "Never collect real personal details. The sign-up form is a demo, and the page should say so.",
    "palette": [
     "#1E7F4F",
     "#9A5A00",
@@ -2899,12 +2250,10 @@
   <title>Menu · Corner Cup Coffee</title>
   <meta name="description" content="Coffee, tea and breakfast at Corner Cup Coffee, with prices.">
   <link rel="stylesheet" href="css/styles.css">
-  <script src="js/main.js" defer><\/script>
 </head>
 <body>
   <header class="site-header">
     <a class="logo" href="index.html">Corner Cup Coffee</a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
     <nav id="site-nav" aria-label="Main">
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -2918,6 +2267,7 @@
   <main id="main">
     <h1>Our Menu</h1>
     <p style="color: brown">Roasted in small batches every morning.</p>
+    <p><a href="#">Order online</a></p>
 
     <figure>
       <img src="images/latte-art.jpg" width="800" height="533">
@@ -2993,10 +2343,6 @@ body {
 img { max-width: 100%; height: auto; }
 
 .site-header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
   padding: var(--space-m);
   background: var(--color-primary);
 }
@@ -3004,11 +2350,14 @@ img { max-width: 100%; height: auto; }
 .site-header a { color: var(--color-on-primary); }
 
 #site-nav ul {
-  display: flex;
-  gap: var(--space-m);
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+#site-nav li {
+  display: inline-block;
+  margin-right: var(--space-m);
 }
 
 nav a:hover,
@@ -3027,22 +2376,6 @@ main {
 table { border-collapse: collapse; width: 100%; }
 
 th, td { padding: 0.5rem; text-align: left; }
-
-@media (max-width: 600px) {
-  #site-nav ul { flex-direction: column; }
-}
-</script>
-<script type="text/plain" id="pj-sample-js">
-document.documentElement.classList.add('js');
-
-const toggle = document.querySelector('.nav-toggle');
-const nav = document.querySelector('#site-nav');
-
-toggle.addEventListener('click', () => {
-  const open = toggle.getAttribute('aria-expanded') === 'true';
-  toggle.setAttribute('aria-expanded', String(!open));
-  nav.classList.toggle('is-open', !open);
-});
 </script>
 <script>
 WD1.ready(function () {
@@ -3082,14 +2415,6 @@ WD1.ready(function () {
   themeState.custom = obj(themeState.custom);
   if (themeState.id && themeState.id !== 'custom' && !TMAP[themeState.id]) themeState.id = null;
 
-  function guessPattern(text) {
-    const s = String(text || '').toLowerCase();
-    if (/sort|reorder/.test(s)) return 'sort';
-    if (/\btabs?\b|tabbed/.test(s)) return 'tabs';
-    if (/filter|search|show only/.test(s)) return 'filter';
-    if (/time|clock|countdown|open now|hours|date/.test(s)) return 'time';
-    return 'calc';
-  }
   function customTheme() {
     const c = themeState.custom;
     const titles = String(c.pages || '').split(',').map((x) => x.trim()).filter(Boolean);
@@ -3098,8 +2423,8 @@ WD1.ready(function () {
     return {
       id: 'custom', custom: true, name: String(c.name || '').trim() || 'My own idea', mono: '+',
       pitch: String(c.pitch || '').trim() || 'Your idea: fill in the plan below.', sample: '', pages, tp: null, fp: null,
-      table: String(c.table || '').trim(), form: String(c.form || '').trim(), js: String(c.js || '').trim(), stretch: String(c.stretch || '').trim(),
-      level: 'Your call', pattern: guessPattern(c.js), note: 'Run the idea past your instructor in week one.',
+      table: String(c.table || '').trim(), form: String(c.form || '').trim(), stretch: String(c.stretch || '').trim(),
+      note: 'Run the idea past your instructor before you start Milestone 1.',
       palette: d.palette, caption: d.caption, csv: d.csv, legend: d.legend, fields: d.fields
     };
   }
@@ -3107,14 +2432,14 @@ WD1.ready(function () {
   const siteName = () => { const t = theme(); return String(themeState.site || '').trim() || (t && t.sample) || 'Your Site Name'; };
   const saveTheme = (evt) => { store.set('theme', themeState); emit(evt || 'pj:tokens'); };
 
-  const TOK = /\{(site|theme|pages|table|form|js|stretch|tablePage|formPage)\}/g;
+  const TOK = /\{(site|theme|pages|table|form|stretch|tablePage|formPage)\}/g;
   function tokenValues() {
     const t = theme(), F = DATA.fallback, v = {};
     const put = (k, val) => { v[k] = val ? { text: val } : { text: F[k], empty: true }; };
     put('site', t || String(themeState.site || '').trim() ? siteName() : '');
     put('theme', t ? t.name : '');
     put('pages', t && t.pages.length ? t.pages.map((p) => p[0]).join(', ') : '');
-    ['table', 'form', 'js', 'stretch'].forEach((k) => put(k, t ? t[k] : ''));
+    ['table', 'form', 'stretch'].forEach((k) => put(k, t ? t[k] : ''));
     const pg = (i) => (t && i != null && t.pages[i] ? 'the ' + t.pages[i][0] + ' page (' + t.pages[i][1] + ')' : '');
     put('tablePage', pg(t && t.tp));
     put('formPage', pg(t && t.fp));
@@ -3285,55 +2610,16 @@ WD1.ready(function () {
   $$('.pj-stretch').forEach(mountStretch);
   $$('.pj-rubric-wrap').forEach(mountRubric);
 
-  /* ================= Timeline, objectives, progress ================= */
-  const parseDate = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
-  const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
-  const fmtDay = (d) => d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-  const fmtShort = (d) => d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-  const startDate = () => parseDate(store.get('start', ''));
-  const targetText = (m) => { const st = startDate(); return st ? ' · target ' + fmtDay(addDays(st, m.day - 1)) : ''; };
-
-  function renderTimeline() {
-    const start = startDate();
-    let curWeek = null;
-    if (start) {
-      const now = new Date();
-      const day = Math.round((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - start) / 864e5) + 1;
-      if (day >= 1 && day <= 31) curWeek = Math.min(4, Math.ceil(day / 7));
-    }
-    fill($('#pj-weeks'), [1, 2, 3, 4].map((w) => h('div', { class: 'pj-week' + (curWeek === w ? ' now' : '') },
-      h('div', { class: 'pj-week-head' }, h('h4', { text: 'Week ' + w }), curWeek === w ? h('span', { class: 'pill info', text: 'This week' }) : null),
-      start ? h('span', { class: 'small muted', text: fmtShort(addDays(start, (w - 1) * 7)) + ' – ' + fmtShort(addDays(start, w * 7 - 1)) }) : null,
-      h('p', { class: 'pj-week-focus', text: DATA.weeks[w - 1] }),
-      MS.filter((m) => m.week === w).map((m) => {
-        const s = stats(m.id);
-        return h('a', { class: 'pj-stop' + (s.done === s.total ? ' done' : ''), href: '#' + m.id, dataset: { ms: m.id } },
-          h('span', { class: 'pj-stop-code', text: m.code }),
-          h('span', { class: 'pj-stop-title', text: m.title }),
-          h('span', { class: 'pj-stop-meta', text: m.after + ' · ' + m.points + ' pts' + targetText(m) }),
-          h('span', { class: 'pj-bar', 'aria-hidden': 'true' }, h('span', { style: { width: s.pct + '%' } })),
-          h('span', { class: 'sr-only', text: ', ' + s.done + ' of ' + s.total + ' tasks done' }));
-      }))));
-  }
-
-  const startInput = $('#pj-start');
-  startInput.value = store.get('start', '');
-  startInput.addEventListener('change', () => {
-    store.set('start', parseDate(startInput.value) ? startInput.value : '');
-    $('#pj-start-note').textContent = parseDate(startInput.value)
-      ? 'Target dates added. Your instructor\'s due dates always come first.'
-      : 'Add your start date to see a target date for each milestone. Your instructor\'s due dates always come first.';
-    refreshProgress();
-  });
-
+  /* ================= Objectives and progress ================= */
   (function renderObjMap() {
+    const objs = WD1.OBJECTIVES.map((o, i) => [o, i + 1]).filter(([, n]) => MS.some((m) => DATA.objmap[m.id].includes(n)));
     const table = h('table', { class: 'data-table pj-objs' },
       h('caption', { class: 'sr-only', text: 'Course objectives practiced in each milestone' }),
       h('thead', null, h('tr', null, h('th', { scope: 'col', text: 'Course objective' }),
         MS.map((m) => h('th', { scope: 'col', dataset: { ms: m.id } }, h('a', { href: '#' + m.id, text: m.code }))))),
-      h('tbody', null, WD1.OBJECTIVES.map((o, i) => h('tr', null,
-        h('th', { scope: 'row' }, h('b', { text: String(i + 1) }), o),
-        MS.map((m) => h('td', { dataset: { ms: m.id } }, DATA.objmap[m.id].includes(i + 1)
+      h('tbody', null, objs.map(([o, n]) => h('tr', null,
+        h('th', { scope: 'row' }, h('b', { text: String(n) }), o),
+        MS.map((m) => h('td', { dataset: { ms: m.id } }, DATA.objmap[m.id].includes(n)
           ? h('span', { class: 'pj-dot', role: 'img', 'aria-label': 'Practiced in ' + m.code })
           : h('span', { class: 'sr-only', text: 'Not a focus' })))))));
     fill($('#pj-objmap'), table);
@@ -3354,26 +2640,24 @@ WD1.ready(function () {
       const s = stats(next.id);
       link.href = '#' + next.id;
       link.firstChild.textContent = next.code + ' · ' + next.title;
-      $('#pj-next-meta').textContent = plural(s.total - s.done, 'task') + ' left' + targetText(next);
+      $('#pj-next-meta').textContent = plural(s.total - s.done, 'task') + ' left';
     } else {
       link.href = '#submit';
       link.firstChild.textContent = 'Submit your project';
       $('#pj-next-meta').textContent = 'Every milestone task is done. Nice work.';
     }
-    renderTimeline();
   }
 
   /* ================= Theme picker ================= */
   const CCOLORS = ['var(--ch2)', 'var(--ch3)', 'var(--ch4)', 'var(--ch5)', 'var(--chl)', 'var(--accent)', 'var(--visited)', 'var(--good)', 'var(--warn)', 'var(--bad)', 'var(--ink-2)'];
   function renderThemeCards() {
     const ct = customTheme();
-    const cards = THEMES.concat([{ id: 'custom', name: themeState.custom.name ? ct.name : 'My own idea', mono: '+', pitch: 'Something else you care about. You fill in the plan.', level: 'Your call' }]);
+    const cards = THEMES.concat([{ id: 'custom', name: themeState.custom.name ? ct.name : 'My own idea', mono: '+', pitch: 'Something else you care about. You fill in the plan.' }]);
     fill($('#pj-themes'), cards.map((t, i) => {
       const b = h('button', { type: 'button', class: 'pj-theme', 'aria-pressed': String(themeState.id === t.id), dataset: { id: t.id } },
         h('span', { class: 'pj-mono', 'aria-hidden': 'true', text: t.mono }),
         h('span', { class: 'pj-theme-name', text: t.name }),
         h('span', { class: 'pj-theme-pitch', text: t.pitch }),
-        h('span', { class: 'pj-theme-tags' }, h('span', { class: 'pill', text: 'JavaScript: ' + t.level })),
         h('span', { class: 'pill visited pj-chosen', text: 'Your theme' }));
       b.style.setProperty('--c', CCOLORS[i % CCOLORS.length]);
       b.addEventListener('click', () => chooseTheme(t.id));
@@ -3398,13 +2682,12 @@ WD1.ready(function () {
   });
   $('#pj-clear-theme').addEventListener('click', () => chooseTheme(null));
 
-  const PATTERN_NAME = DATA.patterns;
   function renderDetail() {
     const el = $('#pj-detail');
     el.classList.add('wide');
     const t = theme();
     if (!t) {
-      fill(el, h('p', { class: 'muted', text: 'No theme chosen yet. Pick a card to see its full plan: pages, table, form, JavaScript feature and a stretch idea.' }));
+      fill(el, h('p', { class: 'muted', text: 'No theme chosen yet. Pick a card to see its full plan: pages, table, form and a stretch idea.' }));
       return;
     }
     const siteInput = h('input', { type: 'text', id: 'pj-site', placeholder: t.sample || 'Your Site Name', autocomplete: 'off' });
@@ -3421,8 +2704,7 @@ WD1.ready(function () {
         ['pages', 'Pages (comma-separated, home page first)', 'text', 'Home, Services, Prices, Book a Repair, About'],
         ['table', 'Data table (Milestone 4)', 'area', 'a price list (service, time, price)'],
         ['form', 'Form (Milestone 4)', 'area', 'a repair booking form (contact details, bike type, date, problem)'],
-        ['js', 'JavaScript feature (Milestone 5)', 'area', 'a price estimator that totals the services a visitor selects'],
-        ['stretch', 'Stretch idea', 'area', 'an FAQ accordion with an Expand all button']
+        ['stretch', 'Stretch idea', 'area', 'an FAQ built with details and summary']
       ];
       body = h('div', { class: 'pj-form-grid', style: { marginTop: '12px' } }, FIELDS.map(([k, label, kind, ph]) => {
         const id = 'pj-cu-' + k;
@@ -3440,15 +2722,12 @@ WD1.ready(function () {
           h('span', { class: 'chip' }, h('b', { text: p[1] }), p[0] + (i === t.tp ? ' · table' : i === t.fp ? ' · form' : '')))))),
         h('dt', { text: 'Data table (M4)' }), h('dd', { text: cap(t.table) + '.' }),
         h('dt', { text: 'Form (M4)' }), h('dd', { text: cap(t.form) + '.' }),
-        h('dt', { text: 'JavaScript feature (M5)' }), h('dd', { text: cap(t.js) + '.' }),
         h('dt', { text: 'Stretch idea' }), h('dd', { text: cap(t.stretch) + '.' }),
         h('dt', { text: 'Watch out' }), h('dd', { text: t.note }));
     }
     fill(el, h('div', { class: 'pj-detail-card' },
       h('div', { class: 'pj-detail-head' },
-        h('h3', { text: t.name }),
-        h('span', { class: 'pill', text: 'JavaScript: ' + t.level }),
-        h('span', { class: 'pill info', text: 'Pattern: ' + PATTERN_NAME[t.pattern] })),
+        h('h3', { text: t.name })),
       h('p', { class: 'muted', style: { margin: 0 }, text: t.pitch }),
       body, siteField));
   }
@@ -3526,7 +2805,7 @@ WD1.ready(function () {
     const odd = files.filter((f) => f && !/^[a-z0-9][a-z0-9-]*\.html$/.test(f));
     if (odd.length) out.push(['warn', 'Use lowercase letters, numbers and hyphens, ending in `.html`: ' + odd.map((f) => '`' + f.replace(/`/g, '') + '`').join(', ')]);
     if (sm.pages.length < 4) out.push(['info', 'Plan 4–5 pages. Milestone 2 asks you to build at least three of them.']);
-    if (sm.pages.length > 6) out.push(['warn', 'That is a lot of pages for one month. Four or five well-built pages beat eight thin ones.']);
+    if (sm.pages.length > 6) out.push(['warn', 'That is a lot of pages for this project. Four or five well-built pages beat eight thin ones.']);
     if (!out.length) out.push(['good', plural(sm.pages.length, 'page') + ', all with clean file names. Copy the README table into your README.']);
     return out;
   }
@@ -3535,7 +2814,6 @@ WD1.ready(function () {
     const second = sm.pages[1] ? slug(sm.pages[1].t) || 'page' : 'page';
     const nodes = sm.pages.map((p) => ({ n: p.f || '(no file name)' })).concat([
       { n: 'css/', k: [{ n: 'styles.css' }] },
-      { n: 'js/', k: [{ n: 'main.js' }] },
       { n: 'images/', k: [{ n: 'README.md' }, { n: 'your-photo.jpg     (lowercase, hyphens, no spaces)' }] },
       { n: 'planning/', k: [{ n: 'wireframe-home.jpg' }, { n: 'wireframe-' + second + '.jpg' }] },
       { n: 'README.md' }
@@ -3547,7 +2825,7 @@ WD1.ready(function () {
     return root + '/\n' + draw(nodes, '');
   }
   function navHTML(current) {
-    return ['<nav id="site-nav" class="site-nav" aria-label="Main">', '  <ul>']
+    return ['<nav class="site-nav" aria-label="Main">', '  <ul>']
       .concat(sm.pages.map((p) => '    <li><a href="' + escAttr(p.f) + '"' + (p.f === current ? ' aria-current="page"' : '') + '>' + escText(p.t) + '</a></li>'))
       .concat(['  </ul>', '</nav>']).join('\n');
   }
@@ -3602,7 +2880,7 @@ WD1.ready(function () {
       'It opens a TCP connection to that IP address on port 443 and sets up encryption (TLS).',
       '**HTTP request:** it sends `GET ' + path + '` with the header `Host: ' + host + '`, so the server knows which of its many sites you want.',
       '**HTTP response:** the server answers `200 OK` with `Content-Type: text/html` and the contents of `index.html`.',
-      'The browser parses the HTML and sends a new request for each linked file (`css/styles.css`, `js/main.js`, every image), then renders the page.'
+      'The browser parses the HTML and sends a new request for each linked file (`css/styles.css`, every image), then renders the page.'
     ];
     const req = 'GET ' + path + ' HTTP/1.1\nHost: ' + host + '\nAccept: text/html';
     const res = 'HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\nCache-Control: max-age=600\nServer: GitHub.com\n\n<!DOCTYPE html>\n<html lang="en">…';
@@ -3635,15 +2913,13 @@ WD1.ready(function () {
       '  <title>' + escText(isHome ? 'Home' : title) + ' · ' + escText(site) + '</title>',
       '  <meta name="description" content="' + escAttr(p.d || 'One sentence about what a visitor finds on this page.') + '">',
       '  <link rel="stylesheet" href="css/styles.css">',
-      '  <script src="js/main.js" defer>' + SCRIPT_END,
       '</head>',
       '<body>',
       '  <a class="skip-link" href="#main">Skip to main content</a>',
       '',
       '  <header class="site-header">',
       '    <a class="logo" href="' + escAttr(home.f) + '">' + escText(site) + '</a>',
-      '    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>',
-      '    <nav id="site-nav" class="site-nav" aria-label="Main">',
+      '    <nav class="site-nav" aria-label="Main">',
       '      <ul>'
     ].concat(sm.pages.map((x) => '        <li><a href="' + escAttr(x.f) + '"' + (x === p ? ' aria-current="page"' : '') + '>' + escText(x.t) + '</a></li>'), [
       '      </ul>',
@@ -4003,139 +3279,12 @@ WD1.ready(function () {
     fbPreview();
   }
 
-  /* ================= M5: breakpoint planner ================= */
-  const bp = Object.assign({ w: 390, b1: 40, b2: 64, nav: 1, cols: [1, 2, 3] }, obj(store.get('bp', {})));
-  if (!Array.isArray(bp.cols) || bp.cols.length !== 3) bp.cols = [1, 2, 3];
-  const bpW = $('#pj-bp-w'), bp1 = $('#pj-bp-1'), bp2 = $('#pj-bp-2'), bpNav = $('#pj-bp-nav');
-  const bpCols = [0, 1, 2].map((i) => $('#pj-bp-c' + i));
-  bpCols.forEach((s) => fill(s, [1, 2, 3, 4].map((n) => h('option', { value: String(n), text: plural(n, 'column') }))));
-  const PRESETS = [['Small phone', 360], ['Phone', 390], ['Tablet', 768], ['Laptop', 1024], ['Desktop', 1280], ['Wide', 1440]];
-  const presetBtns = PRESETS.map(([n, w]) => btn(null, n + ' ' + w, '', () => { bp.w = w; bpW.value = w; renderBP(); bpSave(); }));
-  fill($('#pj-bp-presets'), presetBtns);
-  function bpSync() { bpW.value = bp.w; bp1.value = bp.b1; bp2.value = bp.b2; bpNav.value = String(bp.nav); bpCols.forEach((s, i) => { s.value = String(bp.cols[i]); }); }
-  const bpSave = debounce(() => store.set('bp', bp), 400);
-  bpW.addEventListener('input', () => { bp.w = +bpW.value; renderBP(); bpSave(); });
-  [bp1, bp2].forEach((el) => el.addEventListener('input', () => { bp.b1 = +bp1.value || 40; bp.b2 = +bp2.value || 64; renderBP(); bpSave(); }));
-  bpNav.addEventListener('change', () => { bp.nav = +bpNav.value; renderBP(); bpSave(); });
-  bpCols.forEach((s, i) => s.addEventListener('change', () => { bp.cols[i] = +s.value; renderBP(); bpSave(); }));
-  const colsCSS = (n) => (n === 1 ? '1fr' : 'repeat(' + n + ', 1fr)');
-  function scaleBP() {
-    const stage = $('#pj-bp-stage'), page = $('#pj-bp-page');
-    const s = Math.min(1, stage.clientWidth / bp.w);
-    page.style.transform = s < 1 ? 'scale(' + s + ')' : '';
-    stage.style.height = Math.ceil(page.offsetHeight * s) + 'px';
-  }
-  function renderBP() {
-    const b1 = Math.max(20, bp.b1), b2 = bp.b2 > b1 ? bp.b2 : b1 + 1;
-    const level = bp.w >= b2 * 16 ? 2 : bp.w >= b1 * 16 ? 1 : 0;
-    const cols = bp.cols[level], navRow = level >= bp.nav;
-    $('#pj-bp-wout').textContent = bp.w + 'px';
-    presetBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(PRESETS[i][1] === bp.w)));
-    const page = $('#pj-bp-page');
-    const cards = [];
-    for (let i = 1; i <= 6; i++) cards.push(h('div', { class: 'pj-mk-card', text: 'Card ' + i }));
-    fill(page,
-      h('div', { class: 'pj-mk-head' }, h('span', { text: siteName() }),
-        navRow ? h('span', { class: 'pj-mk-links' }, sm.pages.slice(0, 5).map((p) => h('span', { text: p.t }))) : h('span', { class: 'pj-mk-btn', text: 'Menu' })),
-      h('div', { class: 'pj-mk-hero', text: bp.w + 'px wide' }),
-      h('div', { class: 'pj-mk-grid', style: { gridTemplateColumns: 'repeat(' + cols + ', minmax(0, 1fr))' } }, cards),
-      h('div', { class: 'pj-mk-foot' }));
-    page.style.width = bp.w + 'px';
-    scaleBP();
-    const active = level === 0 ? 'base styles only' : 'base + @media (min-width: ' + b1 + 'em)' + (level === 2 ? ' + @media (min-width: ' + b2 + 'em)' : '');
-    $('#pj-bp-status').innerHTML = fmt('At **' + bp.w + 'px**: ' + active + ' → ' + plural(cols, 'card column') + ', ' + (navRow ? 'nav links in a row' : 'a Menu button') + '.' + (bp.b2 <= bp.b1 ? ' Breakpoint 2 must be larger than breakpoint 1.' : ''));
-    const navCSS = ['  .js .nav-toggle {', '    display: none;', '  }', '', '  .site-nav,', '  .js .site-nav:not(.is-open) {', '    display: block;', '    flex-basis: auto;', '  }', '', '  .site-nav ul {', '    display: flex;', '    gap: var(--space-m);', '  }'];
-    const L = ['/* Base: small screens, no media query needed */', '.card-grid {', '  display: grid;', '  grid-template-columns: ' + colsCSS(bp.cols[0]) + ';', '  gap: var(--space-m);', '}', ''];
-    [1, 2].forEach((lv) => {
-      const em = lv === 1 ? b1 : b2;
-      const inner = [];
-      if (bp.cols[lv] !== bp.cols[lv - 1]) inner.push('  .card-grid {', '    grid-template-columns: ' + colsCSS(bp.cols[lv]) + ';', '  }');
-      if (bp.nav === lv) { if (inner.length) inner.push(''); inner.push(...navCSS); }
-      if (!inner.length) inner.push('  /* Nothing changes here yet: add rules or delete this query */');
-      L.push('/* Breakpoint ' + lv + ': ' + em + 'em, which is ' + em * 16 + 'px at the default text size */', '@media (min-width: ' + em + 'em) {', ...inner, '}', '');
-    });
-    fill($('#pj-bp-code'), WD1.codeBlock(L.join('\n').trim(), 'css', 'css/styles.css · responsive'));
-  }
-  if ('ResizeObserver' in window) new ResizeObserver(() => scaleBP()).observe($('#pj-bp-stage'));
-  else window.addEventListener('resize', scaleBP);
-
-  /* ================= M5: pattern library ================= */
-  function selectPattern() {
-    const t = theme();
-    const panels = $$('#pj-patterns > [data-tab]');
-    const btns = $$('#pj-patterns .tab-btn');
-    btns.forEach((b, i) => { if (!b.dataset.base) b.dataset.base = b.textContent; b.textContent = b.dataset.base + (t && panels[i] && panels[i].dataset.pattern === t.pattern ? ' ★' : ''); });
-    if (!t) return;
-    const idx = panels.findIndex((p) => p.dataset.pattern === t.pattern);
-    if (idx >= 0 && btns[idx]) btns[idx].click();
-  }
-
-  /* ================= Final: demo timer ================= */
-  const tm = { segs: [], i: 0, left: 0, running: false, last: 0, timer: null, ended: false };
-  const tmLen = $('#pj-tm-len'), tmGo = $('#pj-tm-go');
-  const tmLive = (msg) => { $('#pj-tm-live').textContent = msg; };
-  const clock = (sec) => { const s = Math.ceil(Math.abs(sec)); return (sec < 0 ? '+' : '') + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
-  function tmBuild() {
-    const total = +tmLen.value, base = DATA.demo.reduce((a, s) => a + s.s, 0);
-    tm.segs = DATA.demo.map((s) => ({ t: s.t, p: s.p, s: Math.round((s.s * total) / base) }));
-    tm.i = 0; tm.left = tm.segs[0].s; tm.ended = false;
-    tmStop(true);
-    tmRender();
-  }
-  function tmStop(reset) { tm.running = false; clearInterval(tm.timer); tmGo.textContent = reset ? 'Start' : tm.ended ? 'Start over' : 'Resume'; }
-  function tmStart() {
-    tm.running = true; tm.last = Date.now();
-    tm.timer = setInterval(tmTick, 250);
-    tmGo.textContent = 'Pause';
-    tmLive('Started: ' + tm.segs[tm.i].t + '.');
-  }
-  function tmAdvance(manual) {
-    if (tm.i < tm.segs.length - 1) {
-      tm.i++;
-      tm.left = manual ? tm.segs[tm.i].s : tm.left + tm.segs[tm.i].s;
-      tmLive('Next: ' + tm.segs[tm.i].t + '. ' + tm.segs[tm.i].p);
-    } else if (!tm.ended) {
-      tm.ended = true;
-      if (manual) { tm.left = 0; tmStop(true); }
-      tmLive('Time is up. Wrap up and take questions.');
-    }
-  }
-  function tmTick() {
-    const now = Date.now();
-    tm.left -= (now - tm.last) / 1000;
-    tm.last = now;
-    if (tm.left <= 0 && !tm.ended) tmAdvance(false);
-    tmRender();
-  }
-  function tmRender() {
-    const seg = tm.segs[tm.i];
-    const total = tm.segs.reduce((a, s) => a + s.s, 0);
-    const before = tm.segs.slice(0, tm.i).reduce((a, s) => a + s.s, 0);
-    const elapsed = Math.min(total, before + (seg.s - Math.max(0, tm.left)));
-    $('#pj-tm-seg').textContent = 'Part ' + (tm.i + 1) + ' of ' + tm.segs.length + ': ' + seg.t;
-    $('#pj-tm-prompt').textContent = seg.p;
-    const c = $('#pj-tm-clock');
-    c.textContent = tm.ended && tm.left < 0 ? 'Over by ' + clock(tm.left).slice(1) : clock(Math.max(tm.left, 0));
-    c.classList.toggle('over', tm.ended && tm.left < 0);
-    $('#pj-tm-bar').style.width = Math.round((elapsed / total) * 100) + '%';
-    fill($('#pj-tm-list'), tm.segs.map((s, i) => h('li', { class: i === tm.i ? 'now' : i < tm.i ? 'past' : '', 'aria-current': i === tm.i ? 'step' : null },
-      h('span', { text: s.t }), h('span', { class: 'num', text: clock(s.s) }))));
-  }
-  tmGo.addEventListener('click', () => {
-    if (tm.running) { tmStop(false); tmLive('Paused.'); return; }
-    if (tm.ended) tmBuild();
-    tmStart();
-  });
-  $('#pj-tm-next').addEventListener('click', () => { tmAdvance(true); tmRender(); });
-  $('#pj-tm-reset').addEventListener('click', () => { tmBuild(); tmLive('Timer reset.'); });
-  tmLen.addEventListener('change', tmBuild);
-
   /* ================= Project checker ================= */
   const readSample = (id) => document.getElementById(id).textContent.replace(/<\\\/script/gi, '</' + 'script').replace(/^\s*\n/, '').replace(/\s+$/, '') + '\n';
-  const SAMPLE = { html: readSample('pj-sample-html'), css: readSample('pj-sample-css'), js: readSample('pj-sample-js') };
+  const SAMPLE = { html: readSample('pj-sample-html'), css: readSample('pj-sample-css') };
   const CK = { site: null, page: null, filter: 'all', only: false, mode: 'sample', results: [], loading: false };
   const ED = {};
-  const CK_TABS = [['html', 'HTML'], ['css', 'CSS'], ['js', 'JavaScript']];
+  const CK_TABS = [['html', 'HTML'], ['css', 'CSS']];
   function ckTab(k) {
     CK_TABS.forEach(([x]) => {
       const sel = x === k;
@@ -4159,15 +3308,15 @@ WD1.ready(function () {
       ckTab(nk); ED[nk].tab.focus();
     });
   });
-  const ckSet = (code) => { CK.loading = true; ED.html.set(code.html || ''); ED.css.set(code.css || ''); ED.js.set(code.js || ''); CK.loading = false; };
-  const ckCode = () => ({ html: ED.html.get(), css: ED.css.get(), js: ED.js.get() });
+  const ckSet = (code) => { CK.loading = true; ED.html.set(code.html || ''); ED.css.set(code.css || ''); CK.loading = false; };
+  const ckCode = () => ({ html: ED.html.get(), css: ED.css.get() });
   function ckBanner() {
     const b = $('#pj-ck-banner'), mode = CK.mode;
     b.classList.toggle('mine', !/^sample/.test(mode));
     const html = {
       sample: '<strong>Sample page loaded.</strong> This is <code>menu.html</code> from a made-up café site, with <strong>6 deliberate mistakes</strong>. Fix them in the editor and watch the results change, or paste or load your own page.',
       'sample-edited': '<strong>Sample page, edited.</strong> Keep fixing, or press <em>Clear</em> and paste your own code.',
-      files: '<strong>Your files.</strong> Checking <code>' + esc(CK.page || '') + '</code> with the CSS and JavaScript it links to.',
+      files: '<strong>Your files.</strong> Checking <code>' + esc(CK.page || '') + '</code> with the CSS it links to.',
       'files-edited': '<strong>Your files, edited here.</strong> Checking <code>' + esc(CK.page || '') + '</code>. Edits here do not change the files on your computer.',
       empty: '<strong>Ready for your code.</strong> Paste a page into the HTML tab and its stylesheet into the CSS tab, or use <em>Load files…</em> or <em>Load a folder…</em>.',
       mine: '<strong>Your code.</strong> Saved in this browser as you type.'
@@ -4177,8 +3326,8 @@ WD1.ready(function () {
   const ckSave = debounce(() => {
     if (CK.mode === 'sample') { store.set('checker', undefined); return; }
     const c = ckCode();
-    if (c.html.length + c.css.length + c.js.length > 400000) return;
-    store.set('checker', { html: c.html, css: c.css, js: c.js, mode: CK.mode === 'sample-edited' ? 'sample-edited' : 'mine' });
+    if (c.html.length + c.css.length > 400000) return;
+    store.set('checker', { html: c.html, css: c.css, mode: CK.mode === 'sample-edited' ? 'sample-edited' : 'mine' });
   }, 800);
   const ckRunSoon = debounce(() => ckRun(false), 450);
   function ckEdited() {
@@ -4448,6 +3597,64 @@ WD1.ready(function () {
       } },
     { ms: 'm2', label: 'No obsolete presentational elements', ref: 's3-3', fix: 'Replace them with semantic HTML and CSS (for example `<center>` becomes `text-align: center`).',
       run: (x) => { const bad = DEPRECATED.filter((t) => x.doc.querySelector(t)); return bad.length ? ['fail', 'Found: ' + bad.map((t) => '`<' + t + '>`').join(', ')] : ['pass', 'None found.']; } },
+    { ms: 'm2', label: 'Has a meta description', ref: 's3-4', fix: 'Add `<meta name="description" content="One sentence about this page.">` inside `<head>`.',
+      run: (x) => { const m = x.doc.querySelector('meta[name="description" i]'); const c = m ? (m.getAttribute('content') || '').trim() : ''; return c ? ['pass', qv(c)] : ['warn', 'No description.']; } },
+    { ms: 'm2', label: 'The title is descriptive', ref: 's3-4', fix: 'Use `Page name · Site name`, for example `Menu · Corner Cup Coffee`.',
+      run: (x) => {
+        const t = x.doc.querySelector('title'), v = t ? textOf(t) : '';
+        if (!v) return ['na', 'No title yet.'];
+        return /^(document|untitled|home|index|page|title|test|my (web ?)?(site|page))$/i.test(v) || v.length < 5 ? ['warn', qv(v) + ' does not say which page or site this is.'] : ['pass', qv(v)];
+      } },
+    { ms: 'm2', label: 'Alt text describes images (no file names)', ref: 's3-5', fix: 'Describe what matters in the image. Skip "image of", and never use the file name.',
+      run: (x) => {
+        const imgs = $$('img[alt]', x.doc).filter((i) => i.getAttribute('alt').trim());
+        if (!imgs.length) return ['na', 'No images with alt text on this page.'];
+        const bad = imgs.map((i) => i.getAttribute('alt').trim()).filter((a) => /\.(jpe?g|png|gif|webp|svg|avif)$/i.test(a) || /^(image|picture|photo|graphic|img)( of)?\b/i.test(a) || /^(image|photo|picture)\s*\d*$/i.test(a));
+        return bad.length ? ['warn', listv(bad, 3)] : ['pass', plural(imgs.length, 'description') + ' checked.'];
+      } },
+    { ms: 'm2', label: 'No placeholder links (`href="#"`)', ref: 's3-5', fix: 'Point every link at a real page, or remove it until the page exists.',
+      run: (x) => { const bad = $$('a[href]', x.doc).filter((a) => /^(#|javascript:.*)?$/i.test(a.getAttribute('href').trim())); return bad.length ? ['warn', listv(bad.map((a) => textOf(a) || a.getAttribute('href')), 3)] : ['pass', 'None found.']; } },
+    { ms: 'm2', label: 'Images have `width` and `height` attributes', ref: 's3-5', fix: 'Add the image\'s real pixel size, like `width="1200" height="800"`, so the page does not jump while images load.',
+      run: (x) => {
+        const imgs = $$('img', x.doc);
+        if (!imgs.length) return ['na', 'No images on this page.'];
+        const bad = imgs.filter((i) => !i.hasAttribute('width') || !i.hasAttribute('height'));
+        return bad.length ? ['warn', listv(bad.map((i) => i.getAttribute('src') || '(no src)'), 3)] : ['pass', 'All ' + plural(imgs.length, 'image') + ' have dimensions.'];
+      } },
+    { ms: 'm2', label: 'No leftover placeholder text', ref: 's3-5', fix: 'Replace "lorem ipsum", "TODO" and "Your Site Name" with real content.',
+      run: (x) => {
+        const t = textOf(x.doc.body || x.doc.documentElement);
+        const hits = ['lorem ipsum', 'TODO', 'Your Site Name', 'Replace this'].filter((w) => new RegExp('\\b' + w + '\\b', w === 'TODO' ? '' : 'i').test(t));
+        return hits.length ? ['warn', 'Found ' + listv(hits)] : ['pass', 'None found.'];
+      } },
+    { ms: 'm2', label: 'Local links and files exist (with matching capitalization)', ref: 's2-6', fix: 'Fix each path so it matches a real file exactly, capital letters included, or add the missing file.',
+      run: (x) => {
+        if (!x.site || !x.pagePath) return ['na', 'Load your site folder to check links between files.'];
+        const refs = localRefs(x.doc).filter((r) => !(r.el.tagName === 'FORM' && r.a === 'action') || /\.html?$/i.test(pathPart(r.v)));
+        const kinds = x.site.kinds;
+        const missing = [], wrongCase = [];
+        let checked = 0;
+        refs.forEach((r) => {
+          const p = resolvePath(x.pagePath, r.v);
+          if (!p) return;
+          if (x.site.flat && !kinds[kindOf(p)]) return;
+          checked++;
+          const f = findFile(x.site, p);
+          if (f.ok) return;
+          if (f.caseOf) wrongCase.push(r.v + ' (file is ' + f.caseOf + ')'); else missing.push(r.v);
+        });
+        if (wrongCase.length) return ['fail', 'Capitalization differs: ' + listv(wrongCase, 3) + (missing.length ? '. Missing: ' + listv(missing, 3) : '')];
+        if (missing.length) return ['fail', 'Missing: ' + listv(missing, 4)];
+        return ['pass', checked ? 'All ' + plural(checked, 'local reference') + ' found.' : 'No local references to check.'];
+      } },
+    { ms: 'm2', label: 'The nav matches on every page', ref: 's3-6', fix: 'Copy the same nav into every page; only `aria-current="page"` should move.',
+      run: (x) => {
+        if (!x.site || x.site.pages.length < 2 || !x.pagePath) return ['na', 'Load at least two pages to compare navigation.'];
+        const sig = (doc) => { const n = doc.querySelector('nav'); return n ? $$('a[href]', n).map((a) => pathPart(a.getAttribute('href'))).join('|') : ''; };
+        const mine = sig(x.doc);
+        const diff = x.site.pages.filter((p) => p !== x.pagePath && sig(siteDoc(p)) !== mine);
+        return diff.length ? ['warn', 'Different nav links on ' + listv(diff, 4)] : ['pass', 'Same links on all ' + plural(x.site.pages.length, 'page') + '.'];
+      } },
 
     /* M3 · Style System */
     { ms: 'm3', label: 'Links an external stylesheet', ref: 's4-3', fix: 'Add `<link rel="stylesheet" href="css/styles.css">` inside `<head>` on every page.',
@@ -4470,7 +3677,7 @@ WD1.ready(function () {
         if (u) return ['warn', '`var()` is used ' + plural(u, 'time') + ', but no custom properties are defined in the CSS you pasted.'];
         return ['fail', 'No custom properties.'];
       } },
-    { ms: 'm3', label: 'Uses at least five selector types', ref: 's4-4', fix: 'Use each where it fits: element (`p`), class (`.card`), id (`#site-nav`), descendant or child (`nav a`, `ul > li`), pseudo-class (`a:hover`), attribute (`[aria-current="page"]`).',
+    { ms: 'm3', label: 'Uses at least five selector types', ref: 's4-4', fix: 'Use each where it fits: element (`p`), class (`.card`), id (`#main`), descendant or child (`nav a`, `ul > li`), pseudo-class (`a:hover`), attribute (`[aria-current="page"]`).',
       run: (x) => {
         if (!x.hasCSS) return NA_CSS;
         const T = selectorTypes(x.css.selectors);
@@ -4496,7 +3703,7 @@ WD1.ready(function () {
         if (f.length) return ['pass', listv(f, 2)];
         return killed ? ['fail', 'Outlines are removed and no `:focus` style replaces them.'] : ['warn', 'No `:focus` or `:focus-visible` rules; the browser default ring is used.'];
       } },
-    { ms: 'm3', label: 'The navigation is styled', ref: 's4-4', fix: 'Style the menu: `nav ul { display: flex; list-style: none; }`, link padding, hover and current-page states.',
+    { ms: 'm3', label: 'The navigation is styled', ref: 's4-4', fix: 'Style the menu: `nav ul { list-style: none; }`, `nav li { display: inline-block; }`, link padding, hover and current-page states.',
       run: (x) => { if (!x.hasCSS) return NA_CSS; const s = x.css.selectors.filter((v) => /nav/i.test(v)); return s.length ? ['pass', plural(s.length, 'rule') + ', for example ' + listv(s, 2)] : ['warn', 'No selectors mention the nav.']; } },
 
     /* M4 · Tables and Forms */
@@ -4568,141 +3775,6 @@ WD1.ready(function () {
         if (missing.length) return ['warn', plural(missing.length, 'form') + ' without both attributes.'];
         if (forms.some((f) => /post/i.test(f.getAttribute('method')))) return ['warn', '`method="post"` will fail on GitHub Pages.'];
         return ['pass', listv(forms.map((f) => 'action="' + f.getAttribute('action') + '" method="' + f.getAttribute('method') + '"'), 2)];
-      } },
-
-    /* M5 · Responsive and Interactive */
-    { ms: 'm5', label: 'Has a responsive viewport `<meta>`', ref: 'sl-3', fix: 'Add `<meta name="viewport" content="width=device-width, initial-scale=1">` inside `<head>`.',
-      run: (x) => {
-        const m = x.doc.querySelector('meta[name="viewport" i]');
-        if (!m) return ['fail', 'No viewport meta tag, so phones show a zoomed-out desktop layout.'];
-        const c = m.getAttribute('content') || '';
-        if (/user-scalable\s*=\s*(no|0)|maximum-scale\s*=\s*1(\.0)?\b/i.test(c)) return ['warn', qv(c) + ' stops visitors from zooming.'];
-        return /width\s*=\s*device-width/i.test(c) ? ['pass', qv(c)] : ['warn', qv(c) + ' is missing `width=device-width`.'];
-      } },
-    { ms: 'm5', label: 'Uses media queries', ref: 'sl-3', fix: 'Add at least one width-based query, for example `@media (min-width: 40em) { … }`.',
-      run: (x) => {
-        if (!x.hasCSS) return NA_CSS;
-        const w = x.css.media.filter((m) => /width/i.test(m));
-        return w.length ? ['pass', listv(w, 3)] : x.css.media.length ? ['warn', 'Only non-width queries: ' + listv(x.css.media, 2)] : ['fail', 'No media queries.'];
-      } },
-    { ms: 'm5', label: 'Media queries are mobile-first (`min-width`)', ref: 'sl-3', fix: 'Write small-screen styles first, outside any query, then add layout with `@media (min-width: …)` as the screen grows.',
-      run: (x) => {
-        if (!x.hasCSS) return NA_CSS;
-        const w = x.css.media.filter((m) => /width/i.test(m));
-        if (!w.length) return ['na', 'No width-based media queries yet.'];
-        const min = w.filter((m) => /min-width|width\s*>|<=?\s*width/i.test(m)).length;
-        const max = w.filter((m) => /max-width|width\s*</i.test(m)).length;
-        return min ? ['pass', min + ' `min-width` ' + (min === 1 ? 'query' : 'queries') + (max ? ' (plus ' + max + ' `max-width`)' : '') + '.'] : ['warn', 'Only `max-width` queries: this stylesheet is desktop-first.'];
-      } },
-    { ms: 'm5', label: 'Lays out with Flexbox or Grid', ref: 'sl-1', fix: 'Use `display: flex` for rows of items (nav, header) and `display: grid` for card layouts.',
-      run: (x) => {
-        if (!x.hasCSS) return NA_CSS;
-        const d = Array.from(x.css.displays).filter((v) => /flex|grid/.test(v));
-        return d.length ? ['pass', 'Found ' + d.map((v) => '`display: ' + v + '`').join(', ')] : ['fail', 'No `display: flex` or `display: grid`.'];
-      } },
-    { ms: 'm5', label: 'Images scale down (`max-width: 100%`)', ref: 'sl-3', fix: 'Add `img { max-width: 100%; height: auto; }` so images never overflow small screens.',
-      run: (x) => (!x.hasCSS ? NA_CSS : cssHas(x, 'max-width', /100%/, /(^|[\s,>+~(])img\b/) ? ['pass', 'Found an `img` rule with `max-width: 100%`.'] : ['warn', 'No `img { max-width: 100%; }` rule.']) },
-    { ms: 'm5', label: 'Has a menu button for small screens', ref: 'sl-5', fix: 'Add `<button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>` and toggle it with JavaScript (see the starter\'s `js/main.js`).',
-      run: (x) => {
-        const b = $$('button[aria-expanded]', x.doc);
-        return b.length ? ['pass', listv(b.map((e) => textOf(e) || e.getAttribute('aria-label') || 'button'))] : ['warn', 'No `<button aria-expanded>` on this page.'];
-      } },
-    { ms: 'm5', label: 'Includes a script', ref: 'sl-4', fix: 'Add `<script src="js/main.js" defer><\/script>` inside `<head>`.',
-      run: (x) => {
-        const s = $$('script', x.doc).filter(x.jsType);
-        return s.length ? ['pass', listv(s.map((e) => e.getAttribute('src') || 'inline script'))] : ['fail', 'No `<script>` on this page.'];
-      } },
-    { ms: 'm5', label: 'JavaScript responds to events with `addEventListener`', ref: 'sl-5', fix: 'Select an element and listen: `button.addEventListener(\'click\', () => { … });`.',
-      run: (x) => {
-        const n = (x.jsText.match(/addEventListener\s*\(/g) || []).length;
-        if (n) return ['pass', plural(n, 'event listener') + '.'];
-        if (!x.hasJS) return $$('script[src]', x.doc).length ? ['na', 'Paste `js/main.js` into the JavaScript tab (or load your files) to check it.'] : ['fail', 'No JavaScript found.'];
-        return ['fail', 'The JavaScript never calls `addEventListener`.'];
-      } },
-    { ms: 'm5', label: 'No inline event handlers (`onclick=`)', ref: 'sl-5', fix: 'Remove `onclick="…"` attributes and attach listeners in `js/main.js` with `addEventListener`.',
-      run: (x) => {
-        const bad = $$('*', x.doc).filter((e) => Array.from(e.attributes).some((a) => /^on[a-z]+$/i.test(a.name)));
-        return bad.length ? ['warn', listv(bad.map((e) => '<' + e.tagName.toLowerCase() + ' ' + Array.from(e.attributes).find((a) => /^on/i.test(a.name)).name + '>'), 3)] : ['pass', 'None found.'];
-      } },
-    { ms: 'm5', label: 'Scripts in `<head>` use `defer`', ref: 'sl-5', fix: 'Add `defer` (`<script src="js/main.js" defer><\/script>`) so the script runs after the HTML has loaded.',
-      run: (x) => {
-        const head = $$('head script[src]', x.doc).filter((s) => !s.hasAttribute('defer') && !s.hasAttribute('async') && !/module/i.test(s.getAttribute('type') || ''));
-        return head.length ? ['warn', listv(head.map((s) => s.getAttribute('src'))) + ' can run before the page\'s elements exist.'] : ['pass', 'Scripts wait for the HTML.'];
-      } },
-
-    /* Final · Polish, Audit and Present */
-    { ms: 'final', label: 'Has a meta description', ref: 'sl-6', fix: 'Add `<meta name="description" content="One sentence about this page.">` inside `<head>`.',
-      run: (x) => { const m = x.doc.querySelector('meta[name="description" i]'); const c = m ? (m.getAttribute('content') || '').trim() : ''; return c ? ['pass', qv(c)] : ['warn', 'No description.']; } },
-    { ms: 'final', label: 'The title is descriptive', ref: 's3-4', fix: 'Use `Page name · Site name`, for example `Menu · Corner Cup Coffee`.',
-      run: (x) => {
-        const t = x.doc.querySelector('title'), v = t ? textOf(t) : '';
-        if (!v) return ['na', 'No title yet (see Milestone 2).'];
-        return /^(document|untitled|home|index|page|title|test|my (web ?)?(site|page))$/i.test(v) || v.length < 5 ? ['warn', qv(v) + ' does not say which page or site this is.'] : ['pass', qv(v)];
-      } },
-    { ms: 'final', label: 'Alt text describes images (no file names)', ref: 's3-5', fix: 'Describe what matters in the image. Skip "image of", and never use the file name.',
-      run: (x) => {
-        const imgs = $$('img[alt]', x.doc).filter((i) => i.getAttribute('alt').trim());
-        if (!imgs.length) return ['na', 'No images with alt text on this page.'];
-        const bad = imgs.map((i) => i.getAttribute('alt').trim()).filter((a) => /\.(jpe?g|png|gif|webp|svg|avif)$/i.test(a) || /^(image|picture|photo|graphic|img)( of)?\b/i.test(a) || /^(image|photo|picture)\s*\d*$/i.test(a));
-        return bad.length ? ['warn', listv(bad, 3)] : ['pass', plural(imgs.length, 'description') + ' checked.'];
-      } },
-    { ms: 'final', label: 'No placeholder links (`href="#"`)', ref: 's3-5', fix: 'Point every link at a real page, or remove it until the page exists.',
-      run: (x) => { const bad = $$('a[href]', x.doc).filter((a) => /^(#|javascript:.*)?$/i.test(a.getAttribute('href').trim())); return bad.length ? ['warn', listv(bad.map((a) => textOf(a) || a.getAttribute('href')), 3)] : ['pass', 'None found.']; } },
-    { ms: 'final', label: 'Images have `width` and `height` attributes', ref: 'sl-3', fix: 'Add the image\'s real pixel size, like `width="1200" height="800"`, so the page does not jump while images load.',
-      run: (x) => {
-        const imgs = $$('img', x.doc);
-        if (!imgs.length) return ['na', 'No images on this page.'];
-        const bad = imgs.filter((i) => !i.hasAttribute('width') || !i.hasAttribute('height'));
-        return bad.length ? ['warn', listv(bad.map((i) => i.getAttribute('src') || '(no src)'), 3)] : ['pass', 'All ' + plural(imgs.length, 'image') + ' have dimensions.'];
-      } },
-    { ms: 'final', label: 'No leftover placeholder text', ref: 'sl-6', fix: 'Replace "lorem ipsum", "TODO" and "Your Site Name" with real content.',
-      run: (x) => {
-        const t = textOf(x.doc.body || x.doc.documentElement);
-        const hits = ['lorem ipsum', 'TODO', 'Your Site Name', 'Replace this'].filter((w) => new RegExp('\\b' + w + '\\b', w === 'TODO' ? '' : 'i').test(t));
-        return hits.length ? ['warn', 'Found ' + listv(hits)] : ['pass', 'None found.'];
-      } },
-    { ms: 'final', label: 'Local links and files exist (with matching capitalization)', ref: 's2-6', fix: 'Fix each path so it matches a real file exactly, capital letters included, or add the missing file.',
-      run: (x) => {
-        if (!x.site || !x.pagePath) return ['na', 'Load your site folder to check links between files.'];
-        const refs = localRefs(x.doc).filter((r) => !(r.el.tagName === 'FORM' && r.a === 'action') || /\.html?$/i.test(pathPart(r.v)));
-        const kinds = x.site.kinds;
-        const missing = [], wrongCase = [];
-        let checked = 0;
-        refs.forEach((r) => {
-          const p = resolvePath(x.pagePath, r.v);
-          if (!p) return;
-          if (x.site.flat && !kinds[kindOf(p)]) return;
-          checked++;
-          const f = findFile(x.site, p);
-          if (f.ok) return;
-          if (f.caseOf) wrongCase.push(r.v + ' (file is ' + f.caseOf + ')'); else missing.push(r.v);
-        });
-        if (wrongCase.length) return ['fail', 'Capitalization differs: ' + listv(wrongCase, 3) + (missing.length ? '. Missing: ' + listv(missing, 3) : '')];
-        if (missing.length) return ['fail', 'Missing: ' + listv(missing, 4)];
-        return ['pass', checked ? 'All ' + plural(checked, 'local reference') + ' found.' : 'No local references to check.'];
-      } },
-    { ms: 'final', label: 'Images are a sensible file size', ref: 'sl-3', fix: 'Resize to about twice the display width and compress (Squoosh works well). Aim for under 200 KB per image.',
-      run: (x) => {
-        if (!x.site || !x.pagePath) return ['na', 'Load your site folder to check image sizes.'];
-        const sizes = [];
-        localRefs(x.doc).filter((r) => (r.el.tagName === 'IMG' || r.el.tagName === 'SOURCE') || (r.el.tagName === 'LINK' && /icon/i.test(r.el.getAttribute('rel') || ''))).forEach((r) => {
-          const f = findFile(x.site, resolvePath(x.pagePath, r.v));
-          if (f.ok) sizes.push([f.path, x.site.files.get(f.path).size]);
-        });
-        if (!sizes.length) return ['na', 'No image files from this page were loaded.'];
-        const kb = (b) => Math.round(b / 1024) + ' KB';
-        const big = sizes.filter((s) => s[1] > 1024 * 1024), heavy = sizes.filter((s) => s[1] > 300 * 1024);
-        if (big.length) return ['fail', 'Over 1 MB: ' + listv(big.map((s) => s[0] + ' ' + kb(s[1])), 3)];
-        if (heavy.length) return ['warn', 'Over 300 KB: ' + listv(heavy.map((s) => s[0] + ' ' + kb(s[1])), 3)];
-        return ['pass', plural(sizes.length, 'image') + ', largest ' + kb(Math.max(...sizes.map((s) => s[1]))) + '.'];
-      } },
-    { ms: 'final', label: 'The nav matches on every page', ref: 's3-6', fix: 'Copy the same nav into every page; only `aria-current="page"` should move.',
-      run: (x) => {
-        if (!x.site || x.site.pages.length < 2 || !x.pagePath) return ['na', 'Load at least two pages to compare navigation.'];
-        const sig = (doc) => { const n = doc.querySelector('nav'); return n ? $$('a[href]', n).map((a) => pathPart(a.getAttribute('href'))).join('|') : ''; };
-        const mine = sig(x.doc);
-        const diff = x.site.pages.filter((p) => p !== x.pagePath && sig(siteDoc(p)) !== mine);
-        return diff.length ? ['warn', 'Different nav links on ' + listv(diff, 4)] : ['pass', 'Same links on all ' + plural(x.site.pages.length, 'page') + '.'];
       } }
   ];
 
@@ -4711,14 +3783,11 @@ WD1.ready(function () {
     if (!s.docs[p]) s.docs[p] = new DOMParser().parseFromString((s.files.get(p) || {}).text || '', 'text/html');
     return s.docs[p];
   }
-  const jsType = (s) => { const t = (s.getAttribute('type') || '').trim().toLowerCase(); return !t || t === 'module' || /^(text|application)\/(java|ecma)script$/.test(t); };
   function runChecks(code, site, pagePath) {
     const doc = new DOMParser().parseFromString(code.html || '', 'text/html');
     const inlineCSS = $$('style', doc).map((s) => s.textContent).join('\n');
-    const inlineJS = $$('script:not([src])', doc).filter(jsType).map((s) => s.textContent).join('\n');
     const cssText = [code.css || '', inlineCSS].join('\n');
-    const jsText = [code.js || '', inlineJS].join('\n');
-    const x = { doc, cssText, css: analyzeCSS(cssText), hasCSS: cssText.trim().length > 0, jsText, hasJS: jsText.trim().length > 0, site, pagePath, jsType };
+    const x = { doc, cssText, css: analyzeCSS(cssText), hasCSS: cssText.trim().length > 0, site, pagePath };
     return CHECKS.map((c) => {
       let r;
       try { r = c.run(x); } catch (e) { r = ['na', 'This check could not run: ' + e.message]; }
@@ -4728,7 +3797,7 @@ WD1.ready(function () {
   const countRes = (res) => { const n = { pass: 0, warn: 0, fail: 0, na: 0 }; res.forEach((r) => { n[r.s]++; }); return n; };
 
   /* ---- results UI ---- */
-  const ORDER = ['m1', 'm2', 'm3', 'm4', 'm5', 'final'];
+  const ORDER = ['m1', 'm2', 'm3', 'm4'];
   const ICONS = { pass: '✓', warn: '!', fail: '✕', na: '–' };
   const WORDS = { pass: 'Pass', warn: 'Warning', fail: 'Fail', na: 'Not checked' };
   const segBtns = [['all', 'All']].concat(ORDER.map((id) => [id, MSMAP[id].code])).map(([f, label]) => {
@@ -4811,8 +3880,7 @@ WD1.ready(function () {
       return e && e.text != null ? '/* ===== ' + f.path + ' ===== */\n' + e.text : null;
     }).filter(Boolean).join('\n\n');
     const css = grab($$('link[href]', doc).filter((l) => /(^|\s)stylesheet(\s|$)/i.test(l.getAttribute('rel') || '')), 'href');
-    const js = grab($$('script[src]', doc), 'src').replace(/^\/\* =+ (.+) =+ \*\/$/gm, '// ===== $1 =====');
-    return { html, css, js };
+    return { html, css };
   }
   function selectPage(p) {
     CK.page = p; CK.mode = 'files';
@@ -4829,22 +3897,20 @@ WD1.ready(function () {
       if (!rel || /(^|\/)(\.|node_modules\/)/.test(rel)) return;
       const entry = { path: rel, size: f.size, text: null };
       map.set(rel, entry);
-      if (/\.(html?|css|m?js)$/i.test(rel) && f.size < 3000000) reads.push(readText(f).then((t) => { entry.text = t; }));
+      if (/\.(html?|css)$/i.test(rel) && f.size < 3000000) reads.push(readText(f).then((t) => { entry.text = t; }));
     });
     await Promise.all(reads);
     const pages = Array.from(map.keys()).filter((p) => /\.html?$/i.test(p)).sort((a, b) => (a === 'index.html' ? -1 : b === 'index.html' ? 1 : a.split('/').length - b.split('/').length || a.localeCompare(b)));
     fill($('#pj-ck-allres'));
     if (!pages.length) {
       const css = Array.from(map.values()).filter((e) => /\.css$/i.test(e.path) && e.text != null);
-      const js = Array.from(map.values()).filter((e) => /\.m?js$/i.test(e.path) && e.text != null);
-      if (!css.length && !js.length) { $('#pj-ck-live').textContent = 'No HTML, CSS or JavaScript files in what you loaded.'; WD1.toast('No HTML, CSS or JavaScript files found'); return; }
+      if (!css.length) { $('#pj-ck-live').textContent = 'No HTML or CSS files in what you loaded.'; WD1.toast('No HTML or CSS files found'); return; }
       CK.loading = true;
-      if (css.length) ED.css.set(css.map((e) => '/* ===== ' + e.path + ' ===== */\n' + e.text).join('\n\n'));
-      if (js.length) ED.js.set(js.map((e) => '// ===== ' + e.path + ' =====\n' + e.text).join('\n\n'));
+      ED.css.set(css.map((e) => '/* ===== ' + e.path + ' ===== */\n' + e.text).join('\n\n'));
       CK.loading = false;
       CK.mode = CK.mode === 'sample' ? 'sample-edited' : 'mine';
       ckBanner(); ckSave(); ckRun(true);
-      WD1.toast('Loaded ' + plural(css.length + js.length, 'file') + ' into the editors');
+      WD1.toast('Loaded ' + plural(css.length, 'file') + ' into the CSS editor');
       return;
     }
     const kinds = {};
@@ -4852,7 +3918,7 @@ WD1.ready(function () {
     CK.site = { files: map, pages, flat: !folder, kinds, docs: {} };
     fill($('#pj-ck-page'), pages.map((p) => h('option', { value: p, text: p })));
     $('#pj-ck-sitebar').hidden = false;
-    $('#pj-ck-siteinfo').textContent = plural(pages.length, 'page') + ', ' + plural(map.size, 'file') + ' loaded' + (folder ? '' : ' (single files: pick the whole folder to check links and image sizes)');
+    $('#pj-ck-siteinfo').textContent = plural(pages.length, 'page') + ', ' + plural(map.size, 'file') + ' loaded' + (folder ? '' : ' (single files: pick the whole folder to check links between files)');
     selectPage(pages[0]);
   }
   function checkAll() {
@@ -4876,7 +3942,7 @@ WD1.ready(function () {
     CK.site = null; CK.page = null; CK.mode = 'empty';
     $('#pj-ck-sitebar').hidden = true;
     fill($('#pj-ck-allres'));
-    ckSet({ html: '', css: '', js: '' });
+    ckSet({ html: '', css: '' });
     store.set('checker', undefined);
     ckBanner(); ckRun(true); ckTab('html'); ED.html.focus();
   });
@@ -4965,19 +4031,18 @@ WD1.ready(function () {
 
   /* ================= Wiring ================= */
   on('pj:theme', () => {
-    renderDetail(); heroTheme(); paintTokens(); renderPresets(); selectPattern();
+    renderDetail(); heroTheme(); paintTokens(); renderPresets();
     if (!sm.edited) { sm.pages = themePages(); store.set('sitemap', sm); renderSMRows(); renderSMOut(); emit('pj:sitemap'); }
     if (!tb.edited) { tbLoadTheme(); store.set('tb', tb); }
     if (!fb.edited) { fb = fbFromSpec(theme() || DATA.defaults); fbSyncTop(); renderFBRows(); store.set('fb', fb); renderForm(); }
-    renderGH(); renderSkeleton(); palHead(); renderBP(); renderSubmit();
+    renderGH(); renderSkeleton(); palHead(); renderSubmit();
   });
   on('pj:tokens', () => {
-    paintTokens(); heroTheme(); renderGH(); renderSMOut(); renderSkeleton(); palHead(); renderBP(); renderSubmit();
+    paintTokens(); heroTheme(); renderGH(); renderSMOut(); renderSkeleton(); palHead(); renderSubmit();
     const card = $('.pj-theme[data-id="custom"] .pj-theme-name');
     if (card) card.textContent = String(themeState.custom.name || '').trim() || 'My own idea';
-    if (themeState.id === 'custom') selectPattern();
   });
-  on('pj:sitemap', () => { renderSkeleton(); palHead(); renderBP(); });
+  on('pj:sitemap', () => { renderSkeleton(); palHead(); });
   on('pj:progress', () => { refreshProgress(); renderSubmit(); });
 
   /* ================= First render ================= */
@@ -4987,11 +4052,8 @@ WD1.ready(function () {
   syncPalInputs(); renderPresets(); palHead(); palApply();
   tbSync();
   fbSyncTop(); renderFBRows(); renderForm();
-  bpSync(); renderBP();
-  selectPattern();
-  tmBuild();
   const saved = obj(store.get('checker', {}));
-  if (typeof saved.html === 'string' && (saved.html || saved.css || saved.js)) {
+  if (typeof saved.html === 'string' && (saved.html || saved.css)) {
     ckSet(saved); CK.mode = saved.mode === 'sample-edited' ? 'sample-edited' : 'mine'; ckBanner(); ckRun(false);
   } else {
     CK.mode = 'sample'; ckSet(SAMPLE); ckBanner(); ckRun(false);

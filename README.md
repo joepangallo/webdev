@@ -16,7 +16,7 @@ Every section pairs a short explanation with something to do: live code playgrou
 | [`ch4/`](ch4/index.html) | Chapter 4 · CSS 1: Selectors and Basic Styling (syntax, selectors, cascade, box model, text, variables and frameworks) |
 | [`ch5/`](ch5/index.html) | Chapter 5 · HTML 2: Tables and Forms (tables, forms, controls, accessibility, styling, validation) |
 | [`levelup/`](levelup/index.html) | Level Up · Responsive Layout & JavaScript (flexbox, grid, responsive design, JS, DOM and events, tools) |
-| [`project/`](project/index.html) | The incremental course project: ten theme ideas, six milestones, rubrics, starter files and an HTML checker |
+| [`project/`](project/index.html) | The course project for Chapters 2–5: ten theme ideas, four milestones, rubrics, starter files and an HTML checker |
 | [`tools/playground.html`](tools/playground.html) | Full-page HTML/CSS/JS playground with templates, console, device widths and download |
 | [`glossary.html`](glossary.html) | 200+ searchable terms linked to the section that teaches each one, with a flashcard mode |
 | [`docs/`](docs/AUTHORING.md) | Authoring guide and a live component gallery for adding or editing lessons |
@@ -41,7 +41,7 @@ The dashboard shows the same map interactively, with each student's progress per
 
 ## The course project
 
-Students build **one website all month**, one milestone per module, so the final project is the sum of everything they practiced. See [`project/README.md`](project/README.md) for the full handout.
+Students build **one website across Chapters 2–5**, one milestone per chapter (25 points each, 100 in total). The project covers only the material taught in those four chapters, not the whole course. After Milestone 4, students submit their repository URL and their live GitHub Pages URL. See [`project/README.md`](project/README.md) for the full handout.
 
 | Milestone | After | Adds |
 |-----------|-------|------|
@@ -49,10 +49,8 @@ Students build **one website all month**, one milestone per module, so the final
 | M2 · Semantic Structure | Ch 3 | Three or more pages of valid, semantic HTML |
 | M3 · Style System | Ch 4 | One external stylesheet with custom properties, typography and a styled nav |
 | M4 · Tables and Forms | Ch 5 | A real data table and an accessible, validated form |
-| M5 · Responsive and Interactive | Level Up | Flexbox/Grid, mobile-first media queries, a responsive nav, and JavaScript |
-| Final · Polish, Audit and Present | Last week | Validation, accessibility audit, deploy, demo |
 
-Theme ideas include a food truck, personal portfolio, club or event site, game guide, recipe collection, city travel guide, pet adoption, fitness studio, review site and volunteer nonprofit. Each one comes with a table idea, a form idea and a JavaScript feature. Starter files are in [`project/starter/`](project/starter/).
+Theme ideas include a food truck, personal portfolio, club or event site, game guide, recipe collection, city travel guide, pet adoption, fitness studio, review site and volunteer nonprofit. Each one comes with a table idea and a form idea. Starter files are in [`project/starter/`](project/starter/).
 
 ## Publish it with GitHub Pages
 

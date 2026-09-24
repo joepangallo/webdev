@@ -21,26 +21,29 @@ GitHub Pages runs on a server that treats `Photo.JPG` and `photo.jpg` as **diffe
 
 ## Resize before you upload
 
-A phone photo is often 4000 pixels wide and 3 to 5 MB. Your page never shows it that wide.
+A phone photo is often 4000 pixels wide and 3 to 5 MB. Your page never shows it that wide, and a file that big is slow to download.
 
-1. Find the widest size the image is shown at (DevTools: hover the `<img>` in the Elements panel).
-2. Export it at about **2×** that width so it stays sharp on high-density screens:
-   - full-width banner: about 1600 px wide
-   - image inside the main text column: about 1200 px wide
-   - card thumbnail: about 600–800 px wide
-3. Compress it. Aim for **under 200 KB** for most images and under about 350 KB for a large banner.
+1. Find the widest size the image is shown at (DevTools: hover the `<img>` in the Elements panel). The main column in the starter is at most 960 px wide.
+2. Export it at about that width:
+   - image inside the main column: about 1000 px wide
+   - card image: about 600 px wide
+3. Save photos as `.jpg` or `.webp` at a medium quality setting.
 
 Free tools: [Squoosh](https://squoosh.app) in the browser, Preview on macOS (Tools → Adjust Size, then Export), or Photos on Windows (Resize image).
 
 ## Write the HTML so the page does not jump
 
-Give every image its real pixel size, and let CSS make it responsive:
+Give every image its real pixel size in the `width` and `height` attributes:
 
 ```html
-<img src="images/latte-art.jpg" alt="A heart drawn in the foam of a latte" width="1200" height="800">
+<img src="images/latte-art.jpg" alt="A heart drawn in the foam of a latte" width="1000" height="667">
 ```
 
-The starter stylesheet already has `img { max-width: 100%; height: auto; }`, so the image shrinks on small screens while the browser still reserves the right amount of space.
+The browser uses those two numbers to reserve space before the file arrives, so the text below does not jump. The starter stylesheet already has `img { max-width: 100%; height: auto; }`, so an image is never wider than the box that contains it and keeps its shape when it is scaled down.
+
+## Captions
+
+When an image needs a caption, wrap the image and the caption in `<figure>` and `<figcaption>`, like the example on the starter home page. The caption is read by everyone; `alt` stands in for the image for people who cannot see it. Do not repeat the same words in both.
 
 ## Alt text
 

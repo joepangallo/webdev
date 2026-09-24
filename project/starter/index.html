@@ -6,7 +6,6 @@
   <title>Home · Your Site Name</title>
   <meta name="description" content="One sentence that tells search engines and visitors what your site is about.">
   <link rel="stylesheet" href="css/styles.css">
-  <script src="js/main.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -14,8 +13,7 @@
   <!-- The header and nav are the same on every page. Only aria-current moves. -->
   <header class="site-header">
     <a class="logo" href="index.html">Your Site Name</a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-    <nav id="site-nav" class="site-nav" aria-label="Main">
+    <nav class="site-nav" aria-label="Main">
       <ul>
         <li><a href="index.html" aria-current="page">Home</a></li>
         <li><a href="about.html">About</a></li>
@@ -33,7 +31,7 @@
     <section>
       <h2>What you will find here</h2>
       <!-- Milestone 2: one card per page in your site map. -->
-      <ul class="card-grid">
+      <ul class="card-list">
         <li class="card">
           <h3><a href="about.html">About</a></h3>
           <p>A sentence that makes someone want to open this page.</p>
