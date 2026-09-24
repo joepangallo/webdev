@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Web Development I</title>
+  <meta name="description" content="An interactive companion for an introductory web development course: how the web works, HTML, CSS, tables and forms, responsive layout and JavaScript.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="assets/css/course.css">
+  <script src="assets/js/course.js"></script>
+  <style>
+    .hub { max-width: 1180px; margin: 0 auto; }
+    .hub-hero {
+      display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 40px; align-items: center;
+      padding-block: 24px 36px;
+    }
+    @media (max-width: 900px) { .hub-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
+    .hub-hero h1 { font-size: clamp(2.4rem, 1.6rem + 3.4vw, 3.9rem); line-height: 1.02; margin-bottom: .3em; }
+    .hub-hero h1 .lt { color: var(--ink-3); font-weight: 500; }
+    .hub-hero .lede { font-size: 1.2rem; color: var(--ink-2); max-width: 52ch; }
+    .hub-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .hub-cta .btn { min-height: 44px; padding-inline: 18px; font-size: 1rem; }
+    .hub-continue-meta { display: block; font-size: .85rem; color: var(--ink-3); margin-top: 10px; }
+
+    .hub-try { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow-2); }
+    .hub-try-bar {
+      display: flex; align-items: center; gap: 8px; padding: 9px 12px;
+      background: var(--surface-2); border-bottom: 1px solid var(--line);
+      font-family: var(--font-mono); font-size: .75rem; color: var(--ink-3);
+    }
+    .hub-try-bar .dots { display: flex; gap: 5px; }
+    .hub-try-bar .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--line-2); display: block; }
+    .hub-try-bar .addr {
+      flex: 1; min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+      padding: 3px 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .hub-try-panes { display: grid; grid-template-columns: minmax(0, 1fr); }
+    .hub-try-panes .code-editor { min-height: 170px; }
+    .hub-try-panes iframe { width: 100%; height: 190px; border: 0; border-top: 1px solid var(--line); background: #fff; display: block; }
+    .hub-try-foot { font-size: .8rem; color: var(--ink-3); padding: 8px 12px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+
+    .hub-stats {
+      display: grid; grid-template-columns: auto repeat(3, minmax(0, 1fr)); gap: 0; align-items: stretch;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin: 8px 0 56px;
+    }
+    .hub-stats > div { padding: 18px 22px; border-left: 1px solid var(--line); display: grid; align-content: center; gap: 2px; }
+    .hub-stats > div:first-child { border-left: 0; display: flex; align-items: center; gap: 16px; }
+    .hub-stats .v { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .hub-stats .k { font-size: .82rem; color: var(--ink-3); }
+    .hub-ring { width: 64px; height: 64px; flex: none; }
+    .hub-ring circle { fill: none; stroke-width: 7; }
+    .hub-ring .track { stroke: var(--surface-3); }
+    .hub-ring .fill { stroke: var(--visited); stroke-linecap: round; transition: stroke-dashoffset .6s ease; transform: rotate(-90deg); transform-origin: 50% 50%; }
+    @media (max-width: 760px) {
+      .hub-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hub-stats > div:first-child { grid-column: 1 / -1; border-bottom: 1px solid var(--line); }
+      .hub-stats > div:nth-child(2) { border-left: 0; }
+      .hub-stats > div:nth-child(4) { border-left: 0; border-top: 1px solid var(--line); grid-column: 1 / -1; }
+    }
+
+    .hub-h2 { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .hub-h2 h2 { margin: 0; }
+    .hub-h2 p { margin: 0; color: var(--ink-3); font-size: .95rem; max-width: 60ch; }
+
+    .hub-modules { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; margin-bottom: 64px; }
+    @media (max-width: 400px) { .hub-modules { grid-template-columns: minmax(0, 1fr); } }
+    .hub-mod {
+      --c: var(--accent);
+      display: flex; flex-direction: column; gap: 12px;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .hub-mod:hover { border-color: var(--line-2); box-shadow: var(--shadow-1); }
+    .hub-mod-top { display: flex; align-items: center; gap: 12px; }
+    .hub-mod-num {
+      width: 44px; height: 44px; border-radius: 10px; flex: none; display: grid; place-items: center;
+      font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem; color: var(--bm-ink);
+    }
+    .hub-mod-label { font-family: var(--font-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--c); font-weight: 700; }
+    .hub-mod h3 { margin: 0; font-size: 1.25rem; }
+    .hub-mod h3 a { color: var(--ink); text-decoration: none; }
+    .hub-mod h3 a:hover { color: var(--c); }
+    .hub-mod h3 a::after { content: ""; }
+    .hub-mod p { margin: 0; color: var(--ink-2); font-size: .95rem; }
+    .hub-mod ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: .88rem; }
+    .hub-mod li { margin: 0; }
+    .hub-mod li a { display: grid; grid-template-columns: 34px 1fr 14px; gap: 6px; align-items: start; padding: 3px 6px; border-radius: 6px; color: var(--ink-2); text-decoration: none; }
+    .hub-mod li a:hover { background: var(--surface-2); color: var(--ink); }
+    .hub-mod li .n { font-family: var(--font-mono); font-size: .76rem; color: var(--c); padding-top: 2px; }
+    .hub-mod li .d { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--line-2); margin-top: 4px; }
+    .hub-mod li.done a { color: var(--visited); }
+    .hub-mod li.done .d { background: var(--visited); border-color: var(--visited); }
+    .hub-mod-foot { margin-top: auto; display: flex; align-items: center; gap: 12px; padding-top: 6px; }
+    .hub-mod-foot .bar { flex: 1; height: 6px; border-radius: 99px; background: var(--surface-3); overflow: hidden; }
+    .hub-mod-foot .bar span { display: block; height: 100%; background: var(--visited); transition: width .4s; }
+    .hub-mod-foot .pct { font-family: var(--font-mono); font-size: .78rem; color: var(--ink-3); font-variant-numeric: tabular-nums; min-width: 3.5ch; text-align: right; }
+
+    .hub-obj { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; margin-bottom: 64px; align-items: start; }
+    @media (max-width: 900px) { .hub-obj { grid-template-columns: minmax(0, 1fr); } }
+    .hub-matrix-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+    .hub-matrix { width: 100%; border-collapse: collapse; min-width: 560px; }
+    .hub-matrix th, .hub-matrix td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: center; font-size: .88rem; }
+    .hub-matrix thead th { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .06em; color: var(--ink-3); font-weight: 700; background: var(--surface-2); }
+    .hub-matrix tbody tr:last-child th, .hub-matrix tbody tr:last-child td { border-bottom: 0; }
+    .hub-matrix tbody th { text-align: left; font-weight: 400; padding: 0; }
+    .hub-matrix tbody th button {
+      display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start; width: 100%; text-align: left;
+      padding: 9px 12px; border: 0; background: none; font: inherit; font-size: .88rem; color: var(--ink-2); cursor: pointer; line-height: 1.35;
+    }
+    .hub-matrix tbody th button b { font-family: var(--font-mono); color: var(--ink); }
+    .hub-matrix tbody tr:hover th button, .hub-matrix tbody tr.sel th button { color: var(--ink); }
+    .hub-matrix tbody tr.sel { background: var(--accent-soft); }
+    .hub-cell { display: inline-flex; gap: 3px; }
+    .hub-cell i { width: 9px; height: 9px; border-radius: 50%; display: block; background: var(--c); opacity: .9; }
+    .hub-cell i.done { outline: 2px solid var(--visited); outline-offset: 1px; }
+    .hub-obj-detail { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; position: sticky; top: calc(var(--topbar-h) + 16px); }
+    .hub-obj-detail h3 { margin: 0 0 6px; font-size: 1.1rem; }
+    .hub-obj-detail ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 4px; font-size: .92rem; }
+    .hub-obj-detail li { margin: 0; }
+    .hub-obj-detail li a { display: grid; grid-template-columns: 40px 1fr auto; gap: 6px; text-decoration: none; color: var(--ink-2); padding: 4px 6px; border-radius: 6px; }
+    .hub-obj-detail li a:hover { background: var(--surface-2); color: var(--ink); }
+    .hub-obj-detail .n { font-family: var(--font-mono); font-size: .78rem; padding-top: 2px; }
+    .hub-obj-detail .bar { height: 6px; border-radius: 99px; background: var(--surface-3); overflow: hidden; margin-top: 10px; }
+    .hub-obj-detail .bar span { display: block; height: 100%; background: var(--visited); transition: width .4s; }
+
+    .hub-project {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 28px; align-items: start;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 26px; margin-bottom: 64px;
+    }
+    @media (max-width: 900px) { .hub-project { grid-template-columns: minmax(0, 1fr); } }
+    .hub-project h2 { margin-bottom: .35em; }
+    .hub-project p { color: var(--ink-2); }
+    .hub-ms { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: ms; }
+    .hub-ms li { margin: 0; }
+    .hub-ms a {
+      display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: baseline;
+      padding: 10px 4px; border-bottom: 1px dashed var(--line-2); text-decoration: none; color: var(--ink);
+    }
+    .hub-ms li:last-child a { border-bottom: 0; }
+    .hub-ms a:hover .t { color: var(--accent); }
+    .hub-ms .m { font-family: var(--font-mono); font-size: .8rem; font-weight: 700; color: var(--visited); }
+    .hub-ms .t { font-weight: 700; }
+    .hub-ms .s { display: block; font-size: .85rem; color: var(--ink-3); font-weight: 400; }
+    .hub-ms .w { font-family: var(--font-mono); font-size: .75rem; color: var(--ink-3); white-space: nowrap; }
+
+    .hub-tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 56px; }
+    .hub-tool { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; text-decoration: none; color: var(--ink); }
+    .hub-tool:hover { border-color: var(--line-2); box-shadow: var(--shadow-1); color: var(--ink); }
+    .hub-tool .ic { font-family: var(--font-mono); font-size: .8rem; font-weight: 700; color: var(--accent); }
+    .hub-tool strong { display: block; font-family: var(--font-display); font-size: 1.1rem; margin: 4px 0 2px; }
+    .hub-tool span.d { font-size: .9rem; color: var(--ink-2); }
+
+    .hub-data { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 10px; }
+    .hub-data p { margin: 0; font-size: .9rem; color: var(--ink-3); max-width: 70ch; }
+    .hub-confirm { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .9rem; }
+  </style>
+</head>
+<body data-page="home">
+<main id="main">
+  <div class="hub">
+    <section class="hub-hero" aria-labelledby="hub-title">
+      <div>
+        <p class="eyebrow"><span class="tag" style="color: var(--accent)">Interactive course companion</span><span>Chapters 2–5 + Level Up</span></p>
+        <h1 id="hub-title">Web Development&nbsp;I <span class="lt">&lt;/&gt;</span></h1>
+        <p class="lede">Learn how the web works, then build it: HTML structure, CSS styling, tables and forms, responsive layout and JavaScript. Every section has something to click, drag, type or break on purpose.</p>
+        <div class="hub-cta">
+          <a class="btn primary" id="hub-continue" href="ch2/index.html">Start with Chapter 2</a>
+          <a class="btn" href="project/index.html">Open the course project</a>
+        </div>
+        <span class="hub-continue-meta" id="hub-continue-meta">Your progress saves in this browser automatically.</span>
+      </div>
+      <div class="hub-try" aria-label="Live HTML editor">
+        <div class="hub-try-bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="addr">https://you.github.io/first-page/</span>
+        </div>
+        <div class="hub-try-panes" id="hub-try"></div>
+        <div class="hub-try-foot"><span>Edit the HTML. The page redraws as you type.</span><a href="tools/playground.html">Full playground →</a></div>
+      </div>
+    </section>
+
+    <section class="hub-stats" aria-label="Your progress">
+      <div>
+        <svg class="hub-ring" viewBox="0 0 64 64" aria-hidden="true">
+          <circle class="track" cx="32" cy="32" r="27"></circle>
+          <circle class="fill" id="hub-ring" cx="32" cy="32" r="27" stroke-dasharray="169.65" stroke-dashoffset="169.65"></circle>
+        </svg>
+        <div><span class="v" id="hub-pct">0%</span><br><span class="k" id="hub-sections">0 of 0 sections complete</span></div>
+      </div>
+      <div><span class="v" id="hub-quizzes">0</span><span class="k">quizzes finished</span></div>
+      <div><span class="v" id="hub-avg">–</span><span class="k">average best quiz score</span></div>
+      <div><span class="v" id="hub-challenges">0</span><span class="k">code challenges solved</span></div>
+    </section>
+
+    <div class="hub-h2">
+      <h2>Modules</h2>
+      <p>Section numbers match the textbook, <em>Fundamentals of Web Development</em> (3rd ed.), so you can read and practice side by side.</p>
+    </div>
+    <div class="hub-modules" id="hub-modules"></div>
+
+    <div class="hub-h2">
+      <h2>Course objectives</h2>
+      <p>Each dot is a section that practices the objective. Filled rings mean you finished it. Select an objective to see where it is covered.</p>
+    </div>
+    <div class="hub-obj">
+      <div class="hub-matrix-wrap"><table class="hub-matrix" id="hub-matrix"></table></div>
+      <aside class="hub-obj-detail" id="hub-obj-detail" aria-live="polite"></aside>
+    </div>
+
+    <section class="hub-project" aria-labelledby="hub-proj-title">
+      <div>
+        <p class="eyebrow"><span class="tag" style="color: var(--visited)">All month</span><span>One site, six checkpoints</span></p>
+        <h2 id="hub-proj-title">The course project</h2>
+        <p>You build one website from the first week to the last. Each milestone uses the chapter you just finished, so by the end the site is valid, styled, accessible, responsive and interactive, and it is live on the web.</p>
+        <p>Pick from ten themes (a food truck, a pet shelter, a game guide…) or propose your own. The project page has checklists, rubrics, starter files and an automatic checker for your HTML.</p>
+        <a class="btn primary" href="project/index.html">Plan your project</a>
+      </div>
+      <ol class="hub-ms">
+        <li><a href="project/index.html#m1"><span class="m">M1</span><span><span class="t">Plan and Publish</span><span class="s">Theme, site map, folders, first deploy</span></span><span class="w">after Ch 2</span></a></li>
+        <li><a href="project/index.html#m2"><span class="m">M2</span><span><span class="t">Semantic Structure</span><span class="s">Three or more pages of valid, semantic HTML</span></span><span class="w">after Ch 3</span></a></li>
+        <li><a href="project/index.html#m3"><span class="m">M3</span><span><span class="t">Style System</span><span class="s">External CSS, custom properties, typography</span></span><span class="w">after Ch 4</span></a></li>
+        <li><a href="project/index.html#m4"><span class="m">M4</span><span><span class="t">Tables and Forms</span><span class="s">A data table and an accessible, validated form</span></span><span class="w">after Ch 5</span></a></li>
+        <li><a href="project/index.html#m5"><span class="m">M5</span><span><span class="t">Responsive and Interactive</span><span class="s">Flexbox/Grid, media queries, JavaScript</span></span><span class="w">after Level Up</span></a></li>
+        <li><a href="project/index.html#final"><span class="m">Final</span><span><span class="t">Polish, Audit and Present</span><span class="s">Validate, audit, deploy, demo</span></span><span class="w">last week</span></a></li>
+      </ol>
+    </section>
+
+    <div class="hub-h2"><h2>Tools</h2></div>
+    <div class="hub-tools">
+      <a class="hub-tool" href="tools/playground.html"><span class="ic">&lt;/&gt;</span><strong>Code playground</strong><span class="d">HTML, CSS and JS with live preview, console, templates and download.</span></a>
+      <a class="hub-tool" href="glossary.html"><span class="ic">A–Z</span><strong>Glossary</strong><span class="d">Every key term, searchable, with a flashcard mode for review.</span></a>
+      <a class="hub-tool" href="project/index.html#checker"><span class="ic">✓</span><strong>Project checker</strong><span class="d">Paste your page and get a milestone-by-milestone report.</span></a>
+      <a class="hub-tool" href="docs/components.html"><span class="ic">{ }</span><strong>For instructors</strong><span class="d">Component gallery and authoring guide for adding lessons.</span></a>
+    </div>
+
+    <section class="hub-data" aria-labelledby="hub-data-title">
+      <h2 id="hub-data-title" style="font-size: 1.1rem; margin: 0;">Your saved progress</h2>
+      <p>Progress, quiz scores and your playground code are stored only in this browser. Export a file to move them to another computer, or to show your work.</p>
+      <div class="btn-row">
+        <button type="button" class="btn small" id="hub-export">Export progress</button>
+        <label class="btn small" for="hub-import-file" style="cursor:pointer">Import progress</label>
+        <input type="file" id="hub-import-file" accept="application/json,.json" hidden>
+        <span class="hub-confirm" id="hub-reset-wrap"><button type="button" class="btn small ghost" id="hub-reset">Reset all progress</button></span>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+WD1.ready(() => {
+  const { h, $, $$ } = WD1;
+  const COLORS = { ch2: 'var(--ch2)', ch3: 'var(--ch3)', ch4: 'var(--ch4)', ch5: 'var(--ch5)', levelup: 'var(--chl)' };
+  const SWATCH = { ch2: 'var(--bm-margin)', ch3: 'var(--bm-border)', ch4: 'var(--bm-padding)', ch5: 'var(--bm-content)', levelup: 'color-mix(in srgb, var(--chl) 30%, var(--surface))' };
+
+  /* Hero editor */
+  const tryBox = $('#hub-try');
+  const frame = h('iframe', { title: 'Live preview' });
+  const start = '<h1>Hello, web!</h1>\n<p>This is <strong>my first page</strong>.</p>\n<ul>\n  <li>Change the heading</li>\n  <li>Add a <a href="#">link</a></li>\n</ul>';
+  let saved = WD1.store.get('custom', 'hub-try');
+  const draw = (html) => {
+    frame.srcdoc = WD1.buildPreviewDoc({ html, css: 'body{font-family:system-ui,sans-serif;margin:16px;line-height:1.5}' }, 'hub');
+  };
+  let t;
+  WD1.editor(tryBox, { value: saved || start, lang: 'html', height: 170, label: 'HTML editor', onInput: (v) => {
+    clearTimeout(t); t = setTimeout(() => { draw(v); WD1.store.set('custom', 'hub-try', v); }, 250);
+  } });
+  tryBox.appendChild(frame);
+  draw(saved || start);
+
+  /* Modules */
+  const modWrap = $('#hub-modules');
+  WD1.MODULES.forEach((m) => {
+    const card = h('article', { class: 'hub-mod', style: { '--c': COLORS[m.id] } });
+    card.style.setProperty('--c', COLORS[m.id]);
+    card.append(
+      h('div', { class: 'hub-mod-top' },
+        h('span', { class: 'hub-mod-num', style: { background: SWATCH[m.id] }, text: m.num }),
+        h('div', null,
+          h('span', { class: 'hub-mod-label', text: m.label + (m.page ? ' · p. ' + m.page : ' · beyond the readings') }),
+          h('h3', null, h('a', { href: m.href, text: m.title })))),
+      h('p', { text: m.blurb }),
+      h('ol', null, m.sections.map((s) => h('li', { dataset: { sec: s.id } },
+        h('a', { href: m.href + '#' + s.id },
+          h('span', { class: 'n', text: s.num === 'R' ? '✓' : s.num }),
+          h('span', { text: s.title }),
+          h('span', { class: 'd', 'aria-hidden': 'true' }))))),
+      h('div', { class: 'hub-mod-foot' },
+        h('span', { class: 'bar' }, h('span', { dataset: { modBar: m.id } })),
+        h('span', { class: 'pct', dataset: { modPct: m.id } }),
+        h('a', { class: 'btn small', href: m.href, text: 'Open' })));
+    modWrap.appendChild(card);
+  });
+
+  /* Objectives matrix */
+  const table = $('#hub-matrix');
+  table.appendChild(h('caption', { class: 'sr-only', text: 'Course objectives by module' }));
+  table.appendChild(h('thead', null, h('tr', null,
+    h('th', { scope: 'col', style: { textAlign: 'left', paddingLeft: '12px' }, text: 'OBJECTIVE' }),
+    WD1.MODULES.map((m) => h('th', { scope: 'col', title: m.title, text: m.num === 'L' ? 'LVL' : 'CH ' + m.num })))));
+  const tbody = h('tbody');
+  table.appendChild(tbody);
+  let selected = 1;
+  WD1.OBJECTIVES.forEach((text, i) => {
+    const n = i + 1;
+    const tr = h('tr', { dataset: { obj: n } },
+      h('th', { scope: 'row' }, h('button', { type: 'button', 'aria-pressed': 'false', onclick: () => select(n) },
+        h('b', { text: n + '.' }), h('span', { text: text }))),
+      WD1.MODULES.map((m) => {
+        const secs = m.sections.filter((s) => s.obj.includes(n) && s.num !== 'R');
+        const cell = h('span', { class: 'hub-cell', style: { '--c': COLORS[m.id] } });
+        cell.style.setProperty('--c', COLORS[m.id]);
+        secs.forEach((s) => cell.appendChild(h('i', { title: s.num + ' ' + s.title, dataset: { sec: s.id } })));
+        return h('td', { 'aria-label': secs.length ? secs.length + ' section' + (secs.length > 1 ? 's' : '') + ' in ' + m.title : 'none' }, cell);
+      }));
+    tbody.appendChild(tr);
+  });
+
+  function select(n) {
+    selected = n;
+    $$('tr[data-obj]', tbody).forEach((tr) => {
+      const on = +tr.dataset.obj === n;
+      tr.classList.toggle('sel', on);
+      $('button', tr).setAttribute('aria-pressed', String(on));
+    });
+    const det = $('#hub-obj-detail');
+    const secs = [];
+    WD1.MODULES.forEach((m) => m.sections.forEach((s) => { if (s.obj.includes(n) && s.num !== 'R') secs.push(Object.assign({ m }, s)); }));
+    const done = secs.filter((s) => WD1.progress.isDone(s.id)).length;
+    det.innerHTML = '';
+    det.append(
+      h('p', { class: 'eyebrow', style: { marginBottom: '6px' } }, h('span', { class: 'tag', style: { color: 'var(--accent)' }, text: 'Objective ' + n })),
+      h('h3', { text: WD1.OBJECTIVES[n - 1] }),
+      h('span', { class: 'muted small', text: done + ' of ' + secs.length + ' sections complete' }),
+      h('div', { class: 'bar' }, h('span', { style: { width: (secs.length ? Math.round(done / secs.length * 100) : 0) + '%' } })),
+      h('ul', null, secs.map((s) => h('li', null, h('a', { href: s.m.href + '#' + s.id },
+        h('span', { class: 'n', style: { color: COLORS[s.m.id] }, text: s.num }),
+        h('span', { text: s.title }),
+        WD1.progress.isDone(s.id) ? h('span', { class: 'pill visited', text: 'done' }) : h('span'))))));
+  }
+
+  /* Stats + continue */
+  function refresh() {
+    const all = WD1.progress.overall();
+    $('#hub-pct').textContent = all.pct + '%';
+    $('#hub-sections').textContent = all.done + ' of ' + all.total + ' sections complete';
+    $('#hub-ring').style.strokeDashoffset = String(169.65 * (1 - all.pct / 100));
+    const quiz = WD1.store.all().quiz || {};
+    const qs = Object.values(quiz);
+    $('#hub-quizzes').textContent = qs.length;
+    $('#hub-avg').textContent = qs.length ? Math.round(qs.reduce((a, q) => a + q.best / q.total, 0) / qs.length * 100) + '%' : '–';
+    $('#hub-challenges').textContent = Object.keys(WD1.store.all().challenge || {}).length;
+    $$('.hub-mod li[data-sec]').forEach((li) => li.classList.toggle('done', WD1.progress.isDone(li.dataset.sec)));
+    $$('.hub-cell i[data-sec]').forEach((i) => i.classList.toggle('done', WD1.progress.isDone(i.dataset.sec)));
+
+    const cont = $('#hub-continue'), meta = $('#hub-continue-meta');
+    const last = WD1.progress.last();
+    const s = last && WD1.section(last.section);
+    if (s) {
+      cont.textContent = 'Continue: ' + (s.num === 'R' ? s.title : s.num + ' ' + s.title);
+      cont.href = s.module.href + '#' + s.id;
+      meta.textContent = 'You were last reading ' + s.module.label + ', ' + s.module.title + '.';
+    } else if (all.done) {
+      const next = WD1.MODULES.flatMap((m) => m.sections.map((x) => Object.assign({ m }, x))).find((x) => !WD1.progress.isDone(x.id));
+      if (next) { cont.textContent = 'Next up: ' + next.num + ' ' + next.title; cont.href = next.m.href + '#' + next.id; }
+    }
+    select(selected);
+  }
+  document.addEventListener('wd1:refresh', refresh);
+  refresh();
+
+  /* Export / import / reset */
+  $('#hub-export').addEventListener('click', () => {
+    const blob = new Blob([WD1.store.exportJSON()], { type: 'application/json' });
+    const a = h('a', { href: URL.createObjectURL(blob), download: 'webdev1-progress-' + new Date().toISOString().slice(0, 10) + '.json' });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    WD1.toast('Progress exported');
+  });
+  $('#hub-import-file').addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try { WD1.store.importJSON(r.result); WD1.toast('Progress imported'); }
+      catch (err) { WD1.toast(err.message); }
+      e.target.value = '';
+    };
+    r.readAsText(f);
+  });
+  const resetWrap = $('#hub-reset-wrap');
+  function showReset() {
+    resetWrap.innerHTML = '';
+    resetWrap.appendChild(h('button', { type: 'button', class: 'btn small ghost', text: 'Reset all progress', onclick: askReset }));
+  }
+  function askReset() {
+    resetWrap.innerHTML = '';
+    resetWrap.append(
+      h('span', { text: 'Erase all progress, scores and saved code in this browser?' }),
+      h('button', { type: 'button', class: 'btn small', style: { color: 'var(--bad)', borderColor: 'var(--bad)' }, text: 'Yes, erase', onclick: () => { WD1.store.reset(); WD1.toast('Progress reset'); showReset(); } }),
+      h('button', { type: 'button', class: 'btn small ghost', text: 'Cancel', onclick: showReset }));
+  }
+  $('#hub-reset').addEventListener('click', askReset);
+});
+</script>
+</body>
+</html>

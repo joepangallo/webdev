@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Glossary · Web Dev I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="assets/css/course.css">
+  <script src="assets/js/course.js"></script>
+  <style>
+    .gl { max-width: 980px; }
+    .gl-controls {
+      position: sticky; top: calc(var(--topbar-h) + env(safe-area-inset-top, 0px)); z-index: 5;
+      background: var(--bg); padding-block: 12px; display: grid; gap: 10px; border-bottom: 1px solid var(--line);
+    }
+    .gl-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .gl-row input[type="search"] { flex: 1 1 260px; font-size: 1rem; min-height: 42px; }
+    .gl-filter button { font: inherit; font-size: .85rem; padding: 5px 12px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2); cursor: pointer; }
+    .gl-filter button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .gl-count { font-family: var(--font-mono); font-size: .8rem; color: var(--ink-3); margin-left: auto; }
+    .gl-letters { display: flex; flex-wrap: wrap; gap: 2px; }
+    .gl-letters a, .gl-letters span { font-family: var(--font-mono); font-size: .8rem; width: 26px; height: 26px; display: inline-grid; place-items: center; border-radius: 6px; text-decoration: none; }
+    .gl-letters a { color: var(--ink-2); }
+    .gl-letters a:hover { background: var(--surface-2); color: var(--ink); }
+    .gl-letters span { color: var(--line-2); }
+    .gl-group h2 { font-family: var(--font-mono); font-size: 1rem; color: var(--ink-3); margin: 28px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+    .gl-list { margin: 0; display: grid; gap: 0; }
+    .gl-item { display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr); gap: 4px 20px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+    @media (max-width: 640px) { .gl-item { grid-template-columns: minmax(0, 1fr); } }
+    .gl-item dt { font-weight: 700; }
+    .gl-item dd { margin: 0; color: var(--ink-2); }
+    .gl-item dd a.gl-src { font-family: var(--font-mono); font-size: .75rem; margin-left: 6px; text-decoration: none; white-space: nowrap; }
+    .gl-item dd a.gl-src:hover { text-decoration: underline; }
+    mark { background: color-mix(in srgb, var(--accent) 22%, transparent); color: inherit; border-radius: 3px; padding: 0 1px; }
+    .gl-empty { padding: 32px 0; color: var(--ink-3); }
+    #gl-cards { margin-top: 18px; }
+  </style>
+</head>
+<body data-page="glossary">
+<main id="main">
+  <div class="gl">
+    <header class="module-hero" style="margin-bottom: 16px;">
+      <p class="eyebrow"><span class="tag" style="color: var(--accent)">Reference</span><span id="gl-total"></span></p>
+      <h1>Glossary</h1>
+      <p class="lede">Every key term from the course, in plain language. Search it, filter by chapter, jump to the section that teaches it, or turn your filtered list into flashcards.</p>
+    </header>
+
+    <div class="gl-controls">
+      <div class="gl-row">
+        <label class="sr-only" for="gl-q">Search terms</label>
+        <input type="search" id="gl-q" placeholder="Search terms and definitions (try “selector” or “port”)" autocomplete="off">
+        <button type="button" class="btn" id="gl-study">Study as flashcards</button>
+      </div>
+      <div class="gl-row">
+        <div class="gl-filter cluster" role="group" aria-label="Filter by module" id="gl-filter"></div>
+        <span class="gl-count" id="gl-count" aria-live="polite"></span>
+      </div>
+      <nav class="gl-letters" id="gl-letters" aria-label="Jump to letter"></nav>
+    </div>
+
+    <div id="gl-cards" hidden></div>
+    <div id="gl-out"></div>
+  </div>
+</main>
+
+<script>
+/* [term, definition, module, section id] */
+const GLOSSARY = [
+  // Chapter 2: How the Web Works
+  ['Internet', 'The global network of interconnected networks that exchange data using the TCP/IP protocol suite. The web is one service that runs on it.', 'ch2', 's2-1'],
+  ['World Wide Web', 'A system of linked documents and resources identified by URLs and transferred with HTTP. Created by Tim Berners-Lee starting in 1989.', 'ch2', 's2-1'],
+  ['Protocol', 'An agreed set of rules for how two computers format and exchange messages.', 'ch2', 's2-1'],
+  ['TCP/IP', 'The layered protocol suite the Internet runs on, usually described as four layers: link, internet, transport and application.', 'ch2', 's2-1'],
+  ['Packet', 'A small chunk of data with a header (source, destination, sequence number) that travels across the network independently.', 'ch2', 's2-1'],
+  ['Packet switching', 'Splitting a message into packets that may take different routes and are reassembled at the destination. It keeps networks efficient and resilient.', 'ch2', 's2-1'],
+  ['Router', 'A device that forwards packets between networks toward their destination.', 'ch2', 's2-1'],
+  ['IP (Internet Protocol)', 'The internet-layer protocol that gives every device an address and routes packets between networks.', 'ch2', 's2-1'],
+  ['IP address', 'The numeric address of a device on a network, such as `192.0.2.10` (IPv4) or `2001:db8::1` (IPv6).', 'ch2', 's2-1'],
+  ['IPv4', 'The original 32-bit IP address format, written as four numbers from 0 to 255. About 4.3 billion addresses, which ran out.', 'ch2', 's2-1'],
+  ['IPv6', 'The 128-bit IP address format written in hexadecimal groups. It provides about 3.4 × 10^38 addresses.', 'ch2', 's2-1'],
+  ['TCP', 'Transmission Control Protocol. A transport-layer protocol that guarantees ordered, reliable delivery and retransmits lost packets.', 'ch2', 's2-1'],
+  ['UDP', 'User Datagram Protocol. A lightweight transport protocol with no delivery guarantee, used where speed matters more than completeness (video calls, games, DNS lookups).', 'ch2', 's2-1'],
+  ['Three-way handshake', 'How TCP opens a connection: SYN, SYN-ACK, ACK.', 'ch2', 's2-1'],
+  ['Port', 'A number that identifies which program on a machine should receive traffic. HTTP uses 80, HTTPS 443, SSH 22, DNS 53.', 'ch2', 's2-1'],
+  ['DNS (Domain Name System)', 'The distributed directory that translates domain names such as `example.com` into IP addresses.', 'ch2', 's2-2'],
+  ['Domain name', 'A human-readable name for a location on the Internet, read right to left from the top-level domain: `www.example.com`.', 'ch2', 's2-2'],
+  ['Top-level domain (TLD)', 'The last label of a domain name, such as `.com`, `.org`, `.edu` or `.uk`.', 'ch2', 's2-2'],
+  ['gTLD', 'Generic top-level domain, such as `.com`, `.org`, `.net` or `.app`.', 'ch2', 's2-2'],
+  ['ccTLD', 'Country-code top-level domain, two letters such as `.us`, `.ca`, `.uk` or `.de`.', 'ch2', 's2-2'],
+  ['Registrar', 'A company accredited to sell domain name registrations to the public.', 'ch2', 's2-2'],
+  ['Recursive resolver', 'The DNS server (often your ISP\'s or a public one) that does the work of finding an answer by asking other servers, then caches it.', 'ch2', 's2-2'],
+  ['Root name server', 'The top of the DNS hierarchy. It points resolvers to the right TLD servers.', 'ch2', 's2-2'],
+  ['Authoritative name server', 'The DNS server that holds the official records for a domain and gives the final answer.', 'ch2', 's2-2'],
+  ['A record', 'A DNS record that maps a name to an IPv4 address. AAAA does the same for IPv6.', 'ch2', 's2-2'],
+  ['CNAME record', 'A DNS record that makes one name an alias for another name.', 'ch2', 's2-2'],
+  ['MX record', 'A DNS record that names the mail servers that accept email for a domain.', 'ch2', 's2-2'],
+  ['TTL (time to live)', 'How long, in seconds, a DNS answer may be cached before it must be looked up again.', 'ch2', 's2-2'],
+  ['URL', 'Uniform Resource Locator: the full address of a resource, made of a scheme, host, optional port, path, query string and fragment.', 'ch2', 's2-3'],
+  ['Scheme', 'The first part of a URL that names the protocol, such as `https:` or `mailto:`.', 'ch2', 's2-3'],
+  ['Query string', 'The part of a URL after `?`, holding `name=value` pairs separated by `&`.', 'ch2', 's2-3'],
+  ['Fragment', 'The part of a URL after `#`, pointing to a location inside the page. It is never sent to the server.', 'ch2', 's2-3'],
+  ['Percent-encoding', 'Writing characters that are unsafe in a URL as `%` plus two hex digits, e.g. a space becomes `%20`.', 'ch2', 's2-3'],
+  ['Absolute URL', 'A URL that includes the scheme and host, so it works from anywhere.', 'ch2', 's2-3'],
+  ['Relative URL', 'A URL resolved against the current page\'s address, such as `about.html` or `../images/logo.png`.', 'ch2', 's2-3'],
+  ['HTTP', 'Hypertext Transfer Protocol: the request/response protocol browsers and servers use to exchange web resources.', 'ch2', 's2-4'],
+  ['HTTPS', 'HTTP sent over an encrypted TLS connection so it cannot be read or altered in transit. Default port 443.', 'ch2', 's2-4'],
+  ['TLS', 'Transport Layer Security: the encryption layer behind HTTPS. It replaced the older SSL.', 'ch2', 's2-4'],
+  ['HTTP request', 'A message from client to server: a request line (method, path, version), headers, and an optional body.', 'ch2', 's2-4'],
+  ['HTTP response', 'A message from server to client: a status line (version, status code, reason), headers, and usually a body.', 'ch2', 's2-4'],
+  ['GET', 'The HTTP method for retrieving a resource. Any data goes in the URL, so it should not change anything on the server.', 'ch2', 's2-4'],
+  ['POST', 'The HTTP method for sending data for the server to process, such as a form submission. Data goes in the request body.', 'ch2', 's2-4'],
+  ['Status code', 'The three-digit result of a request: 2xx success, 3xx redirection, 4xx client error, 5xx server error.', 'ch2', 's2-4'],
+  ['HTTP header', 'A `Name: value` line of metadata on a request or response, such as `Content-Type: text/html`.', 'ch2', 's2-4'],
+  ['User agent', 'The software making a request on the user\'s behalf, usually the browser. It identifies itself in the `User-Agent` header.', 'ch2', 's2-4'],
+  ['Stateless', 'Each HTTP request is independent; the server does not remember earlier requests on its own.', 'ch2', 's2-4'],
+  ['Cookie', 'A small piece of data the server asks the browser to store (`Set-Cookie`) and send back (`Cookie`), used to remember state such as a login.', 'ch2', 's2-4'],
+  ['Web browser', 'A client program that requests resources over HTTP and renders HTML, CSS and JavaScript into an interactive page.', 'ch2', 's2-5'],
+  ['Rendering engine', 'The part of a browser that turns markup and styles into pixels: Blink (Chrome, Edge), WebKit (Safari), Gecko (Firefox).', 'ch2', 's2-5'],
+  ['DOM (Document Object Model)', 'The tree of objects a browser builds from HTML. CSS styles it and JavaScript reads and changes it.', 'ch2', 's2-5'],
+  ['CSSOM', 'The tree the browser builds from CSS, combined with the DOM to decide how each element looks.', 'ch2', 's2-5'],
+  ['Render tree', 'The combination of DOM and CSSOM containing only the visible elements and their computed styles.', 'ch2', 's2-5'],
+  ['Layout (reflow)', 'The rendering step that calculates the size and position of every box on the page.', 'ch2', 's2-5'],
+  ['Browser cache', 'Local copies of previously downloaded resources that let repeat visits skip the network.', 'ch2', 's2-5'],
+  ['Web server', 'Software (and the machine running it) that listens for HTTP requests and returns responses, e.g. Apache, Nginx or Node.js.', 'ch2', 's2-6'],
+  ['Static site', 'A site whose pages are ready-made files sent as-is to every visitor.', 'ch2', 's2-6'],
+  ['Dynamic site', 'A site whose pages are generated per request by server code, often using a database.', 'ch2', 's2-6'],
+  ['LAMP stack', 'Linux, Apache, MySQL and PHP: a classic open-source server stack.', 'ch2', 's2-6'],
+  ['localhost', 'The name for your own computer, usually `127.0.0.1`. Used to run a web server for development.', 'ch2', 's2-6'],
+  ['CDN', 'Content delivery network: servers around the world that cache copies of files close to users for speed.', 'ch2', 's2-6'],
+  ['Web hosting', 'A service that runs your site on a server connected to the Internet: shared, VPS, dedicated, cloud or static hosting.', 'ch2', 's2-6'],
+
+  // Chapter 3: HTML 1
+  ['HTML', 'HyperText Markup Language: the standard language for describing the structure and meaning of web content.', 'ch3', 's3-1'],
+  ['Markup language', 'A language that annotates content with tags to describe its structure, rather than a programming language that performs logic.', 'ch3', 's3-1'],
+  ['W3C', 'World Wide Web Consortium: the standards body that published HTML and publishes CSS and many other web standards.', 'ch3', 's3-1'],
+  ['WHATWG', 'The browser-vendor group that maintains the HTML Living Standard, the single current HTML specification since 2019.', 'ch3', 's3-1'],
+  ['XHTML', 'An XML-based version of HTML with strict syntax rules. Browsers stop rendering on errors when a page is served as XML.', 'ch3', 's3-1'],
+  ['HTML5', 'The major revision of HTML that added semantic elements, native audio/video, new form controls and forgiving, well-defined parsing.', 'ch3', 's3-1'],
+  ['Element', 'A piece of an HTML document: usually an opening tag, content and a closing tag, e.g. `<p>Hi</p>`.', 'ch3', 's3-2'],
+  ['Tag', 'The markup that starts or ends an element, written in angle brackets: `<p>` and `</p>`.', 'ch3', 's3-2'],
+  ['Attribute', 'A `name="value"` pair inside an opening tag that adds information, e.g. `href`, `src`, `alt`, `class`.', 'ch3', 's3-2'],
+  ['Void element', 'An element that cannot have content and has no closing tag, such as `<img>`, `<br>`, `<input>` or `<meta>`.', 'ch3', 's3-2'],
+  ['Boolean attribute', 'An attribute whose presence means true, such as `required` or `disabled`.', 'ch3', 's3-2'],
+  ['Nesting', 'Placing elements inside other elements. Inner elements must close before their parents: `<p><em>…</em></p>`.', 'ch3', 's3-2'],
+  ['Comment', 'Text between `<!--` and `-->` that the browser ignores.', 'ch3', 's3-2'],
+  ['Semantic markup', 'Choosing elements for what content means (heading, list, navigation) rather than how it should look.', 'ch3', 's3-3'],
+  ['Heading hierarchy', 'Using `<h1>` through `<h6>` in order to outline a page, without skipping levels.', 'ch3', 's3-3'],
+  ['DOCTYPE', 'The `<!DOCTYPE html>` line at the top of a document. It keeps the browser in standards mode.', 'ch3', 's3-4'],
+  ['Quirks mode', 'A legacy rendering mode browsers use when the DOCTYPE is missing, which imitates old browser bugs.', 'ch3', 's3-4'],
+  ['head element', 'The `<head>` holds metadata: the title, character set, viewport, stylesheets and scripts. None of it is page content.', 'ch3', 's3-4'],
+  ['body element', 'The `<body>` holds all visible page content.', 'ch3', 's3-4'],
+  ['meta charset', '`<meta charset="utf-8">` tells the browser how to decode the file\'s text. It should come first in the head.', 'ch3', 's3-4'],
+  ['Viewport meta tag', '`<meta name="viewport" content="width=device-width, initial-scale=1">` makes mobile browsers use the real screen width.', 'ch3', 's3-4'],
+  ['Hyperlink', 'An `<a href="…">` element that links to another resource or a location in the same page.', 'ch3', 's3-5'],
+  ['alt text', 'The `alt` attribute on an image: a text alternative read by screen readers and shown if the image fails. Decorative images use `alt=""`.', 'ch3', 's3-5'],
+  ['Character entity', 'A code for a character that is reserved or hard to type, e.g. `&lt;` for <, `&amp;` for &, `&copy;` for ©.', 'ch3', 's3-5'],
+  ['Block element', 'An element that starts on a new line and takes the full available width, such as `<p>`, `<div>` or `<h1>`.', 'ch3', 's3-5'],
+  ['Inline element', 'An element that flows within a line of text, such as `<a>`, `<strong>`, `<em>` or `<span>`.', 'ch3', 's3-5'],
+  ['div', 'A generic block container with no meaning, used for grouping when no semantic element fits.', 'ch3', 's3-5'],
+  ['span', 'A generic inline container with no meaning, used to target a piece of text.', 'ch3', 's3-5'],
+  ['Unordered list', '`<ul>` with `<li>` items, for lists where order does not matter.', 'ch3', 's3-5'],
+  ['Ordered list', '`<ol>` with `<li>` items, for sequences where order matters.', 'ch3', 's3-5'],
+  ['Description list', '`<dl>` with `<dt>` terms and `<dd>` descriptions, for name/value groups like a glossary.', 'ch3', 's3-5'],
+  ['header', 'Introductory content for the page or a section: a logo, title or navigation.', 'ch3', 's3-6'],
+  ['nav', 'A block of major navigation links.', 'ch3', 's3-6'],
+  ['main', 'The dominant content of the page. Only one visible `<main>` per page.', 'ch3', 's3-6'],
+  ['article', 'Self-contained content that would make sense on its own, such as a blog post or product card.', 'ch3', 's3-6'],
+  ['section', 'A thematic group of content, normally with its own heading.', 'ch3', 's3-6'],
+  ['aside', 'Content related to the surrounding content but separate from it, such as a sidebar.', 'ch3', 's3-6'],
+  ['footer', 'Closing content for the page or a section: copyright, contact, related links.', 'ch3', 's3-6'],
+  ['figure and figcaption', '`<figure>` wraps self-contained media such as an image or chart; `<figcaption>` gives its caption.', 'ch3', 's3-6'],
+  ['Landmark', 'A region that assistive technology can jump to, created by elements such as `header`, `nav`, `main` and `footer`.', 'ch3', 's3-6'],
+  ['Validator', 'A tool such as the W3C Markup Validation Service that checks HTML against the specification.', 'ch3', 's3-review'],
+
+  // Chapter 4: CSS 1
+  ['CSS', 'Cascading Style Sheets: the language that controls presentation (color, type, spacing, layout) separately from HTML structure.', 'ch4', 's4-1'],
+  ['Rule', 'A selector followed by a declaration block: `h1 { color: navy; }`.', 'ch4', 's4-2'],
+  ['Declaration', 'A `property: value;` pair inside a rule.', 'ch4', 's4-2'],
+  ['Property', 'The aspect being styled, such as `color`, `margin` or `font-size`.', 'ch4', 's4-2'],
+  ['Hex color', 'A color written as `#RRGGBB` hexadecimal red, green and blue values, e.g. `#1F4FD1`.', 'ch4', 's4-2'],
+  ['rgb() / hsl()', 'Color functions: red-green-blue channels, or hue-saturation-lightness. Both accept an alpha value for transparency.', 'ch4', 's4-2'],
+  ['px', 'The CSS pixel, an absolute length unit.', 'ch4', 's4-2'],
+  ['em', 'A length relative to the element\'s own font size (for font-size, the parent\'s). Nested ems compound.', 'ch4', 's4-2'],
+  ['rem', 'A length relative to the root (`html`) font size. It does not compound.', 'ch4', 's4-2'],
+  ['Viewport units', '`vw` and `vh` are 1% of the viewport\'s width and height.', 'ch4', 's4-2'],
+  ['Inline style', 'CSS in an element\'s `style` attribute. Hard to maintain and very high priority.', 'ch4', 's4-3'],
+  ['Embedded style sheet', 'CSS inside a `<style>` element in the document head.', 'ch4', 's4-3'],
+  ['External style sheet', 'A separate `.css` file linked with `<link rel="stylesheet" href="…">`, shared by many pages.', 'ch4', 's4-3'],
+  ['Selector', 'The pattern that picks which elements a rule applies to.', 'ch4', 's4-4'],
+  ['Class selector', 'Selects elements with a class attribute: `.card`. Reusable across many elements.', 'ch4', 's4-4'],
+  ['ID selector', 'Selects the single element with that id: `#main-nav`.', 'ch4', 's4-4'],
+  ['Descendant selector', 'Two selectors separated by a space: `nav a` matches any `a` inside a `nav`.', 'ch4', 's4-4'],
+  ['Child selector', '`ul > li` matches `li` elements that are direct children of a `ul`.', 'ch4', 's4-4'],
+  ['Attribute selector', 'Selects by attribute: `[type="email"]`, `a[href^="https"]`.', 'ch4', 's4-4'],
+  ['Pseudo-class', 'A state or position keyword after a colon: `:hover`, `:focus`, `:first-child`, `:nth-child(2n)`.', 'ch4', 's4-4'],
+  ['Pseudo-element', 'Styles part of an element or inserts generated content, written with two colons: `::first-line`, `::before`.', 'ch4', 's4-4'],
+  ['Cascade', 'The algorithm that decides which declaration wins when several apply: origin and importance, then specificity, then source order.', 'ch4', 's4-5'],
+  ['Specificity', 'A selector\'s weight, counted as (IDs, classes/attributes/pseudo-classes, elements/pseudo-elements). Higher wins.', 'ch4', 's4-5'],
+  ['Inheritance', 'Some properties, mostly text ones like `color` and `font-family`, pass from parent to child automatically.', 'ch4', 's4-5'],
+  ['!important', 'A flag that raises a declaration above normal ones. Best avoided because it makes styles hard to override.', 'ch4', 's4-5'],
+  ['Box model', 'Every element is a rectangle of content, surrounded by padding, then border, then margin.', 'ch4', 's4-6'],
+  ['Padding', 'Space inside the border, between the border and the content. It shows the background.', 'ch4', 's4-6'],
+  ['Border', 'The line around an element\'s padding and content.', 'ch4', 's4-6'],
+  ['Margin', 'Transparent space outside the border that separates an element from its neighbors.', 'ch4', 's4-6'],
+  ['box-sizing', '`content-box` (default) sets `width` for content only; `border-box` includes padding and border in `width`.', 'ch4', 's4-6'],
+  ['Margin collapse', 'Adjacent vertical margins of block elements combine into the larger one rather than adding up.', 'ch4', 's4-6'],
+  ['Font stack', 'A comma-separated list of font families in order of preference, ending with a generic family such as `sans-serif`.', 'ch4', 's4-7'],
+  ['Web font', 'A font file downloaded with the page via `@font-face` or a font service, so users see it without installing it.', 'ch4', 's4-7'],
+  ['line-height', 'The height of each line of text. Around 1.4 to 1.6 is comfortable for body text.', 'ch4', 's4-7'],
+  ['Custom property (CSS variable)', 'A reusable value defined with two dashes, `--brand: #1F4FD1;`, and used with `var(--brand)`.', 'ch4', 's4-8'],
+  ['CSS framework', 'A prewritten library of CSS (and sometimes JS) such as Bootstrap or Tailwind that speeds up consistent design.', 'ch4', 's4-8'],
+  ['Utility class', 'A single-purpose class like `mt-4` or `text-center`; utility-first frameworks such as Tailwind build designs from them.', 'ch4', 's4-8'],
+  ['Preprocessor', 'A tool such as Sass that adds features (nesting, mixins) and compiles to plain CSS.', 'ch4', 's4-8'],
+
+  // Chapter 5: HTML 2
+  ['table', 'The element for two-dimensional tabular data, made of rows (`tr`) and cells (`td`, `th`).', 'ch5', 's5-1'],
+  ['th', 'A header cell. Use `scope="col"` or `scope="row"` to say which cells it labels.', 'ch5', 's5-1'],
+  ['td', 'A data cell.', 'ch5', 's5-1'],
+  ['caption', 'The title of a table, placed right after the opening `<table>` tag.', 'ch5', 's5-1'],
+  ['thead, tbody, tfoot', 'Groups of rows for a table\'s header, body and footer.', 'ch5', 's5-1'],
+  ['colspan / rowspan', 'Attributes that make a cell stretch across several columns or rows.', 'ch5', 's5-1'],
+  ['border-collapse', 'A table property. `collapse` merges adjacent cell borders into single lines.', 'ch5', 's5-2'],
+  ['Zebra striping', 'Alternating row backgrounds, usually with `tr:nth-child(even)`, to help eyes track rows.', 'ch5', 's5-2'],
+  ['form', 'The element that groups controls and sends their data to the URL in `action` using the HTTP `method`.', 'ch5', 's5-3'],
+  ['action attribute', 'The URL that receives a form\'s data.', 'ch5', 's5-3'],
+  ['method attribute', '`get` (data in the URL query string) or `post` (data in the request body).', 'ch5', 's5-3'],
+  ['name attribute', 'The key under which a control\'s value is sent. A control without `name` sends nothing.', 'ch5', 's5-3'],
+  ['input', 'The versatile form control whose `type` (text, email, number, date, checkbox, radio…) sets its behavior.', 'ch5', 's5-4'],
+  ['Radio buttons', 'Inputs sharing one `name` from which only one can be chosen.', 'ch5', 's5-4'],
+  ['Checkbox', 'An input that can be on or off independently of others.', 'ch5', 's5-4'],
+  ['select', 'A drop-down list of `<option>` elements.', 'ch5', 's5-4'],
+  ['datalist', 'A list of suggestions attached to a text input with the `list` attribute.', 'ch5', 's5-4'],
+  ['textarea', 'A multi-line text control.', 'ch5', 's5-4'],
+  ['Hidden input', '`<input type="hidden">` sends a value the user does not see or edit.', 'ch5', 's5-4'],
+  ['label', 'Text that names a form control. Link it with `for` matching the control\'s `id`, or wrap the control.', 'ch5', 's5-5'],
+  ['fieldset and legend', '`<fieldset>` groups related controls; `<legend>` names the group, e.g. a set of radio buttons.', 'ch5', 's5-5'],
+  ['Accessibility', 'Designing so people with disabilities can perceive, understand, navigate and interact with a site.', 'ch5', 's5-5'],
+  ['WCAG', 'Web Content Accessibility Guidelines, organized around four principles: perceivable, operable, understandable, robust (POUR).', 'ch5', 's5-5'],
+  ['Screen reader', 'Assistive software that reads the page aloud and lets users navigate by headings, landmarks and form fields.', 'ch5', 's5-5'],
+  ['ARIA', 'Accessible Rich Internet Applications: attributes such as `aria-label` that add accessibility information when native HTML cannot.', 'ch5', 's5-5'],
+  ['Placeholder', 'Hint text shown in an empty field. It is not a substitute for a label.', 'ch5', 's5-5'],
+  [':focus-visible', 'A pseudo-class for elements focused in a way that should show a focus ring, such as by keyboard.', 'ch5', 's5-6'],
+  ['accent-color', 'A CSS property that tints native checkboxes, radios and range sliders.', 'ch5', 's5-6'],
+  ['Client-side validation', 'Checking input in the browser before it is sent. Fast feedback, but easy to bypass.', 'ch5', 's5-7'],
+  ['Server-side validation', 'Checking input on the server. Always required, because anyone can send any request.', 'ch5', 's5-7'],
+  ['Constraint validation', 'The browser\'s built-in checks driven by attributes such as `required`, `type`, `min`, `max`, `minlength` and `pattern`.', 'ch5', 's5-7'],
+  ['pattern attribute', 'A regular expression the whole value must match, e.g. `pattern="\\d{5}"` for a five-digit ZIP code.', 'ch5', 's5-7'],
+  ['ValidityState', 'The object on `input.validity` with flags such as `valueMissing`, `typeMismatch` and `valid`.', 'ch5', 's5-7'],
+  ['setCustomValidity()', 'A JavaScript method that sets a custom error message on a control (an empty string clears it).', 'ch5', 's5-7'],
+
+  // Level Up
+  ['Flexbox', 'A one-dimensional layout mode (`display: flex`) that arranges items in a row or column and distributes space.', 'levelup', 'sl-1'],
+  ['Main axis / cross axis', 'In flexbox, the main axis follows `flex-direction`; the cross axis is perpendicular to it.', 'levelup', 'sl-1'],
+  ['justify-content', 'Aligns flex or grid items along the main (inline) axis: `flex-start`, `center`, `space-between`…', 'levelup', 'sl-1'],
+  ['align-items', 'Aligns items along the cross (block) axis.', 'levelup', 'sl-1'],
+  ['flex-grow', 'How much of the leftover space a flex item takes, relative to its siblings.', 'levelup', 'sl-1'],
+  ['CSS Grid', 'A two-dimensional layout mode (`display: grid`) with rows and columns.', 'levelup', 'sl-2'],
+  ['fr unit', 'A grid unit for a fraction of the leftover space: `1fr 2fr` splits it one-third / two-thirds.', 'levelup', 'sl-2'],
+  ['grid-template-areas', 'Names regions of a grid with strings like `"header header" "nav main"` so items can be placed by name.', 'levelup', 'sl-2'],
+  ['Responsive web design', 'Building one site that adapts to any screen using fluid layouts, flexible images and media queries.', 'levelup', 'sl-3'],
+  ['Media query', 'A CSS condition such as `@media (min-width: 768px) { … }` that applies rules only when it is true.', 'levelup', 'sl-3'],
+  ['Breakpoint', 'A width at which a layout changes through a media query.', 'levelup', 'sl-3'],
+  ['Mobile-first', 'Writing base styles for small screens, then adding `min-width` media queries for larger ones.', 'levelup', 'sl-3'],
+  ['srcset', 'An `img` attribute listing image files at different sizes so the browser can pick the best one.', 'levelup', 'sl-3'],
+  ['JavaScript', 'The programming language of the web browser, used to make pages respond to users and change after loading.', 'levelup', 'sl-4'],
+  ['Variable', 'A named value. Use `const` when it will not be reassigned and `let` when it will.', 'levelup', 'sl-4'],
+  ['Data type', 'The kind of a value: string, number, boolean, null, undefined, object (arrays are objects).', 'levelup', 'sl-4'],
+  ['Strict equality (===)', 'Compares value and type without conversion. Prefer it to `==`.', 'levelup', 'sl-4'],
+  ['Function', 'A reusable block of code that takes parameters and can return a value.', 'levelup', 'sl-4'],
+  ['Arrow function', 'Short function syntax: `const double = (n) => n * 2;`.', 'levelup', 'sl-4'],
+  ['Array', 'An ordered list of values: `[\'a\', \'b\', \'c\']`, indexed from 0.', 'levelup', 'sl-4'],
+  ['Object', 'A collection of named properties: `{ name: \'Ana\', age: 20 }`.', 'levelup', 'sl-4'],
+  ['Template literal', 'A backtick string that can embed expressions: `` `Hi ${name}` ``.', 'levelup', 'sl-4'],
+  ['querySelector()', 'Returns the first element matching a CSS selector. `querySelectorAll()` returns all matches.', 'levelup', 'sl-5'],
+  ['textContent', 'The text inside an element. Setting it replaces the content safely as plain text.', 'levelup', 'sl-5'],
+  ['classList', 'An element property with `add`, `remove` and `toggle` methods for its classes.', 'levelup', 'sl-5'],
+  ['Event', 'Something that happens on the page, such as a click, key press, input or form submit.', 'levelup', 'sl-5'],
+  ['Event listener', 'A function registered with `addEventListener(\'click\', fn)` that runs when the event happens.', 'levelup', 'sl-5'],
+  ['Event bubbling', 'After an event fires on the target, it travels up through each ancestor, which can also handle it.', 'levelup', 'sl-5'],
+  ['preventDefault()', 'Stops the browser\'s default action for an event, such as a form navigating on submit.', 'levelup', 'sl-5'],
+  ['Library', 'Code you call when you need it, such as a date or charting library.', 'levelup', 'sl-6'],
+  ['Framework', 'A structure that calls your code and shapes how the app is built, such as Angular or Next.js.', 'levelup', 'sl-6'],
+  ['React', 'A JavaScript library for building user interfaces from reusable components.', 'levelup', 'sl-6'],
+  ['Bootstrap', 'A CSS framework with ready-made components and a responsive grid.', 'levelup', 'sl-6'],
+  ['Tailwind CSS', 'A utility-first CSS framework that styles elements with many small classes.', 'levelup', 'sl-6'],
+  ['Git', 'A version control system that records snapshots (commits) of a project\'s history.', 'levelup', 'sl-6'],
+  ['GitHub Pages', 'Free static hosting that publishes a site straight from a GitHub repository.', 'levelup', 'sl-6'],
+  ['npm', 'The Node.js package manager for installing JavaScript libraries and tools.', 'levelup', 'sl-6'],
+  ['DevTools', 'The browser\'s built-in developer tools for inspecting the DOM, CSS, network requests and the console.', 'levelup', 'sl-6']
+];
+
+WD1.ready(() => {
+  const { $, h } = WD1;
+  const MODS = WD1.MODULES;
+  const modOf = (id) => MODS.find((m) => m.id === id);
+  let filter = 'all';
+
+  const terms = GLOSSARY.map(([term, def, mod, sec]) => ({ term, def, mod, sec, key: term.replace(/^[^A-Za-z0-9]+/, '').toUpperCase() }))
+    .sort((a, b) => a.key.localeCompare(b.key));
+  $('#gl-total').textContent = terms.length + ' terms';
+
+  const fil = $('#gl-filter');
+  [['all', 'All']].concat(MODS.map((m) => [m.id, m.num === 'L' ? 'Level Up' : 'Ch ' + m.num])).forEach(([id, label]) => {
+    fil.appendChild(h('button', { type: 'button', 'aria-pressed': String(id === filter), text: label, dataset: { f: id },
+      onclick: () => { filter = id; [...fil.children].forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.f === id))); render(); } }));
+  });
+
+  const esc = WD1.esc;
+  const hi = (html, q) => {
+    if (!q) return html;
+    const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
+    // Only highlight text outside tags
+    return html.split(/(<[^>]+>|&[#\w]+;)/).map((part) => /^[<&]/.test(part) ? part : part.replace(re, '<mark>$1</mark>')).join('');
+  };
+
+  function current() {
+    const q = $('#gl-q').value.trim().toLowerCase();
+    return { q, list: terms.filter((t) => (filter === 'all' || t.mod === filter) && (!q || t.term.toLowerCase().includes(q) || t.def.toLowerCase().includes(q))) };
+  }
+
+  function render() {
+    const { q, list } = current();
+    const out = $('#gl-out');
+    out.innerHTML = '';
+    $('#gl-count').textContent = list.length + ' of ' + terms.length + ' terms';
+    const letters = $('#gl-letters');
+    letters.innerHTML = '';
+    const groups = new Map();
+    list.forEach((t) => { const L = /[A-Z]/.test(t.key[0]) ? t.key[0] : '#'; if (!groups.has(L)) groups.set(L, []); groups.get(L).push(t); });
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((L) => {
+      letters.appendChild(groups.has(L) ? h('a', { href: '#gl-' + L, text: L }) : h('span', { text: L, 'aria-hidden': 'true' }));
+    });
+    if (!list.length) { out.appendChild(h('p', { class: 'gl-empty', text: 'No terms match. Try a shorter search or another chapter.' })); return; }
+    groups.forEach((items, L) => {
+      out.appendChild(h('section', { class: 'gl-group', id: 'gl-' + L, 'aria-label': 'Terms starting with ' + L },
+        h('h2', { text: L }),
+        h('dl', { class: 'gl-list' }, items.map((t) => {
+          const m = modOf(t.mod), s = WD1.section(t.sec);
+          return h('div', { class: 'gl-item' },
+            h('dt', { html: hi(esc(t.term), q) }),
+            h('dd', null,
+              h('span', { html: hi(WD1.fmt(t.def), q) }),
+              s ? h('a', { class: 'gl-src', href: m.href + '#' + s.id, style: { color: 'var(--' + (t.mod === 'levelup' ? 'chl' : t.mod) + ')' }, text: (s.num === 'R' ? m.label : s.num) + ' →' }) : null));
+        }))));
+    });
+    if (!$('#gl-cards').hidden) study();
+  }
+
+  function study() {
+    const { list } = current();
+    const box = $('#gl-cards');
+    box.hidden = false;
+    box.innerHTML = '';
+    const el = h('div', { dataset: { title: 'Study ' + list.length + ' term' + (list.length === 1 ? '' : 's') } });
+    box.appendChild(el);
+    WD1.flashcards(el, WD1.shuffle(list).map((t) => ({ front: t.term, back: t.def })));
+    $('#gl-study').textContent = 'Hide flashcards';
+  }
+  $('#gl-study').addEventListener('click', () => {
+    const box = $('#gl-cards');
+    if (!box.hidden) { box.hidden = true; box.innerHTML = ''; $('#gl-study').textContent = 'Study as flashcards'; return; }
+    study();
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  let t;
+  $('#gl-q').addEventListener('input', () => { clearTimeout(t); t = setTimeout(render, 120); });
+  render();
+});
+</script>
+</body>
+</html>

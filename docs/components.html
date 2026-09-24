@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Component Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/course.css">
+  <script src="../assets/js/course.js"></script>
+</head>
+<body data-page="docs">
+<main id="main">
+  <header class="module-hero">
+    <p class="eyebrow"><span class="tag">For authors</span><span>docs/AUTHORING.md explains each one</span></p>
+    <h1>Component gallery</h1>
+    <p class="lede">Every interactive building block the lessons use, rendered from the same markup you would write in a chapter page.</p>
+  </header>
+
+  <section class="lesson" id="gallery">
+    <h2>Code block</h2>
+    <script type="text/plain" class="code" data-lang="html">
+      <!-- A tiny page -->
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="utf-8">
+          <title>Hello &amp; welcome</title>
+          <style>
+            h1 { color: #1F4FD1; margin: 0 0 1rem; }
+            @media (max-width: 600px) { h1 { font-size: 1.5rem; } }
+          </style>
+        </head>
+        <body>
+          <h1 class="title" id="top">Hello, web!</h1>
+          <img src="cat.jpg" alt="A sleepy cat">
+          <script>
+            const btn = document.querySelector('button');
+            btn.addEventListener('click', () => console.log("clicked", 42));
+          <\/script>
+        </body>
+      </html>
+    </script>
+
+    <aside class="callout tip"><strong>Tip</strong> Callouts come in <code>tip</code>, <code>warn</code>, <code>try</code>, <code>book</code>, <code>project</code> and the default note.</aside>
+    <aside class="callout warn"><strong>Watch out</strong> Void elements like <code>&lt;img&gt;</code> never get a closing tag.</aside>
+    <aside class="callout try"><strong>Try it</strong> Open DevTools with <kbd>F12</kbd> and find the Network tab.</aside>
+    <aside class="callout book"><strong>In the textbook</strong> Read pages 43–48 before class.</aside>
+    <aside class="callout project"><strong>Project milestone</strong> Add a site map to your project README.</aside>
+
+    <div class="quiz" data-id="demo-quiz" data-title="Quick check">
+      <script type="application/json">
+      [
+        {"q": "Which element holds the visible content of a page?", "choices": ["`<head>`", "`<body>`", "`<meta>`", "`<title>`"], "answer": 1, "explain": "Everything the user sees goes in `<body>`. The `<head>` holds metadata."},
+        {"q": "Select every **void** element.", "choices": ["`<br>`", "`<p>`", "`<img>`", "`<input>`"], "answer": [0, 2, 3], "explain": "Void elements cannot have content, so they have no closing tag."},
+        {"q": "HTTP is a stateless protocol.", "answer": true, "explain": "Each request stands alone; cookies and sessions add state on top."},
+        {"q": "What is the default port for HTTPS?", "answer": ["443"], "explain": "HTTP uses 80 and HTTPS uses 443."}
+      ]
+      </script>
+    </div>
+
+    <div class="flashcards" data-title="Protocols">
+      <script type="application/json">
+      [
+        {"front": "TCP", "back": "Transmission Control Protocol. Guarantees ordered, reliable delivery of packets."},
+        {"front": "IP", "back": "Internet Protocol. Addresses and routes packets between networks."},
+        {"front": "DNS", "back": "Domain Name System. Translates names like `example.com` into IP addresses."}
+      ]
+      </script>
+    </div>
+
+    <div class="playground" data-id="demo-pg" data-title="Style the heading" data-height="240">
+      <textarea data-lang="html"><h1>Hello!</h1>
+<p>Edit me. <a href="about.html">A link</a></p>
+<form action="/subscribe" method="get">
+  <label>Email <input type="email" name="email" value="ana@example.com"></label>
+  <input type="text" placeholder="no name attribute">
+  <button>Subscribe</button>
+</form></textarea>
+      <textarea data-lang="css">h1 {
+  color: tomato;
+}</textarea>
+      <textarea data-lang="js">console.log('Headings:', document.querySelectorAll('h1'));</textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "The page has an `<h1>`", "test": "return !!$('h1')"},
+        {"label": "The `<h1>` is navy (`color: navy`)", "test": "return style('h1','color') === 'rgb(0, 0, 128)'"}
+      ]
+      </script>
+    </div>
+
+    <div class="match" data-title="Match the status code">
+      <script type="application/json">
+      {"leftTitle": "Code", "rightTitle": "Meaning", "pairs": [["200", "OK: the request succeeded"], ["301", "Moved permanently"], ["404", "Not found"], ["500", "Internal server error"]]}
+      </script>
+    </div>
+
+    <div class="order" data-title="Order the document">
+      <script type="application/json">
+      {"code": true, "items": ["<!DOCTYPE html>", "<html lang=\"en\">", "<head>", "<title>My page</title>", "</head>", "<body>", "</body>", "</html>"], "explain": "The DOCTYPE comes first, then `<html>` wraps `<head>` and `<body>`."}
+      </script>
+    </div>
+
+    <div class="buckets" data-title="Which layer?">
+      <script type="application/json">
+      {"buckets": ["Application", "Transport", "Internet", "Link"], "items": [["HTTP", "Application"], ["DNS", "Application"], ["TCP", "Transport"], ["UDP", "Transport"], ["IP", "Internet"], ["Ethernet", "Link"], ["Wi-Fi", "Link"]]}
+      </script>
+    </div>
+
+    <div class="stepper" data-title="Packets on the move">
+      <div class="stepper-stage">
+        <div class="cluster">
+          <span class="chip" data-on="1-4">Browser</span>
+          <span class="chip" data-on="2-4" data-active="2">Router</span>
+          <span class="chip" data-on="3-4" data-active="3">Server</span>
+          <span class="chip" data-on="4" data-active="4">Page!</span>
+        </div>
+      </div>
+      <ol class="steps">
+        <li><p>The browser splits the request into packets.</p></li>
+        <li><p>Routers forward each packet toward the destination.</p></li>
+        <li><p>The server reassembles the packets and responds.</p></li>
+        <li><p>The response travels back and the page renders.</p></li>
+      </ol>
+    </div>
+
+    <div class="fill" data-title="Complete the rule" data-explain="A declaration is `property: value;` inside braces.">
+      <script type="text/plain">
+h1 [[{]]
+  [[color]]: navy[[;]]
+[[}]]
+      </script>
+    </div>
+
+    <div class="fill" data-mode="text" data-title="Fill in the protocol names">
+      <script type="text/plain">The [[Domain Name System|DNS]] turns names into addresses, and [[HTTPS]] encrypts web traffic on port [[443]].</script>
+    </div>
+
+    <div class="tabs">
+      <div data-tab="Inline"><p>Inline styles live in a <code>style</code> attribute.</p></div>
+      <div data-tab="Embedded"><p>Embedded styles live in a <code>&lt;style&gt;</code> element.</p></div>
+      <div data-tab="External"><p>External styles live in a <code>.css</code> file linked with <code>&lt;link&gt;</code>.</p></div>
+    </div>
+
+    <div class="widget" data-kind="Simulator" data-title="A custom widget">
+      <div class="range-row"><label for="demo-range">Padding</label><input type="range" id="demo-range" min="0" max="40" value="12"><output id="demo-out">12px</output></div>
+      <div class="output" id="demo-css">padding: 12px;</div>
+    </div>
+  </section>
+</main>
+<script>
+  WD1.ready(() => {
+    const r = document.getElementById('demo-range');
+    r.addEventListener('input', () => {
+      document.getElementById('demo-out').textContent = r.value + 'px';
+      document.getElementById('demo-css').textContent = 'padding: ' + r.value + 'px;';
+    });
+  });
+</script>
+</body>
+</html>

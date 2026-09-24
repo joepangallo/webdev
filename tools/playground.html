@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Code Playground · Web Dev I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/course.css">
+  <script src="../assets/js/course.js"></script>
+  <style>
+    body[data-page="playground"] .page > main { padding-block: 16px 24px; }
+    body[data-page="playground"] .site-footer { display: none; }
+    .tp-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 12px; }
+    .tp-head h1 { font-size: 1.5rem; margin: 0; }
+    .tp-head .status { font-family: var(--font-mono); font-size: .75rem; color: var(--ink-3); }
+    .tp-toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-left: auto; }
+    .tp-toolbar select { width: auto; min-height: 32px; padding: 4px 8px; font-size: .85rem; }
+
+    .tp-work {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      height: calc(100vh - var(--topbar-h) - 110px); min-height: 520px;
+      border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface);
+      box-shadow: var(--shadow-1);
+    }
+    .tp-work.stacked { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+    @media (max-width: 900px) {
+      .tp-work, .tp-work.stacked { grid-template-columns: minmax(0, 1fr); grid-template-rows: 380px 460px; height: auto; }
+    }
+    .tp-editors { display: flex; flex-direction: column; min-width: 0; min-height: 0; border-right: 1px solid var(--line); }
+    .tp-work.stacked .tp-editors { border-right: 0; border-bottom: 1px solid var(--line); }
+    @media (max-width: 900px) { .tp-editors { border-right: 0; border-bottom: 1px solid var(--line); } }
+    .tp-editors .pg-tabs { flex: none; }
+    .tp-pane { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    .tp-pane .code-editor { flex: 1; min-height: 0; }
+
+    .tp-right { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+    .tp-stage { flex: 1; min-height: 0; background: var(--surface-3); overflow: auto; display: flex; justify-content: center; }
+    .tp-stage iframe { width: 100%; height: 100%; border: 0; background: #fff; display: block; transition: width .25s ease; }
+    .tp-stage.fixed iframe { box-shadow: 0 0 0 1px var(--line-2), var(--shadow-2); }
+    .tp-console { flex: none; height: 150px; overflow: auto; border-top: 1px solid var(--line); background: var(--code-bg); font-family: var(--font-mono); font-size: .8rem; }
+    .tp-console .log-line { padding: 4px 12px; border-bottom: 1px solid var(--code-line); white-space: pre-wrap; overflow-wrap: anywhere; color: var(--code-ink); }
+    .tp-console .log-line.error { color: var(--bad); background: var(--bad-soft); }
+    .tp-console .log-line.warn { color: var(--warn); background: var(--warn-soft); }
+    .tp-console .log-line.info { color: var(--accent); }
+    .tp-console .empty { padding: 6px 12px; color: var(--ink-3); }
+    .tp-console[hidden] { display: none; }
+    .tp-tips { margin-top: 14px; font-size: .88rem; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  </style>
+</head>
+<body data-page="playground">
+<main id="main">
+  <div class="tp-head">
+    <h1>Code playground</h1>
+    <span class="status" id="tp-status">Saved in this browser</span>
+    <div class="tp-toolbar">
+      <label class="sr-only" for="tp-template">Start from a template</label>
+      <select id="tp-template">
+        <option value="">Start from a template…</option>
+      </select>
+      <div class="seg" role="group" aria-label="Preview width">
+        <button type="button" data-w="0" aria-pressed="true">Fill</button>
+        <button type="button" data-w="390">390</button>
+        <button type="button" data-w="768">768</button>
+        <button type="button" data-w="1024">1024</button>
+      </div>
+      <button type="button" class="btn small" id="tp-layout" aria-pressed="false">Stack panes</button>
+      <button type="button" class="btn small" id="tp-console-toggle" aria-pressed="true">Console</button>
+      <button type="button" class="btn small" id="tp-copy">Copy page</button>
+      <button type="button" class="btn small" id="tp-download">Download .html</button>
+      <button type="button" class="btn small ghost" id="tp-share">Copy share link</button>
+    </div>
+  </div>
+
+  <div class="tp-work" id="tp-work">
+    <div class="tp-editors" id="tp-editors">
+      <div class="pg-tabs" role="tablist" id="tp-tabs"></div>
+    </div>
+    <div class="tp-right">
+      <div class="pg-label"><span>Preview</span><span id="tp-size" class="num"></span></div>
+      <div class="tp-stage" id="tp-stage"><iframe id="tp-frame" title="Preview"></iframe></div>
+      <div class="pg-label" id="tp-console-label"><span>Console</span><button type="button" class="btn small ghost" id="tp-clear">Clear</button></div>
+      <div class="tp-console" id="tp-console" aria-live="polite" aria-label="Console output"></div>
+    </div>
+  </div>
+  <p class="tp-tips">
+    <span><kbd>Tab</kbd> indents, <kbd>Shift</kbd>+<kbd>Tab</kbd> outdents. Press <kbd>Esc</kbd> then <kbd>Tab</kbd> to leave the editor.</span>
+    <span>Forms and links are intercepted so you can see what would be sent.</span>
+    <span>Use the width buttons to test media queries.</span>
+  </p>
+</main>
+
+<script>
+WD1.ready(() => {
+  const { $, $$, h } = WD1;
+  const ID = 'tool';
+
+  const TEMPLATES = {
+    blank: { label: 'Blank page', html: '<h1>Hello!</h1>\n<p>Start building.</p>', css: 'body {\n  font-family: system-ui, sans-serif;\n  margin: 2rem;\n}', js: '' },
+    skeleton: { label: 'Full HTML document', html: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>My Page</title>\n</head>\n<body>\n  <h1>My Page</h1>\n  <p>A complete document, from the DOCTYPE down.</p>\n</body>\n</html>', css: '', js: '' },
+    semantic: { label: 'Semantic layout', html: '<header>\n  <h1>Trail Notes</h1>\n  <nav>\n    <ul>\n      <li><a href="#">Home</a></li>\n      <li><a href="#">Hikes</a></li>\n      <li><a href="#">Gear</a></li>\n    </ul>\n  </nav>\n</header>\n<main>\n  <article>\n    <h2>Sunrise on Ridge Loop</h2>\n    <p>Published <time datetime="2026-09-12">September 12, 2026</time></p>\n    <figure>\n      <img src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22240%22%3E%3Crect width=%22600%22 height=%22240%22 fill=%22%23f4b183%22/%3E%3Cpath d=%22M0 240 L180 90 L300 170 L420 60 L600 240Z%22 fill=%22%236b4f3a%22/%3E%3C/svg%3E" alt="A rocky ridge line against an orange sunrise sky">\n      <figcaption>The ridge, 6:40 a.m.</figcaption>\n    </figure>\n    <p>We started in the dark and reached the top as the sun came up.</p>\n  </article>\n  <aside>\n    <h2>Trail stats</h2>\n    <p>4.2 miles · 900 ft gain</p>\n  </aside>\n</main>\n<footer>\n  <p>&copy; 2026 Trail Notes</p>\n</footer>', css: 'body { font-family: system-ui, sans-serif; margin: 0; line-height: 1.5; }\nheader, main, footer { padding: 1rem 1.5rem; }\nnav ul { list-style: none; display: flex; gap: 1rem; padding: 0; }\nimg { max-width: 100%; height: auto; }', js: '' },
+    table: { label: 'Data table', html: '<table>\n  <caption>Food truck menu</caption>\n  <thead>\n    <tr><th scope="col">Item</th><th scope="col">Size</th><th scope="col">Price</th></tr>\n  </thead>\n  <tbody>\n    <tr><th scope="row">Tacos</th><td>3 pcs</td><td>$9.50</td></tr>\n    <tr><th scope="row">Elote</th><td>1 ear</td><td>$4.00</td></tr>\n    <tr><th scope="row">Horchata</th><td>16 oz</td><td>$3.75</td></tr>\n  </tbody>\n</table>', css: 'body { font-family: system-ui, sans-serif; margin: 2rem; }\ntable { border-collapse: collapse; min-width: 320px; }\ncaption { font-weight: 700; text-align: left; padding-bottom: .5rem; }\nth, td { padding: .5rem .75rem; border-bottom: 1px solid #ddd; text-align: left; }\ntbody tr:nth-child(even) { background: #f5f7fa; }\ntd:last-child { text-align: right; font-variant-numeric: tabular-nums; }', js: '' },
+    form: { label: 'Accessible form', html: '<form action="/register" method="post">\n  <fieldset>\n    <legend>Your details</legend>\n    <label for="name">Full name</label>\n    <input id="name" name="name" required autocomplete="name">\n\n    <label for="email">Email</label>\n    <input id="email" name="email" type="email" required autocomplete="email">\n  </fieldset>\n\n  <fieldset>\n    <legend>T-shirt size</legend>\n    <label><input type="radio" name="size" value="s" required> Small</label>\n    <label><input type="radio" name="size" value="m"> Medium</label>\n    <label><input type="radio" name="size" value="l"> Large</label>\n  </fieldset>\n\n  <button>Register</button>\n</form>', css: 'body { font-family: system-ui, sans-serif; margin: 2rem; max-width: 32rem; }\nfieldset { border: 1px solid #ccd; border-radius: 8px; margin-bottom: 1rem; }\nlabel { display: block; margin-top: .5rem; }\ninput:not([type="radio"]) { display: block; width: 100%; padding: .5rem; margin-top: .25rem; }\ninput:user-invalid { border-color: crimson; }\nbutton { padding: .6rem 1.2rem; }', js: '' },
+    flex: { label: 'Flexbox navigation', html: '<nav class="bar">\n  <a class="logo" href="#">Brew&amp;Co</a>\n  <ul>\n    <li><a href="#">Menu</a></li>\n    <li><a href="#">Hours</a></li>\n    <li><a href="#">Contact</a></li>\n  </ul>\n</nav>', css: 'body { margin: 0; font-family: system-ui, sans-serif; }\n.bar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1rem 1.5rem;\n  background: #1f2937;\n}\n.bar a { color: white; text-decoration: none; }\n.logo { font-weight: 800; font-size: 1.25rem; }\n.bar ul { display: flex; gap: 1.25rem; list-style: none; margin: 0; padding: 0; }\n\n@media (max-width: 480px) {\n  .bar { flex-direction: column; gap: .75rem; }\n}', js: '' },
+    grid: { label: 'Grid page layout', html: '<div class="layout">\n  <header>Header</header>\n  <nav>Nav</nav>\n  <main>Main content</main>\n  <aside>Sidebar</aside>\n  <footer>Footer</footer>\n</div>', css: 'body { margin: 0; font-family: system-ui, sans-serif; }\n.layout {\n  display: grid;\n  gap: 8px;\n  padding: 8px;\n  min-height: 100vh;\n  grid-template-columns: 1fr;\n  grid-template-areas: "header" "nav" "main" "aside" "footer";\n}\n@media (min-width: 700px) {\n  .layout {\n    grid-template-columns: 180px 1fr 200px;\n    grid-template-rows: auto 1fr auto;\n    grid-template-areas:\n      "header header header"\n      "nav    main   aside"\n      "footer footer footer";\n  }\n}\nheader { grid-area: header; } nav { grid-area: nav; } main { grid-area: main; }\naside { grid-area: aside; } footer { grid-area: footer; }\n.layout > * { background: #e0e7ff; padding: 1rem; border-radius: 6px; }', js: '' },
+    events: { label: 'JavaScript events', html: '<button id="like">♥ Like</button>\n<p>Likes: <output id="count">0</output></p>\n\n<label for="name">Your name</label>\n<input id="name" placeholder="Type here">\n<p id="greeting">Hello, stranger!</p>', css: 'body { font-family: system-ui, sans-serif; margin: 2rem; }\nbutton { font-size: 1.1rem; padding: .5rem 1rem; }', js: "const btn = document.querySelector('#like');\nconst count = document.querySelector('#count');\nlet likes = 0;\n\nbtn.addEventListener('click', () => {\n  likes++;\n  count.textContent = likes;\n  console.log('likes is now', likes);\n});\n\nconst nameInput = document.querySelector('#name');\nnameInput.addEventListener('input', (event) => {\n  const name = event.target.value.trim() || 'stranger';\n  document.querySelector('#greeting').textContent = `Hello, ${name}!`;\n});" }
+  };
+
+  const sel = $('#tp-template');
+  Object.entries(TEMPLATES).forEach(([k, t]) => sel.appendChild(h('option', { value: k, text: t.label })));
+
+  /* Load: share link > handoff from a lesson > saved > default */
+  let code = null, source = '';
+  if (location.hash.startsWith('#code=')) {
+    try {
+      const b64 = location.hash.slice(6);
+      code = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(b64)))));
+      source = 'Loaded from a share link';
+    } catch (e) { code = null; }
+  }
+  if (!code && location.hash === '#handoff') {
+    try {
+      const raw = localStorage.getItem('wd1:handoff');
+      if (raw) { const d = JSON.parse(raw); code = { html: d.html, css: d.css, js: d.js }; source = 'Opened from “' + (d.title || 'a lesson') + '”'; }
+    } catch (e) { code = null; }
+  }
+  if (!code) code = WD1.store.get('custom', 'playground');
+  if (!code) { const t = TEMPLATES.events; code = { html: t.html, css: t.css, js: t.js }; source = 'Example: JavaScript events'; }
+  code = { html: code.html || '', css: code.css || '', js: code.js || '' };
+  if (source) $('#tp-status').textContent = source;
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+
+  /* Editors */
+  const tabs = $('#tp-tabs'), edWrap = $('#tp-editors');
+  const editors = {};
+  let active = 'html';
+  ['html', 'css', 'js'].forEach((l) => {
+    const tab = h('button', { type: 'button', class: 'pg-tab', role: 'tab', 'aria-selected': String(l === active), text: l.toUpperCase(), onclick: () => select(l) });
+    tabs.appendChild(tab);
+    const pane = h('div', { class: 'tp-pane', hidden: l !== active });
+    edWrap.appendChild(pane);
+    editors[l] = WD1.editor(pane, { value: code[l], lang: l, onInput: (v) => { code[l] = v; schedule(); } });
+    editors[l].tab = tab; editors[l].pane = pane;
+  });
+  function select(l) {
+    active = l;
+    Object.entries(editors).forEach(([k, ed]) => { ed.pane.hidden = k !== l; ed.tab.setAttribute('aria-selected', String(k === l)); });
+    editors[l].focus();
+  }
+
+  /* Preview + console */
+  const frame = $('#tp-frame'), consoleEl = $('#tp-console');
+  function clearConsole() {
+    consoleEl.innerHTML = '';
+    consoleEl.appendChild(h('div', { class: 'empty', text: 'console.log() output and errors appear here.' }));
+  }
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if (!d || d.wd1pg !== ID) return;
+    const empty = $('.empty', consoleEl);
+    if (empty) empty.remove();
+    const pre = { error: '✖ ', warn: '⚠ ', info: '› ' }[d.type] || '';
+    consoleEl.appendChild(h('div', { class: 'log-line ' + (d.type === 'log' ? '' : d.type), text: pre + (d.args || []).join(' ') }));
+    consoleEl.scrollTop = consoleEl.scrollHeight;
+  });
+  let timer = null, saveTimer = null;
+  function run() { clearConsole(); frame.srcdoc = WD1.buildPreviewDoc(code, ID); }
+  function schedule() {
+    clearTimeout(timer); timer = setTimeout(run, 400);
+    clearTimeout(saveTimer);
+    $('#tp-status').textContent = 'Saving…';
+    saveTimer = setTimeout(() => { WD1.store.set('custom', 'playground', code); $('#tp-status').textContent = 'Saved in this browser'; }, 700);
+  }
+  $('#tp-clear').addEventListener('click', clearConsole);
+
+  /* Templates */
+  sel.addEventListener('change', () => {
+    const t = TEMPLATES[sel.value];
+    if (!t) return;
+    ['html', 'css', 'js'].forEach((l) => editors[l].set(t[l]));
+    sel.value = '';
+    $('#tp-status').textContent = 'Loaded template: ' + t.label;
+    run();
+  });
+
+  /* Preview width */
+  const stage = $('#tp-stage'), sizeEl = $('#tp-size');
+  $$('.seg button[data-w]').forEach((b) => b.addEventListener('click', () => {
+    $$('.seg button[data-w]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    const w = +b.dataset.w;
+    frame.style.width = w ? w + 'px' : '100%';
+    frame.style.flex = w ? 'none' : '';
+    stage.classList.toggle('fixed', !!w);
+    sizeEl.textContent = w ? w + 'px wide' : '';
+  }));
+
+  /* Layout + console toggles */
+  $('#tp-layout').addEventListener('click', (e) => {
+    const on = $('#tp-work').classList.toggle('stacked');
+    e.currentTarget.setAttribute('aria-pressed', String(on));
+  });
+  $('#tp-console-toggle').addEventListener('click', (e) => {
+    const show = consoleEl.hidden;
+    consoleEl.hidden = !show; $('#tp-console-label').hidden = !show;
+    e.currentTarget.setAttribute('aria-pressed', String(show));
+  });
+
+  /* Export: a clean standalone document with no playground helpers */
+  function cleanDoc() {
+    const style = code.css.trim() ? '<style>\n' + code.css + '\n</style>\n' : '';
+    const script = code.js.trim() ? '<script>\n' + code.js.replace(/<\/script/gi, '<\\/script') + '\n<\/script>\n' : '';
+    if (/<html[\s>]/i.test(code.html)) {
+      let doc = code.html;
+      if (style) doc = /<\/head>/i.test(doc) ? doc.replace(/<\/head>/i, () => style + '</head>') : doc.replace(/<html[^>]*>/i, (m) => m + '\n<head>\n' + style + '</head>');
+      if (script) doc = /<\/body>/i.test(doc) ? doc.replace(/<\/body>/i, () => script + '</body>') : doc + '\n' + script;
+      return doc;
+    }
+    return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Playground page</title>\n' +
+      style + '</head>\n<body>\n' + code.html + '\n' + script + '</body>\n</html>\n';
+  }
+  $('#tp-copy').addEventListener('click', (e) => WD1.copy(cleanDoc(), e.currentTarget));
+  $('#tp-download').addEventListener('click', () => {
+    const url = URL.createObjectURL(new Blob([cleanDoc()], { type: 'text/html' }));
+    const a = h('a', { href: url, download: 'index.html' });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    WD1.toast('Downloaded index.html');
+  });
+  $('#tp-share').addEventListener('click', (e) => {
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(code))));
+    const url = location.href.split('#')[0] + '#code=' + encodeURIComponent(b64);
+    WD1.copy(url, e.currentTarget);
+  });
+
+  run();
+});
+</script>
+</body>
+</html>
