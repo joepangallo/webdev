@@ -30,7 +30,7 @@
     .c2-row { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; margin-bottom: 12px; }
     .c2-row > .grow { flex: 1 1 240px; min-width: 0; }
     .c2-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
-    .c2-chips .btn { font-family: var(--font-mono); font-weight: 400; white-space: normal; text-align: left; }
+    .c2-chips .btn { font-family: var(--font-mono); font-weight: 400; white-space: normal; text-align: left; overflow-wrap: anywhere; max-width: 100%; }
     .c2-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .c2-fb { font-size: .93rem; border-radius: 8px; padding: 9px 12px; margin: 10px 0 0; background: var(--surface-2); color: var(--ink-2); }
     .c2-fb:empty { display: none; }
@@ -69,7 +69,7 @@
     .c2-svg .lbl-ok { fill: var(--good); font-weight: 700; }
     .c2-svg .tag { font-family: var(--font-mono); font-size: 12px; font-weight: 700; }
     .c2-svg .tag.miss { fill: var(--bad); } .c2-svg .tag.hit { fill: var(--good); }
-    .c2-svg g.active .arrow { stroke-width: 4; }
+    .c2-svg g.active .arrow { stroke-width: 3.2; }
     .stepper-stage .c2-svg [data-active].active { outline: none; }
 
     /* 2.1 Packet simulator */
@@ -304,6 +304,31 @@
     @media (max-width: 640px) { .c2-ws { grid-template-columns: minmax(0, 1fr); } }
     .c2-ws .field small { color: var(--ink-3); font-size: .78rem; line-height: 1.35; }
     .c2-md { margin: 12px 0 0; white-space: pre-wrap; max-height: 360px; overflow: auto; }
+    /* Narrow screens: portrait diagrams, compact waterfall, stacked tables */
+    .c2-svg.sm text { font-size: 13px; }
+    .c2-svg.sm .t-sub { font-size: 11px; }
+    .c2-svg.sm .t-mono, .c2-svg.sm .tag { font-size: 11px; }
+    .c2-seq { max-width: 620px; margin: 0 auto; }
+    .c2-narrow-only { display: none; }
+    .c2-ps-svg.portrait { min-width: 0; max-width: 340px; margin: 0 auto; }
+    .c2-io-head .pill { white-space: nowrap; }
+    @media (max-width: 640px) { .c2-seq text { font-size: 16px; } .c2-seq .t-mono { font-size: 13.5px; } .c2-seq .t-sub { font-size: 13px; } }
+    @media (max-width: 640px) {
+      .c2-wide-only { display: none; }
+      .c2-narrow-only { display: block; max-width: 420px; margin: 0 auto; }
+      .c2-wf { min-width: 0; }
+      .c2-wf-row { grid-template-columns: 92px minmax(0, 1fr); }
+      .c2-wf-name { font-size: .64rem; }
+      .c2-wf-note { display: none; }
+      .c2-wf-marks { left: 92px; }
+      .c2-wf-axis { margin-left: 92px; }
+      .c2-parts thead { display: none; }
+      .c2-parts tr { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+      .c2-parts tbody tr:last-child { border-bottom: 0; }
+      .c2-parts td { border: 0; padding: 0; }
+      .c2-parts td:nth-child(2) { min-width: 0; }
+      .c2-parts td:nth-child(3) { grid-column: 1 / -1; font-size: .88rem; color: var(--ink-2); }
+    }
   </style>
 </head>
 <body data-module="ch2">
@@ -424,37 +449,37 @@
 
     <div class="stepper" data-title="The TCP three-way handshake">
       <div class="stepper-stage">
-        <svg class="c2-svg min c2-seq" viewBox="0 0 600 340" role="img" aria-label="Sequence diagram: messages passed between a browser on the left and a server on the right over time, top to bottom.">
+        <svg class="c2-svg c2-seq" viewBox="0 0 420 340" role="img" aria-label="Sequence diagram: messages passed between a browser on the left and a server on the right over time, top to bottom.">
           <defs>
             <marker id="c2-mk-hs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker>
             <marker id="c2-mk-hs2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-alt"/></marker>
           </defs>
-          <text x="110" y="22" text-anchor="middle" class="t-strong">Browser</text>
-          <text x="110" y="40" text-anchor="middle" class="t-mono t-sub">192.168.1.23:51544</text>
-          <text x="490" y="22" text-anchor="middle" class="t-strong">Server</text>
-          <text x="490" y="40" text-anchor="middle" class="t-mono t-sub">203.0.113.80:443</text>
-          <line x1="110" y1="50" x2="110" y2="332" class="life"/>
-          <line x1="490" y1="50" x2="490" y2="332" class="life"/>
+          <text x="80" y="22" text-anchor="middle" class="t-strong">Browser</text>
+          <text x="80" y="40" text-anchor="middle" class="t-mono t-sub">192.168.1.23:51544</text>
+          <text x="340" y="22" text-anchor="middle" class="t-strong">Server</text>
+          <text x="340" y="40" text-anchor="middle" class="t-mono t-sub">203.0.113.80:443</text>
+          <line x1="80" y1="50" x2="80" y2="332" class="life"/>
+          <line x1="340" y1="50" x2="340" y2="332" class="life"/>
           <g data-on="1-5" data-active="1">
-            <line x1="112" y1="66" x2="486" y2="101" class="arrow" marker-end="url(#c2-mk-hs)"/>
-            <text transform="translate(300 83.5) rotate(5.3)" y="-8" text-anchor="middle" class="t-mono lbl-mod halo">SYN · seq=1000</text>
+            <line x1="82" y1="66" x2="336" y2="101" class="arrow" marker-end="url(#c2-mk-hs)"/>
+            <text transform="translate(209 83.5) rotate(7.85)" y="-8" text-anchor="middle" class="t-mono lbl-mod halo">SYN · seq=1000</text>
           </g>
           <g data-on="2-5" data-active="2">
-            <line x1="488" y1="121" x2="114" y2="156" class="arrow alt" marker-end="url(#c2-mk-hs2)"/>
-            <text transform="translate(300 138.5) rotate(-5.3)" y="-8" text-anchor="middle" class="t-mono lbl-alt halo">SYN-ACK · seq=5000, ack=1001</text>
+            <line x1="338" y1="121" x2="84" y2="156" class="arrow alt" marker-end="url(#c2-mk-hs2)"/>
+            <text transform="translate(211 138.5) rotate(-7.85)" y="-8" text-anchor="middle" class="t-mono lbl-alt halo">SYN-ACK · seq=5000, ack=1001</text>
           </g>
           <g data-on="3-5" data-active="3">
-            <line x1="112" y1="176" x2="486" y2="211" class="arrow" marker-end="url(#c2-mk-hs)"/>
-            <text transform="translate(300 193.5) rotate(5.3)" y="-8" text-anchor="middle" class="t-mono lbl-mod halo">ACK · ack=5001</text>
+            <line x1="82" y1="176" x2="336" y2="211" class="arrow" marker-end="url(#c2-mk-hs)"/>
+            <text transform="translate(209 193.5) rotate(7.85)" y="-8" text-anchor="middle" class="t-mono lbl-mod halo">ACK · ack=5001</text>
           </g>
-          <text data-on="3-5" x="300" y="234" text-anchor="middle" class="lbl-ok">✓ connection open</text>
+          <text data-on="3-5" x="210" y="236" text-anchor="middle" class="lbl-ok">✓ connection open</text>
           <g data-on="4-5" data-active="4">
-            <line x1="112" y1="248" x2="486" y2="276" class="arrow" marker-end="url(#c2-mk-hs)"/>
-            <text transform="translate(300 262) rotate(4.3)" y="-8" text-anchor="middle" class="t-mono lbl-mod halo">(TLS) GET / HTTP/1.1 …</text>
+            <line x1="82" y1="250" x2="336" y2="278" class="arrow" marker-end="url(#c2-mk-hs)"/>
+            <text transform="translate(209 264) rotate(6.29)" y="-8" text-anchor="middle" class="t-mono lbl-mod halo">(TLS) GET / HTTP/1.1 …</text>
           </g>
           <g data-on="5" data-active="5">
-            <line x1="488" y1="292" x2="114" y2="320" class="arrow alt" marker-end="url(#c2-mk-hs2)"/>
-            <text transform="translate(300 306) rotate(-4.3)" y="-8" text-anchor="middle" class="t-mono lbl-alt halo">HTTP/1.1 200 OK …</text>
+            <line x1="338" y1="294" x2="84" y2="322" class="arrow alt" marker-end="url(#c2-mk-hs2)"/>
+            <text transform="translate(211 308) rotate(-6.29)" y="-8" text-anchor="middle" class="t-mono lbl-alt halo">HTTP/1.1 200 OK …</text>
           </g>
         </svg>
       </div>
@@ -498,10 +523,10 @@
     <div class="quiz" data-title="Check your understanding: protocols">
       <script type="application/json">
       [
-        {"q": "Which TCP/IP layer uses IP addresses to route packets from one network to another?", "choices": ["Application", "Transport", "Internet", "Link"], "answer": 2, "explain": "The internet layer (IPv4 and IPv6) handles addressing and routing across networks. The link layer only moves frames across one physical hop."},
+        {"q": "Which TCP/IP layer uses IP addresses to route packets from one network to another?", "shuffle": true, "choices": ["Application", "Transport", "Internet", "Link"], "answer": 2, "explain": "The internet layer (IPv4 and IPv6) handles addressing and routing across networks. The link layer only moves frames across one physical hop."},
         {"q": "All the packets of one message always travel the same route.", "answer": false, "explain": "Each packet is routed independently, so packets can take different paths and arrive out of order. TCP reorders them using sequence numbers."},
-        {"q": "Which protocol would you pick when every byte must arrive, in order, even if that costs a little speed?", "choices": ["UDP", "TCP", "ICMP", "Ethernet"], "answer": 1, "explain": "TCP numbers, acknowledges and resends data. UDP is fire-and-forget."},
-        {"q": "Select every **private** IPv4 address (one that isn't reachable directly from the public internet).", "choices": ["`10.4.2.1`", "`172.20.8.8`", "`8.8.8.8`", "`192.168.0.10`", "`172.32.0.1`"], "answer": [0, 1, 3], "explain": "The private ranges are `10.0.0.0/8`, `172.16.0.0` to `172.31.255.255`, and `192.168.0.0/16`. `172.32.0.1` is just outside the 172 range, and `8.8.8.8` is a public DNS resolver."},
+        {"q": "Which protocol would you pick when every byte must arrive, in order, even if that costs a little speed?", "shuffle": true, "choices": ["UDP", "TCP", "ICMP", "Ethernet"], "answer": 1, "explain": "TCP numbers, acknowledges and resends data. UDP is fire-and-forget."},
+        {"q": "Select every **private** IPv4 address (one that isn't reachable directly from the public internet).", "shuffle": true, "choices": ["`10.4.2.1`", "`172.20.8.8`", "`8.8.8.8`", "`192.168.0.10`", "`172.32.0.1`"], "answer": [0, 1, 3], "explain": "The private ranges are `10.0.0.0/8`, `172.16.0.0` to `172.31.255.255`, and `192.168.0.0/16`. `172.32.0.1` is just outside the 172 range, and `8.8.8.8` is a public DNS resolver."},
         {"q": "How many bits long is an IPv6 address? (Type a number.)", "answer": ["128"], "explain": "IPv4 uses 32 bits (about 4.3 billion addresses); IPv6 uses 128 bits (about 3.4 × 10^38)."}
       ]
       </script>
@@ -542,7 +567,7 @@
 
     <div class="stepper" data-title="Resolving www.example.com" id="c2-dns-stepper">
       <div class="stepper-stage">
-        <svg class="c2-svg min" viewBox="0 0 700 360" role="img" aria-label="DNS resolution diagram: browser, operating system, recursive resolver, root server, .com TLD server, authoritative server and web server, with arrows showing the queries and answers.">
+        <svg class="c2-svg min c2-wide-only" viewBox="0 0 700 360" role="img" aria-label="DNS resolution diagram: browser, operating system, recursive resolver, root server, .com TLD server, authoritative server and web server, with arrows showing the queries and answers.">
           <defs>
             <marker id="c2-mk-dns" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker>
             <marker id="c2-mk-dns2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-alt"/></marker>
@@ -581,9 +606,32 @@
           <g class="node" data-active="6"><rect class="box" x="520" y="280" width="170" height="54" rx="10"/><text x="605" y="304" text-anchor="middle" class="t-strong">Authoritative server</text><text x="605" y="322" text-anchor="middle" class="t-sub">for example.com</text></g>
           <g class="node" data-on="8" data-active="8"><rect class="box" x="300" y="292" width="140" height="54" rx="10"/><text x="370" y="316" text-anchor="middle" class="t-strong">Web server</text><text x="370" y="334" text-anchor="middle" class="t-mono t-sub">203.0.113.80</text></g>
           <!-- cache tags, updated by the page script -->
-          <text id="c2-dt-b" x="95" y="32" text-anchor="middle" class="tag"></text>
-          <text id="c2-dt-o" x="95" y="318" text-anchor="middle" class="tag"></text>
-          <text id="c2-dt-r" x="350" y="140" text-anchor="middle" class="tag"></text>
+          <text data-dnstag="b" x="95" y="32" text-anchor="middle" class="tag"></text>
+          <text data-dnstag="o" x="95" y="318" text-anchor="middle" class="tag"></text>
+          <text data-dnstag="r" x="350" y="140" text-anchor="middle" class="tag"></text>
+        </svg>
+        <svg class="c2-svg sm c2-narrow-only" viewBox="0 0 360 570" role="img" aria-label="DNS resolution diagram, arranged top to bottom for narrow screens.">
+          <defs>
+            <marker id="c2-mk-dnp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker>
+            <marker id="c2-mk-dnp3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ok"/></marker>
+          </defs>
+          <g data-on="2-8" data-active="2"><line x1="82" y1="98" x2="82" y2="146" class="arrow" marker-end="url(#c2-mk-dnp)"/><text x="92" y="126" class="t-mono lbl-mod halo">www.example.com?</text></g>
+          <g data-on="3-8" data-active="3"><line x1="82" y1="208" x2="82" y2="286" class="arrow" marker-end="url(#c2-mk-dnp)"/></g>
+          <g data-on="4-8" data-active="4"><line x1="156" y1="294" x2="194" y2="242" class="arrow" marker-start="url(#c2-mk-dnp)" marker-end="url(#c2-mk-dnp)"/><text x="273" y="276" text-anchor="middle" class="t-mono lbl-alt halo">↩ referral: .com</text></g>
+          <g data-on="5-8" data-active="5"><line x1="156" y1="318" x2="194" y2="318" class="arrow" marker-start="url(#c2-mk-dnp)" marker-end="url(#c2-mk-dnp)"/><text x="273" y="366" text-anchor="middle" class="t-mono lbl-alt halo">↩ referral: example.com</text></g>
+          <g data-on="6-8" data-active="6"><line x1="156" y1="342" x2="194" y2="392" class="arrow" marker-start="url(#c2-mk-dnp)" marker-end="url(#c2-mk-dnp)"/><text x="273" y="452" text-anchor="middle" class="t-mono lbl-ok halo">✓ A 203.0.113.80</text><text x="273" y="468" text-anchor="middle" class="t-mono lbl-ok halo">TTL 3600</text></g>
+          <g data-on="7-8" data-active="7"><line x1="40" y1="288" x2="40" y2="208" class="arrow ok" marker-end="url(#c2-mk-dnp3)"/><line x1="40" y1="148" x2="40" y2="98" class="arrow ok" marker-end="url(#c2-mk-dnp3)"/><text x="92" y="244" class="t-mono lbl-ok halo">↑ 203.0.113.80</text></g>
+          <g data-on="8" data-active="8"><path d="M154 54 H354 V527 H352" class="arrow ok" marker-end="url(#c2-mk-dnp3)"/><text x="273" y="492" text-anchor="middle" class="t-mono lbl-ok halo">connect to :443</text></g>
+          <g class="node" data-active="1,8"><rect class="box" x="12" y="40" width="140" height="54" rx="10"/><text x="82" y="64" text-anchor="middle" class="t-strong">Browser</text><text x="82" y="82" text-anchor="middle" class="t-sub">its own DNS cache</text></g>
+          <g class="node" data-active="2"><rect class="box" x="12" y="150" width="140" height="54" rx="10"/><text x="82" y="174" text-anchor="middle" class="t-strong">Operating system</text><text x="82" y="192" text-anchor="middle" class="t-sub">stub resolver + hosts</text></g>
+          <g class="node" data-active="3,7"><rect class="box" x="12" y="290" width="140" height="56" rx="10"/><text x="82" y="315" text-anchor="middle" class="t-strong">Recursive resolver</text><text x="82" y="333" text-anchor="middle" class="t-sub">ISP, school, or 1.1.1.1</text></g>
+          <g class="node" data-active="4"><rect class="box" x="198" y="200" width="150" height="54" rx="10"/><text x="273" y="224" text-anchor="middle" class="t-strong">Root server</text><text x="273" y="242" text-anchor="middle" class="t-sub">knows every TLD</text></g>
+          <g class="node" data-active="5"><rect class="box" x="198" y="290" width="150" height="56" rx="10"/><text x="273" y="315" text-anchor="middle" class="t-strong">.com TLD server</text><text x="273" y="333" text-anchor="middle" class="t-sub">run by the registry</text></g>
+          <g class="node" data-active="6"><rect class="box" x="198" y="380" width="150" height="54" rx="10"/><text x="273" y="404" text-anchor="middle" class="t-strong">Authoritative server</text><text x="273" y="422" text-anchor="middle" class="t-sub">for example.com</text></g>
+          <g class="node" data-on="8" data-active="8"><rect class="box" x="198" y="500" width="150" height="54" rx="10"/><text x="273" y="524" text-anchor="middle" class="t-strong">Web server</text><text x="273" y="542" text-anchor="middle" class="t-mono t-sub">203.0.113.80</text></g>
+          <text data-dnstag="b" x="162" y="72" class="tag"></text>
+          <text data-dnstag="o" x="162" y="182" class="tag"></text>
+          <text data-dnstag="r" x="82" y="366" text-anchor="middle" class="tag"></text>
         </svg>
       </div>
       <ol class="steps">
@@ -656,9 +704,9 @@
       <script type="application/json">
       [
         {"q": "In `shop.blog.example.co.uk`, what is the top-level domain? (Type it without the dot.)", "answer": ["uk"], "pattern": "^\\.?uk\\.?$", "explain": "The TLD is always the last label: `uk`, a country-code TLD. `co.uk` is the public suffix under which companies register names like `example.co.uk`."},
-        {"q": "A recursive resolver with an empty cache needs `www.example.com`. Which server does it ask first?", "choices": ["The authoritative server for example.com", "A .com TLD server", "A root server", "The registrar"], "answer": 2, "explain": "It starts at the top: the root refers it to the .com servers, which refer it to example.com's authoritative servers."},
-        {"q": "Which record type maps a name to an IPv6 address?", "choices": ["A", "AAAA", "CNAME", "MX"], "answer": 1, "explain": "A holds IPv4 addresses and AAAA holds IPv6 addresses (IPv6 addresses are four times as long, hence four A's)."},
-        {"q": "What does the TTL on a DNS record control?", "choices": ["How many routers a packet may cross", "How long resolvers and browsers may cache the answer", "How long the domain registration lasts", "How long a TCP connection stays open"], "answer": 1, "explain": "DNS TTL is measured in seconds and limits how long any cache may reuse the answer. (IP packets also have a TTL field, but that one counts router hops.)"},
+        {"q": "A recursive resolver with an empty cache needs `www.example.com`. Which server does it ask first?", "shuffle": true, "choices": ["The authoritative server for example.com", "A .com TLD server", "A root server", "The registrar"], "answer": 2, "explain": "It starts at the top: the root refers it to the .com servers, which refer it to example.com's authoritative servers."},
+        {"q": "Which record type maps a name to an IPv6 address?", "shuffle": true, "choices": ["A", "AAAA", "CNAME", "MX"], "answer": 1, "explain": "A holds IPv4 addresses and AAAA holds IPv6 addresses (IPv6 addresses are four times as long, hence four A's)."},
+        {"q": "What does the TTL on a DNS record control?", "shuffle": true, "choices": ["How many routers a packet may cross", "How long resolvers and browsers may cache the answer", "How long the domain registration lasts", "How long a TCP connection stays open"], "answer": 1, "explain": "DNS TTL is measured in seconds and limits how long any cache may reuse the answer. (IP packets also have a TTL field, but that one counts router hops.)"},
         {"q": "You register a domain name directly with ICANN.", "answer": false, "explain": "You rent names from a registrar, which records them with the TLD's registry. ICANN accredits registrars and coordinates the system."}
       ]
       </script>
@@ -742,9 +790,9 @@
       <script type="application/json">
       [
         {"q": "In `https://shop.example.com:8443/cart?id=7#top`, what is the port? (Type the number.)", "answer": ["8443"], "explain": "The port follows the host after a colon. Because it isn't the https default (443), it has to be written out."},
-        {"q": "Which part of a URL is **never** sent to the server?", "choices": ["The path", "The query string", "The fragment", "The port"], "answer": 2, "explain": "The fragment (`#...`) stays in the browser and is used to scroll to an element or by JavaScript."},
-        {"q": "The page `https://example.com/blog/posts/today.html` links to `../img/a.png`. Which URL does the browser request?", "choices": ["`https://example.com/img/a.png`", "`https://example.com/blog/img/a.png`", "`https://example.com/blog/posts/img/a.png`", "`https://example.com/blog/posts/today.html/../img/a.png`"], "answer": 1, "explain": "Start from the page's folder, `/blog/posts/`, climb one level to `/blog/`, then go into `img/`."},
-        {"q": "What does `%20` stand for in a URL?", "choices": ["A percent sign", "The number 20", "A space", "The end of the path"], "answer": 2, "explain": "A space is byte 0x20, so percent-encoding writes it as `%20`. Form-encoded query strings may use `+` instead."},
+        {"q": "Which part of a URL is **never** sent to the server?", "shuffle": true, "choices": ["The path", "The query string", "The fragment", "The port"], "answer": 2, "explain": "The fragment (`#...`) stays in the browser and is used to scroll to an element or by JavaScript."},
+        {"q": "The page `https://example.com/blog/posts/today.html` links to `../img/a.png`. Which URL does the browser request?", "shuffle": true, "choices": ["`https://example.com/img/a.png`", "`https://example.com/blog/img/a.png`", "`https://example.com/blog/posts/img/a.png`", "`https://example.com/blog/posts/today.html/../img/a.png`"], "answer": 1, "explain": "Start from the page's folder, `/blog/posts/`, climb one level to `/blog/`, then go into `img/`."},
+        {"q": "What does `%20` stand for in a URL?", "shuffle": true, "choices": ["A percent sign", "The number 20", "A space", "The end of the path"], "answer": 2, "explain": "A space is byte 0x20, so percent-encoding writes it as `%20`. Form-encoded query strings may use `+` instead."},
         {"q": "A link to `/about` on `https://www.example.com/shop/shoes/` goes to `https://www.example.com/about`.", "answer": true, "explain": "A leading slash means \"start at the root of this host,\" so the current folder doesn't matter."}
       ]
       </script>
@@ -901,10 +949,10 @@
     <div class="quiz" data-title="Check your understanding: HTTP">
       <script type="application/json">
       [
-        {"q": "A search form should put the search term in the URL so results can be bookmarked and shared. Which method should it use?", "choices": ["GET", "POST", "PUT", "DELETE"], "answer": 0, "explain": "GET sends form data in the query string and is safe to repeat, so the result URL can be bookmarked. Use POST for actions that change something."},
+        {"q": "A search form should put the search term in the URL so results can be bookmarked and shared. Which method should it use?", "shuffle": true, "choices": ["GET", "POST", "PUT", "DELETE"], "answer": 0, "explain": "GET sends form data in the query string and is safe to repeat, so the result URL can be bookmarked. Use POST for actions that change something."},
         {"q": "Which header must every HTTP/1.1 request include? (Type its name.)", "answer": ["Host"], "explain": "One server (one IP address) often hosts many sites, so `Host` says which one you want. Without it an HTTP/1.1 server answers 400 Bad Request."},
-        {"q": "A browser sends `If-None-Match` with an ETag and gets back `304 Not Modified`. What happens next?", "choices": ["It downloads the file again", "It shows an error page", "It uses the copy already in its cache", "It follows a redirect"], "answer": 2, "explain": "304 means \"your copy is still current.\" The response has no body, which saves the whole download."},
-        {"q": "Which status code means \"you're not logged in\" rather than \"you're logged in but not allowed\"?", "choices": ["`401`", "`403`", "`404`", "`500`"], "answer": 0, "explain": "401 Unauthorized really means unauthenticated. 403 Forbidden means the server knows who you are and still says no."},
+        {"q": "A browser sends `If-None-Match` with an ETag and gets back `304 Not Modified`. What happens next?", "shuffle": true, "choices": ["It downloads the file again", "It shows an error page", "It uses the copy already in its cache", "It follows a redirect"], "answer": 2, "explain": "304 means \"your copy is still current.\" The response has no body, which saves the whole download."},
+        {"q": "Which status code means \"you're not logged in\" rather than \"you're logged in but not allowed\"?", "shuffle": true, "choices": ["`401`", "`403`", "`404`", "`500`"], "answer": 0, "explain": "401 Unauthorized really means unauthenticated. 403 Forbidden means the server knows who you are and still says no."},
         {"q": "HTTP servers automatically remember each visitor between requests.", "answer": false, "explain": "HTTP is stateless. Cookies (`Set-Cookie` then `Cookie`) let the server recognize a returning browser."}
       ]
       </script>
@@ -1051,11 +1099,11 @@ downloads, then runs…
     <div class="quiz" data-title="Check your understanding: browsers">
       <script type="application/json">
       [
-        {"q": "What does the browser build from the HTML it receives?", "choices": ["The CSSOM", "The DOM", "The render tree", "The ETag"], "answer": 1, "explain": "HTML becomes the DOM (Document Object Model). CSS becomes the CSSOM, and the two combine into the render tree."},
-        {"q": "Which order is correct?", "choices": ["Paint → Layout → Render tree", "Render tree → Layout → Paint", "Layout → Render tree → Paint", "Paint → Render tree → Layout"], "answer": 1, "explain": "The browser must know what's visible (render tree) before it can compute sizes and positions (layout), and it needs positions before it can fill in pixels (paint)."},
+        {"q": "What does the browser build from the HTML it receives?", "shuffle": true, "choices": ["The CSSOM", "The DOM", "The render tree", "The ETag"], "answer": 1, "explain": "HTML becomes the DOM (Document Object Model). CSS becomes the CSSOM, and the two combine into the render tree."},
+        {"q": "Which order is correct?", "shuffle": true, "choices": ["Paint → Layout → Render tree", "Render tree → Layout → Paint", "Layout → Render tree → Paint", "Paint → Render tree → Layout"], "answer": 1, "explain": "The browser must know what's visible (render tree) before it can compute sizes and positions (layout), and it needs positions before it can fill in pixels (paint)."},
         {"q": "A plain `<script src=\"app.js\">` in the `<head>` (no `defer` or `async`) pauses HTML parsing until the script has downloaded and run.", "answer": true, "explain": "That's why scripts either go at the end of `<body>` or get the `defer` attribute."},
-        {"q": "With HTTP/1.1, why does a page with 30 images load slower than with HTTP/2?", "choices": ["HTTP/1.1 can't send images", "Browsers use at most about six connections per host, each carrying one request at a time, so requests queue", "HTTP/1.1 has no caching", "HTTP/2 compresses images"], "answer": 1, "explain": "HTTP/2 multiplexes many requests over one connection, so nothing waits for a free connection."},
-        {"q": "Which rendering engine does Firefox use?", "choices": ["Blink", "WebKit", "Gecko", "V8"], "answer": 2, "explain": "Gecko is Mozilla's engine. Blink powers Chromium-based browsers, WebKit powers Safari, and V8 is a JavaScript engine."}
+        {"q": "With HTTP/1.1, why does a page with 30 images load slower than with HTTP/2?", "shuffle": true, "choices": ["HTTP/1.1 can't send images", "Browsers use at most about six connections per host, each carrying one request at a time, so requests queue", "HTTP/1.1 has no caching", "HTTP/2 compresses images"], "answer": 1, "explain": "HTTP/2 multiplexes many requests over one connection, so nothing waits for a free connection."},
+        {"q": "Which rendering engine does Firefox use?", "shuffle": true, "choices": ["Blink", "WebKit", "Gecko", "V8"], "answer": 2, "explain": "Gecko is Mozilla's engine. Blink powers Chromium-based browsers, WebKit powers Safari, and V8 is a JavaScript engine."}
       ]
       </script>
     </div>
@@ -1071,13 +1119,13 @@ downloads, then runs…
 
     <div class="stepper" data-title="Static vs. dynamic: what the server does" id="c2-sv-stepper">
       <div class="stepper-stage">
-        <svg class="c2-svg min" viewBox="0 0 700 290" role="img" aria-label="Diagram: a browser sends requests to an nginx web server, which either reads a file from disk or hands the request to PHP, which queries a MySQL database.">
+        <svg class="c2-svg min c2-wide-only" viewBox="0 0 700 290" role="img" aria-label="Diagram: a browser sends requests to an nginx web server, which either reads a file from disk or hands the request to PHP, which queries a MySQL database.">
           <defs>
             <marker id="c2-mk-sv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker>
             <marker id="c2-mk-sv2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ok"/></marker>
           </defs>
-          <g data-on="1-7" data-active="1,4"><line x1="132" y1="112" x2="236" y2="112" class="arrow" marker-end="url(#c2-mk-sv)"/><text id="c2-sv-req" x="184" y="86" text-anchor="middle" class="t-mono lbl-mod halo">GET /about.html</text></g>
-          <g data-on="3,7" data-active="3,7"><line x1="238" y1="142" x2="134" y2="142" class="arrow ok" marker-end="url(#c2-mk-sv2)"/><text id="c2-sv-res" x="184" y="178" text-anchor="middle" class="t-mono lbl-ok halo">200 OK</text></g>
+          <g data-on="1-7" data-active="1,4"><line x1="132" y1="112" x2="236" y2="112" class="arrow" marker-end="url(#c2-mk-sv)"/><text data-svlbl="req" x="184" y="86" text-anchor="middle" class="t-mono lbl-mod halo">GET /about.html</text></g>
+          <g data-on="3,7" data-active="3,7"><line x1="238" y1="142" x2="134" y2="142" class="arrow ok" marker-end="url(#c2-mk-sv2)"/><text data-svlbl="res" x="184" y="178" text-anchor="middle" class="t-mono lbl-ok halo">200 OK</text></g>
           <g data-on="2-3" data-active="2"><line x1="392" y1="100" x2="452" y2="58" class="arrow" marker-end="url(#c2-mk-sv)"/><text x="410" y="66" text-anchor="end" class="t-mono lbl-mod halo">read file</text></g>
           <g data-on="4-7" data-active="4"><line x1="392" y1="146" x2="452" y2="196" class="arrow" marker-end="url(#c2-mk-sv)"/><text x="408" y="190" text-anchor="end" class="t-mono lbl-mod halo">run script</text></g>
           <g data-on="5-6" data-active="5"><line x1="556" y1="203" x2="598" y2="203" class="arrow" marker-end="url(#c2-mk-sv)"/><line x1="600" y1="223" x2="558" y2="223" class="arrow ok" marker-end="url(#c2-mk-sv2)"/></g>
@@ -1089,6 +1137,25 @@ downloads, then runs…
           <g class="node" data-on="1-3" data-active="2"><rect class="box" x="454" y="20" width="236" height="58" rx="10"/><text x="572" y="45" text-anchor="middle" class="t-strong">Disk</text><text x="572" y="63" text-anchor="middle" class="t-mono t-sub">/var/www/html/about.html</text></g>
           <g class="node" data-on="4-7" data-active="5,6"><rect class="box" x="454" y="184" width="100" height="58" rx="10"/><text x="504" y="209" text-anchor="middle" class="t-strong">PHP</text><text x="504" y="227" text-anchor="middle" class="t-mono t-sub">products.php</text></g>
           <g class="node" data-on="4-7" data-active="5,6"><rect class="box" x="602" y="184" width="88" height="58" rx="10"/><text x="646" y="209" text-anchor="middle" class="t-strong">MySQL</text><text x="646" y="227" text-anchor="middle" class="t-sub">database</text></g>
+        </svg>
+        <svg class="c2-svg sm c2-narrow-only" viewBox="0 0 360 470" role="img" aria-label="Static and dynamic request diagram, arranged top to bottom for narrow screens.">
+          <defs>
+            <marker id="c2-mk-svp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker>
+            <marker id="c2-mk-svp2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ok"/></marker>
+          </defs>
+          <g data-on="1-7" data-active="1,4"><line x1="160" y1="76" x2="160" y2="146" class="arrow" marker-end="url(#c2-mk-svp)"/><text data-svlbl="req" x="152" y="116" text-anchor="end" class="t-mono lbl-mod halo">GET /about.html</text></g>
+          <g data-on="3,7" data-active="3,7"><line x1="200" y1="148" x2="200" y2="78" class="arrow ok" marker-end="url(#c2-mk-svp2)"/><text data-svlbl="res" x="208" y="116" class="t-mono lbl-ok halo">200 OK</text></g>
+          <g data-on="2-3" data-active="2"><line x1="140" y1="208" x2="102" y2="286" class="arrow" marker-end="url(#c2-mk-svp)"/><text x="108" y="250" text-anchor="end" class="t-mono lbl-mod halo">read file</text></g>
+          <g data-on="4-7" data-active="4"><line x1="220" y1="208" x2="258" y2="286" class="arrow" marker-end="url(#c2-mk-svp)"/><text x="252" y="246" class="t-mono lbl-mod halo">run script</text></g>
+          <g data-on="5-6" data-active="5"><line x1="262" y1="348" x2="262" y2="396" class="arrow" marker-end="url(#c2-mk-svp)"/><line x1="292" y1="398" x2="292" y2="350" class="arrow ok" marker-end="url(#c2-mk-svp2)"/></g>
+          <text data-on="5" x="254" y="380" text-anchor="end" class="t-mono lbl-mod halo">SELECT … WHERE id = 7</text>
+          <text data-on="6" x="254" y="398" text-anchor="end" class="t-mono lbl-ok halo">row: "Trail Runner", 89.99</text>
+          <g data-on="7" data-active="7"><line x1="246" y1="288" x2="208" y2="212" class="arrow ok" marker-end="url(#c2-mk-svp2)"/><text x="200" y="262" text-anchor="end" class="t-mono lbl-ok halo">new HTML</text></g>
+          <g class="node" data-active="1,3,7"><rect class="box" x="105" y="20" width="150" height="54" rx="10"/><text x="180" y="44" text-anchor="middle" class="t-strong">Browser</text><text x="180" y="62" text-anchor="middle" class="t-sub">the client</text></g>
+          <g class="node" data-active="1,2,4,7"><rect class="box" x="105" y="150" width="150" height="56" rx="10"/><text x="180" y="174" text-anchor="middle" class="t-strong">Web server</text><text x="180" y="193" text-anchor="middle" class="t-mono t-sub">nginx · port 443</text></g>
+          <g class="node" data-on="1-3" data-active="2"><rect class="box" x="10" y="290" width="150" height="66" rx="10"/><text x="85" y="312" text-anchor="middle" class="t-strong">Disk</text><text x="85" y="330" text-anchor="middle" class="t-mono t-sub">/var/www/html/</text><text x="85" y="346" text-anchor="middle" class="t-mono t-sub">about.html</text></g>
+          <g class="node" data-on="4-7" data-active="5,6"><rect class="box" x="200" y="290" width="150" height="56" rx="10"/><text x="275" y="314" text-anchor="middle" class="t-strong">PHP</text><text x="275" y="332" text-anchor="middle" class="t-mono t-sub">products.php</text></g>
+          <g class="node" data-on="4-7" data-active="5,6"><rect class="box" x="200" y="400" width="150" height="56" rx="10"/><text x="275" y="424" text-anchor="middle" class="t-strong">MySQL</text><text x="275" y="442" text-anchor="middle" class="t-sub">database</text></g>
         </svg>
       </div>
       <ol class="steps">
@@ -1178,11 +1245,11 @@ downloads, then runs…
     <div class="quiz" data-title="Check your understanding: servers">
       <script type="application/json">
       [
-        {"q": "Nginx, Apache and IIS are all examples of…", "choices": ["Operating systems", "Web server software", "Databases", "Server-side languages"], "answer": 1, "explain": "They listen for HTTP requests and send responses. The operating system, database and language are the other layers of the stack."},
-        {"q": "Which kind of request requires the server to run code each time it's requested?", "choices": ["A static request", "A dynamic request", "Both", "Neither"], "answer": 1, "explain": "Static files are read and sent unchanged. Dynamic pages are generated by a program, often using a database."},
+        {"q": "Nginx, Apache and IIS are all examples of…", "shuffle": true, "choices": ["Operating systems", "Web server software", "Databases", "Server-side languages"], "answer": 1, "explain": "They listen for HTTP requests and send responses. The operating system, database and language are the other layers of the stack."},
+        {"q": "Which kind of request requires the server to run code each time it's requested?", "shuffle": true, "choices": ["A static request", "A dynamic request", "Both", "Neither"], "answer": 1, "explain": "Static files are read and sent unchanged. Dynamic pages are generated by a program, often using a database."},
         {"q": "In the LAMP stack, what does the **P** stand for? (Type the name.)", "answer": ["PHP"], "pattern": "^(php|perl|python)$", "explain": "LAMP is Linux, Apache, MySQL, PHP. In the early days the P sometimes meant Perl or Python, so those are accepted too."},
-        {"q": "Which address always means \"this computer\"?", "choices": ["`192.168.1.1`", "`127.0.0.1`", "`8.8.8.8`", "`0.0.0.0`"], "answer": 1, "explain": "`127.0.0.1` (and `::1` in IPv6) is loopback, which is what `localhost` resolves to. `192.168.1.1` is typically your router."},
-        {"q": "Which hosting gives you your own virtual machine with root access at a modest price?", "choices": ["Shared hosting", "A VPS", "Static hosting", "A CDN"], "answer": 1, "explain": "A virtual private server is a slice of a physical machine that behaves like your own computer: you can install anything."}
+        {"q": "Which address always means \"this computer\"?", "shuffle": true, "choices": ["`192.168.1.1`", "`127.0.0.1`", "`8.8.8.8`", "`0.0.0.0`"], "answer": 1, "explain": "`127.0.0.1` (and `::1` in IPv6) is loopback, which is what `localhost` resolves to. `192.168.1.1` is typically your router."},
+        {"q": "Which hosting gives you your own virtual machine with root access at a modest price?", "shuffle": true, "choices": ["Shared hosting", "A VPS", "Static hosting", "A CDN"], "answer": 1, "explain": "A virtual private server is a slice of a physical machine that behaves like your own computer: you can install anything."}
       ]
       </script>
     </div>
@@ -1292,21 +1359,21 @@ downloads, then runs…
     <div class="quiz" data-pass="0.8" data-title="Chapter 2 quiz">
       <script type="application/json">
       [
-        {"q": "Which statement about the internet and the World Wide Web is correct?", "choices": ["They're two names for the same thing", "The web is one service that runs on top of the internet", "The internet runs on top of the web", "The web was created before the internet"], "answer": 1, "explain": "The internet (1969 onward) is the infrastructure; the web (1989 to 1991) is one application on it, alongside email, games and video calls."},
-        {"q": "What is encapsulation in the TCP/IP model?", "choices": ["Encrypting data before it's sent", "Each layer wrapping the data from the layer above in its own header", "Compressing packets to save bandwidth", "Combining several packets into one"], "answer": 1, "explain": "Going down the stack, HTTP data gets a TCP header, then an IP header, then a link-layer frame. The receiver unwraps in reverse."},
+        {"q": "Which statement about the internet and the World Wide Web is correct?", "shuffle": true, "choices": ["They're two names for the same thing", "The web is one service that runs on top of the internet", "The internet runs on top of the web", "The web was created before the internet"], "answer": 1, "explain": "The internet (1969 onward) is the infrastructure; the web (1989 to 1991) is one application on it, alongside email, games and video calls."},
+        {"q": "What is encapsulation in the TCP/IP model?", "shuffle": true, "choices": ["Encrypting data before it's sent", "Each layer wrapping the data from the layer above in its own header", "Compressing packets to save bandwidth", "Combining several packets into one"], "answer": 1, "explain": "Going down the stack, HTTP data gets a TCP header, then an IP header, then a link-layer frame. The receiver unwraps in reverse."},
         {"q": "What is the default port for HTTPS? (Type the number.)", "answer": ["443"], "explain": "HTTP uses port 80 and HTTPS uses 443, so URLs can leave them out."},
-        {"q": "Which server holds the official DNS records for `example.com`?", "choices": ["A root server", "The `.com` TLD server", "The authoritative name server for example.com", "Your recursive resolver"], "answer": 2, "explain": "Root and TLD servers only refer the resolver onward. The authoritative server has the actual A, AAAA, MX and other records."},
-        {"q": "A site moved to a new IP address, but some visitors still reach the old server for a few hours. What's the most likely reason?", "choices": ["The registrar hasn't approved the change", "Resolvers are still using cached answers whose TTL hasn't expired", "The browser cache is full", "HTTP/2 is still connected to the old server"], "answer": 1, "explain": "Cached DNS answers stay valid until their TTL runs out. Site owners lower the TTL before a planned move to make the switch faster."},
-        {"q": "Which part of `https://shop.example.com/cart?item=42#summary` is the query string?", "choices": ["`shop.example.com`", "`/cart`", "`?item=42`", "`#summary`"], "answer": 2, "explain": "The query string starts at `?` and ends before the fragment (`#`)."},
-        {"q": "On `https://example.com/blog/post.html`, a link to `/img/a.png` goes to…", "choices": ["`https://example.com/blog/img/a.png`", "`https://example.com/img/a.png`", "`https://img/a.png`", "`https://example.com/blog/post.html/img/a.png`"], "answer": 1, "explain": "A leading slash starts at the root of the same host."},
-        {"q": "Which HTTP method asks the server to remove a resource?", "choices": ["GET", "POST", "DELETE", "HEAD"], "answer": 2, "explain": "DELETE removes; GET retrieves; POST submits data; HEAD retrieves headers only."},
-        {"q": "Which status code tells the browser to use the copy it already has in its cache?", "choices": ["`200`", "`301`", "`304`", "`404`"], "answer": 2, "explain": "304 Not Modified has no body; the browser reuses its cached copy."},
-        {"q": "Select every **client error** status code.", "choices": ["`400`", "`404`", "`500`", "`403`", "`503`"], "answer": [0, 1, 3], "explain": "4xx codes are client errors. 500 and 503 are server errors (5xx)."},
+        {"q": "Which server holds the official DNS records for `example.com`?", "shuffle": true, "choices": ["A root server", "The `.com` TLD server", "The authoritative name server for example.com", "Your recursive resolver"], "answer": 2, "explain": "Root and TLD servers only refer the resolver onward. The authoritative server has the actual A, AAAA, MX and other records."},
+        {"q": "A site moved to a new IP address, but some visitors still reach the old server for a few hours. What's the most likely reason?", "shuffle": true, "choices": ["The registrar hasn't approved the change", "Resolvers are still using cached answers whose TTL hasn't expired", "The browser cache is full", "HTTP/2 is still connected to the old server"], "answer": 1, "explain": "Cached DNS answers stay valid until their TTL runs out. Site owners lower the TTL before a planned move to make the switch faster."},
+        {"q": "Which part of `https://shop.example.com/cart?item=42#summary` is the query string?", "shuffle": true, "choices": ["`shop.example.com`", "`/cart`", "`?item=42`", "`#summary`"], "answer": 2, "explain": "The query string starts at `?` and ends before the fragment (`#`)."},
+        {"q": "On `https://example.com/blog/post.html`, a link to `/img/a.png` goes to…", "shuffle": true, "choices": ["`https://example.com/blog/img/a.png`", "`https://example.com/img/a.png`", "`https://img/a.png`", "`https://example.com/blog/post.html/img/a.png`"], "answer": 1, "explain": "A leading slash starts at the root of the same host."},
+        {"q": "Which HTTP method asks the server to remove a resource?", "shuffle": true, "choices": ["GET", "POST", "DELETE", "HEAD"], "answer": 2, "explain": "DELETE removes; GET retrieves; POST submits data; HEAD retrieves headers only."},
+        {"q": "Which status code tells the browser to use the copy it already has in its cache?", "shuffle": true, "choices": ["`200`", "`301`", "`304`", "`404`"], "answer": 2, "explain": "304 Not Modified has no body; the browser reuses its cached copy."},
+        {"q": "Select every **client error** status code.", "shuffle": true, "choices": ["`400`", "`404`", "`500`", "`403`", "`503`"], "answer": [0, 1, 3], "explain": "4xx codes are client errors. 500 and 503 are server errors (5xx)."},
         {"q": "HTTP remembers each visitor between requests without any help from cookies.", "answer": false, "explain": "HTTP is stateless. Cookies, sent with `Set-Cookie` and returned with `Cookie`, let the server recognize a returning browser."},
-        {"q": "Which sequence of rendering stages is correct?", "choices": ["Layout → DOM → Paint → Render tree", "DOM + CSSOM → Render tree → Layout → Paint", "Paint → Layout → DOM", "Render tree → DOM → Layout → Paint"], "answer": 1, "explain": "Parse into the DOM and CSSOM, combine into the render tree, calculate layout, then paint (and composite)."},
-        {"q": "Which of these browsers does **not** use the Blink engine?", "choices": ["Chrome", "Microsoft Edge", "Firefox", "Opera"], "answer": 2, "explain": "Firefox uses Gecko. Chrome, Edge and Opera all use Blink."},
-        {"q": "Which stack is Linux, Nginx, MySQL and PHP?", "choices": ["LAMP", "LEMP", "MERN", "WISA"], "answer": 1, "explain": "LEMP swaps Apache for Nginx (pronounced \"engine-x,\" hence the E)."},
-        {"q": "What does `http://localhost:5500/` connect to?", "choices": ["A server at example.com on port 5500", "A program on your own computer listening on port 5500", "Your router's admin page", "A root DNS server"], "answer": 1, "explain": "localhost means this computer, and the port picks the program: 5500 is the default for VS Code's Live Server."}
+        {"q": "Which sequence of rendering stages is correct?", "shuffle": true, "choices": ["Layout → DOM → Paint → Render tree", "DOM + CSSOM → Render tree → Layout → Paint", "Paint → Layout → DOM", "Render tree → DOM → Layout → Paint"], "answer": 1, "explain": "Parse into the DOM and CSSOM, combine into the render tree, calculate layout, then paint (and composite)."},
+        {"q": "Which of these browsers does **not** use the Blink engine?", "shuffle": true, "choices": ["Chrome", "Microsoft Edge", "Firefox", "Opera"], "answer": 2, "explain": "Firefox uses Gecko. Chrome, Edge and Opera all use Blink."},
+        {"q": "Which stack is Linux, Nginx, MySQL and PHP?", "shuffle": true, "choices": ["LAMP", "LEMP", "MERN", "WISA"], "answer": 1, "explain": "LEMP swaps Apache for Nginx (pronounced \"engine-x,\" hence the E)."},
+        {"q": "What does `http://localhost:5500/` connect to?", "shuffle": true, "choices": ["A server at example.com on port 5500", "A program on your own computer listening on port 5500", "Your router's admin page", "A root DNS server"], "answer": 1, "explain": "localhost means this computer, and the port picks the program: 5500 is the default for VS Code's Live Server."}
       ]
       </script>
     </div>
@@ -1346,7 +1413,11 @@ downloads, then runs…
       const input = $('#c2-ps-msg'), dropBox = $('#c2-ps-drop'), sendBtn = $('#c2-ps-send');
       const sentEl = $('#c2-ps-sent'), arrEl = $('#c2-ps-arr'), asmEl = $('#c2-ps-asm');
       const statusEl = $('#c2-ps-status'), logEl = $('#c2-ps-log');
-      const N = { you: [50, 150], R1: [175, 70], R2: [175, 230], R3: [330, 45], R4: [330, 150], R5: [330, 255], R6: [485, 85], R7: [485, 215], srv: [630, 150] };
+      const WIDE = { you: [50, 150], R1: [175, 70], R2: [175, 230], R3: [330, 45], R4: [330, 150], R5: [330, 255], R6: [485, 85], R7: [485, 215], srv: [630, 150] };
+      // On narrow screens the same network is drawn top to bottom (x and y swapped).
+      const TALL = {};
+      Object.keys(WIDE).forEach((k) => { TALL[k] = [WIDE[k][1], Math.round(40 + (WIDE[k][0] - 50) * 0.8)]; });
+      let N = WIDE;
       const E = [['you', 'R1'], ['you', 'R2'], ['R1', 'R3'], ['R1', 'R4'], ['R2', 'R4'], ['R2', 'R5'], ['R3', 'R6'], ['R4', 'R6'], ['R4', 'R7'], ['R5', 'R7'], ['R6', 'srv'], ['R7', 'srv'], ['R6', 'R7']];
       const next = {};
       E.forEach(([a, b]) => {
@@ -1359,24 +1430,36 @@ downloads, then runs…
         (next[node] || []).forEach((nx) => { if (!path.includes(nx)) dfs(nx, path.concat(nx)); });
       })('you', ['you']);
 
-      const wires = {};
-      const gw = svg('g', {}, root);
-      E.forEach(([a, b]) => {
-        wires[a + '-' + b] = wires[b + '-' + a] = svg('line', { x1: N[a][0], y1: N[a][1], x2: N[b][0], y2: N[b][1], class: 'wire' }, gw);
-      });
-      [['you', 'You'], ['srv', 'Server']].forEach(([k, label]) => {
-        const g = svg('g', { class: 'endpoint' }, root);
-        svg('rect', { x: N[k][0] - 40, y: N[k][1] - 24, width: 80, height: 48, rx: 9 }, g);
-        svg('text', { x: N[k][0], y: N[k][1] + 5, 'text-anchor': 'middle', class: 't-strong' }, g).textContent = label;
-      });
-      const routers = {};
-      Object.keys(N).filter((k) => k[0] === 'R').forEach((k) => {
-        const g = svg('g', { class: 'router' }, root);
-        svg('circle', { cx: N[k][0], cy: N[k][1], r: 19 }, g);
-        svg('text', { x: N[k][0], y: N[k][1] + 4, 'text-anchor': 'middle' }, g).textContent = k;
-        routers[k] = g;
-      });
-      const layer = svg('g', {}, root);
+      let wires = {}, routers = {}, layer = null, tall = null;
+      function drawNet() {
+        const wantTall = root.parentNode.clientWidth < 520;
+        if (wantTall === tall) return false;
+        tall = wantTall;
+        N = tall ? TALL : WIDE;
+        root.setAttribute('viewBox', tall ? '0 0 300 544' : '0 0 680 300');
+        root.classList.toggle('portrait', tall);
+        root.replaceChildren();
+        wires = {};
+        routers = {};
+        const gw = svg('g', {}, root);
+        E.forEach(([a, b]) => {
+          wires[a + '-' + b] = wires[b + '-' + a] = svg('line', { x1: N[a][0], y1: N[a][1], x2: N[b][0], y2: N[b][1], class: 'wire' }, gw);
+        });
+        [['you', 'You'], ['srv', 'Server']].forEach(([k, label]) => {
+          const g = svg('g', { class: 'endpoint' }, root);
+          svg('rect', { x: N[k][0] - 40, y: N[k][1] - 24, width: 80, height: 48, rx: 9 }, g);
+          svg('text', { x: N[k][0], y: N[k][1] + 5, 'text-anchor': 'middle', class: 't-strong' }, g).textContent = label;
+        });
+        Object.keys(N).filter((k) => k[0] === 'R').forEach((k) => {
+          const g = svg('g', { class: 'router' }, root);
+          svg('circle', { cx: N[k][0], cy: N[k][1], r: 19 }, g);
+          svg('text', { x: N[k][0], y: N[k][1] + 4, 'text-anchor': 'middle' }, g).textContent = k;
+          routers[k] = g;
+        });
+        layer = svg('g', {}, root);
+        return true;
+      }
+      drawNet();
 
       const vis = (s) => s.replace(/ /g, '␣');
       const slot = (num, text, cls) => h('span', { class: 'c2-slot ' + (cls || '') }, h('b', { text: String(num) }), h('span', { text }));
@@ -1516,6 +1599,15 @@ downloads, then runs…
       }
 
       idle();
+      window.addEventListener('resize', debounce(() => {
+        if (drawNet()) {
+          run++;
+          idle();
+          statusEl.className = 'c2-fb info';
+          statusEl.innerHTML = 'Press <strong>Send message</strong> to start.';
+          logEl.textContent = '';
+        }
+      }, 200));
       sendBtn.addEventListener('click', send);
       input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } });
     });
@@ -1707,7 +1799,7 @@ downloads, then runs…
         if (t === 'arpa') return ['Infrastructure TLD', 'Used for reverse lookups (from IP address to name) and other technical purposes.'];
         if (SPECIAL[t]) return ['Special-use name', 'Not a public TLD: it is ' + SPECIAL[t] + '.'];
         if (LEGACY.includes(t)) return ['Generic TLD (gTLD)', 'One of the original open TLDs: anyone can register a name here.'];
-        if (RESTRICTED.includes(t)) return ['Generic-restricted TLD', 'A generic TLD with registration rules (for example, .pro is meant for licensed professionals).'];
+        if (RESTRICTED.includes(t)) return ['Generic-restricted TLD', 'A generic TLD that started out with registration rules: .biz for businesses, .name for individuals, .pro for professionals.'];
         if (SPONSORED[t]) return ['Sponsored TLD', 'Limited to ' + SPONSORED[t] + '.'];
         if (/^[a-z]{2}$/.test(t)) {
           return ['Country-code TLD (ccTLD)', (CC[t] ? 'Assigned to ' + CC[t] + '.' : 'Two-letter TLDs belong to countries and territories.') +
@@ -1789,8 +1881,8 @@ downloads, then runs…
     safe('dns-tags', () => {
       const st = $('#c2-dns-stepper');
       if (!st) return;
-      const tags = { b: $('#c2-dt-b'), o: $('#c2-dt-o'), r: $('#c2-dt-r') };
-      const set = (el, text, hit) => { el.textContent = text; el.setAttribute('class', 'tag ' + (hit ? 'hit' : 'miss')); };
+      const tags = { b: $$('[data-dnstag="b"]', st), o: $$('[data-dnstag="o"]', st), r: $$('[data-dnstag="r"]', st) };
+      const set = (els, text, hit) => els.forEach((el) => { el.textContent = text; el.setAttribute('class', 'tag ' + (hit ? 'hit' : 'miss')); });
       const update = (step) => {
         set(tags.b, step >= 7 ? 'cached ✓' : 'cache: miss ✗', step >= 7);
         set(tags.o, step < 2 ? '' : step >= 7 ? 'cached ✓' : 'cache + hosts: miss ✗', step >= 7);
@@ -2413,7 +2505,7 @@ downloads, then runs…
           const segHtml = segs.map(([k, a, b]) => '<span class="c2-wf-seg s-' + k + '" style="left:' + pct(a) + ';width:' + pct(Math.max(b - a, 0.5)) + ';transition-delay:' + (animate ? (a / T * 1.2).toFixed(2) : 0) + 's"></span>').join('');
           return '<div class="c2-wf-row" title="' + esc(r.n + ': ' + note) + '"><span class="c2-wf-name">' + esc(r.n) + '</span><div class="c2-wf-track">' + segHtml + '<span class="c2-wf-note" style="' + noteStyle + '">' + esc(note) + '</span></div></div>';
         }).join('');
-        const step = niceStep(T / 5);
+        const step = niceStep(T / (wf.clientWidth < 480 ? 2.5 : 5));
         let ticks = '';
         for (let x = 0; x <= T; x += step) ticks += '<span style="left:' + pct(x) + '">' + fmtMs(x) + '</span>';
         const mark = (ms, cls, text) => '<div class="c2-wf-mark ' + cls + (ms / T > 0.6 ? ' flip' : '') + '" style="left:' + pct(ms) + '"><b>' + text + '</b></div>';
@@ -2540,10 +2632,9 @@ downloads, then runs…
     safe('static-dynamic', () => {
       const st = $('#c2-sv-stepper');
       if (!st) return;
-      const req = $('#c2-sv-req'), res = $('#c2-sv-res');
       const update = (s) => {
-        req.textContent = s <= 3 ? 'GET /about.html' : 'GET /products.php?id=7';
-        res.textContent = s <= 3 ? '200 OK · file from disk' : '200 OK · generated page';
+        $$('[data-svlbl="req"]', st).forEach((el) => { el.textContent = s <= 3 ? 'GET /about.html' : 'GET /products.php?id=7'; });
+        $$('[data-svlbl="res"]', st).forEach((el) => { el.textContent = s <= 3 ? '200 OK (file)' : '200 OK (generated)'; });
       };
       st.addEventListener('stepchange', (e) => update(e.detail.step));
       update(+(st.dataset.step || 1));
@@ -2561,7 +2652,7 @@ downloads, then runs…
         const mysql = s.db === 'mysql';
         if (s.web === 'static' && s.lang === 'none' && s.db === 'none') return { name: 'Jamstack', letters: {}, desc: 'A static site: pre-built HTML, CSS and JavaScript files served from a CDN or static host, with any dynamic features coming from JavaScript that calls APIs. The name stands for JavaScript, APIs and Markup. Your course project fits here.' };
         if (s.lang === 'php' && mysql && s.web === 'apache') {
-          if (s.os === 'linux') return { name: 'LAMP', letters: { os: 'L', web: 'A', db: 'M', lang: 'P' }, desc: 'Linux, Apache, MySQL, PHP: the classic open-source stack since the early 2000s. WordPress sites commonly run on it.' };
+          if (s.os === 'linux') return { name: 'LAMP', letters: { os: 'L', web: 'A', db: 'M', lang: 'P' }, desc: 'Linux, Apache, MySQL, PHP: the classic open-source stack, named in the late 1990s. WordPress sites commonly run on it.' };
           if (s.os === 'windows') return { name: 'WAMP', letters: { os: 'W', web: 'A', db: 'M', lang: 'P' }, desc: 'Windows, Apache, MySQL, PHP. Popular for local development on Windows, through packages like WampServer and XAMPP.' };
           if (s.os === 'macos') return { name: 'MAMP', letters: { os: 'M', web: 'A', db: 'M', lang: 'P' }, desc: 'macOS, Apache, MySQL, PHP. Used for local development on a Mac.' };
         }

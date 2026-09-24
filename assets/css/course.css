@@ -508,6 +508,7 @@ mark { background: color-mix(in srgb, var(--warn) 28%, transparent); color: inhe
 .btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--accent-ink); }
 .btn.ghost { background: transparent; border-color: transparent; color: var(--ink-2); }
 .btn.ghost:hover { background: var(--surface-2); color: var(--ink); }
+.btn.wrap { white-space: normal; text-align: left; }
 .btn.small { min-height: 30px; padding: 4px 10px; font-size: .82rem; border-radius: 7px; }
 .btn.complete[aria-pressed="true"] { background: var(--visited-soft); border-color: var(--visited); color: var(--visited); }
 .btn svg { width: 16px; height: 16px; flex: none; }
@@ -870,6 +871,9 @@ pre.bare { background: var(--code-bg); border: 1px solid var(--code-line); borde
 .stepper-stage [data-on], .stepper-stage [data-active] { transition: opacity .3s, transform .3s, background .3s, border-color .3s, color .3s, fill .3s, stroke .3s; }
 .stepper-stage [data-on]:not(.on) { opacity: .18; }
 .stepper-stage [data-active].active { outline: 3px solid var(--mod); outline-offset: 3px; }
+/* outline doesn't draw reliably on SVG shapes, so highlight them with a stroke */
+.stepper-stage svg .active { outline: none; }
+.stepper-stage svg .active :is(rect, circle, ellipse, path, polygon, line) { stroke: var(--mod); stroke-width: 3; }
 .stepper .steps { list-style: none; margin: 0; padding: 16px; }
 .stepper .steps > li { display: none; margin: 0; gap: 12px; }
 .stepper .steps > li.current { display: flex; }

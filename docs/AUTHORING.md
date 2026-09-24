@@ -82,7 +82,7 @@ What `course.js` adds automatically, so **do not** write these yourself:
 | `<div class="output">` | Monospace output panel |
 | `<div class="seg"><button aria-pressed="true">` | Segmented control |
 | `<div class="range-row"><label/><input type=range/><output/></div>` | Slider row |
-| `.btn`, `.btn.primary`, `.btn.ghost`, `.btn.small`, `.btn-row` | Buttons |
+| `.btn`, `.btn.primary`, `.btn.ghost`, `.btn.small`, `.btn.wrap`, `.btn-row` | Buttons (`.wrap` lets long labels wrap on phones) |
 | `.bm-margin`, `.bm-border`, `.bm-padding`, `.bm-content` | DevTools box-model colors |
 
 Useful tokens: `--surface`, `--surface-2`, `--ink`, `--ink-2`, `--ink-3`, `--line`, `--accent`, `--mod` (the current chapter's color), `--good`, `--bad`, `--warn`, `--visited`, `--code-bg`, `--font-mono`, `--font-display`. Never hard-code a color that only works in one theme.
