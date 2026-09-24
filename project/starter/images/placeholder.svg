@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" role="img" aria-labelledby="t">
+  <title id="t">Placeholder image</title>
+  <rect width="800" height="450" fill="#e3e8f0"/>
+  <circle cx="620" cy="120" r="54" fill="#f2c14e"/>
+  <path d="M0 360 L190 190 L330 320 L450 220 L800 400 L800 450 L0 450 Z" fill="#8aa2c8"/>
+  <path d="M0 410 L260 280 L520 400 L680 330 L800 380 L800 450 L0 450 Z" fill="#5c7aa8"/>
+  <text x="400" y="80" text-anchor="middle" font-family="system-ui, sans-serif" font-size="30" font-weight="700" fill="#2b4c7e">Replace me with your own image</text>
+  <text x="400" y="118" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" fill="#454d5e">800 × 450 · see images/README.md</text>
+</svg>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact · Your Site Name</title>
+  <meta name="description" content="Send a message to Your Site Name.">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <a class="logo" href="index.html">Your Site Name</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html" aria-current="page">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <h1>Contact</h1>
+    <p>Questions, ideas or feedback? Send a message and we will reply by email.</p>
+
+    <!-- A deliberately small, accessible form to build on in Milestone 4.
+         GitHub Pages is a static host: it cannot store what people send.
+         For now the form sends its data back to this page with GET, so after
+         you press Send you can read the name=value pairs in the address bar.
+         In Milestone 4, create thanks.html and change action to "thanks.html". -->
+    <form action="contact.html" method="get">
+      <fieldset>
+        <legend>Send a message</legend>
+
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" autocomplete="name" required>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" minlength="10" required></textarea>
+        </div>
+      </fieldset>
+
+      <!-- Milestone 4 ideas: a <select> for the topic, a radio-button group in its
+           own <fieldset> and <legend>, a date or number input with min and max. -->
+
+      <button class="button" type="submit">Send message</button>
+    </form>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; Your Name. Built for the Web Development I course project.</p>
+  </footer>
+</body>
+</html>

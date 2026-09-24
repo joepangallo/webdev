@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home · Your Site Name</title>
+  <meta name="description" content="One sentence that tells search engines and visitors what your site is about.">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- The header and nav are the same on every page. Only aria-current moves. -->
+  <header class="site-header">
+    <a class="logo" href="index.html">Your Site Name</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <h1>Your Site Name</h1>
+    <p class="tagline">One line that tells a visitor what this site is and who it is for.</p>
+
+    <p>Replace this paragraph with a short welcome. Say what a visitor can do here: read a menu, meet adoptable pets, plan a trip, sign up for an event.</p>
+
+    <section>
+      <h2>What you will find here</h2>
+      <!-- Milestone 2: one card per page in your site map. -->
+      <ul class="card-grid">
+        <li class="card">
+          <h3><a href="about.html">About</a></h3>
+          <p>A sentence that makes someone want to open this page.</p>
+        </li>
+        <li class="card">
+          <h3><a href="contact.html">Contact</a></h3>
+          <p>A sentence about how and why to get in touch.</p>
+        </li>
+        <li class="card">
+          <h3>Your next page</h3>
+          <p>Add a card and a nav link for every page you build.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>A picture worth a caption</h2>
+      <!-- Milestone 2: replace the placeholder with your own image. Keep width and
+           height equal to the image's real size in pixels, and describe the image
+           in alt. See images/README.md for sizes and alt text tips. -->
+      <figure>
+        <img src="images/placeholder.svg" alt="Placeholder landscape: replace with a description of your own image" width="800" height="450">
+        <figcaption>A caption adds context the image alone cannot give.</figcaption>
+      </figure>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; Your Name. Built for the Web Development I course project.</p>
+  </footer>
+</body>
+</html>
