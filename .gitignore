@@ -1,0 +1,7 @@
+# macOS cruft
+.DS_Store
+
+# Course syllabus. It carries the school name, section number and term, so it
+# stays beside the repo rather than in it — this repository is public.
+*Web-Development-I.pdf
+*[Ss]yllabus*.pdf
