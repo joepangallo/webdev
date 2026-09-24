@@ -22,8 +22,6 @@ Every section pairs a short explanation with something to do: live code playgrou
 | [`docs/`](docs/AUTHORING.md) | Authoring guide and a live component gallery for adding or editing lessons |
 | `assets/` | The shared stylesheet and JavaScript runtime every page uses |
 
-The `chN/` folders also keep the original table-of-contents screenshots for each chapter.
-
 ## Course objectives → modules
 
 | # | Objective | Where it is practiced |
