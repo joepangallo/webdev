@@ -230,7 +230,7 @@
     .pj-prev-head { background: var(--p-primary); color: var(--p-on); padding: 10px 14px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 12px; font-family: var(--p-heading); font-weight: 700; }
     .pj-prev-head span { font-family: var(--p-body); font-weight: 400; font-size: .85em; }
     .pj-prev-body { padding: var(--p-space); display: grid; gap: 10px; }
-    .pj-prev h4 { font-family: var(--p-heading); color: var(--p-text); margin: 0; font-size: 1.3em; }
+    .pj-prev .pv-h { font-family: var(--p-heading); color: var(--p-text); margin: 0; font-size: 1.3em; font-weight: 700; line-height: 1.2; }
     .pj-prev p { margin: 0; }
     .pj-prev .pv-muted { color: var(--p-muted); font-size: .88em; }
     .pj-prev .pv-link { color: var(--p-accent); text-decoration: underline; }
@@ -588,7 +588,7 @@
           <div class="pj-prev" id="pj-pal-prev">
             <div class="pj-prev-head" data-pv-site>Site name <span>Home · Menu · About</span></div>
             <div class="pj-prev-body">
-              <h4>A heading in your heading font</h4>
+              <p class="pv-h">A heading in your heading font</p>
               <p>Body text in your body font, with <span class="pv-link">a link in the accent color</span> and enough contrast to read comfortably.</p>
               <div class="pv-card">
                 <p><strong>A card on the surface color</strong></p>
@@ -1028,7 +1028,7 @@
         <button type="button" class="btn small ghost" id="pj-ck-sample">Load sample</button>
         <button type="button" class="btn small ghost" id="pj-ck-clear">Clear</button>
         <input type="file" id="pj-ck-input" multiple accept=".html,.htm,.css,.js,.mjs,.svg,.png,.jpg,.jpeg,.gif,.webp,.avif" hidden>
-        <input type="file" id="pj-ck-dir" multiple webkitdirectory hidden>
+        <input type="file" id="pj-ck-dir" multiple hidden>
       </div>
       <div class="pj-ck-bar" id="pj-ck-sitebar" hidden>
         <div class="field">
@@ -4881,6 +4881,8 @@ WD1.ready(function () {
     ckBanner(); ckRun(true); ckTab('html'); ED.html.focus();
   });
   $('#pj-ck-files').addEventListener('click', () => $('#pj-ck-input').click());
+  // Folder picking is a non-standard (but universally supported) attribute, so it is set here rather than in the HTML.
+  $('#pj-ck-dir').setAttribute('webkitdirectory', '');
   $('#pj-ck-folder').addEventListener('click', () => $('#pj-ck-dir').click());
   $('#pj-ck-input').addEventListener('change', (e) => { loadFiles(e.target.files, false); e.target.value = ''; });
   $('#pj-ck-dir').addEventListener('change', (e) => { loadFiles(e.target.files, true); e.target.value = ''; });

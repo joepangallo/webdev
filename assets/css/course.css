@@ -553,7 +553,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); width
 .card h3, .card h4 { margin-top: 0; }
 .card > :last-child { margin-bottom: 0; }
 
-.table-wrap { overflow-x: auto; margin: 0 0 1.4em; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.table-wrap { position: relative; overflow-x: auto; margin: 0 0 1.4em; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 .data-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
 .data-table th, .data-table td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .data-table thead th { background: var(--surface-2); font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-2); }
