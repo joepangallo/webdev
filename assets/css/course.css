@@ -782,6 +782,10 @@ pre.bare { background: var(--code-bg); border: 1px solid var(--code-line); borde
 .pg-console .log-line.warn { color: var(--warn); background: var(--warn-soft); }
 .pg-console .log-line.info { color: var(--accent); }
 .pg-console .empty { padding: 6px 12px; color: var(--ink-3); }
+/* data-preview="false": JavaScript-only exercises keep the (invisible) frame running and show just the console */
+.playground.console-only .pg-preview-col > .pg-label:first-child { display: none; }
+.playground.console-only .pg-preview-col > iframe { flex: none; height: 1px; min-height: 1px !important; opacity: 0; pointer-events: none; }
+.playground.console-only .pg-console { max-height: none; flex: 1; min-height: 180px; }
 .pg-checks { padding: 12px 16px; border-top: 1px solid var(--line); background: var(--surface); }
 .pg-checks h4 { margin: 0 0 8px; font-size: .9rem; display: flex; align-items: center; gap: 8px; }
 .pg-checks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; font-size: .9rem; }

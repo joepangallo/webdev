@@ -153,7 +153,7 @@ Add `"shuffle": true` to a question to shuffle its choices. Finishing a quiz wit
 </div>
 ```
 
-- Include only the tabs you need. A JS tab adds a console panel (`data-console="false"` hides it; `"true"` forces it).
+- Include only the tabs you need. A JS tab adds a console panel (`data-console="false"` hides it; `"true"` forces it). For JavaScript-only exercises, `data-preview="false"` hides the rendered preview and gives the console the full column.
 - Textarea content is not parsed as HTML, so tags can be written literally. Entities **are** decoded, so write `&amp;copy;` to show `&copy;`.
 - Check tests are function bodies called with `doc`, `win`, `$` (querySelector), `$$` (querySelectorAll → array), `style(selectorOrNode, prop)` (computed value) and `code` (`{html, css, js}` strings). Computed colors come back as `rgb(r, g, b)`.
 - The preview intercepts form submits and shows exactly what the browser would send (method, URL/body, name/value table, and a warning for controls without `name`). Links do not navigate; `#id` links scroll.

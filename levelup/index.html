@@ -187,9 +187,6 @@
     .lu-ss-legend i { display: inline-block; width: 14px; height: 10px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
 
     /* ---- L.4 console-only playgrounds (no page preview needed) ---- */
-    .lu-console-only .pg-preview-col > .pg-label:first-child { display: none; }
-    .lu-console-only .pg-preview-col > iframe { flex: none; height: 1px; min-height: 1px !important; opacity: 0; pointer-events: none; }
-    .lu-console-only .pg-console { max-height: none; flex: 1; min-height: 180px; }
 
     /* ---- L.4 typeof game ---- */
     .lu-tg-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; align-items: baseline; margin-bottom: 8px; }
@@ -1055,7 +1052,7 @@ img { [[max-width]]: 100%; height: auto; }
     <aside class="callout try"><strong>Meet the console</strong> Open DevTools (<kbd>F12</kbd>, or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd> on Windows and <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>J</kbd> on a Mac in Chrome or Edge) and click <strong>Console</strong>. Type <code>2 + 2</code> and press Enter. The console runs JavaScript on the current page, and it is where <code>console.log()</code> output and error messages appear. It will be your best friend.</aside>
 
     <p>Start with a warm-up. The playground below has a console panel. Every time you edit, your code runs again.</p>
-    <div class="playground lu-console-only" data-title="Warm-up: variables, strings and the console" data-height="250">
+    <div class="playground" data-preview="false" data-title="Warm-up: variables, strings and the console" data-height="250">
       <textarea data-lang="js">// Output shows up in the console panel.
 const name = 'Ada';
 let visits = 1;
@@ -1266,7 +1263,7 @@ console.log(`${name} has visited ${visits} times`);  // a template literal
 
     <h3>Your turn: write three functions</h3>
     <p>Fill in each function body so it <code>return</code>s the right value. The checks call your functions with several different inputs, so make them work in general, not just for the examples. Keep them as <code>function</code> declarations so the checks can find them.</p>
-    <div class="playground lu-console-only" data-title="Functions practice" data-height="400">
+    <div class="playground" data-preview="false" data-title="Functions practice" data-height="400">
       <textarea data-lang="js">// 1. Convert Celsius to Fahrenheit:  F = C × 9 / 5 + 32
 function celsiusToF(c) {
   // return ...

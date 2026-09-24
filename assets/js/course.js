@@ -1194,6 +1194,7 @@
     el.innerHTML = '';
     el.classList.add('widget', 'playground');
     if (el.dataset.layout === 'stacked') el.classList.add('stacked');
+    if (el.dataset.preview === 'false') el.classList.add('console-only');
 
     const resetB = iconBtn('reset', 'Reset', 'ghost', () => {
       Object.assign(code, orig);
