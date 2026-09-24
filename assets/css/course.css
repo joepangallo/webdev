@@ -262,6 +262,7 @@ kbd {
   font-size: .8em;
 }
 
+mark { background: color-mix(in srgb, var(--warn) 28%, transparent); color: inherit; border-radius: 3px; padding: 0 .12em; }
 .muted { color: var(--ink-3); }
 .small { font-size: .875rem; }
 .nowrap { white-space: nowrap; }
@@ -662,6 +663,7 @@ pre.bare { background: var(--code-bg); border: 1px solid var(--code-line); borde
 .feedback.good { background: var(--good-soft); color: var(--good); }
 .feedback.bad { background: var(--bad-soft); color: var(--bad); }
 .feedback.info { background: var(--accent-soft); color: var(--accent); }
+.feedback.warn { background: var(--warn-soft); color: var(--warn); }
 .feedback .explain { display: block; color: var(--ink-2); margin-top: 4px; }
 
 .pill { display: inline-block; padding: 1px 8px; border-radius: 99px; font-size: .78rem; font-weight: 700; background: var(--surface-3); color: var(--ink-2); }

@@ -222,7 +222,8 @@
 
     /* Block vs inline */
     .c3-bi { padding: 16px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin-top: 10px; }
-    .c3-bi p { margin: 0 0 10px; }
+    .c3-bi p { margin: 0 0 10px; max-width: none; }
+    .c3-bi.on p[data-tag] { margin-bottom: 16px; }
     .c3-bi p:last-child { margin: 0; }
     .c3-bi.on div[data-tag], .c3-bi.on p[data-tag] { outline: 2px dashed var(--mod); outline-offset: 3px; position: relative; padding-top: 1.35em; }
     .c3-bi.on div[data-tag] { padding: 1.5em 10px 8px; }
