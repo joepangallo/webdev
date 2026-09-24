@@ -267,7 +267,7 @@
     .c5-au-line:focus-visible { outline-offset: -3px; }
     .c5-au-line code { padding: 0; border: 0; background: none; font-family: var(--font-mono); font-size: .8rem; white-space: pre; }
     .c5-au-num { flex: none; width: 3ch; text-align: right; font-family: var(--font-mono); font-size: .72rem; color: var(--ink-3); }
-    .c5-au-mark { margin-left: auto; padding-left: 14px; font-family: var(--font-mono); font-size: .7rem; font-weight: 700; text-transform: uppercase; }
+    .c5-au-mark { flex: none; width: 1.2em; margin-left: -6px; font-weight: 700; text-align: center; }
     .c5-au-line.is-found { border-left-color: var(--bad); background: var(--bad-soft); }
     .c5-au-line.is-found .c5-au-mark { color: var(--bad); }
     .c5-au-line.is-ok { border-left-color: var(--good); }
@@ -351,7 +351,7 @@
     .c5-rx-results li { display: flex; align-items: center; gap: 8px; margin: 0; padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; font-size: .85rem; }
     .c5-rx-results li.is-good { border-color: var(--good); background: var(--good-soft); }
     .c5-rx-results li.is-bad { border-color: var(--bad); background: var(--bad-soft); }
-    .c5-rx-results code { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .c5-rx-results code { flex: 1; min-width: 0; padding: 0; border: 0; background: none; white-space: pre-wrap; overflow-wrap: anywhere; }
     .c5-rx-ico { font-weight: 700; }
     .c5-rx-verdict { font-size: .78rem; font-weight: 700; }
     .c5-rx-results li.is-good .c5-rx-ico, .c5-rx-results li.is-good .c5-rx-verdict { color: var(--good); }
@@ -1315,23 +1315,28 @@ label {
       </div>
     </div>
 
-    <p>The <code>headers</code> attribute handles tables where a cell sits under two levels of headings:</p>
+    <p>The <code>headers</code> attribute handles tables where a cell sits under two levels of headings. Here a screen reader can read the 20:00 cell as "North campus, Closes, Monday, 20:00":</p>
     <script type="text/plain" class="code" data-lang="html">
       <table>
         <caption>Lab hours by campus</caption>
         <tr>
           <td></td>
           <th id="north" colspan="2">North campus</th>
+          <th id="south" colspan="2">South campus</th>
         </tr>
         <tr>
           <td></td>
           <th id="n-open">Opens</th>
           <th id="n-close">Closes</th>
+          <th id="s-open">Opens</th>
+          <th id="s-close">Closes</th>
         </tr>
         <tr>
           <th id="mon">Monday</th>
           <td headers="north n-open mon">8:00</td>
           <td headers="north n-close mon">20:00</td>
+          <td headers="south s-open mon">9:00</td>
+          <td headers="south s-close mon">17:00</td>
         </tr>
       </table>
     </script>
@@ -2562,8 +2567,8 @@ input:user-invalid {
       const btns = LINES.map(([code], i) => {
         const b = h('button', { type: 'button', class: 'c5-au-line', tabindex: i === 0 ? '0' : '-1', 'aria-label': 'Line ' + (i + 1) + ': ' + code.trim() },
           h('span', { class: 'c5-au-num', 'aria-hidden': 'true', text: String(i + 1) }),
-          h('code', { html: WD1.highlight(code, 'html') }),
-          h('span', { class: 'c5-au-mark', 'aria-hidden': 'true' }));
+          h('span', { class: 'c5-au-mark', 'aria-hidden': 'true' }),
+          h('code', { html: WD1.highlight(code, 'html') }));
         b.addEventListener('click', () => { focusLine(i, false); pick(i); });
         list.appendChild(h('li', null, b));
         return b;
@@ -2594,7 +2599,7 @@ input:user-invalid {
         LINES.forEach(([code, q], j) => {
           if (q !== p) return;
           btns[j].classList.add('is-found');
-          $('.c5-au-mark', btns[j]).textContent = 'problem';
+          $('.c5-au-mark', btns[j]).textContent = '\u2717';
           btns[j].setAttribute('aria-label', 'Line ' + (j + 1) + ', problem found: ' + code.trim());
         });
         $$('.c5-mock [data-prob="' + p + '"]', root).forEach((x) => x.classList.add('is-flagged'));
@@ -2613,7 +2618,8 @@ input:user-invalid {
         if (!p) {
           misses++;
           btns[i].classList.add('is-ok');
-          $('.c5-au-mark', btns[i]).textContent = 'fine';
+          btns[i].setAttribute('aria-label', 'Line ' + (i + 1) + ', checked, fine: ' + code.trim());
+          $('.c5-au-mark', btns[i]).textContent = '\u2713';
           verdict.classList.add('is-miss');
           verdict.innerHTML = '<strong>Line ' + (i + 1) + ' is fine.</strong> ' + esc(fine);
         } else if (got.has(p)) {

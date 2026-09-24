@@ -864,11 +864,11 @@ pre.bare { background: var(--code-bg); border: 1px solid var(--code-line); borde
 .stepper-stage [data-on], .stepper-stage [data-active] { transition: opacity .3s, transform .3s, background .3s, border-color .3s, color .3s, fill .3s, stroke .3s; }
 .stepper-stage [data-on]:not(.on) { opacity: .18; }
 .stepper-stage [data-active].active { outline: 3px solid var(--mod); outline-offset: 3px; }
-.stepper .steps { list-style: none; margin: 0; padding: 16px; counter-reset: stp; }
+.stepper .steps { list-style: none; margin: 0; padding: 16px; }
 .stepper .steps > li { display: none; margin: 0; gap: 12px; }
 .stepper .steps > li.current { display: flex; }
 .stepper .steps > li::before {
-  counter-increment: stp; content: counter(stp);
+  content: attr(data-n);
   flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
   background: var(--mod); color: var(--surface); font-family: var(--font-mono); font-weight: 700; font-size: .85rem;
 }

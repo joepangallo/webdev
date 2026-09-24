@@ -1516,7 +1516,8 @@
     if (!list) return;
     list.classList.add('steps');
     const steps = $$(':scope > li', list);
-    steps.forEach((li) => {
+    steps.forEach((li, k) => {
+      li.dataset.n = String(k + 1); // hidden items don't advance CSS counters, so number them explicitly
       const body = h('div', { class: 'step-body' });
       while (li.firstChild) body.appendChild(li.firstChild);
       li.appendChild(body);
