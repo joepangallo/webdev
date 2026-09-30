@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Final Project: Build a Website · Web Dev I</title>
+  <meta name="description" content="The final project: build one multi-page website about a topic you choose and publish it on GitHub Pages. It grows with the class and covers Chapters 2 to 5 so far.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/course.css">
+  <script src="../assets/js/course.js"></script>
+  <style>
+    /* ---------- Project assignment (pa-) ---------- */
+    body[data-page="project"] { --mod: var(--visited); }
+
+    /* At a glance: four facts under the lede */
+    .pa-glance { margin: 22px 0 0; }
+    .pa-glance .card { padding: 14px 16px; }
+    .pa-glance dt {
+      font-family: var(--font-mono); font-size: .72rem; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px;
+    }
+    .pa-glance dd { margin: 0; color: var(--ink); font-size: .98rem; line-height: 1.45; }
+
+    /* One requirement group per chapter, marked with that chapter's color */
+    .pa-group {
+      --ch: var(--visited);
+      background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--ch);
+      border-radius: var(--radius); padding: 16px clamp(12px, 3vw, 18px) 6px; margin: 0 0 22px;
+    }
+    .pa-group[data-ch="2"] { --ch: var(--ch2); }
+    .pa-group[data-ch="3"] { --ch: var(--ch3); }
+    .pa-group[data-ch="4"] { --ch: var(--ch4); }
+    .pa-group[data-ch="5"] { --ch: var(--ch5); }
+    .pa-group > h3 { margin-top: 0; margin-bottom: .25em; }
+    .pa-group .pa-tag {
+      display: block; font-family: var(--font-mono); font-size: .74rem; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase; color: var(--ch); margin-bottom: 4px;
+    }
+    .pa-taught { font-size: .9rem; color: var(--ink-2); margin-bottom: .9em; }
+    .pa-group ul { padding-left: 1.2em; }
+    .pa-group li { margin-bottom: .55em; }
+    .pa-why { display: block; color: var(--ink-2); font-size: .94rem; }
+    .pa-group details.reveal { background: var(--bg); padding-inline: clamp(10px, 2.5vw, 16px); }
+
+    /* Before-you-submit checklist */
+    .pa-check { list-style: none; margin: 0 0 1em; padding: 0; }
+    .pa-check li { margin: 0; border-bottom: 1px solid var(--line); }
+    .pa-check li:last-child { border-bottom: 0; }
+    .pa-check label { display: block; position: relative; padding: 10px 6px 10px 34px; cursor: pointer; }
+    .pa-check input { position: absolute; left: 6px; top: 13px; width: 18px; height: 18px; margin: 0; accent-color: var(--visited); }
+    .pa-check input:checked + span { color: var(--ink-3); text-decoration: line-through; text-decoration-color: var(--ink-3); }
+    .pa-check-box { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 4px 14px; margin-bottom: 10px; }
+    .pa-count { font-size: .9rem; color: var(--ink-2); }
+
+    /* The one-line submission box */
+    .pa-submit {
+      background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--visited);
+      border-radius: var(--radius); padding: 18px 20px;
+    }
+    .pa-submit p { margin: 0; font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); }
+  </style>
+</head>
+<body data-page="project">
+<main id="main">
+  <header class="module-hero">
+    <p class="eyebrow"><span class="tag">Final project</span><span>One website</span><span>Chapters 2–5 so far</span></p>
+    <h1>Final Project: Build a Website</h1>
+    <p class="lede">Build one multi-page website about a topic you choose and publish it on the web with GitHub Pages. The project grows with the class: it covers Chapters 2 to 5 so far, and new requirements are added here as we cover new chapters.</p>
+    <dl class="cards pa-glance">
+      <div class="card"><dt>What you build</dt><dd>One website with at least four pages, a data table and a form</dd></div>
+      <div class="card"><dt>Where it lives</dt><dd>A public GitHub repository, live on GitHub Pages</dd></div>
+      <div class="card"><dt>What it covers</dt><dd>Chapters 2 to 5, and each new chapter as we cover it</dd></div>
+      <div class="card"><dt>What you submit</dt><dd>Your GitHub repo link</dd></div>
+    </dl>
+  </header>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="overview">
+    <h2>The project</h2>
+    <p>You will build a real website: several pages that link to each other, share one look, show some data in a table and invite visitors to fill in a form. It lives in a public GitHub repository and GitHub Pages publishes it for free, so anyone with the address can visit it.</p>
+    <p>Why one site instead of separate exercises? Because each chapter adds a layer to the same thing. Chapter 2 puts it on the web, Chapter 3 gives it structure, Chapter 4 gives it a look, and Chapter 5 adds a table and a form. At the end you have one piece of work that shows everything you have learned, at an address you can share.</p>
+    <aside class="callout project">
+      <strong>The project grows with the class</strong>
+      It only uses material we have covered, which right now is Chapters 2 to 5. When we cover a new chapter, a new group of requirements is added to this page and you apply it to the same site. Nothing you build now gets thrown away.
+    </aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="topic">
+    <h2>Choose a topic</h2>
+    <p>Pick something you know or care about. You will write real content for it, and that is much easier when you like the subject. A good topic naturally has three things:</p>
+    <ul>
+      <li><strong>Enough for 4 or 5 pages.</strong> A home page plus three or four pages with a clear job each.</li>
+      <li><strong>Some data that belongs in a table.</strong> Prices, a schedule, stats, ratings: anything with rows and columns.</li>
+      <li><strong>A reason for a visitor to fill in a form.</strong> An order, a sign-up, a question, a review.</li>
+    </ul>
+    <p>A few examples to get you thinking:</p>
+    <div class="table-wrap">
+      <table class="data-table">
+        <caption class="sr-only">Example topics, each with a table and a form</caption>
+        <thead>
+          <tr><th scope="col">Topic</th><th scope="col">A table of…</th><th scope="col">A form to…</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">A food truck or coffee shop</th><td>menu items, sizes and prices</td><td>request catering for an event</td></tr>
+          <tr><th scope="row">A personal portfolio</th><td>your skills and where you used them</td><td>get in touch with you</td></tr>
+          <tr><th scope="row">A game guide</th><td>character stats</td><td>submit a strategy tip</td></tr>
+          <tr><th scope="row">A city travel guide</th><td>attractions, hours and prices</td><td>plan a weekend trip</td></tr>
+          <tr><th scope="row">A pet adoption site</th><td>adoptable pets and their fees</td><td>apply to adopt a pet</td></tr>
+          <tr><th scope="row">A book or movie review site</th><td>titles, years and ratings</td><td>write a review</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>For more ideas, each with suggested pages, a table and a form, see the <a href="index.html#themes">theme ideas on the project hub</a>. Your own idea is welcome as long as it has the same three ingredients.</p>
+    <aside class="callout warn">
+      <strong>Pick something new</strong>
+      Your project must be a different site from the Harbor Street Library homework site. Use the homework to practice, and the project to build something of your own.
+    </aside>
+    <aside class="callout">
+      <strong>Your repository is public</strong>
+      Anyone can read every file in it. Do not put your home address, your personal phone number or anyone else's private details on the site. Invent the business, the people and the prices, or get permission before you use real ones.
+    </aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="requirements">
+    <h2>Requirements</h2>
+    <p>Each group below is what one chapter adds to your site. The links under each heading go to the chapter sections that teach those skills, so if an item looks unfamiliar, start there.</p>
+
+    <!-- ---------- Chapter 2 ---------- -->
+    <div class="pa-group" data-ch="2" id="req-ch2">
+      <span class="pa-tag">Chapter 2 · How the Web Works</span>
+      <h3>Put it on the web</h3>
+      <p class="pa-taught">Taught in <a href="../ch2/index.html#s2-3">2.3 Uniform Resource Locators</a> and <a href="../ch2/index.html#s2-6">2.6 Web Servers</a></p>
+      <ul>
+        <li>A <strong>public GitHub repository</strong> for your site, with <code>index.html</code> at the top level of the repository, not inside a folder.
+          <span class="pa-why">When someone visits your site's address without a file name, the server sends <code>index.html</code>.</span></li>
+        <li><strong>File and folder names in lowercase with no spaces</strong>, such as <code>menu.html</code> and <code>images/food-truck.jpg</code>. Use hyphens between words.
+          <span class="pa-why">Web servers treat <code>Menu.html</code> and <code>menu.html</code> as two different files, and a space has to be encoded in a URL.</span></li>
+        <li>A <code>css/</code> folder for your stylesheet and an <code>images/</code> folder for your images.</li>
+        <li>The site is <strong>live on GitHub Pages</strong>, and every page loads from its <code>https://your-username.github.io/your-repo/</code> address.</li>
+        <li><strong>Relative links only</strong> for your own files: <code>about.html</code>, <code>css/styles.css</code>, <code>images/logo.png</code>. No paths that start with <code>/</code>, and no <code>file:///</code> or <code>C:\</code> paths.
+          <span class="pa-why">Your live site sits in a folder named after your repository, so a path that starts with <code>/</code> jumps to <code>your-username.github.io</code> and misses your files. A <code>file:///</code> path only exists on your own computer.</span></li>
+      </ul>
+    </div>
+
+    <!-- ---------- Chapter 3 ---------- -->
+    <div class="pa-group" data-ch="3" id="req-ch3">
+      <span class="pa-tag">Chapter 3 · HTML 1: Introduction</span>
+      <h3>Give it structure</h3>
+      <p class="pa-taught">Taught in <a href="../ch3/index.html#s3-3">3.3 Semantic Markup</a>, <a href="../ch3/index.html#s3-4">3.4 Structure of HTML Documents</a>, <a href="../ch3/index.html#s3-5">3.5 Quick Tour of HTML Elements</a> and <a href="../ch3/index.html#s3-6">3.6 HTML5 Semantic Structure Elements</a></p>
+      <ul>
+        <li><strong>At least 4 pages</strong>, all linked from the nav. The thank-you page for your form is extra and does not count toward the four.</li>
+        <li>Every page is a <strong>complete document</strong>: <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html lang="en"&gt;</code>, <code>&lt;meta charset="utf-8"&gt;</code>, the viewport <code>&lt;meta&gt;</code>, a <code>&lt;title&gt;</code> that is different on every page, and a <code>&lt;meta name="description"&gt;</code>.</li>
+        <li><code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> and <code>&lt;footer&gt;</code> on every page, with <strong>the same nav on every page</strong>.
+          <span class="pa-why">Landmarks let screen reader users jump straight to the menu or the content, and a nav that never moves means visitors never get lost.</span></li>
+        <li><strong>One <code>&lt;h1&gt;</code> per page</strong> and no skipped heading levels: the subsections of an <code>&lt;h2&gt;</code> are <code>&lt;h3&gt;</code>s, not <code>&lt;h4&gt;</code>s.</li>
+        <li><strong>Lists</strong> (<code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code>) wherever the content really is a list, including the nav links.</li>
+        <li><strong>Images</strong> with meaningful <code>alt</code> text, plus <code>width</code> and <code>height</code> set to the image's real size in pixels. Use <code>alt=""</code> only for a purely decorative image.
+          <span class="pa-why">Alt text is what a screen reader reads aloud and what shows if the image fails to load. Width and height let the browser save space for the image, so the page does not jump as it loads.</span></li>
+        <li>At least one <strong><code>&lt;figure&gt;</code> with a <code>&lt;figcaption&gt;</code></strong>.</li>
+        <li><code>&lt;section&gt;</code>, <code>&lt;article&gt;</code> and <code>&lt;aside&gt;</code> where they fit the content.</li>
+        <li><strong>Real content you wrote yourself.</strong> No lorem ipsum and no leftover placeholder text.</li>
+      </ul>
+      <details class="reveal">
+        <summary>Example: the skeleton every page shares</summary>
+        <script type="text/plain" class="code" data-lang="html" data-title="menu.html">
+<!-- Tells the browser this is a modern HTML document -->
+<!DOCTYPE html>
+<!-- The root element; lang tells screen readers which language to speak -->
+<html lang="en">
+  <!-- Information about the page; nothing in the head is shown on the page -->
+  <head>
+    <!-- The character set, so letters like é and symbols like © display correctly -->
+    <meta charset="utf-8">
+    <!-- Phones use their real screen width instead of shrinking a desktop layout -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Shown in the browser tab and in search results; different on every page -->
+    <title>Menu · Corner Cup Coffee</title>
+    <!-- A one-sentence summary that search engines may show under the title -->
+    <meta name="description" content="Our drinks and pastries, with sizes and prices.">
+    <!-- The one shared stylesheet, linked with a relative path -->
+    <link rel="stylesheet" href="css/styles.css">
+  </head> <!-- End of the page information -->
+  <!-- Everything the visitor sees goes inside the body -->
+  <body>
+    <!-- The banner at the top of every page -->
+    <header>
+      <!-- The site name, which links back to the home page -->
+      <p><a href="index.html">Corner Cup Coffee</a></p>
+      <!-- The main menu: the same links, in the same order, on every page -->
+      <nav>
+        <!-- A list, because the nav links really are a list of choices -->
+        <ul>
+          <!-- A relative link to a file in the same folder -->
+          <li><a href="index.html">Home</a></li>
+          <!-- aria-current="page" marks the page the visitor is on right now -->
+          <li><a href="menu.html" aria-current="page">Menu</a></li>
+          <!-- One list item for every page in your site -->
+          <li><a href="catering.html">Catering</a></li>
+        </ul> <!-- End of the list of links -->
+      </nav> <!-- End of the main menu -->
+    </header> <!-- End of the banner -->
+    <!-- The content that belongs to this page only -->
+    <main>
+      <!-- The one h1 on the page: what this page is about -->
+      <h1>Our Menu</h1>
+      <!-- Real content you wrote, not placeholder text -->
+      <p>Everything on this menu is made fresh each morning.</p>
+    </main> <!-- End of this page's content -->
+    <!-- Closing information: who made the site and image credits -->
+    <footer>
+      <!-- &copy; is the character reference for the © symbol -->
+      <p>&copy; Your Name. Photos by Your Name unless credited below.</p>
+    </footer> <!-- End of the footer -->
+  </body> <!-- End of the visible page -->
+</html> <!-- End of the document -->
+        </script>
+      </details>
+    </div>
+
+    <!-- ---------- Chapter 4 ---------- -->
+    <div class="pa-group" data-ch="4" id="req-ch4">
+      <span class="pa-tag">Chapter 4 · CSS</span>
+      <h3>Give it a look</h3>
+      <p class="pa-taught">Taught in <a href="../ch4/index.html#s4-2">4.2 CSS Syntax</a>, <a href="../ch4/index.html#s4-3">4.3 Location of Styles</a>, <a href="../ch4/index.html#s4-4">4.4 Selectors</a>, <a href="../ch4/index.html#s4-6">4.6 The Box Model</a>, <a href="../ch4/index.html#s4-7">4.7 CSS Text Styling</a> and <a href="../ch4/index.html#s4-8">4.8 CSS Frameworks and Variables</a></p>
+      <ul>
+        <li><strong>One external stylesheet, <code>css/styles.css</code></strong>, linked from every page with <code>&lt;link rel="stylesheet" href="css/styles.css"&gt;</code>. No <code>&lt;style&gt;</code> blocks and no <code>style="…"</code> attributes.
+          <span class="pa-why">One file styles every page, so one change updates the whole site.</span></li>
+        <li><strong>Custom properties in <code>:root</code></strong> for your colors, fonts and spacing, used everywhere with <code class="nowrap">var(--…)</code>.
+          <span class="pa-why">When you change your brand color, you change it in exactly one place.</span></li>
+        <li><strong>Font stacks that end with a generic family</strong>, such as <code>Georgia, "Times New Roman", serif</code>.
+          <span class="pa-why">If a visitor does not have your first choice, the browser moves along the list instead of falling back to its default.</span></li>
+        <li><code>box-sizing: border-box</code> on every element, a <strong>readable <code>max-width</code></strong> for your content (roughly 45 to 75 characters per line), and <strong>deliberate spacing</strong>: padding inside boxes, margins between them.</li>
+        <li>A <strong>styled nav</strong> that looks like a menu, with a <code>:hover</code> state, a <code>:focus-visible</code> state for keyboard users (<a href="../ch5/index.html#s5-6">5.6 Styling and Designing Forms</a>) and a style for the current page.</li>
+        <li><strong>At least five selector types</strong> from this list: element, class, id, descendant or child, attribute, pseudo-class.</li>
+        <li><strong>Text contrast of at least 4.5:1</strong> against its background, including links and button text.
+          <span class="pa-why">Low-contrast text is hard for everyone to read, and impossible for some visitors.</span></li>
+      </ul>
+      <p>For layout, use what Chapter 4 covered: block and inline-block boxes, padding and margins, and a <code>max-width</code> with <code>margin: 0 auto</code> (or <code>margin-inline: auto</code>) to center a column. That is all this project needs.</p>
+      <details class="reveal">
+        <summary>Example: a nav with hover, focus and current-page styles</summary>
+        <script type="text/plain" class="code" data-lang="html" data-title="The nav on menu.html">
+<!-- The main menu; only the aria-current link changes from page to page -->
+<nav>
+  <!-- A list of links, one item per page -->
+  <ul>
+    <!-- A relative link to the home page -->
+    <li><a href="index.html">Home</a></li>
+    <!-- aria-current="page" tells screen readers, and your CSS, which page this is -->
+    <li><a href="menu.html" aria-current="page">Menu</a></li>
+    <!-- Another page in the same folder -->
+    <li><a href="catering.html">Catering</a></li>
+  </ul> <!-- End of the list -->
+</nav> <!-- End of the nav -->
+        </script>
+        <script type="text/plain" class="code" data-lang="css" data-title="css/styles.css">
+/* Design tokens: each color is defined once, here, and reused with var() */
+:root {
+  /* The brand color, for links and the current-page marker (8:1 on white) */
+  --brand: #7a3e12;
+  /* A pale tint of the brand color for hover backgrounds */
+  --brand-pale: #f6e9df;
+} /* End of the tokens */
+/* Descendant selector: the list inside the nav loses its bullets and indent */
+nav ul { list-style: none; margin: 0; padding: 0; }
+/* inline-block puts the items side by side, like words on a line */
+nav li { display: inline-block; }
+/* Every link in the nav */
+nav a {
+  /* inline-block lets the link take padding on all four sides */
+  display: inline-block;
+  /* Padding makes each link a bigger, easier target */
+  padding: 0.5rem 0.75rem;
+  /* The brand color from :root */
+  color: var(--brand);
+  /* Menus do not need underlines */
+  text-decoration: none;
+} /* End of the link rule */
+/* Pseudo-class: mouse users see which link they are pointing at */
+nav a:hover { background: var(--brand-pale); }
+/* Pseudo-class: keyboard users see a clear ring around the focused link */
+nav a:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+/* Attribute selector: the link for the page the visitor is on */
+nav a[aria-current="page"] {
+  /* Bold text marks the current page */
+  font-weight: bold;
+  /* A bar under the link, so the marker does not rely on color alone */
+  border-bottom: 3px solid var(--brand);
+} /* End of the current-page rule */
+        </script>
+      </details>
+    </div>
+
+    <!-- ---------- Chapter 5 ---------- -->
+    <div class="pa-group" data-ch="5" id="req-ch5">
+      <span class="pa-tag">Chapter 5 · HTML 2: Tables and Forms</span>
+      <h3>Add a table and a form</h3>
+      <p class="pa-taught">Taught in <a href="../ch5/index.html#s5-1">5.1 HTML Tables</a>, <a href="../ch5/index.html#s5-2">5.2 Styling Tables</a>, <a href="../ch5/index.html#s5-3">5.3 Introducing Forms</a>, <a href="../ch5/index.html#s5-4">5.4 Form Control Elements</a>, <a href="../ch5/index.html#s5-5">5.5 Table and Form Accessibility</a> and <a href="../ch5/index.html#s5-7">5.7 Validating User Input</a></p>
+      <ul>
+        <li><strong>One data table</strong> with real or realistic data, at least 5 rows and 3 columns. Tables are for data, never for page layout.</li>
+        <li>The table has a <code>&lt;caption&gt;</code>, a <code>&lt;thead&gt;</code> and a <code>&lt;tbody&gt;</code>, and <code>&lt;th&gt;</code> header cells with <code>scope="col"</code> (and <code>scope="row"</code> on row headers).
+          <span class="pa-why">Scope tells a screen reader which header goes with each cell, so a visitor who cannot see the table still knows what "$4.50" is the price of.</span></li>
+        <li>The table is <strong>styled</strong> (padding, borders or zebra rows) and <strong>wrapped in an element with <code>overflow-x: auto</code></strong>, so on a phone it scrolls inside its own box instead of widening the page.</li>
+        <li><strong>One form</strong> with a visible <code>&lt;label&gt;</code> for every control, connected by matching <code>for</code> and <code>id</code>. A placeholder is not a label.</li>
+        <li>At least one <strong><code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code></strong>. Every group of radio buttons needs one.</li>
+        <li><strong>Input types that fit the data</strong>: <code>email</code>, <code>tel</code>, <code>number</code>, <code>date</code>, radio buttons, checkboxes, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code>.
+          <span class="pa-why">The right type gives phone users the right keyboard and gets you free checking, such as "that is not an email address".</span></li>
+        <li>A <strong><code>name</code> on every control</strong>.
+          <span class="pa-why">The browser only sends values from controls that have a name.</span></li>
+        <li><strong>Built-in validation</strong> where it fits the data: <code>required</code>, <code>min</code> and <code>max</code>, <code>minlength</code>, <code>pattern</code>. Test it by trying to submit bad data.</li>
+        <li><strong><code>action="thanks.html"</code> and <code>method="get"</code></strong>, plus a <code>thanks.html</code> page that thanks the visitor.
+          <span class="pa-why">GitHub Pages is a static host: it only sends files and has no program to receive form data, so it cannot accept a POST. With GET, the browser simply asks for <code>thanks.html</code> with the answers in the query string, and GitHub Pages can serve that.</span></li>
+      </ul>
+      <details class="reveal">
+        <summary>Example: a table wrapper and the start of a form</summary>
+        <script type="text/plain" class="code" data-lang="html" data-title="menu.html">
+<!-- The wrapper: the CSS below lets the table scroll inside this box on a phone -->
+<div class="table-scroll">
+  <!-- The data table itself -->
+  <table>
+    <!-- The caption names the table for every visitor, including screen reader users -->
+    <caption>Drinks and prices</caption>
+    <!-- thead holds the header row -->
+    <thead>
+      <!-- scope="col": each of these headers labels the column below it -->
+      <tr><th scope="col">Drink</th><th scope="col">Size</th><th scope="col">Price</th></tr>
+    </thead> <!-- End of the header row -->
+    <!-- tbody holds the data rows -->
+    <tbody>
+      <!-- scope="row": this header labels the rest of its row -->
+      <tr><th scope="row">Latte</th><td>12 oz</td><td>$4.50</td></tr>
+    </tbody> <!-- End of the data rows -->
+  </table> <!-- End of the table -->
+</div> <!-- End of the wrapper -->
+        </script>
+        <script type="text/plain" class="code" data-lang="css" data-title="css/styles.css">
+/* Class selector: a wide table scrolls inside this box instead of widening the page */
+.table-scroll { overflow-x: auto; }
+        </script>
+        <script type="text/plain" class="code" data-lang="html" data-title="catering.html">
+<!-- action: the page to open on submit; method="get" works on a static host -->
+<form action="thanks.html" method="get">
+  <!-- for="email" connects this label to the control with id="email" -->
+  <label for="email">Email</label>
+  <!-- type="email" checks the format; required blocks an empty submit -->
+  <!-- name is the label the browser sends along with the value -->
+  <input type="email" id="email" name="email" required>
+  <!-- fieldset groups related controls; legend is the question they answer -->
+  <fieldset>
+    <!-- The question that both radio buttons answer -->
+    <legend>Pickup or delivery?</legend>
+    <!-- Radio buttons that share a name form one group: the visitor picks exactly one -->
+    <input type="radio" id="pickup" name="service" value="pickup" required>
+    <!-- Every radio button gets its own label -->
+    <label for="pickup">Pickup</label>
+    <!-- The second choice in the same group -->
+    <input type="radio" id="delivery" name="service" value="delivery">
+    <!-- Its label, connected by for and id -->
+    <label for="delivery">Delivery</label>
+  </fieldset> <!-- End of the group -->
+  <!-- A real button that submits the form -->
+  <button type="submit">Send request</button>
+</form> <!-- End of the form -->
+        </script>
+      </details>
+    </div>
+
+    <!-- ---------- Quality ---------- -->
+    <div class="pa-group" id="req-quality">
+      <span class="pa-tag">Every chapter · Quality</span>
+      <h3>Make it solid</h3>
+      <p class="pa-taught">The Nu Html Checker is introduced in <a href="../ch3/index.html#s3-1">3.1 What Is HTML and Where Did It Come From?</a></p>
+      <ul>
+        <li>Every HTML page passes the <a href="https://validator.w3.org/nu/">W3C Nu Html Checker</a> with no errors.</li>
+        <li><code>css/styles.css</code> passes the <a href="https://jigsaw.w3.org/css-validator/">W3C CSS Validator</a> with no errors.
+          <span class="pa-why">Browsers quietly repair or skip your mistakes, so a page can look fine in one browser and break in another. The validators show you every mistake, with a line number.</span></li>
+        <li><strong>Works at phone width</strong> with no sideways scrolling of the page. To test it in Chrome, open DevTools and turn on the device toolbar (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>, or <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> on a Mac).</li>
+        <li><strong>Credit every image you did not make</strong>: who made it and where it came from, with a link. Put credits in the footer or on a <code>credits.html</code> page.</li>
+      </ul>
+      <details class="reveal">
+        <summary>Example: images that shrink to fit a phone</summary>
+        <script type="text/plain" class="code" data-lang="css" data-title="css/styles.css">
+/* Element selector: this rule applies to every image on every page */
+img {
+  /* Never wider than the box that holds it, so photos shrink on a phone */
+  max-width: 100%;
+  /* Keep the original proportions when the width shrinks */
+  height: auto;
+} /* End of the image rule */
+        </script>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="build">
+    <h2>How to build it</h2>
+
+    <h3>Start from the starter files or from scratch</h3>
+    <p>The course has a small, valid three-page starter site you can copy: <a href="starter/index.html">starter/index.html</a>, <a href="starter/about.html">starter/about.html</a>, <a href="starter/contact.html">starter/contact.html</a> and <a href="starter/css/styles.css">starter/css/styles.css</a>. It already has a complete page skeleton, a shared nav and a stylesheet organized with comments. Copy those files, plus <a href="starter/images/placeholder.svg">starter/images/placeholder.svg</a>, into the same folders in your repository, then rename, rewrite and add pages until the site is yours. Every placeholder has to go, including that image.</p>
+    <p>Or start with an empty folder and write every line yourself. It is slower, but you will understand every line. Either way is fine.</p>
+
+    <h3>Build it as we go</h3>
+    <p>Do not save the project for the end. After each chapter, apply that chapter to your site and push it. Small steps are easier to fix when something breaks, and your site is always live and working.</p>
+    <div class="table-wrap">
+      <table class="data-table">
+        <caption class="sr-only">What to add to your site after each chapter</caption>
+        <thead>
+          <tr><th scope="col">When</th><th scope="col">Add to your site</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">After Chapter 2</th><td>The repository, the <code>css/</code> and <code>images/</code> folders, and a placeholder <code>index.html</code> that is live on GitHub Pages</td></tr>
+          <tr><th scope="row">After Chapter 3</th><td>Your pages, with real content, semantic structure, images and a figure</td></tr>
+          <tr><th scope="row">After Chapter 4</th><td><code>css/styles.css</code>: custom properties, fonts, spacing and a styled nav</td></tr>
+          <tr><th scope="row">After Chapter 5</th><td>The data table, the form and the thank-you page</td></tr>
+          <tr><th scope="row">After each new chapter</th><td>The new requirements added to this page</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Create the repository and publish it</h3>
+    <ol>
+      <li>On <a href="https://github.com/">github.com</a>, create a new repository. Make it <strong>Public</strong> and give it a short lowercase name, such as <code>corner-cup-coffee</code>.</li>
+      <li>Clone it to your computer, add your files, and send them back to GitHub:</li>
+    </ol>
+    <script type="text/plain" class="code" data-lang="shell" data-title="Terminal">
+# Download your new, empty repository into a folder with the same name
+git clone https://github.com/your-username/corner-cup-coffee.git
+# Move into that folder: run every git command from inside it
+cd corner-cup-coffee
+# (Now create index.html and the css and images folders here with your editor)
+# List what has changed since your last commit
+git status
+# Stage every change in this folder for the next snapshot
+git add .
+# Save the snapshot with a message that says what you did
+git commit -m "Add placeholder home page"
+# Upload your commits to GitHub, which then republishes your live site
+git push
+    </script>
+    <ol start="3">
+      <li>On GitHub, open your repository's <strong>Settings</strong>, then <strong>Pages</strong>. Under <strong>Build and deployment</strong>, choose <strong>Deploy from a branch</strong>, pick the branch <strong>main</strong> and the folder <strong>/ (root)</strong>, and press <strong>Save</strong>.</li>
+      <li>After a short wait, refresh the Pages settings. Your address appears at the top, for example <code>https://your-username.github.io/corner-cup-coffee/</code>. Open it in a private (incognito) window to be sure you are not seeing an old copy.</li>
+      <li>From then on, every time you finish a piece of work: <code class="nowrap">git add .</code>, <code class="nowrap">git commit -m "…"</code>, <code class="nowrap">git push</code>. GitHub Pages republishes your site on every push.</li>
+    </ol>
+    <aside class="callout tip">
+      <strong>Commit often</strong>
+      Commit every time something works: a new page, a finished table, a fixed validator error. Each commit is a snapshot you can go back to, and messages like "Add menu table" tell the story of how you built the site. For a picture of how add, commit and push fit together, see Version control with Git and GitHub in <a href="../levelup/index.html#sl-6">Frameworks and Developer Tools</a>.
+    </aside>
+    <details class="reveal">
+      <summary>If Git asks who you are, or asks you to sign in</summary>
+      <p>The first time you commit on a computer, Git may stop and ask for your name and email. Run the two <code>git config</code> commands it shows you, using your name and the email address of your GitHub account, then commit again.</p>
+      <p>The first time you push, GitHub may ask you to sign in, usually in a browser window. Follow the prompt. If you would rather use buttons than the terminal, GitHub Desktop or your editor's Source Control panel runs the same add, commit and push steps.</p>
+      <p>A warning that you "appear to have cloned an empty repository" is normal for a brand-new repository.</p>
+    </details>
+
+    <h3>Check your work (optional)</h3>
+    <p>The <a href="index.html#checker">project checker</a> on the project hub runs many of these requirements against your pages, right in your browser; nothing is uploaded. It is a quick self-check and does not replace the W3C validators.</p>
+    <aside class="callout">
+      <strong>This page is the assignment</strong>
+      The <a href="index.html">project hub</a> has more theme ideas, planning tools and the checker. Treat it as optional help. Where the hub and this page differ, follow this page.
+    </aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="checklist">
+    <h2>Before you submit</h2>
+    <p>Go through this list on your live site, not just on your own computer. Your ticks are saved in this browser only.</p>
+    <div class="pa-check-box">
+      <ul class="pa-check" id="pa-check">
+        <li><label><input type="checkbox" data-key="public"><span>My repository is public and <code>index.html</code> is at its top level.</span></label></li>
+        <li><label><input type="checkbox" data-key="live"><span>My GitHub Pages address loads in a private (incognito) window.</span></label></li>
+        <li><label><input type="checkbox" data-key="pages"><span>I have at least 4 pages, all reachable from the same nav on every page.</span></label></li>
+        <li><label><input type="checkbox" data-key="names"><span>Every file and folder name is lowercase with no spaces, and every link to my own files is relative.</span></label></li>
+        <li><label><input type="checkbox" data-key="html"><span>Every page is a complete document with header, nav, main and footer, one <code>&lt;h1&gt;</code> and no skipped heading levels.</span></label></li>
+        <li><label><input type="checkbox" data-key="css"><span>Every page links <code>css/styles.css</code>, and there are no <code>&lt;style&gt;</code> blocks or <code>style</code> attributes.</span></label></li>
+        <li><label><input type="checkbox" data-key="table-form"><span>My table and my form are on the live site, and submitting the form opens my thank-you page.</span></label></li>
+        <li><label><input type="checkbox" data-key="valid"><span>Every page passes the Nu Html Checker, and <code>styles.css</code> passes the CSS Validator, with no errors.</span></label></li>
+        <li><label><input type="checkbox" data-key="phone"><span>The site works at phone width with no sideways scrolling.</span></label></li>
+        <li><label><input type="checkbox" data-key="images"><span>Every image has <code>alt</code> text, <code>width</code> and <code>height</code>, and every image I did not make is credited.</span></label></li>
+        <li><label><input type="checkbox" data-key="content"><span>No placeholder text is left, and no private details such as my home address or phone number.</span></label></li>
+        <li><label><input type="checkbox" data-key="pushed"><span>I pushed my latest commit and it shows on the live site.</span></label></li>
+      </ul>
+    </div>
+    <p class="pa-count" id="pa-count" aria-live="polite"></p>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="submit">
+    <h2>Submit</h2>
+    <div class="pa-submit"><p>Submit your GitHub repo link.</p></div>
+  </section>
+</main>
+<script>
+  WD1.ready(() => {
+    // Before-you-submit checklist: ticks are saved in this browser only.
+    const list = WD1.$('#pa-check');
+    const count = WD1.$('#pa-count');
+    const boxes = WD1.$$('input[type="checkbox"]', list);
+    const saved = WD1.store.get('custom', 'project-assignment-checklist') || {};
+
+    function update() {
+      const done = boxes.filter((b) => b.checked).length;
+      count.textContent = done === boxes.length
+        ? 'All ' + boxes.length + ' checked. You are ready to submit.'
+        : done + ' of ' + boxes.length + ' checked.';
+    }
+
+    boxes.forEach((b) => {
+      b.checked = !!saved[b.dataset.key];
+      b.addEventListener('change', () => {
+        const state = WD1.store.get('custom', 'project-assignment-checklist') || {};
+        if (b.checked) state[b.dataset.key] = true; else delete state[b.dataset.key];
+        WD1.store.set('custom', 'project-assignment-checklist', state);
+        update();
+      });
+    });
+    update();
+  });
+</script>
+</body>
+</html>
