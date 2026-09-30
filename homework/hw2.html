@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Homework 2 · Web Dev I</title>
+  <meta name="description" content="Give the Harbor Street Library site one stylesheet, a program schedule table and a library card application form.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/course.css">
+  <script src="../assets/js/course.js"></script>
+  <style>
+    /* ---------- Homework page (hw-) ---------- */
+    body[data-page="homework"] { --mod: var(--ch5); }
+    html { scroll-padding-top: calc(var(--topbar-h) + 20px); }
+
+    /* Jump links under the hero */
+    .hw-jump { list-style: none; padding: 0; margin: 20px 0 0; font-size: .92rem; }
+    .hw-jump li { display: inline-block; margin: 0 6px 8px 0; }
+    .hw-jump a {
+      display: inline-block; padding: 5px 12px; border-radius: 99px;
+      background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); text-decoration: none;
+    }
+    .hw-jump a:hover { border-color: var(--mod); color: var(--ink); }
+
+    /* Numbered steps with round counters */
+    .hw-steps { list-style: none; padding-left: 0; counter-reset: hw-step; }
+    .hw-steps > li { counter-increment: hw-step; position: relative; padding-left: 46px; margin: 0 0 1.1em; }
+    .hw-steps > li + li { margin-top: 0; }
+    .hw-steps > li::before {
+      content: counter(hw-step);
+      position: absolute; left: 0; top: 0;
+      width: 30px; height: 30px; line-height: 28px; text-align: center; border-radius: 50%;
+      background: var(--surface); border: 1.5px solid var(--mod); color: var(--mod);
+      font-family: var(--font-mono); font-weight: 700; font-size: .85rem;
+    }
+    .hw-steps > li > strong:first-child { display: block; font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 2px; }
+    .hw-steps > li > :last-child { margin-bottom: 0; }
+
+    /* Requirement lists: each item names its textbook section */
+    .hw-req { list-style: none; padding-left: 0; }
+    .hw-req > li { position: relative; padding: 10px 14px 10px 40px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+    .hw-req > li + li { margin-top: 8px; }
+    .hw-req > li::before {
+      content: ""; position: absolute; left: 14px; top: 16px;
+      width: 12px; height: 12px; border-radius: 3px; border: 2px solid var(--mod);
+    }
+    .hw-req .pill { margin-left: 4px; font-family: var(--font-mono); font-weight: 700; vertical-align: 1px; }
+
+    /* Part badges on headings */
+    .hw-part { display: inline-block; font-family: var(--font-mono); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mod); font-weight: 700; margin: 0 0 6px; }
+
+    /* Overview cards */
+    .hw-card-tag { display: block; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .07em; text-transform: uppercase; color: var(--mod); font-weight: 700; margin-bottom: 4px; }
+    .card .hw-files { margin: 8px 0 0; font-size: .9rem; color: var(--ink-2); }
+
+    /* The address a GET form produces */
+    .hw-url { overflow-wrap: anywhere; word-break: break-word; }
+
+    /* Saved checklist */
+    .hw-check { list-style: none; padding: 0; margin: 0 0 1em; }
+    .hw-check > li + li { margin-top: 6px; }
+    .hw-check label {
+      position: relative; display: block; cursor: pointer;
+      padding: 10px 14px 10px 44px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface);
+    }
+    .hw-check input { position: absolute; left: 14px; top: 13px; width: 18px; height: 18px; margin: 0; accent-color: var(--visited); }
+    .hw-check input:checked + span { color: var(--ink-3); }
+    .hw-check label:hover { border-color: var(--line-2); }
+    .hw-count { font-family: var(--font-mono); font-size: .85rem; color: var(--ink-3); }
+
+    /* Submit box */
+    .hw-submit {
+      padding: 20px 22px; border-radius: var(--radius);
+      background: var(--accent-soft); border: 2px solid var(--accent);
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink);
+    }
+    .hw-submit p { margin: 0; }
+  </style>
+</head>
+<body data-page="homework">
+<main id="main">
+  <header class="module-hero">
+    <p class="eyebrow"><span class="tag">Homework 2</span><span>Chapters 4 and 5</span></p>
+    <h1>Style the Library, Then Add a Schedule and a Form</h1>
+    <p class="lede">In Homework 1 you built Harbor Street Library as three plain HTML pages. Now you give the whole site one stylesheet, add a weekly program schedule, and add a library card application form, all in the same repository and at the same GitHub Pages address.</p>
+    <ul class="hw-jump" aria-label="Jump to a part of this homework">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#pick-up">Pick up where you left off</a></li>
+      <li><a href="#setup">New files and nav</a></li>
+      <li><a href="#part-1">Part 1: Stylesheet</a></li>
+      <li><a href="#part-2">Part 2: Schedule table</a></li>
+      <li><a href="#part-3">Part 3: Card form</a></li>
+      <li><a href="#part-4">Part 4: Check your work</a></li>
+      <li><a href="#before-submit">Checklist</a></li>
+      <li><a href="#submit">Submit</a></li>
+    </ul>
+  </header>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="overview">
+    <h2>What you will build</h2>
+    <p>Right now your three pages use the browser's built-in styles: a serif font, blue underlined links, text that runs the full width of the window. That is fine for checking structure. Homework 1 ended with "Styling comes next", and this is that step: Chapter 4 gives you the tools. In this homework you keep every page you already wrote and add to it.</p>
+
+    <div class="cards">
+      <div class="card">
+        <span class="hw-card-tag">Part 1 · Chapter 4</span>
+        <h3>One stylesheet</h3>
+        <p>Write <code>css/styles.css</code> and link it from every page: design tokens, typography, the box model, labeled selectors and a note on the cascade.</p>
+      </div>
+      <div class="card">
+        <span class="hw-card-tag">Part 2 · 5.1, 5.2, 5.5</span>
+        <h3>Schedule table</h3>
+        <p>Add <code>schedule.html</code> with an accessible table of weekly library programs that scrolls inside itself on a phone.</p>
+      </div>
+      <div class="card">
+        <span class="hw-card-tag">Part 3 · 5.3 to 5.7</span>
+        <h3>Card application</h3>
+        <p>Add <code>card.html</code>, a labeled, validated form that sends its answers to a new <code>thanks.html</code> page.</p>
+      </div>
+      <div class="card">
+        <span class="hw-card-tag">Part 4</span>
+        <h3>Check and publish</h3>
+        <p>Run both W3C validators, test with the keyboard and at phone width, then confirm the live site shows your new styles.</p>
+      </div>
+    </div>
+
+    <p>When you finish, your repository looks like this. Everything you create is an HTML file or a CSS file.</p>
+    <script type="text/plain" class="code" data-lang="text" data-title="harbor-street-library">
+      harbor-street-library/     # your repository folder from Homework 1
+      ├── css/                   # NEW folder, all lowercase
+      │   └── styles.css         # NEW: the one stylesheet every page links to
+      ├── images/                # from Homework 1
+      ├── index.html             # Home, from Homework 1 (now styled)
+      ├── events.html            # Events, from Homework 1 (now styled)
+      ├── schedule.html          # NEW: Schedule, with the program table
+      ├── card.html              # NEW: Get a Card, with the application form
+      ├── thanks.html            # NEW: the page the form sends visitors to
+      └── report.html            # Web Report, from Homework 1 (now styled)
+    </script>
+
+    <p>Every page gets the same navigation, with the two new pages added. The order matters, because visitors expect the menu to stay put as they move around a site:</p>
+    <div class="table-wrap">
+      <table class="data-table">
+        <caption class="sr-only">The navigation links, in order</caption>
+        <thead>
+          <tr><th scope="col">Position</th><th scope="col">Link text</th><th scope="col">Goes to</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">1</th><td>Home</td><td><code>index.html</code></td></tr>
+          <tr><th scope="row">2</th><td>Events</td><td><code>events.html</code></td></tr>
+          <tr><th scope="row">3</th><td>Schedule</td><td><code>schedule.html</code> (new)</td></tr>
+          <tr><th scope="row">4</th><td>Get a Card</td><td><code>card.html</code> (new)</td></tr>
+          <tr><th scope="row">5</th><td>Web Report</td><td><code>report.html</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="callout book"><strong>Keep the chapters open</strong> Each requirement below names the section that teaches it, such as <em>4.6</em> or <em>5.5</em>. When something is unclear, jump back to <a href="../ch4/index.html">Chapter 4: CSS 1</a> or <a href="../ch5/index.html">Chapter 5: HTML 2</a>, find that section, and try its interactive examples again before you write your own version.</aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="pick-up">
+    <h2>Before you start: pick up where you left off</h2>
+    <p>This homework continues in the <strong>same</strong> repository as Homework 1, <code>harbor-street-library</code>. You do not create a new repository. If it has been a while since you touched it, these steps get you back to a working setup.</p>
+
+    <aside class="callout warn"><strong>Is your Homework 1 finished?</strong> If <code>index.html</code>, <code>events.html</code> or <code>report.html</code> is missing or incomplete, finish those three pages first. This homework styles them, so a stylesheet has nothing to work on until the HTML exists. Each page needs its DOCTYPE, <code>lang</code>, charset, viewport and title, plus a header, nav, main and footer with one <code>&lt;h1&gt;</code>.</aside>
+
+    <ol class="hw-steps">
+      <li>
+        <strong>Open the project folder in VS Code</strong>
+        <p>Choose <strong>File → Open Folder…</strong> and pick the <code>harbor-street-library</code> folder you cloned in Homework 1 (it is inside your <code>web-projects</code> folder). Pick that folder itself, the one that directly contains <code>index.html</code>, not <code>web-projects</code> above it. VS Code's terminal, Live Server and relative paths all start from the folder you open, so opening the wrong one is the cause of many "file not found" problems.</p>
+      </li>
+      <li>
+        <strong>Open a terminal inside VS Code</strong>
+        <p>Choose <strong>Terminal → New Terminal</strong>. It opens already inside your project folder, so Git commands run in the right place.</p>
+      </li>
+      <li>
+        <strong>Download anything that changed on GitHub</strong>
+        <p>Run <code>git pull</code>. If you edited a file on github.com or worked on another computer, this brings those commits down to this computer. Pulling first means your later <code>git push</code> is not rejected for being out of date. If it says <em>Already up to date</em>, you are ready.</p>
+      </li>
+      <li>
+        <strong>Start Live Server</strong>
+        <p>Right-click <code>index.html</code> in the Explorer and choose <strong>Open with Live Server</strong> (or press <strong>Go Live</strong> in the status bar at the bottom). Your site opens at <code>http://127.0.0.1:5500/index.html</code>, served by a small web server on your own computer (2.6), and the browser reloads every time you save a file. Keep it open while you work.</p>
+      </li>
+      <li>
+        <strong>Save your work to GitHub often</strong>
+        <p>Every time you finish a step in this homework, commit it and push it. Small commits with clear messages make it easy to see what changed and to undo a mistake. The cycle is always the same:</p>
+      </li>
+    </ol>
+
+    <script type="text/plain" class="code" data-lang="text" data-title="terminal">
+      # Download any commits that are on GitHub but not on this computer yet
+      git pull
+
+      # List the files you changed or created since your last commit
+      git status
+
+      # Stage every change in this folder so it goes into the next commit
+      git add .
+
+      # Save a snapshot, with a message that says what you did and why
+      git commit -m "Link styles.css on every page"
+
+      # Upload your commits to GitHub; Pages republishes the site shortly after
+      git push
+    </script>
+
+    <aside class="callout tip"><strong>Type the commands, not the notes</strong> Lines that start with <code>#</code> are notes for you. Type or paste one command at a time. Some terminals, including the default one on a Mac, treat a pasted <code>#</code> line as an error.</aside>
+
+    <details class="reveal">
+      <summary>Something went wrong with Git</summary>
+      <ul>
+        <li><strong><code>fatal: not a git repository</code></strong>: the terminal is in the wrong folder. Open the <code>harbor-street-library</code> folder in VS Code (step 1) and open a new terminal.</li>
+        <li><strong><code>git push</code> is rejected with "fetch first" or "non-fast-forward"</strong>: GitHub has commits you do not have yet. Run <code>git pull</code>, then <code>git push</code> again.</li>
+        <li><strong><code>nothing to commit, working tree clean</code></strong>: you have not saved any changes since the last commit. Save your files in VS Code (<kbd>Ctrl</kbd> + <kbd>S</kbd>, or <kbd>Cmd</kbd> + <kbd>S</kbd> on a Mac) and try again.</li>
+        <li><strong>Git asks who you are</strong>: set your name and email once with <code>git config --global user.name "Your Name"</code> and <code>git config --global user.email "you@example.com"</code>, using the email of your GitHub account.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="setup">
+    <h2>Set up: new files and the new navigation</h2>
+    <p>Create every new file first, and update the navigation on every page, before you write any CSS. That way every link works from the start, and when you style the navigation you see the final set of five links.</p>
+
+    <h3>Create the files</h3>
+    <ol class="hw-steps">
+      <li>
+        <strong>Make the stylesheet</strong>
+        <p>In VS Code's Explorer, create a folder named <code>css</code> at the top of the project, next to <code>index.html</code>. Inside it, create an empty file named <code>styles.css</code>. Use all lowercase letters for both names; the reason is in the warning below.</p>
+      </li>
+      <li>
+        <strong>Make the three new pages from a copy</strong>
+        <p>Right-click <code>events.html</code>, choose <strong>Copy</strong>, then <strong>Paste</strong>, and rename the copy <code>schedule.html</code>. Do the same for <code>card.html</code> and <code>thanks.html</code>. Starting from a copy means each new page already has the full skeleton from Homework 1: the DOCTYPE, <code>lang</code>, charset, viewport, header, nav, main and footer.</p>
+      </li>
+      <li>
+        <strong>Give each new page its own title and heading</strong>
+        <p>In each copy, change the <code>&lt;title&gt;</code> and the <code>&lt;h1&gt;</code>, and delete the Events content inside <code>&lt;main&gt;</code> (keep the <code>&lt;h1&gt;</code>). The title is what shows in the browser tab, in bookmarks and in search results, so it should say what the page is and which site it belongs to:</p>
+      </li>
+    </ol>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <caption class="sr-only">Titles and headings for the new pages</caption>
+        <thead>
+          <tr><th scope="col">File</th><th scope="col"><code>&lt;title&gt;</code></th><th scope="col"><code>&lt;h1&gt;</code></th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row"><code>schedule.html</code></th><td>Schedule · Harbor Street Library</td><td>Program Schedule</td></tr>
+          <tr><th scope="row"><code>card.html</code></th><td>Get a Card · Harbor Street Library</td><td>Get a Library Card</td></tr>
+          <tr><th scope="row"><code>thanks.html</code></th><td>Thank You · Harbor Street Library</td><td>Thank You</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Update the navigation on every page</h3>
+    <p>All six pages get the same five links in the same order. The only difference from page to page is which link carries <code>aria-current="page"</code>: the link to the page you are on. That attribute tells screen readers "this is the current page", and it gives your CSS something to select so you can highlight that link (4.4). Here is the navigation as it appears on <code>schedule.html</code>:</p>
+
+    <script type="text/plain" class="code" data-lang="html" data-title="schedule.html (inside the header)">
+      <!-- nav marks this block as the site's main navigation (Chapter 3) -->
+      <nav>
+        <!-- A list, because the navigation is a list of links; CSS removes the bullets later -->
+        <ul>
+          <!-- Relative links like "index.html" work on Live Server and on GitHub Pages -->
+          <li><a href="index.html">Home</a></li>
+          <!-- The Events page from Homework 1 -->
+          <li><a href="events.html">Events</a></li>
+          <!-- We are on schedule.html, so only this link says aria-current="page" -->
+          <li><a href="schedule.html" aria-current="page">Schedule</a></li>
+          <!-- The new library card application page -->
+          <li><a href="card.html">Get a Card</a></li>
+          <!-- The Web Report page from Homework 1 -->
+          <li><a href="report.html">Web Report</a></li>
+        <!-- End of the list of links -->
+        </ul>
+      <!-- End of the navigation -->
+      </nav>
+    </script>
+
+    <p>On <code>index.html</code>, move <code>aria-current="page"</code> to the Home link; on <code>card.html</code>, to the Get a Card link; and so on. <code>thanks.html</code> is not in the menu, so none of its links get the attribute. Homework 1 called <code>aria-current</code> optional; in this homework it is required on every page except <code>thanks.html</code>, so add it now if you skipped it.</p>
+
+    <aside class="callout warn"><strong>Two path mistakes that only break online</strong> Both of these work on your laptop and fail on GitHub Pages, which is why they are so confusing.
+      <br><strong>A leading slash.</strong> <code>href="/css/styles.css"</code> means "start at the root of the web server". On GitHub Pages your site lives in a subfolder, <code>https://&lt;username&gt;.github.io/harbor-street-library/</code>, so the root is <code>&lt;username&gt;.github.io/</code> and the browser looks for the stylesheet in the wrong place. Write <code>href="css/styles.css"</code>: a relative path, starting from the page's own folder.
+      <br><strong>Capital letters.</strong> GitHub Pages treats <code>CSS/Styles.css</code> and <code>css/styles.css</code> as two different files. Windows and macOS usually do not, so a mismatch works locally and breaks online. Keep every folder and file name lowercase, and make every link match it exactly.</aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-1">
+    <p class="hw-part">Part 1 · Chapter 4</p>
+    <h2>One stylesheet for the whole site</h2>
+    <p>In this part you write <code>css/styles.css</code>. Work through the steps in order, save often, and watch Live Server update every page as you go. Each requirement ends with the section that teaches it.</p>
+
+    <h3>Step 1: Link the stylesheet on every page</h3>
+    <p>Add this line inside the <code>&lt;head&gt;</code> of all six pages, after the <code>&lt;title&gt;</code>:</p>
+    <script type="text/plain" class="code" data-lang="html" data-title="every page, inside <head>">
+      <!-- Loads the one shared stylesheet; the path is relative (no leading slash) and all lowercase -->
+      <link rel="stylesheet" href="css/styles.css">
+    </script>
+    <p>Why an external stylesheet instead of the other two places CSS can live (4.3)? One file styles every page, so a design change means editing one file instead of six. The browser downloads it once, caches it, and reuses it on every page, so later pages load faster. An inline <code>style=""</code> attribute styles only one element, cannot be reused, and beats every normal rule in your stylesheet, which makes it hard to override later. A <code>&lt;style&gt;</code> element works for only one page.</p>
+    <ul class="hw-req">
+      <li>Every page links <code>css/styles.css</code> in its <code>&lt;head&gt;</code>. <span class="pill info">4.3</span></li>
+      <li>No page contains a <code>&lt;style&gt;</code> element or a <code>style=""</code> attribute. All presentation lives in <code>styles.css</code>. <span class="pill info">4.1</span> <span class="pill info">4.3</span></li>
+    </ul>
+    <details class="reveal">
+      <summary>How do I know the link works?</summary>
+      <p>Add one obvious rule to <code>styles.css</code>, such as a background color on <code>body</code>, and save. If every page changes, the link works. If nothing changes, open DevTools (<kbd>F12</kbd>), go to the <strong>Network</strong> tab, and reload. Find <code>styles.css</code> in the list: a status of <code>200</code> means it loaded, and <code>404</code> means the path in your <code>&lt;link&gt;</code> does not match the real folder and file name. To confirm no inline styles are left, press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> (<kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> on a Mac) in VS Code and search the project for <code>style=</code> and for <code>&lt;style</code>. Both searches should find nothing in your HTML files.</p>
+    </details>
+
+    <h3>Step 2: Organize the file with comment headings</h3>
+    <p>A stylesheet grows fast. Headings made of comments let you, and anyone reading your code, find things quickly. The order also works with the cascade: tokens come first so every rule below can use them, and general rules come before the rules that adjust them, so when two rules tie on specificity, the adjusting rule wins because it comes later (4.5). Start your file with these five sections, leaving room at the very top for the cascade notes you write in Step 8:</p>
+    <script type="text/plain" class="code" data-lang="css" data-title="css/styles.css (outline)">
+      /* =============================================================
+         Harbor Street Library: site stylesheet
+         (Your cascade notes from Step 8 go in this top comment.)
+         ============================================================= */
+
+      /* ---------- 1. Tokens: custom properties for colors, fonts, spacing ---------- */
+
+      /* ---------- 2. Base: page-wide element styles (body, headings, links) ---------- */
+
+      /* ---------- 3. Layout: header, nav, main and footer boxes ---------- */
+
+      /* ---------- 4. Components: reusable pieces (the table, the form, buttons) ---------- */
+
+      /* ---------- 5. Pages: rules that only one page needs ---------- */
+    </script>
+    <ul class="hw-req">
+      <li>The stylesheet is organized under comment headings for <strong>tokens</strong>, <strong>base</strong>, <strong>layout</strong>, <strong>components</strong> and <strong>pages</strong>, in that order. <span class="pill info">4.2</span></li>
+    </ul>
+
+    <h3>Step 3: Design tokens, colors and units</h3>
+    <p>Design tokens are the few values your whole design is built from: a handful of colors, two font stacks, a spacing size. You store them as custom properties on <code>:root</code> (the <code>&lt;html&gt;</code> element) and read them everywhere else with <code>var()</code> (4.8). Then a design change, such as a new brand color, is one edit instead of a search through the whole file. The example below uses made-up names and values; choose your own colors for a library.</p>
+    <script type="text/plain" class="code" data-lang="css" data-title="technique: define and use tokens">
+      /* :root is the <html> element, so every element on the page can read these values */
+      :root {
+        /* Brand color written in hex notation: red, green, blue as two hex digits each (4.2) */
+        --color-brand: #1d4e89;
+        /* A pale background written in hsl(): hue 210deg, 25% saturation, 97% lightness */
+        --color-bg: hsl(210 25% 97%);
+        /* Body font stack: named fonts first, a generic family last as the safety net (4.7) */
+        --font-body: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        /* One spacing step in rem, so spacing follows the reader's root font size */
+        --space: 1rem;
+      /* End of the token rule */
+      }
+
+      /* An element selector that reads two tokens with var() */
+      body {
+        /* Change --color-bg once in :root and every use of it follows */
+        background-color: var(--color-bg);
+        /* The same font stack everywhere it is used, from one definition */
+        font-family: var(--font-body);
+      /* End of the rule */
+      }
+    </script>
+    <p>Units matter as much as values (4.2). <code>rem</code> is relative to the root font size, so text sized in <code>rem</code> grows when a reader turns up the browser's default size. <code>em</code> is relative to the element's own font size, so padding in <code>em</code> grows with the text inside it. <code>ch</code> is the width of the "0" character, which makes it perfect for limiting line length. <code>px</code> stays fixed, which suits thin borders.</p>
+    <ul class="hw-req">
+      <li>A <code>:root</code> rule defines custom properties for your <strong>colors</strong> (at least text, background, brand and link), your <strong>font stacks</strong>, and your <strong>spacing</strong>. <span class="pill info">4.8</span></li>
+      <li>Every other rule reads those values with <code>var()</code>. Outside <code>:root</code>, no color and no font stack is typed out directly. <span class="pill info">4.8</span></li>
+      <li>Your colors use at least two notations: hex (<code>#1d4e89</code>) and <code>rgb()</code> or <code>hsl()</code>. <span class="pill info">4.2</span></li>
+      <li>Units are chosen on purpose: <code>rem</code> for font sizes, <code>rem</code> or <code>em</code> for padding and margins, <code>ch</code> or <code>%</code> for line length and widths, and <code>px</code> only for small fixed details such as borders. <span class="pill info">4.2</span></li>
+    </ul>
+
+    <h3>Step 4: Typography</h3>
+    <p>Most of your site is text, so typography does more for it than almost anything else (4.7). A font stack lists fonts in order of preference, and the browser uses the first one the visitor's device actually has, which is why the stack must end with a generic family such as <code>sans-serif</code> or <code>serif</code> that always exists. Headings in a different stack from the body text give the page a clear voice and help readers see its structure.</p>
+    <script type="text/plain" class="code" data-lang="css" data-title="technique: text styles set once, inherited everywhere">
+      /* Element selector: text styles set on body inherit into every element inside it (4.5) */
+      body {
+        /* Unitless line-height: 1.5 times each element's own font size, so it scales */
+        line-height: 1.5;
+      /* End of the body rule */
+      }
+
+      /* Grouped selector list: all three heading levels share the heading font stack */
+      h1, h2, h3 {
+        /* A second stack from your tokens, different from the body stack */
+        font-family: var(--font-heading);
+      /* End of the heading rule */
+      }
+    </script>
+    <ul class="hw-req">
+      <li>The body uses a font stack that ends in a generic family. <span class="pill info">4.7</span></li>
+      <li>Headings use a different font stack, which also ends in a generic family. <span class="pill info">4.7</span></li>
+      <li><code>h1</code>, <code>h2</code> and <code>h3</code> each have a <code>font-size</code> in <code>rem</code>, getting smaller from <code>h1</code> to <code>h3</code>. <span class="pill info">4.7</span></li>
+      <li>Body text has a <code>line-height</code> of about <code>1.5</code>, written without a unit. <span class="pill info">4.7</span></li>
+      <li>Paragraphs and lists have a readable measure: a <code>max-width</code> of about <code>70ch</code> (anywhere from <code>60ch</code> to <code>75ch</code> is fine). <span class="pill info">4.7</span></li>
+    </ul>
+    <details class="reveal">
+      <summary>Optional: using a web font</summary>
+      <p>If you want a font your visitors probably do not have, you can load a hosted web font (4.7). Paste the font service's <code>&lt;link&gt;</code> into each page's <code>&lt;head&gt;</code> <em>before</em> the link to <code>styles.css</code>, then put the font's name at the front of a normal font stack in your tokens, keeping the fallbacks and the generic family after it. Load only the weights you use.</p>
+    </details>
+
+    <h3>Step 5: The box model and page layout</h3>
+    <p>Every element is a box: content, then padding, then a border, then margin (4.6). By default, <code>width</code> sets only the content area and padding and border are added on top, so a box grows wider than the width you wrote. The <code>border-box</code> rule below changes that for every element, which makes every size you set predictable.</p>
+    <script type="text/plain" class="code" data-lang="css" data-title="technique: predictable sizes and a centered column">
+      /* Universal selector plus two pseudo-elements: every box includes padding and border in its width (4.6) */
+      *, *::before, *::after {
+        /* width now means the whole box, from border edge to border edge */
+        box-sizing: border-box;
+      /* End of the rule */
+      }
+
+      /* Element selector for the page's main content area */
+      main {
+        /* Never wider than this; on a phone it is simply the width of the screen */
+        max-width: 60rem;
+        /* auto on the left and right splits the leftover space evenly, which centers the box */
+        margin-inline: auto;
+        /* Padding keeps the text off the edges of the screen on narrow phones */
+        padding: var(--space);
+      /* End of the main rule */
+      }
+    </script>
+    <p>Chapter 4 centered boxes with <code>margin: 0 auto</code>. <code>margin-inline: auto</code> is the same idea written as one property: it sets only the left and right margins (the "inline" direction is the direction a line of text runs) and leaves the top and bottom margins alone. Use it for this homework.</p>
+    <p>For the navigation, remember the three display types from 4.6. List items are <code>block</code>, so they stack. Links are <code>inline</code>, so padding on them does not push anything away. <code>inline-block</code> keeps a link on the line but lets its padding count, which turns each link into a comfortable, easy-to-tap target (5.6 recommends about 44 by 44 pixels for thumbs).</p>
+    <script type="text/plain" class="code" data-lang="css" data-title="technique: tappable navigation links">
+      /* Descendant selector: every link anywhere inside the nav */
+      nav a {
+        /* Sits in the line like inline, but respects padding and margins like a block (4.6) */
+        display: inline-block;
+        /* Padding in em grows with the link text and enlarges the tap target */
+        padding: 0.6em 0.9em;
+      /* End of the nav link rule */
+      }
+    </script>
+    <ul class="hw-req">
+      <li>The stylesheet starts (after the tokens) with <code>*, *::before, *::after { box-sizing: border-box; }</code>. <span class="pill info">4.6</span></li>
+      <li>The main content is centered with a <code>max-width</code> and <code>margin-inline: auto</code>. <span class="pill info">4.6</span></li>
+      <li>Boxes use <strong>padding</strong> for space inside them (header, footer, main) and <strong>margins</strong> for space between them (sections, figures, paragraphs). <span class="pill info">4.6</span></li>
+      <li>At least one element has a visible <strong>border</strong> and at least one has a <strong>background color</strong>, both from your tokens. The announcement <code>&lt;aside&gt;</code> on the Home page and each event <code>&lt;article&gt;</code> on the Events page are natural places for both. <span class="pill info">4.6</span></li>
+      <li>Navigation links are <code>display: inline-block</code> with padding, and the list bullets are gone. <span class="pill info">4.6</span></li>
+    </ul>
+    <details class="reveal">
+      <summary>Hint: my nav links still stack up with bullets</summary>
+      <p>The bullets and the stacking come from the list, not the links. <code>nav ul</code> needs <code>list-style: none</code> to drop the bullets and <code>padding-left: 0</code> to remove the indent browsers add to lists. Each <code>nav li</code> is a block box by default, so it starts on a new line; making the list items <code>display: inline-block</code> too lets them sit side by side.</p>
+    </details>
+    <details class="reveal">
+      <summary>Hint: an image is wider than the screen on a phone</summary>
+      <p>An image is as wide as its file unless you say otherwise. <code>img { max-width: 100%; height: auto; }</code> lets an image shrink to fit its container while keeping its proportions, and it never makes a small image bigger.</p>
+    </details>
+
+    <h3>Step 6: Use, and label, every kind of selector</h3>
+    <p>Good selectors let you style exactly what you mean without adding extra classes everywhere (4.4). Your stylesheet must use each kind below at least once, and each one needs a CSS comment right above it that names its kind. Writing the name down makes you think about <em>why</em> the selector matches what it matches, which is the skill that makes CSS debugging fast.</p>
+    <div class="table-wrap">
+      <table class="data-table">
+        <caption class="sr-only">The eight selector kinds you must use</caption>
+        <thead>
+          <tr><th scope="col">Kind</th><th scope="col">Pattern</th><th scope="col">Ideas on your site</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Element</th><td><code>p</code></td><td><code>body</code>, <code>h1</code>, <code>footer</code>, <code>table</code></td></tr>
+          <tr><th scope="row">Class</th><td><code>.name</code></td><td>the hint under a form field, the wrapper around the table (you add these classes to your HTML)</td></tr>
+          <tr><th scope="row">Id</th><td><code>#name</code></td><td>the one card application form, the one schedule table (you add these ids too)</td></tr>
+          <tr><th scope="row">Descendant (a space)</th><td><code>nav a</code></td><td>links inside the nav, paragraphs inside the footer</td></tr>
+          <tr><th scope="row">Child (<code>&gt;</code>)</th><td><code>nav &gt; ul</code></td><td>the site name, <code>header &gt; p</code>; the list directly inside the nav; a legend directly inside a fieldset</td></tr>
+          <tr><th scope="row">Attribute</th><td><code>[aria-current="page"]</code>, <code>a[href^="mailto:"]</code></td><td>the current page's nav link, the email link in your footer</td></tr>
+          <tr><th scope="row">Pseudo-class</th><td><code>:hover</code>, <code>:focus-visible</code></td><td>nav links under the pointer, any control focused from the keyboard</td></tr>
+          <tr><th scope="row">Pseudo-element</th><td><code>::first-letter</code>, <code>::before</code></td><td>a large first letter on the Home page's welcome paragraph</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <script type="text/plain" class="code" data-lang="css" data-title="technique: a labeled selector">
+      /* CHILD selector (>): only a ul directly inside the nav, not lists nested deeper */
+      nav > ul {
+        /* Removes the bullets that the browser draws for list items */
+        list-style: none;
+      /* End of the rule */
+      }
+    </script>
+    <ul class="hw-req">
+      <li>Your stylesheet uses at least one element, class, id, descendant, child, attribute, pseudo-class and pseudo-element selector. <span class="pill info">4.4</span></li>
+      <li>Each of those eight has a comment directly above it naming its kind. <span class="pill info">4.4</span></li>
+      <li>Every class or id your CSS uses also exists in your HTML. Homework 1 used no classes or ids, so add the ones you need, for example <code>class="table-scroll"</code> on the table wrapper and <code>class="hint"</code> on each form hint. A selector that matches nothing is not "used". <span class="pill info">4.4</span></li>
+    </ul>
+
+    <h3>Step 7: Highlight the current page</h3>
+    <p>You already added <code>aria-current="page"</code> to one link on each page. Now style it with an attribute selector, so visitors can see where they are. Do not rely on color alone: some visitors cannot tell two colors apart, so add a shape or weight change as well, such as an underline bar or bold text.</p>
+    <script type="text/plain" class="code" data-lang="css" data-title="technique: style the current link">
+      /* ATTRIBUTE selector: only the nav link whose aria-current attribute equals "page" */
+      nav a[aria-current="page"] {
+        /* A thick bottom border marks the current page by shape, not only by color */
+        border-bottom: 3px solid var(--color-brand);
+      /* End of the rule */
+      }
+    </script>
+    <ul class="hw-req">
+      <li>The link marked <code>aria-current="page"</code> looks different from the other nav links, by more than color alone. <span class="pill info">4.4</span></li>
+      <li>Nav links change on <code>:hover</code>, and every link shows a clear outline on <code>:focus-visible</code>. <span class="pill info">4.4</span> <span class="pill info">5.6</span></li>
+    </ul>
+
+    <h3>Step 8: Explain your cascade in a comment</h3>
+    <p>When two rules set the same property on the same element, the cascade picks exactly one winner (4.5). Specificity is written <strong>A-B-C</strong>: A counts ids, B counts classes, attributes and pseudo-classes, and C counts element names and pseudo-elements. Compare A first; only if A ties, compare B; only if B ties, compare C. If specificity ties completely, the rule that comes later wins. Separately, some properties, mostly text ones like <code>color</code> and <code>font-family</code>, <em>inherit</em> from parent to child, while box properties like <code>padding</code> and <code>border</code> do not.</p>
+    <p>Write a comment block at the very top of <code>styles.css</code> that shows you can apply this to <em>your own</em> stylesheet. The example below is from a different site (the hiking club from Chapter 4) so you can see the format; your notes must use selectors from your file.</p>
+    <script type="text/plain" class="code" data-lang="css" data-title="technique: cascade notes (example from a different site)">
+      /* CASCADE NOTES (written for a hiking club site; yours must use your own selectors)
+         Specificity is A-B-C: ids, then classes/attributes/pseudo-classes, then elements/pseudo-elements.
+         1. .trip-card h2    = 0-1-1  one class, one element
+         2. #featured h2     = 1-0-1  one id, one element
+         3. main h2          = 0-0-2  two elements
+         Conflict: rules 1 and 3 both set color on the h2 inside a trip card.
+         Rule 1 wins because 0-1-1 beats 0-0-2 in column B, even though rule 3 comes later in the file.
+         Inheritance: body sets color: var(--color-text). Paragraphs inherit that color because
+         color is an inherited text property, so I never set color on p. */
+    </script>
+    <ul class="hw-req">
+      <li>The top comment lists three of your own selectors with their specificity written as A-B-C. <span class="pill info">4.5</span></li>
+      <li>It names two of them that set the same property on the same element, says which rule wins, and explains why (specificity, or order when specificity ties). <span class="pill info">4.5</span></li>
+      <li>It gives one example of inheritance from your stylesheet: a property you set on a parent that its children inherit. <span class="pill info">4.5</span></li>
+    </ul>
+    <details class="reveal">
+      <summary>Hint: check your specificity numbers</summary>
+      <p>Chapter 4's <a href="../ch4/index.html#s4-5">specificity calculator</a> scores any selector you type. You can also check in the browser: right-click an element, choose <strong>Inspect</strong>, and in the <strong>Styles</strong> pane hover over a selector. Chrome and Edge show its specificity, and they cross out any declaration that lost the cascade, which is a quick way to confirm your "which rule wins" answer.</p>
+    </details>
+
+    <h3>Step 9: Check color contrast</h3>
+    <p>Text is only readable if it stands out from its background. The accessibility guidelines ask for a contrast ratio of at least <strong>4.5:1</strong> for normal body text (4.2, 5.5). Your browser can measure it for you:</p>
+    <ol class="hw-steps">
+      <li><strong>Inspect a paragraph</strong><p>Right-click a paragraph on your page and choose <strong>Inspect</strong>. DevTools opens with that paragraph selected.</p></li>
+      <li><strong>Open the color picker</strong><p>In the <strong>Styles</strong> pane, find the <code>color</code> declaration that applies (it may be inherited from <code>body</code>) and click the small colored square next to its value.</p></li>
+      <li><strong>Read the contrast ratio</strong><p>Chrome and Edge show a <strong>Contrast ratio</strong> line with a number and check marks. One check mark means it meets the 4.5:1 minimum for normal text. A warning icon means the text is too faint: make the text darker or the background lighter by editing your tokens, then check again.</p></li>
+      <li><strong>Repeat for links</strong><p>Check a normal link, a nav link, the table header text and your form's button text, each against its own background.</p></li>
+    </ol>
+    <ul class="hw-req">
+      <li>Body text and links have a contrast ratio of at least 4.5:1 against their backgrounds, checked in DevTools. <span class="pill info">4.2</span> <span class="pill info">5.5</span></li>
+    </ul>
+    <aside class="callout try"><strong>Commit checkpoint</strong> Your three original pages should now look designed. Commit and push with a message such as <code>"Style all pages with styles.css"</code>.</aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-2">
+    <p class="hw-part">Part 2 · 5.1, 5.2, 5.5</p>
+    <h2>The program schedule table</h2>
+    <p>A table is for <em>tabular data</em>: information that makes sense along two axes, like a spreadsheet (5.1). A weekly program schedule is a perfect fit: each row is one program, and each column is one kind of fact about it. On <code>schedule.html</code>, under the <code>&lt;h1&gt;</code>, write a short sentence introducing the schedule, then build a table with this data:</p>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <caption class="sr-only">The data to put in your schedule table</caption>
+        <thead>
+          <tr><th scope="col">Day</th><th scope="col">Time</th><th scope="col">Program</th><th scope="col">Ages</th><th scope="col">Room</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Monday</th><td>10:00 AM</td><td>Toddler Story Time</td><td>1 to 3</td><td>Children's Room</td></tr>
+          <tr><th scope="row">Tuesday</th><td>4:00 PM</td><td>Homework Help</td><td>8 to 14</td><td>Study Room B</td></tr>
+          <tr><th scope="row">Wednesday</th><td>6:00 PM</td><td>Coding Club</td><td>12 to 17</td><td>Computer Lab</td></tr>
+          <tr><th scope="row">Thursday</th><td>7:00 PM</td><td>Harbor Readers Book Club</td><td>Adults</td><td>Reading Room</td></tr>
+          <tr><th scope="row">Friday</th><td>3:30 PM</td><td>Lego Build Lab</td><td>6 to 12</td><td>Community Room</td></tr>
+          <tr><th scope="row">Saturday</th><td>10:30 AM</td><td>Family Story Time</td><td>All ages</td><td>Children's Room</td></tr>
+          <tr><th scope="row">Saturday</th><td>1:00 PM</td><td>Chess Club</td><td>10 and up</td><td>Reading Room</td></tr>
+          <tr><th scope="row">Sunday</th><td colspan="4">Closed. The library is closed on Sundays.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Look at the Sunday row. It has only two cells: the day, and one cell that stretches across the other four columns with <code>colspan="4"</code>. That one cell <em>replaces</em> four, so you delete the other three. If you leave them in, they get pushed out past the right edge of the table (5.1).</p>
+
+    <h3>The markup</h3>
+    <p>Here is the technique on a different, smaller table. Your schedule follows the same pattern with five columns and eight rows.</p>
+    <script type="text/plain" class="code" data-lang="html" data-title="technique: an accessible data table (different data)">
+      <!-- The wrapper scrolls sideways on a narrow screen, so the page itself never does -->
+      <div class="table-scroll">
+        <!-- A table, because this is data with rows and columns, never for page layout -->
+        <table>
+          <!-- The caption names the table; it must be the first thing inside <table> -->
+          <caption>Used book sale prices</caption>
+          <!-- thead groups the header row, giving CSS and screen readers a clear target -->
+          <thead>
+            <!-- One row of column headers -->
+            <tr>
+              <!-- scope="col": this header labels every cell below it -->
+              <th scope="col">Item</th>
+              <!-- The second column header -->
+              <th scope="col">Price</th>
+              <!-- The third column header -->
+              <th scope="col">Condition</th>
+            <!-- End of the header row -->
+            </tr>
+          <!-- End of the header group -->
+          </thead>
+          <!-- tbody groups the data rows -->
+          <tbody>
+            <!-- One record per row -->
+            <tr>
+              <!-- scope="row": this header labels the other cells in its row -->
+              <th scope="row">Paperbacks</th>
+              <!-- An ordinary data cell -->
+              <td>$1</td>
+              <!-- The last cell in this row -->
+              <td>Good</td>
+            <!-- End of the row -->
+            </tr>
+            <!-- A row where one cell covers two columns -->
+            <tr>
+              <!-- The row header stays in its own cell -->
+              <th scope="row">Magazines</th>
+              <!-- colspan="2" fills the Price and Condition slots, so this row has only two cells -->
+              <td colspan="2">Free, while they last</td>
+            <!-- End of the row -->
+            </tr>
+          <!-- End of the body rows -->
+          </tbody>
+        <!-- End of the table -->
+        </table>
+      <!-- End of the scrolling wrapper -->
+      </div>
+    </script>
+    <ul class="hw-req">
+      <li>The table has a <code>&lt;caption&gt;</code> as its first child, such as "Weekly program schedule". <span class="pill info">5.1</span> <span class="pill info">5.5</span></li>
+      <li>The header row is inside <code>&lt;thead&gt;</code>, and every data row is inside <code>&lt;tbody&gt;</code>. <span class="pill info">5.1</span></li>
+      <li>The five column headers are <code>&lt;th scope="col"&gt;</code>: Day, Time, Program, Ages, Room. <span class="pill info">5.1</span> <span class="pill info">5.5</span></li>
+      <li>Each day cell is a row header, <code>&lt;th scope="row"&gt;</code>; the other cells are <code>&lt;td&gt;</code>. <span class="pill info">5.5</span></li>
+      <li>All eight rows from the data above are present, and the Sunday row uses one <code>colspan="4"</code> cell. <span class="pill info">5.1</span></li>
+      <li>The table sits inside a wrapper element (a <code>&lt;div&gt;</code> with a class) so it can scroll inside itself. <span class="pill info">5.2</span></li>
+      <li>Tables are used for data only, never to position things on a page, and no page uses the obsolete <code>border</code>, <code>cellpadding</code>, <code>cellspacing</code> or <code>bgcolor</code> attributes. <span class="pill info">5.1</span> <span class="pill info">5.2</span></li>
+    </ul>
+
+    <h3>The styles</h3>
+    <p>An unstyled table is hard to read: no lines, cramped cells, headers that do not line up with their data (5.2). Add the table rules to the <strong>components</strong> section of <code>styles.css</code>. The wrapper matters most on a phone: a table cannot shrink narrower than its content, so without the wrapper a wide table pushes the whole page sideways. With <code>overflow-x: auto</code>, only the wrapper scrolls, and only when the table does not fit. (<code>overflow-x</code> is the horizontal-only version of the <code>overflow</code> property from 4.6.)</p>
+    <script type="text/plain" class="code" data-lang="css" data-title="technique: two table rules">
+      /* CLASS selector: the wrapper around the table */
+      .table-scroll {
+        /* Scroll sideways inside this box, and only when the table is wider than it */
+        overflow-x: auto;
+      /* End of the wrapper rule */
+      }
+
+      /* PSEUDO-CLASS :nth-child(even): every second row in the table body only */
+      tbody tr:nth-child(even) {
+        /* A faint stripe from your tokens helps the eye follow a row across */
+        background-color: var(--color-stripe);
+      /* End of the stripe rule */
+      }
+    </script>
+    <ul class="hw-req">
+      <li><code>border-collapse: collapse</code>, so neighboring cell borders merge into single lines. <span class="pill info">5.2</span></li>
+      <li>Padding on <code>th</code> and <code>td</code>, so the data has room to breathe. <span class="pill info">5.2</span></li>
+      <li>Styled column headers: for example a background color, bold text and a bottom border, all from your tokens. <span class="pill info">5.2</span></li>
+      <li>Zebra stripes on the body rows with <code>:nth-child()</code>. <span class="pill info">5.2</span></li>
+      <li>Aligned text: header cells use the same <code>text-align</code> as the data under them (browsers center <code>&lt;th&gt;</code> by default), and times line up with <code>font-variant-numeric: tabular-nums</code>. <span class="pill info">5.2</span></li>
+      <li>The wrapper has <code>overflow-x: auto</code>. At 390 pixels wide, the table scrolls inside its wrapper and the page does not scroll sideways. <span class="pill info">5.2</span></li>
+    </ul>
+    <details class="reveal">
+      <summary>Common table mistakes</summary>
+      <ul>
+        <li><strong>Cells stick out past the right edge.</strong> A row has too many cells. Count the slots: a <code>colspan="4"</code> cell uses four, so the Sunday row needs exactly one more cell (the day).</li>
+        <li><strong><code>table &gt; tr</code> matches nothing.</strong> The browser puts rows inside a <code>&lt;tbody&gt;</code>, so no row is a direct child of the table. Use <code>tbody tr</code>.</li>
+        <li><strong>The header row is striped too.</strong> <code>tr:nth-child(even)</code> also counts rows in <code>&lt;thead&gt;</code>. Start the selector with <code>tbody</code>.</li>
+        <li><strong>The page still scrolls sideways on a phone.</strong> The <code>overflow-x</code> rule is on the table instead of the wrapper, or the wrapper's class in the HTML does not match the class in the CSS.</li>
+      </ul>
+    </details>
+    <aside class="callout try"><strong>Commit checkpoint</strong> Commit and push with a message such as <code>"Add program schedule table"</code>.</aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-3">
+    <p class="hw-part">Part 3 · 5.3 to 5.7</p>
+    <h2>The library card application form</h2>
+    <p>On <code>card.html</code>, under the <code>&lt;h1&gt;</code>, write a sentence or two inviting visitors to apply for a library card, then build the form. When a visitor presses the submit button, the browser checks their answers and then goes to <code>thanks.html</code>.</p>
+
+    <h3>Where the answers go, and why GET</h3>
+    <p>A form's <code>action</code> is the address that receives the data, and its <code>method</code> is how the data travels (5.3). A real library would send this form to a program on its web server with <code>method="post"</code>, over HTTPS, because POST keeps personal details out of the address bar, browser history and server logs. You cannot do that here: <strong>GitHub Pages is a static host</strong>. It can only hand out files you uploaded; it has no program to receive a POST, so it answers one with an error.</p>
+    <p>So your form uses <code>method="get"</code> with <code>action="thanks.html"</code>. With GET, the browser adds every <code>name=value</code> pair to the address as a query string, the same query strings you took apart in 2.3, and GitHub Pages simply serves <code>thanks.html</code>. That turns the address bar into a window on exactly what your form sends:</p>
+    <div class="output hw-url">https://&lt;username&gt;.github.io/harbor-street-library/thanks.html?full_name=Ana+Ruiz&amp;email=ana%40example.com&amp;phone=941-555-0123&amp;birth_date=2004-05-17&amp;card_type=adult&amp;interests=history&amp;interests=events&amp;branch=main&amp;notes=&amp;agree=yes</div>
+    <p>Notice the details from 5.3 and 5.4: a space becomes <code>+</code>, <code>@</code> becomes <code>%40</code>, each checked box sends its own pair (so <code>interests</code> appears twice), an empty text box still sends its name with nothing after the <code>=</code>, and a date always travels as <code>YYYY-MM-DD</code> whatever the visitor saw on screen.</p>
+    <script type="text/plain" class="code" data-lang="html" data-title="the form element">
+      <!-- action: the page that receives the data; method="get": the pairs travel in the URL's query string -->
+      <form action="thanks.html" method="get">
+    </script>
+
+    <h3>The fields</h3>
+    <p>Build these controls, in this order, using exactly these <code>name</code> values. The name is the key the receiving page gets with each value; a control without a name is never sent at all (5.3).</p>
+    <div class="table-wrap">
+      <table class="data-table">
+        <caption class="sr-only">The form fields to build</caption>
+        <thead>
+          <tr><th scope="col">Visible label</th><th scope="col">Control</th><th scope="col"><code>name</code></th><th scope="col">Rules and details</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Full name</th><td><code>&lt;input type="text"&gt;</code></td><td><code>full_name</code></td><td><code>required</code>, <code>autocomplete="name"</code></td></tr>
+          <tr><th scope="row">Email</th><td><code>&lt;input type="email"&gt;</code></td><td><code>email</code></td><td><code>required</code>, <code>autocomplete="email"</code></td></tr>
+          <tr><th scope="row">Phone</th><td><code>&lt;input type="tel"&gt;</code></td><td><code>phone</code></td><td>a <code>pattern</code> that accepts the format 941-555-0123, a visible hint showing that format connected with <code>aria-describedby</code>, <code>autocomplete="tel"</code></td></tr>
+          <tr><th scope="row">Date of birth</th><td><code>&lt;input type="date"&gt;</code></td><td><code>birth_date</code></td><td><code>required</code>, and <code>max</code> set to the day you write the page, as <code>YYYY-MM-DD</code>, so a birth date cannot be in the future</td></tr>
+          <tr><th scope="row">Card type</th><td>three <code>type="radio"</code> inputs in a <code>&lt;fieldset&gt;</code> with the <code>&lt;legend&gt;</code> "Card type"</td><td><code>card_type</code> on all three</td><td>labels Adult, Teen, Child with values <code>adult</code>, <code>teen</code>, <code>child</code>; <code>required</code> on the first radio (that makes the whole group required)</td></tr>
+          <tr><th scope="row">Interests</th><td>four <code>type="checkbox"</code> inputs in a second <code>&lt;fieldset&gt;</code> with the <code>&lt;legend&gt;</code> "Interests (optional)"</td><td><code>interests</code> on all four</td><td>labels Fiction, History, Science and nature, Local events, with values <code>fiction</code>, <code>history</code>, <code>science</code>, <code>events</code></td></tr>
+          <tr><th scope="row">Preferred branch</th><td><code>&lt;select&gt;</code> with three <code>&lt;option&gt;</code>s</td><td><code>branch</code></td><td>Harbor Street (Main), North Beach, Eastside, with values <code>main</code>, <code>north-beach</code>, <code>eastside</code></td></tr>
+          <tr><th scope="row">Notes (optional)</th><td><code>&lt;textarea&gt;</code></td><td><code>notes</code></td><td><code>maxlength="300"</code>, plus a visible hint "Up to 300 characters." connected with <code>aria-describedby</code></td></tr>
+          <tr><th scope="row">I agree to follow the library card rules</th><td><code>&lt;input type="checkbox"&gt;</code></td><td><code>agree</code></td><td><code>value="yes"</code>, <code>required</code></td></tr>
+          <tr><th scope="row">Apply for my card</th><td><code>&lt;button type="submit"&gt;</code></td><td>none needed</td><td>name the button by what it does, and leave out a Reset button, since people press it by accident and lose everything (5.6)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Every control needs a visible <code>&lt;label&gt;</code> connected to it with <code>for</code> and <code>id</code>: the label's <code>for</code> matches the control's <code>id</code> exactly (5.5). That connection is what screen readers announce as the control's name, and it makes the label clickable, so a tiny checkbox gets a big target. That includes each radio button and each checkbox: every one gets its own unique <code>id</code> and its own label. A <code>placeholder</code> is <strong>not</strong> a label: it disappears as soon as you type, and it is usually too faint to read.</p>
+
+    <p>Here is the technique on two fields that are <em>not</em> in your form:</p>
+    <script type="text/plain" class="code" data-lang="html" data-title="technique: a labeled field with a hint, and a radio group">
+      <!-- for="zip" matches the input's id="zip", so clicking the label focuses the field (5.5) -->
+      <label for="zip">ZIP code</label>
+      <!-- name is the key that is sent; pattern demands exactly five digits; aria-describedby links the hint -->
+      <input type="text" id="zip" name="zip" inputmode="numeric" pattern="[0-9]{5}" aria-describedby="zip-hint" required>
+      <!-- The hint is visible to everyone, and screen readers read it along with the field -->
+      <p id="zip-hint" class="hint">Five digits, for example 34285.</p>
+
+      <!-- A fieldset groups controls that answer one question -->
+      <fieldset>
+        <!-- The legend is that question; screen readers announce it with each option -->
+        <legend>Pickup day</legend>
+        <!-- Radios in one group share a name; required on one makes the whole group required -->
+        <input type="radio" id="pickup-sat" name="pickup" value="saturday" required>
+        <!-- Each radio gets its own label, connected by for and id -->
+        <label for="pickup-sat">Saturday</label>
+        <!-- Same name, different id and value -->
+        <input type="radio" id="pickup-sun" name="pickup" value="sunday">
+        <!-- The label for the second option -->
+        <label for="pickup-sun">Sunday</label>
+      <!-- End of the group -->
+      </fieldset>
+    </script>
+    <ul class="hw-req">
+      <li>The form uses <code>action="thanks.html"</code> and <code>method="get"</code>. <span class="pill info">5.3</span></li>
+      <li>All ten items from the table are present, in order, with the given types, <code>name</code>s and values. <span class="pill info">5.4</span></li>
+      <li>Every control has a visible <code>&lt;label&gt;</code> whose <code>for</code> matches the control's unique <code>id</code>. No placeholder is used in place of a label. <span class="pill info">5.5</span></li>
+      <li>The radio buttons and the checkboxes each sit in their own <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>. <span class="pill info">5.4</span> <span class="pill info">5.5</span></li>
+      <li>The phone and notes hints are visible text connected with <code>aria-describedby</code>. <span class="pill info">5.5</span></li>
+    </ul>
+    <details class="reveal">
+      <summary>Hint: writing the phone pattern</summary>
+      <p><code>pattern</code> takes a regular expression, and the browser checks it against the <em>whole</em> value (5.7). <code>[0-9]</code> means "one digit", <code>{3}</code> means "exactly three of the thing before", and a hyphen outside square brackets is just a hyphen. So three digits, a hyphen, three digits, a hyphen and four digits is <code>pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"</code>. Test it: <code>941-555-0123</code> should pass, and <code>9415550123</code> and <code>941-5550-123</code> should fail.</p>
+    </details>
+    <details class="reveal">
+      <summary>Hint: where do I find today's date for <code>max</code>?</summary>
+      <p>Write the date you build the page in the same format a date input sends: four-digit year, two-digit month, two-digit day, separated by hyphens. The fifth of March 2026, for example, is written <code>max="2026-03-05"</code>. The date picker then refuses any later date, and typing one in makes the field invalid.</p>
+    </details>
+
+    <h3>Validation: make the form refuse bad data</h3>
+    <p>The attributes you added (<code>required</code>, <code>type="email"</code>, <code>pattern</code>, <code>max</code>, <code>maxlength</code>) are built-in validation (5.7). When the visitor submits, the browser checks every one; if any fails, it stops, moves focus to the first problem and shows a message, and nothing is sent. The only way to know your rules work is to try to break them. Run each test below on <code>card.html</code>:</p>
+    <div class="table-wrap">
+      <table class="data-table">
+        <caption class="sr-only">Bad data to test the form with</caption>
+        <thead>
+          <tr><th scope="col">Try this</th><th scope="col">What should happen</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Submit the form completely empty</th><td>The browser stops at Full name and shows a message. The address bar does not change.</td></tr>
+          <tr><th scope="row">Email <code>ana.example.com</code></th><td>A message about the missing <code>@</code>.</td></tr>
+          <tr><th scope="row">Phone <code>9415550123</code></th><td>A message that the format does not match. Your visible hint tells the visitor the right format.</td></tr>
+          <tr><th scope="row">A date of birth next year</th><td>The picker will not allow it, or a message says the value must be on or before your <code>max</code> date.</td></tr>
+          <tr><th scope="row">No card type chosen</th><td>A message on the card type group.</td></tr>
+          <tr><th scope="row">Paste a very long paragraph into Notes</th><td>The text stops at 300 characters.</td></tr>
+          <tr><th scope="row">"I agree" left unchecked</th><td>A message on the checkbox.</td></tr>
+          <tr><th scope="row">Everything filled in correctly</th><td><code>thanks.html</code> opens, and the address bar shows your <code>name=value</code> pairs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <aside class="callout"><strong>Validation in the browser is a convenience</strong> Anyone can delete a <code>required</code> attribute in DevTools or send a request without using your form at all. A real library's server would check every value again, because the server is the only part it controls (5.7). Browser validation exists to help honest visitors fix mistakes quickly.</aside>
+    <ul class="hw-req">
+      <li>Every bad-data test above is blocked, and a correct submission reaches <code>thanks.html</code> with all the pairs in the address. <span class="pill info">5.7</span></li>
+    </ul>
+
+    <h3>Style the form</h3>
+    <p>Design decides whether people finish a form (5.6). One column, labels above their fields, fields wide enough to see what you typed, and a focus ring you can always see. Form controls also arrive with their own browser styles and do not inherit your page's font, which is why unstyled inputs look small and out of place. Put these rules in the <strong>components</strong> section of <code>styles.css</code>.</p>
+    <script type="text/plain" class="code" data-lang="css" data-title="technique: three form rules">
+      /* ELEMENT selector list: controls do not inherit the page font on their own (5.6) */
+      input, select, textarea, button {
+        /* Take the font family and size from the surrounding text */
+        font: inherit;
+      /* End of the rule */
+      }
+
+      /* PSEUDO-CLASS :focus-visible: shows when the browser decides focus should show, as it always does for keyboard users */
+      :focus-visible {
+        /* A thick outline in a color from your tokens, clearly visible on every control */
+        outline: 3px solid var(--color-focus);
+      /* End of the focus rule */
+      }
+
+      /* PSEUDO-CLASS :user-invalid: matches only after the visitor has changed the field or tried to submit */
+      input:user-invalid {
+        /* A red border from your tokens, so empty fields do not start out looking like errors */
+        border-color: var(--color-error);
+      /* End of the error rule */
+      }
+    </script>
+    <ul class="hw-req">
+      <li>Labels for text fields, the select and the textarea sit on their own line <strong>above</strong> their fields (<code>display: block</code>). Radio and checkbox labels stay beside their boxes. <span class="pill info">5.6</span></li>
+      <li>Text fields, the select and the textarea are <code>width: 100%</code> of the form, with comfortable padding and <code>font: inherit</code>. The form itself has a sensible <code>max-width</code>, such as <code>36rem</code>. <span class="pill info">5.6</span> <span class="pill info">4.6</span></li>
+      <li>Field borders are dark enough to see against the background (at least 3:1). <span class="pill info">5.6</span></li>
+      <li>Every control shows a clear focus ring with <code>:focus-visible</code>. <span class="pill info">5.6</span></li>
+      <li>Invalid fields get an error style with <code>:user-invalid</code>, one that does not rely on color alone (for example, a thicker border as well as a red one). <span class="pill info">5.6</span></li>
+      <li>The fieldsets, hints and submit button are styled from your tokens, and the button text meets 4.5:1 contrast. <span class="pill info">5.6</span></li>
+    </ul>
+    <details class="reveal">
+      <summary>Hint: I added <code>:user-invalid</code> and nothing turns red</summary>
+      <p>That is <code>:user-invalid</code> doing its job: it waits until the visitor has interacted. Type a bad email, then press <kbd>Tab</kbd> to leave the field, or press the submit button with bad data. <code>:invalid</code> would match immediately, painting every empty required field red before anyone has typed a thing, which is why 5.6 recommends <code>:user-invalid</code>.</p>
+    </details>
+    <details class="reveal">
+      <summary>Hint: the radio buttons and checkboxes stretched across the whole form</summary>
+      <p>A rule like <code>input { width: 100%; }</code> hits every input, including radios and checkboxes. Aim the width rule only at the text-style inputs, for example with <code>input:not([type="radio"], [type="checkbox"])</code> as in 5.6, or by listing the types you want.</p>
+    </details>
+
+    <h3>The thanks page</h3>
+    <p><code>thanks.html</code> is a normal page of your site, built from the same skeleton as the others, so it looks like it belongs.</p>
+    <ul class="hw-req">
+      <li>It has the full page skeleton, links <code>css/styles.css</code>, and has the same header, five-link nav (with no link marked current) and footer as every other page. <span class="pill info">4.3</span></li>
+      <li>Its <code>&lt;main&gt;</code> has one <code>&lt;h1&gt;</code> and a paragraph thanking the visitor for applying. <span class="pill info">5.3</span></li>
+      <li>It clearly says this is a demonstration: the application was not sent to anyone and nothing was stored. <span class="pill info">5.3</span></li>
+      <li>It links back to the Home page. <span class="pill info">5.3</span></li>
+    </ul>
+    <aside class="callout try"><strong>Read your own form data</strong> Submit the form with real-looking answers, then click the address bar of <code>thanks.html</code> and read the query string. Find each <code>name=value</code> pair, spot the <code>%40</code>, and notice that <code>interests</code> appears once for each box you checked and not at all when none are checked. This is exactly what the browser would send to a real server. It is also why forms that collect personal details use POST over HTTPS: a GET address like this one ends up in history and server logs.</aside>
+    <aside class="callout try"><strong>Commit checkpoint</strong> Commit and push with a message such as <code>"Add library card form and thanks page"</code>.</aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-4">
+    <p class="hw-part">Part 4</p>
+    <h2>Check your work</h2>
+    <p>Browsers quietly repair mistakes, so a page can look right and still be broken for screen readers, other browsers or phones. These checks find what your eyes miss.</p>
+
+    <h3>Validate every page</h3>
+    <ol class="hw-steps">
+      <li><strong>Open the Nu Html Checker</strong><p>Go to <a href="https://validator.w3.org/nu/">validator.w3.org/nu</a>. After you push, you can check the live page by pasting its address (for example <code>https://&lt;username&gt;.github.io/harbor-street-library/card.html</code>). Before you push, use <strong>File upload</strong> or <strong>Text input</strong> instead.</p></li>
+      <li><strong>Check all six pages</strong><p><code>index.html</code>, <code>events.html</code>, <code>schedule.html</code>, <code>card.html</code>, <code>thanks.html</code> and <code>report.html</code>. Fix errors from the top down, since one early mistake, like an unclosed element, often causes several messages further down. Read the warnings too, and fix them when you can.</p></li>
+      <li><strong>Validate the stylesheet</strong><p>Go to the W3C CSS Validator at <a href="https://jigsaw.w3.org/css-validator/">jigsaw.w3.org/css-validator</a>. Use <strong>By URI</strong> with your live stylesheet address, <code>https://&lt;username&gt;.github.io/harbor-street-library/css/styles.css</code>, or <strong>By file upload</strong>. Remember that browsers skip CSS they do not understand without any error (4.2), so the validator is how you find a declaration that silently does nothing.</p></li>
+    </ol>
+    <ul class="hw-req">
+      <li>All six HTML pages show no errors in the Nu Html Checker. <span class="pill info">3.1</span></li>
+      <li><code>styles.css</code> shows no errors in the W3C CSS Validator. <span class="pill info">4.2</span></li>
+    </ul>
+
+    <h3>Use the site with only the keyboard</h3>
+    <p>Many people never use a mouse: they navigate with a keyboard, a switch device or voice control, all of which move focus the way the <kbd>Tab</kbd> key does (5.5). Put your mouse away and try it on <code>card.html</code>:</p>
+    <ol class="hw-steps">
+      <li><strong>Tab through everything</strong><p>Press <kbd>Tab</kbd> repeatedly. Focus should visit every nav link and every form control in the same order you see them, and your focus ring should be clearly visible each time. <kbd>Shift</kbd> + <kbd>Tab</kbd> goes backward.</p></li>
+      <li><strong>Answer every question</strong><p>Type into the text fields. In the card type group, <kbd>Tab</kbd> lands on one radio and the arrow keys move between the options. <kbd>Space</kbd> checks and unchecks a checkbox. On the select, the arrow keys change the option.</p></li>
+      <li><strong>Submit</strong><p>Press <kbd>Enter</kbd> while you are in a text field, or <kbd>Tab</kbd> to the button and press <kbd>Enter</kbd> or <kbd>Space</kbd>. Try it once with bad data (focus should jump to the first problem) and once with good data.</p></li>
+    </ol>
+    <aside class="callout warn"><strong>Using Safari on a Mac?</strong> Safari skips links when you press <kbd>Tab</kbd> unless you turn on <em>Press Tab to highlight each item</em> in its settings. Chrome, Edge and Firefox do not need that, so use one of them for this test.</aside>
+
+    <h3>Check a phone-sized screen</h3>
+    <ol class="hw-steps">
+      <li><strong>Turn on device mode</strong><p>Open DevTools (<kbd>F12</kbd>) and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> (<kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> on a Mac), or click the phone-and-tablet icon at the top of DevTools. Choose <strong>Responsive</strong> in the toolbar above the page and type <code>390</code> as the width. You can also just open the live site on your own phone.</p></li>
+      <li><strong>Look for sideways scrolling</strong><p>Visit all six pages and try to scroll sideways. Nothing should move except the schedule table, which scrolls inside its own wrapper. Text should stay readable, the nav links should wrap onto a second line rather than run off the screen, and the form fields should fit the screen.</p></li>
+    </ol>
+    <details class="reveal">
+      <summary>Hint: something makes the page wider than the phone</summary>
+      <p>Look for a fixed width in pixels, such as <code>width: 800px</code>, and replace it with <code>max-width</code> so the box can shrink. Check that images have <code>max-width: 100%</code>, and that the table's wrapper, not the table, has <code>overflow-x: auto</code>. In DevTools, hover over elements in the Elements panel to see which box sticks out past the right edge.</p>
+    </details>
+
+    <h3>Publish and check the live site</h3>
+    <ol class="hw-steps">
+      <li><strong>Commit and push everything</strong><p>Run <code>git status</code>. It should say <em>nothing to commit, working tree clean</em>. If it lists files, add, commit and push them. Check on github.com that <code>css/styles.css</code> and all six HTML files are in your repository.</p></li>
+      <li><strong>Wait for GitHub Pages</strong><p>Pages rebuilds your site after each push, which takes a moment. The repository's <strong>Actions</strong> tab shows each <em>pages build and deployment</em> run; a green check means the new version is live.</p></li>
+      <li><strong>Open the live site without the cache</strong><p>Go to <code>https://&lt;username&gt;.github.io/harbor-street-library/</code> and visit every page. Your browser keeps copies of files it downloaded before, including your stylesheet, so it may show the old, unstyled version (4.1 explains why caching speeds up pages). Do a hard reload with <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> (<kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> on a Mac), or open the site in a private window, which starts with an empty cache.</p></li>
+      <li><strong>Test the live form</strong><p>Fill in the form on the live site and confirm you land on the live <code>thanks.html</code> with your pairs in the address.</p></li>
+    </ol>
+    <details class="reveal">
+      <summary>The live site has no styles, or shows a 404 page</summary>
+      <ul>
+        <li><strong>No styles online, but they work on Live Server:</strong> the stylesheet path starts with <code>/</code>, or its capital letters do not match the real folder and file name. Open DevTools' Network tab on the live page and look for <code>styles.css</code> with a <code>404</code> status.</li>
+        <li><strong>A 404 page for schedule.html or card.html:</strong> the file was not committed, or its name on GitHub differs from the link (for example <code>Schedule.html</code>). Compare the file list on github.com with your links.</li>
+        <li><strong>Still the old version after pushing:</strong> wait for the green check in the Actions tab, then hard reload.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="before-submit">
+    <h2>Before you submit</h2>
+    <p>Go through this list on your <strong>live</strong> site. Your ticks are saved in this browser, so you can come back to it. <span class="hw-count" id="hw2-count" aria-live="polite"></span></p>
+    <ul class="hw-check" id="hw2-checklist">
+      <li><label><input type="checkbox"><span>Six pages exist: <code>index.html</code>, <code>events.html</code>, <code>schedule.html</code>, <code>card.html</code>, <code>thanks.html</code>, <code>report.html</code>, plus <code>css/styles.css</code>.</span></label></li>
+      <li><label><input type="checkbox"><span>Every page links <code>css/styles.css</code> with a relative, lowercase path, and no page has a <code>&lt;style&gt;</code> element or a <code>style=""</code> attribute.</span></label></li>
+      <li><label><input type="checkbox"><span>Every page has the same five nav links in order (Home, Events, Schedule, Get a Card, Web Report), with <code>aria-current="page"</code> on the current page's link only.</span></label></li>
+      <li><label><input type="checkbox"><span>The cascade notes are at the top of <code>styles.css</code>: three specificities, one conflict explained, one inheritance example.</span></label></li>
+      <li><label><input type="checkbox"><span>The stylesheet has the five comment headings: tokens, base, layout, components, pages.</span></label></li>
+      <li><label><input type="checkbox"><span><code>:root</code> defines colors, font stacks and spacing, and the rest of the file uses them with <code>var()</code>.</span></label></li>
+      <li><label><input type="checkbox"><span>Colors use hex plus <code>rgb()</code> or <code>hsl()</code>; font sizes are in <code>rem</code>; spacing in <code>rem</code> or <code>em</code>; line length in <code>ch</code> or <code>%</code>.</span></label></li>
+      <li><label><input type="checkbox"><span>Body and heading font stacks both end in a generic family; <code>h1</code> to <code>h3</code> sizes are in <code>rem</code>; <code>line-height</code> is about 1.5; text has a readable <code>max-width</code>.</span></label></li>
+      <li><label><input type="checkbox"><span>The <code>border-box</code> rule is present; <code>main</code> is centered with <code>max-width</code> and <code>margin-inline: auto</code>; there is padding, margin, a border and a background color.</span></label></li>
+      <li><label><input type="checkbox"><span>Nav links are <code>inline-block</code> with padding, change on hover, and the current page link stands out by more than color.</span></label></li>
+      <li><label><input type="checkbox"><span>All eight selector kinds are used, each with a comment naming its kind.</span></label></li>
+      <li><label><input type="checkbox"><span>Body text and links reach at least 4.5:1 contrast in DevTools.</span></label></li>
+      <li><label><input type="checkbox"><span>The schedule table has a caption, <code>thead</code>, <code>tbody</code>, <code>scope="col"</code> and <code>scope="row"</code> headers, all eight rows, and the Sunday <code>colspan="4"</code> row.</span></label></li>
+      <li><label><input type="checkbox"><span>The table is styled: collapsed borders, cell padding, styled headers, zebra rows, aligned text, and a wrapper with <code>overflow-x: auto</code>.</span></label></li>
+      <li><label><input type="checkbox"><span>The form sends to <code>thanks.html</code> with <code>method="get"</code> and has all ten items with the given names, types and values.</span></label></li>
+      <li><label><input type="checkbox"><span>Every control has a visible label connected by <code>for</code> and <code>id</code>; radios and checkboxes are in fieldsets with legends; hints use <code>aria-describedby</code>.</span></label></li>
+      <li><label><input type="checkbox"><span>The form is styled: labels above fields, full-width fields with padding, a visible <code>:focus-visible</code> ring, and a <code>:user-invalid</code> error style.</span></label></li>
+      <li><label><input type="checkbox"><span>Every bad-data test is blocked, and a correct submission shows the <code>name=value</code> pairs on <code>thanks.html</code>.</span></label></li>
+      <li><label><input type="checkbox"><span><code>thanks.html</code> matches the rest of the site and says this is a demo that stores nothing.</span></label></li>
+      <li><label><input type="checkbox"><span>The Nu Html Checker shows no errors on all six pages, and the CSS Validator shows no errors for <code>styles.css</code>.</span></label></li>
+      <li><label><input type="checkbox"><span>The keyboard-only test works from the first nav link to the submit button, with a visible focus ring the whole way.</span></label></li>
+      <li><label><input type="checkbox"><span>At 390 pixels wide, no page scrolls sideways; only the table scrolls inside its wrapper.</span></label></li>
+      <li><label><input type="checkbox"><span><code>git status</code> is clean, everything is pushed, and the live site shows the new styles in a private window.</span></label></li>
+    </ul>
+    <p><button type="button" class="btn small ghost" id="hw2-clear">Clear my ticks</button></p>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="submit">
+    <h2>Submit</h2>
+    <div class="hw-submit">
+      <p>Submit your GitHub repo link.</p>
+    </div>
+  </section>
+</main>
+<script>
+  WD1.ready(() => {
+    // Saved checklist: one boolean per box, stored with the course's own storage helper
+    const boxes = WD1.$$('#hw2-checklist input[type="checkbox"]');
+    const count = document.getElementById('hw2-count');
+    const clear = document.getElementById('hw2-clear');
+    const saved = WD1.store.get('custom', 'hw2-checklist');
+    const save = () => WD1.store.set('custom', 'hw2-checklist', boxes.map((b) => b.checked));
+    const update = () => {
+      const done = boxes.filter((b) => b.checked).length;
+      count.textContent = '(' + done + ' of ' + boxes.length + ' checked)';
+    };
+    boxes.forEach((b, i) => {
+      b.checked = Array.isArray(saved) && !!saved[i];
+      b.addEventListener('change', () => { save(); update(); });
+    });
+    clear.addEventListener('click', () => {
+      boxes.forEach((b) => { b.checked = false; });
+      save(); update();
+    });
+    update();
+  });
+</script>
+</body>
+</html>
