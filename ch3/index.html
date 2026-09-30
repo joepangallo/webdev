@@ -58,6 +58,15 @@
     .c3-fb.warn { background: var(--warn-soft); color: var(--warn); }
     .c3-fb.info { background: var(--accent-soft); color: var(--accent); }
 
+    /* Reference tables with 4+ columns: scroll inside .table-wrap on phones instead of squashing */
+    .c3-void-table, .c3-bool-table, .c3-links-table, .c3-inline-table, .c3-img-table, .c3-ent-table, .c3-lists-table { min-width: 680px; }
+    .c3-head-table { min-width: 760px; }
+    .c3-head-table td:first-child { width: 30%; }
+    .c3-head-table td:first-child code, .c3-void-table td:last-child code { white-space: normal; overflow-wrap: anywhere; }
+    .c3-site { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 14px 18px; align-items: start; margin: 0 0 1.2em; }
+    @media (max-width: 620px) { .c3-site { grid-template-columns: minmax(0, 1fr); } }
+    .c3-site > p { margin: 0; }
+
     /* Layers demo */
     .c3-layers-frame { height: 270px; }
 
@@ -466,7 +475,45 @@
     </div>
 
     <h3>Void elements</h3>
-    <p>A few elements can't contain anything, so they have no closing tag. These are <strong>void</strong> (or empty) elements. An image, for example, is completely described by its attributes. The ones you'll meet most: <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;meta&gt;</code> and <code>&lt;link&gt;</code> (the full list adds <code>area</code>, <code>base</code>, <code>col</code>, <code>embed</code>, <code>source</code>, <code>track</code> and <code>wbr</code>).</p>
+    <p>A few elements can't contain anything, so they have no closing tag. These are <strong>void</strong> (or empty) elements. An image, for example, is completely described by its attributes: which file to show and what it shows. There is nothing to put "inside" an image, so there is nothing to close.</p>
+    <p>You'll meet six of them all the time. Each one gets a full explanation later in the chapter; this table tells you what each is for, so the names mean something when you see them:</p>
+    <div class="table-wrap">
+      <table class="data-table c3-void-table">
+        <thead><tr><th scope="col">Element</th><th scope="col">What it does</th><th scope="col">Use it for</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;img&gt;</code></td><td>Shows an image. <code>src</code> names the file and <code>alt</code> describes it.</td><td>Photos, logos and diagrams that are part of the content (3.5)</td><td><code>&lt;img src="oven.jpg" alt="Our wood-fired oven"&gt;</code></td></tr>
+          <tr><td><code>&lt;br&gt;</code></td><td>Ends a line without ending the paragraph.</td><td>Line breaks that belong to the content: an address, a poem. Not for adding space.</td><td><code>12 Main St.&lt;br&gt;Riverside</code></td></tr>
+          <tr><td><code>&lt;hr&gt;</code></td><td>A thematic break: the topic changes here. Browsers draw it as a horizontal line.</td><td>A scene change in a story, or a switch to a new topic within one section. Not for decoration: if you just want a line, use a CSS border.</td><td><code>&lt;hr&gt;</code> between the story of the restaurant and its opening hours</td></tr>
+          <tr><td><code>&lt;meta&gt;</code></td><td>Information about the page, placed in the <code>&lt;head&gt;</code>.</td><td>The character encoding, the phone viewport, the search description (3.4)</td><td><code>&lt;meta charset="utf-8"&gt;</code></td></tr>
+          <tr><td><code>&lt;link&gt;</code></td><td>Connects another file to the page, from the <code>&lt;head&gt;</code>.</td><td>Your stylesheet and the tab icon (3.4)</td><td><code>&lt;link rel="stylesheet" href="css/styles.css"&gt;</code></td></tr>
+          <tr><td><code>&lt;input&gt;</code></td><td>A form control: a text box, a checkbox, a date picker and more.</td><td>Forms (Chapter 5)</td><td><code>&lt;input type="checkbox" checked&gt;</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Here are five of them in one small page. Notice that none of them has a closing tag, while <code>&lt;title&gt;</code> and <code>&lt;p&gt;</code>, which hold text, do:</p>
+    <script type="text/plain" class="code" data-lang="html" data-title="visit.html (part)">
+      <!-- The head: information about the page -->
+      <head>
+        <!-- meta: a void element; all it needs is its charset attribute -->
+        <meta charset="utf-8">
+        <!-- title is NOT void: its text sits between an opening and a closing tag -->
+        <title>Visit Us · Slice of Life</title>
+        <!-- link: connects the stylesheet; href says which file, so nothing goes inside -->
+        <link rel="stylesheet" href="css/styles.css">
+      </head>
+      <!-- The body: what visitors see -->
+      <body>
+        <!-- img: the file and its description are attributes, so there is no closing tag -->
+        <img src="images/storefront.jpg" alt="The red front door of Slice of Life on Main Street">
+        <!-- br: an address is one paragraph, but each part needs its own line -->
+        <p>12 Main Street<br>Riverside</p>
+        <!-- hr: the topic changes from where we are to when we're open -->
+        <hr>
+        <!-- The new topic starts after the break -->
+        <p>Open daily, 11 AM to 11 PM.</p>
+      </body>
+    </script>
+    <p>The full list of void elements has seven more that you'll rarely write by hand: <code>&lt;source&gt;</code> and <code>&lt;track&gt;</code> go inside audio and video players, <code>&lt;col&gt;</code> belongs to tables (Chapter 5), <code>&lt;area&gt;</code> marks a clickable region of an image, <code>&lt;embed&gt;</code> embeds external content, <code>&lt;base&gt;</code> changes the starting point for every relative link on a page, and <code>&lt;wbr&gt;</code> marks a spot where a very long word or web address may wrap onto the next line.</p>
     <p>XHTML required a slash on them: <code>&lt;br /&gt;</code>. HTML still allows that slash but ignores it. On a <em>non</em>-void element it's a trap: <code>&lt;div /&gt;</code> is just an opening <code>&lt;div&gt;</code>, and it still needs a <code>&lt;/div&gt;</code>.</p>
 
     <div class="buckets" data-title="Void or not?">
@@ -508,6 +555,34 @@
 
     <h3>Boolean attributes</h3>
     <p>Most attributes need a value, but a few, such as <code>checked</code>, <code>disabled</code>, <code>required</code> and <code>hidden</code>, are <strong>boolean</strong>: just being there means "true." That has a surprising consequence you can try in the Checkbox example of the anatomy explorer above: <code>checked="false"</code> still checks the box, because the browser only asks whether the attribute exists. To turn it off, remove the attribute.</p>
+    <p>Each boolean attribute works like an on/off switch for one feature of one element. These are the ones you'll see in this course, with where each one goes and what switching it on does:</p>
+    <div class="table-wrap">
+      <table class="data-table c3-bool-table">
+        <thead><tr><th scope="col">Attribute</th><th scope="col">Put it on</th><th scope="col">When it's present</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>hidden</code></td><td>Any element</td><td>The element isn't shown at all, until something (usually JavaScript) removes the attribute. The tab boxes on this page hide their inactive panels this way.</td><td><code>&lt;p hidden&gt;Sold out tonight!&lt;/p&gt;</code></td></tr>
+          <tr><td><code>defer</code></td><td><code>&lt;script&gt;</code> with a <code>src</code></td><td>The script waits to run until the whole page has been read (3.4).</td><td><code>&lt;script src="menu.js" defer&gt;&lt;/script&gt;</code></td></tr>
+          <tr><td><code>reversed</code></td><td><code>&lt;ol&gt;</code></td><td>The list counts down instead of up (3.5).</td><td><code>&lt;ol reversed&gt;</code> for a top-3 countdown</td></tr>
+          <tr><td><code>open</code></td><td><code>&lt;details&gt;</code></td><td>The disclosure box starts open instead of closed (3.6).</td><td><code>&lt;details open&gt;</code></td></tr>
+          <tr><td><code>checked</code></td><td>A checkbox or radio button</td><td>It starts ticked.</td><td><code>&lt;input type="checkbox" checked&gt;</code></td></tr>
+          <tr><td><code>disabled</code></td><td>Buttons and form fields</td><td>Greyed out: it can't be clicked, typed in or focused.</td><td><code>&lt;button disabled&gt;Order&lt;/button&gt;</code></td></tr>
+          <tr><td><code>required</code></td><td>Form fields</td><td>The form refuses to send while this field is empty (Chapter 5).</td><td><code>&lt;input type="email" required&gt;</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Because only presence matters, there are several ways to write "on" and exactly one way to write "off":</p>
+    <script type="text/plain" class="code" data-lang="html">
+      <!-- On: the attribute with no value at all. This is the usual way to write it -->
+      <input type="checkbox" checked>
+      <!-- Also on: an empty value still means the attribute is present -->
+      <input type="checkbox" checked="">
+      <!-- Also on: the old XHTML style, which repeats the name as the value -->
+      <input type="checkbox" checked="checked">
+      <!-- STILL on: the browser never reads the word "false", only that checked is there -->
+      <input type="checkbox" checked="false">
+      <!-- Off: the only way to switch it off is to leave the attribute out -->
+      <input type="checkbox">
+    </script>
 
     <h3>Whitespace and comments</h3>
     <p>Browsers <strong>collapse whitespace</strong>: any run of spaces, tabs and line breaks in your text displays as a single space. That lets you indent your code neatly without changing the page, but it also means pressing Enter in your editor doesn't start a new line on screen. Use <code>&lt;p&gt;</code> for paragraphs, <code>&lt;br&gt;</code> for a line break inside one (a poem, a street address), and CSS for spacing. Only <code>&lt;pre&gt;</code> (preformatted text) keeps whitespace exactly as typed.</p>
@@ -711,21 +786,166 @@ Open   late!</textarea>
     <p>Quirks mode can look "helpful" here, guessing what <code>220</code> and <code>ffcc00</code> meant, but it also changes layout in subtler ways and hides your mistakes. You always want standards mode, so every page you write starts with <code>&lt;!DOCTYPE html&gt;</code>.</p>
 
     <h3>The head: information about the page</h3>
-    <p>The head holds metadata that browsers, search engines and social media sites read. These are the elements you'll use most:</p>
+    <p>The head holds <strong>metadata</strong>: information <em>about</em> the page rather than content <em>on</em> it. Visitors never see it in the page itself, but browsers, search engines and social media sites read it to decide how to decode, lay out, name and summarize your page. A missing head element rarely breaks a page outright. Instead, something quietly goes wrong: garbled accents, a shrunken layout on phones, a tab labeled with a file name.</p>
+    <p>These are the elements you'll use most, which pages need them, and what happens without them:</p>
     <div class="table-wrap">
-      <table class="data-table">
-        <thead><tr><th scope="col">Element</th><th scope="col">What it does</th></tr></thead>
+      <table class="data-table c3-head-table">
+        <thead><tr><th scope="col">Element</th><th scope="col">What it does</th><th scope="col">Which pages need it</th><th scope="col">If you leave it out</th></tr></thead>
         <tbody>
-          <tr><td><code>&lt;meta charset="utf-8"&gt;</code></td><td>Declares the character encoding so é, ñ, 中 and emoji display correctly. First in the head.</td></tr>
-          <tr><td><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></td><td>Makes phones use their real screen width instead of zooming out on a desktop-sized layout.</td></tr>
-          <tr><td><code>&lt;title&gt;</code></td><td>The page's name in tabs, bookmarks, history and search results. Required.</td></tr>
-          <tr><td><code>&lt;meta name="description" content="…"&gt;</code></td><td>A one- or two-sentence summary that search engines may show under your title.</td></tr>
-          <tr><td><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></td><td>Connects an external CSS file.</td></tr>
-          <tr><td><code>&lt;link rel="icon" href="favicon.png"&gt;</code></td><td>The small icon shown in the browser tab.</td></tr>
-          <tr><td><code>&lt;script src="app.js" defer&gt;&lt;/script&gt;</code></td><td>Loads JavaScript. <code>defer</code> waits to run it until the HTML has been parsed.</td></tr>
+          <tr><td><code>&lt;meta charset="utf-8"&gt;</code></td><td>Declares the character encoding so é, ñ, 中 and emoji display correctly. First in the head.</td><td>Every page</td><td>The browser guesses the encoding. A wrong guess turns "Café" into "CafÃ©".</td></tr>
+          <tr><td><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></td><td>Makes phones use their real screen width instead of zooming out on a desktop-sized layout.</td><td>Every page</td><td>Phones show a shrunken desktop layout that visitors have to pinch and zoom to read.</td></tr>
+          <tr><td><code>&lt;title&gt;</code></td><td>The page's name in tabs, bookmarks, history and search results. Required.</td><td>Every page, exactly one each</td><td>The tab shows the file name or web address, and the validator reports an error.</td></tr>
+          <tr><td><code>&lt;meta name="description" content="…"&gt;</code></td><td>A one- or two-sentence summary that search engines may show under your title.</td><td>Every page you want people to find through search</td><td>Search engines pick a snippet of your page text themselves, which may not be the part you'd choose.</td></tr>
+          <tr><td><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></td><td>Connects an external CSS file.</td><td>Every page that should share the site's design</td><td>The page appears in the browser's plain default styles.</td></tr>
+          <tr><td><code>&lt;link rel="icon" href="favicon.png"&gt;</code></td><td>The small icon shown in the browser tab.</td><td>Recommended on every page, usually the same file</td><td>The tab shows a generic blank icon.</td></tr>
+          <tr><td><code>&lt;script src="app.js" defer&gt;&lt;/script&gt;</code></td><td>Loads JavaScript. <code>defer</code> waits to run it until the HTML has been parsed.</td><td>Only pages that use JavaScript</td><td>Nothing breaks; the page simply has no scripted behavior.</td></tr>
         </tbody>
       </table>
     </div>
+
+    <p>Pick an element to see what it's for, when you need it, the mistakes people make with it, and a commented example.</p>
+    <div class="tabs">
+      <div data-tab="charset">
+        <p><strong>What it is.</strong> Your HTML file is stored as bytes, which are just numbers. A <strong>character encoding</strong> is the table that says which number stands for which character. <strong>UTF-8</strong> covers every character in every written language, plus symbols and emoji, and it's what nearly every web page uses.</p>
+        <p><strong>When you need it.</strong> On every page, as the very first thing inside <code>&lt;head&gt;</code>. The browser has to know the encoding before it reads any text, including the text of your <code>&lt;title&gt;</code>, and the standard requires the declaration within the first 1024 bytes of the file.</p>
+        <p><strong>If you leave it out.</strong> The browser has to guess. When it guesses wrong, every accented letter and curly quote turns into gibberish: "Café — open late" becomes "CafÃ© â€” open late". The validator also reports an error. Untick the charset box in the simulator below to see it happen.</p>
+        <p><strong>Watch out.</strong></p>
+        <ul>
+          <li>Spell it <code>utf-8</code>, with the hyphen. Browsers forgive <code>utf8</code>, but the validator doesn't.</li>
+          <li>The declaration has to match how the file is actually saved. VS Code and most modern editors save as UTF-8 by default; if characters still look wrong, check the encoding shown in your editor's status bar.</li>
+          <li>One charset per page, and no text before it in the head.</li>
+        </ul>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The head starts here -->
+          <head>
+            <!-- First line of the head: the browser needs the encoding before it reads any text -->
+            <meta charset="utf-8">
+            <!-- Because the encoding is already known, the é and the · in this title display correctly -->
+            <title>Café Nights · Slice of Life</title>
+          </head>
+        </script>
+      </div>
+      <div data-tab="viewport">
+        <p><strong>What it is.</strong> Without instructions, a phone's browser pretends its screen is about 980 pixels wide, the width of an old desktop monitor. It lays the page out at that width and then shrinks the whole thing to fit, so the text ends up tiny. This tag tells it to use the device's real width (<code>width=device-width</code>) and to start at normal, 100% zoom (<code>initial-scale=1</code>).</p>
+        <p><strong>When you need it.</strong> On every page. Copy it exactly as shown; you'll almost never need to change it.</p>
+        <p><strong>If you leave it out.</strong> On a phone, visitors see a miniature desktop page and have to pinch and zoom to read it. The responsive CSS you'll write later in the course, which rearranges a page for small screens, doesn't kick in either, because the phone keeps claiming to be 980 pixels wide. Untick the viewport box in the simulator below to see the "On a phone" preview shrink.</p>
+        <p><strong>Watch out.</strong> Never add <code>maximum-scale=1</code> or <code>user-scalable=no</code>. They stop visitors from zooming in, which locks out anyone who needs larger text to read. Separate the settings with commas, not semicolons.</p>
+        <script type="text/plain" class="code" data-lang="html" data-title="Write this">
+          <!-- Lay the page out at the phone's real width, starting at 100% zoom -->
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+        </script>
+        <script type="text/plain" class="code" data-lang="html" data-title="Never this">
+          <!-- Don't: maximum-scale=1 and user-scalable=no stop people from zooming in to read -->
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        </script>
+      </div>
+      <div data-tab="title">
+        <p><strong>What it is.</strong> The page's name. It appears in the browser tab, in bookmarks and history, and as the clickable headline of a search result. It's also the first thing a screen reader announces when the page opens.</p>
+        <p><strong>When you need it.</strong> On every page, exactly once, inside <code>&lt;head&gt;</code>. Give each page its own title that says what's on that page, so visitors can tell your open tabs apart.</p>
+        <p><strong>If you leave it out.</strong> The tab and any bookmark show the file name or web address instead, search engines make up a headline, and the validator reports an error.</p>
+        <p><strong>Watch out.</strong></p>
+        <ul>
+          <li>Put the specific part first: "Menu · Slice of Life", not "Slice of Life · Menu". When lots of tabs are open, only the first few words fit.</li>
+          <li>Search results cut titles off at around 60 characters.</li>
+          <li>The title is plain text only. Tags inside it are shown as text, not treated as markup.</li>
+          <li>The title is not the <code>&lt;h1&gt;</code>. The title lives in the head and never appears on the page; the <code>&lt;h1&gt;</code> is the visible heading in the body. They often say similar things, and a page needs both.</li>
+        </ul>
+        <script type="text/plain" class="code" data-lang="html" data-title="index.html">
+          <!-- Home page: the site's name plus what it offers and where -->
+          <title>Slice of Life · Wood-Fired Pizza in Riverside</title>
+        </script>
+        <script type="text/plain" class="code" data-lang="html" data-title="menu.html">
+          <!-- Another page: the specific part first, so it survives in a narrow tab -->
+          <title>Menu · Slice of Life</title>
+        </script>
+      </div>
+      <div data-tab="description">
+        <p><strong>What it is.</strong> A short summary of the page, written for search results. Search engines often show it under your title, although they may swap in a sentence from your page that better matches what someone searched for.</p>
+        <p><strong>When you need it.</strong> On every page you want people to find through search, with a different description for each page. It doesn't change where you rank; it changes whether people click, because it's your pitch in the list of results.</p>
+        <p><strong>If you leave it out.</strong> The search engine picks a snippet from the page on its own, often the first text it finds, which may be your menu links or an address rather than what makes the page worth visiting.</p>
+        <p><strong>Watch out.</strong></p>
+        <ul>
+          <li>Aim for about 150 characters. Longer descriptions get cut off with "…". The simulator below counts for you.</li>
+          <li><code>&lt;meta&gt;</code> is void, so the text goes in the <code>content</code> attribute, not between tags. <code>&lt;meta name="description"&gt;Our menu&lt;/meta&gt;</code> doesn't work.</li>
+          <li>Write it for people. A list of keywords ("pizza, best pizza, pizza Riverside") reads like spam and earns no clicks.</li>
+        </ul>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- One or two sentences, about 150 characters, written for a person deciding whether to click -->
+          <meta name="description" content="Hand-stretched dough, local toppings and a wood-fired oven. Open until 11 PM every night on Main Street.">
+        </script>
+      </div>
+      <div data-tab="stylesheet">
+        <p><strong>What it is.</strong> A link to an external CSS file, the file that holds your site's design. <code>rel="stylesheet"</code> says what the linked file is for, and <code>href</code> says where it is, using the same kinds of path as ordinary links (3.5). You'll write the CSS itself in Chapter 4.</p>
+        <p><strong>When you need it.</strong> On every page that should share the site's design. Every page links to the same file, so changing that one file restyles the whole site.</p>
+        <p><strong>If you leave it out.</strong> Nothing breaks: the page appears in the browser's default styles, with black serif text on white and blue, underlined links.</p>
+        <p><strong>Watch out.</strong></p>
+        <ul>
+          <li>It's <code>href</code>, not <code>src</code>, and <code>rel="stylesheet"</code> is required. Without it the browser ignores the link.</li>
+          <li>The path depends on where the page is. A page inside a folder needs <code>../</code> to climb out first.</li>
+          <li>If you link several stylesheets, they load in order, and when two rules conflict the later file usually wins (Chapter 4).</li>
+        </ul>
+        <script type="text/plain" class="code" data-lang="html" data-title="index.html">
+          <!-- This page is in the site's top folder, so the css folder is right next to it -->
+          <link rel="stylesheet" href="css/styles.css">
+        </script>
+        <script type="text/plain" class="code" data-lang="html" data-title="blog/first-post.html">
+          <!-- This page is inside blog/, so go up one folder first, then down into css/ -->
+          <link rel="stylesheet" href="../css/styles.css">
+        </script>
+      </div>
+      <div data-tab="icon">
+        <p><strong>What it is.</strong> The <strong>favicon</strong> ("favorite icon"): the small square picture in the browser tab, in bookmarks and in history. It helps visitors find your site among a row of open tabs.</p>
+        <p><strong>When you need it.</strong> It's optional, but a finished site has one. Put the same <code>&lt;link&gt;</code> on every page, adjusting the path for pages in folders.</p>
+        <p><strong>If you leave it out.</strong> The tab shows a generic blank-page or globe icon. Browsers also go looking for a file named <code>favicon.ico</code> in the site's top folder anyway, so the server logs a "not found" error for it.</p>
+        <p><strong>Which format?</strong></p>
+        <ul>
+          <li><strong>PNG</strong>: works in every browser. Use a square image at least 32 × 32 pixels. Start here.</li>
+          <li><strong>SVG</strong>: stays sharp at any size, and most current browsers accept it. Add it alongside a PNG, not instead of one.</li>
+          <li><strong>ICO</strong>: the original favicon format, which packs several sizes into one file. You only need it for very old browsers.</li>
+          <li>iPhones and iPads use a separate 180 × 180 PNG, linked with <code>rel="apple-touch-icon"</code>, when someone saves your site to their home screen.</li>
+        </ul>
+        <p><strong>Watch out.</strong> Browsers hold on to favicons stubbornly. After you change yours, you may need a hard refresh (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd>, or <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> on a Mac) or a new tab before the new one shows. Keep the image square and simple; a detailed logo turns to mush at 16 pixels.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The tab icon: a small square PNG, which works in every browser -->
+          <link rel="icon" href="images/favicon.png" type="image/png">
+          <!-- The icon iPhones and iPads use when someone saves the site to their home screen -->
+          <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+        </script>
+      </div>
+      <div data-tab="script">
+        <p><strong>What it is.</strong> Loads a JavaScript file, the code that makes a page respond to the visitor. <code>&lt;script&gt;</code> is <em>not</em> void: it always needs a closing <code>&lt;/script&gt;</code>, even when there's nothing between the tags.</p>
+        <p><strong>When you need it.</strong> Only on pages that use JavaScript, which you'll write later in the course. Put it in the head with <code>defer</code>.</p>
+        <p><strong>defer, async or nothing?</strong></p>
+        <ul>
+          <li><strong>No attribute:</strong> the browser stops reading your HTML, downloads the script, runs it, and only then carries on. A script in the head therefore runs before the body exists, so code that looks for a button finds nothing and fails with an error such as "Cannot read properties of null". The page also appears later.</li>
+          <li><strong><code>defer</code>:</strong> the browser keeps reading the HTML while the script downloads in the background, then runs the script once the whole page has been read. Several deferred scripts run in the order they appear. This is the one to use.</li>
+          <li><strong><code>async</code>:</strong> runs the script the moment it finishes downloading, in whatever order the files arrive. Only for independent scripts, such as visitor statistics, that don't touch the page.</li>
+        </ul>
+        <p><strong>Watch out.</strong> <code>defer</code> only works on scripts with a <code>src</code>. Older tutorials put scripts at the very end of the body instead; <code>defer</code> in the head does the same job and starts the download sooner. Never write <code>&lt;script src="menu.js" /&gt;</code>: the slash doesn't close the element, so the browser treats everything after it as part of the script and your page content vanishes.</p>
+        <script type="text/plain" class="code" data-lang="html" data-title="Write this">
+          <!-- Download menu.js in the background; run it once the whole page has been read -->
+          <script src="js/menu.js" defer><\/script>
+        </script>
+        <script type="text/plain" class="code" data-lang="html" data-title="Never this">
+          <!-- Wrong: script isn't void, so the slash is ignored and the element stays open -->
+          <script src="js/menu.js" defer />
+          <!-- This heading is now treated as script text, so it never appears on the page -->
+          <h1>Slice of Life</h1>
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which ones does my page need?</strong>
+      <ul>
+        <li><strong>Every page, no exceptions:</strong> charset (first), viewport and a title. Example: <code>&lt;meta charset="utf-8"&gt;</code></li>
+        <li><strong>Every page you want found in search:</strong> a description of about 150 characters, different on each page.</li>
+        <li><strong>As soon as your site has a stylesheet:</strong> the same stylesheet link on every page, with the path adjusted for pages in folders. Example: <code>&lt;link rel="stylesheet" href="css/styles.css"&gt;</code></li>
+        <li><strong>A finished site:</strong> an icon. Example: <code>&lt;link rel="icon" href="images/favicon.png"&gt;</code></li>
+        <li><strong>Only when the page uses JavaScript:</strong> a script with <code>defer</code>. Example: <code>&lt;script src="js/menu.js" defer&gt;&lt;/script&gt;</code></li>
+      </ul>
+      <p>Charset must come first. The rest can go in any order, but using the same order on every page makes them easy to check.</p>
+    </aside>
 
     <div class="widget" data-kind="Simulator" data-title="What the head controls" id="c3-head">
       <div class="c3-split">
@@ -843,21 +1063,171 @@ Open   late!</textarea>
     </div>
 
     <h3>Links</h3>
-    <p>The anchor element <code>&lt;a&gt;</code> makes a link, and its <code>href</code> attribute says where it goes. The destination can take several forms:</p>
+    <p>The anchor element <code>&lt;a&gt;</code> makes a link, and its <code>href</code> attribute says where it goes. The text between the tags is what the visitor sees and selects. The destination can take several forms, and choosing the right one decides whether your links keep working when your site moves from your laptop to the web:</p>
     <div class="table-wrap">
-      <table class="data-table">
-        <thead><tr><th scope="col">Kind</th><th scope="col">Example <code>href</code></th><th scope="col">Goes to</th></tr></thead>
+      <table class="data-table c3-links-table">
+        <thead><tr><th scope="col">Kind</th><th scope="col">Example <code>href</code></th><th scope="col">Goes to</th><th scope="col">Use it for</th></tr></thead>
         <tbody>
-          <tr><td>Absolute URL</td><td><code>https://www.w3.org/</code></td><td>A full address with the protocol. Use it for other websites.</td></tr>
-          <tr><td>Relative path</td><td><code>about.html</code>, <code>../index.html</code></td><td>A file located relative to the current page. Use it inside your own site.</td></tr>
-          <tr><td>Root-relative</td><td><code>/images/logo.png</code></td><td>A path from the site's root folder. Works on a web server, but not when you open files straight from your disk.</td></tr>
-          <tr><td>Fragment</td><td><code>#contact</code>, <code>about.html#team</code></td><td>The element with that <code>id</code>, on this page or another one.</td></tr>
-          <tr><td>Email</td><td><code>mailto:hello@example.com</code></td><td>Opens the visitor's email app with the address filled in.</td></tr>
-          <tr><td>Phone</td><td><code>tel:+15555550123</code></td><td>Starts a call on phones.</td></tr>
+          <tr><td>Absolute URL</td><td><code>https://www.w3.org/</code></td><td>A full address with the protocol, the same from any page.</td><td>Pages on other websites</td></tr>
+          <tr><td>Relative path</td><td><code>about.html</code>, <code>../index.html</code></td><td>A file located relative to the current page.</td><td>Pages, images and CSS inside your own site</td></tr>
+          <tr><td>Root-relative</td><td><code>/images/logo.png</code></td><td>A path from the site's root folder. Works on a web server, but not when you open files straight from your disk.</td><td>Large sites on their own domain. Avoid it in this course.</td></tr>
+          <tr><td>Fragment</td><td><code>#contact</code>, <code>about.html#team</code></td><td>The element with that <code>id</code>, on this page or another one.</td><td>A table of contents, "back to top", skip links</td></tr>
+          <tr><td>Email</td><td><code>mailto:hello@example.com</code></td><td>Opens the visitor's email app with the address filled in.</td><td>A contact address</td></tr>
+          <tr><td>Phone</td><td><code>tel:+15555550123</code></td><td>Starts a call on phones.</td><td>A number visitors will call from their phone</td></tr>
         </tbody>
       </table>
     </div>
-    <p>Add <code>target="_blank"</code> to open a link in a new tab. Use it sparingly, since it takes control away from the visitor. (Older code also adds <code>rel="noopener"</code> for security; modern browsers now apply that automatically.) Finally, make link text meaningful on its own. Screen reader users often pull up a list of all links on a page, and a list of "click here, click here, click here" tells them nothing.</p>
+
+    <p>The examples below all come from one small site, Slice of Life's. Keep its folders in mind as you read them:</p>
+    <div class="c3-site">
+      <div class="c3-pane">
+        <div class="c3-pane-h"><span>The site's files</span></div>
+        <div class="c3-pane-b">
+          <ul class="c3-ftree" aria-label="Slice of Life site folder">
+            <li class="c3-folder"><span class="c3-fname">sliceoflife/</span>
+              <ul>
+                <li class="c3-file"><span class="c3-fname">index.html</span></li>
+                <li class="c3-file"><span class="c3-fname">menu.html</span></li>
+                <li class="c3-file"><span class="c3-fname">about.html</span></li>
+                <li class="c3-folder"><span class="c3-fname">css/</span><ul><li class="c3-file"><span class="c3-fname">styles.css</span></li></ul></li>
+                <li class="c3-folder"><span class="c3-fname">images/</span><ul><li class="c3-file"><span class="c3-fname">logo.png</span></li></ul></li>
+                <li class="c3-folder"><span class="c3-fname">blog/</span><ul><li class="c3-file"><span class="c3-fname">index.html</span></li><li class="c3-file"><span class="c3-fname">first-post.html</span></li></ul></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <p>The same files can be opened in three places: straight from the folder on your laptop, from a free GitHub Pages site such as <code>https://yourname.github.io/sliceoflife/</code>, and from the restaurant's own domain, <code>https://sliceoflife.example/</code>. The best kind of link works in all three. Notice that the GitHub Pages address has an extra folder, <code>/sliceoflife/</code>, in it; that detail matters for root-relative links.</p>
+    </div>
+
+    <div class="tabs">
+      <div data-tab="Absolute">
+        <p><strong>What it is.</strong> A complete web address: the protocol (<code>https://</code>), the domain, and optionally a path to one page. It points to the same place no matter which page the link is on.</p>
+        <p><strong>When to use it.</strong> For pages on someone else's website: a supplier, a map, a news story, a source you're quoting.</p>
+        <p><strong>When not to.</strong> For pages in your own site. If you write <code>https://sliceoflife.example/menu.html</code> in your own pages, then while you test on your laptop every link jumps to the live site instead of your working copy, and they all break if the site ever moves to a new address.</p>
+        <p><strong>Watch out.</strong> Leave off the <code>https://</code> and the browser treats the address as a relative path: <code>href="www.w3.org"</code> looks for a file named <code>www.w3.org</code> in your own folder. And resist opening other sites in a new tab. Visitors can already do that themselves (<kbd>Ctrl</kbd>-click, <kbd>Cmd</kbd>-click or a long press), but a forced new tab breaks their Back button. Save <code>target="_blank"</code> for cases where leaving would lose their work, such as a help link in the middle of a half-filled order, and say in the link text that it opens a new tab.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- On about.html: a link to another website needs the whole address, starting with https:// -->
+          <p>Our flour comes from <a href="https://riversidemillers.example/">Riverside Millers</a>.</p>
+          <!-- On the order page: a rare good reason for a new tab, since leaving would lose a half-typed order -->
+          <a href="https://riversidemillers.example/allergens.pdf" target="_blank">Allergen chart (opens in a new tab)</a>
+        </script>
+      </div>
+      <div data-tab="Relative">
+        <p><strong>What it is.</strong> Directions from the folder of the current page to another file, with no protocol and no domain. The "Relative paths" section below covers the rules, and the trainer lets you practice them.</p>
+        <p><strong>When to use it.</strong> For every link, image and stylesheet inside your own site. Relative paths work from your disk, on GitHub Pages and on any server, because the files stay in the same places relative to each other wherever the site is copied.</p>
+        <p><strong>Watch out.</strong></p>
+        <ul>
+          <li>The directions start from the folder of the page the link is <em>on</em>, not from the top of the site. The link to the home page is <code>index.html</code> from <code>menu.html</code> but <code>../index.html</code> from <code>blog/first-post.html</code>.</li>
+          <li>Match upper and lower case exactly: web servers treat <code>Menu.html</code> and <code>menu.html</code> as different files.</li>
+          <li>Use forward slashes (<code>/</code>), never the backslashes (<code>\</code>) that Windows File Explorer shows.</li>
+          <li>Avoid spaces in file names. Use hyphens instead: <code>first-post.html</code>.</li>
+        </ul>
+        <script type="text/plain" class="code" data-lang="html" data-title="index.html">
+          <!-- menu.html is in the same folder as this page, so its name is the whole path -->
+          <a href="menu.html">See the menu</a>
+          <!-- Go down into the blog folder, then to the post -->
+          <a href="blog/first-post.html">Read our first blog post</a>
+        </script>
+        <script type="text/plain" class="code" data-lang="html" data-title="blog/first-post.html">
+          <!-- This page is inside blog/, so ../ climbs up to the top folder first -->
+          <a href="../index.html">Home</a>
+          <!-- The blog's own home page is in the same folder as this post -->
+          <a href="index.html">All blog posts</a>
+        </script>
+      </div>
+      <div data-tab="Root-relative">
+        <p><strong>What it is.</strong> A path that starts with a slash. The slash means "the top of the website", so <code>/menu.html</code> means <code>https://sliceoflife.example/menu.html</code> from every page, however deep in the folders it is.</p>
+        <p><strong>When to use it.</strong> On large sites that always run at the top of their own domain, where it's handy that the same path works from every folder.</p>
+        <p><strong>When not to.</strong> In this course, because it breaks in two of the three places your site will live:</p>
+        <ul>
+          <li><strong>Opened from your disk:</strong> the slash means the top of your whole drive (<code>C:\</code> or Macintosh HD), not your project folder, so the file isn't found.</li>
+          <li><strong>On a GitHub Pages project site:</strong> your site lives in a folder, <code>https://yourname.github.io/sliceoflife/</code>. The slash jumps to <code>https://yourname.github.io/</code>, skipping your folder, so you get a "404 Not Found" page.</li>
+        </ul>
+        <p>Relative paths work in all three places, so use them instead.</p>
+        <script type="text/plain" class="code" data-lang="html" data-title="blog/first-post.html on GitHub Pages">
+          <!-- Root-relative: goes to https://yourname.github.io/menu.html, outside your site, so 404 -->
+          <a href="/menu.html">Menu</a>
+          <!-- Relative: goes to https://yourname.github.io/sliceoflife/menu.html, the right page -->
+          <a href="../menu.html">Menu</a>
+        </script>
+      </div>
+      <div data-tab="Fragment">
+        <p><strong>What it is.</strong> A <code>#</code> followed by an <code>id</code>. The browser scrolls to the element whose <code>id</code> matches. Put a page name in front (<code>about.html#hours</code>) to open another page and jump straight to that spot.</p>
+        <p><strong>When to use it.</strong> A table of contents at the top of a long page, a "Back to top" link, a menu item that goes straight to the hours on the About page, and the "Skip to main content" link that lets keyboard users jump past the menu.</p>
+        <p><strong>Watch out.</strong></p>
+        <ul>
+          <li>The <code>id</code> must exist and match exactly, including case: <code>#Hours</code> won't find <code>id="hours"</code>.</li>
+          <li>Each <code>id</code> must be unique on its page and can't contain spaces.</li>
+          <li><code>href="#"</code> on its own just jumps to the top of the page. Don't use it as a placeholder for a page you haven't built yet; link to the real file once it exists.</li>
+        </ul>
+        <script type="text/plain" class="code" data-lang="html" data-title="about.html">
+          <!-- A small table of contents for a long page -->
+          <nav aria-label="On this page">
+            <!-- # plus an id: scrolls down to the element with id="hours" -->
+            <a href="#hours">Opening hours</a>
+            <!-- The same idea for the element with id="parking" -->
+            <a href="#parking">Parking</a>
+          </nav>
+          <!-- The target of the first link: its id matches the part after the # -->
+          <section id="hours">
+            <!-- The page scrolls so this heading lands at the top of the window -->
+            <h2>Opening hours</h2>
+            <!-- The section's content -->
+            <p>Open daily, 11 AM to 11 PM.</p>
+          </section>
+        </script>
+        <script type="text/plain" class="code" data-lang="html" data-title="menu.html">
+          <!-- A page name, then #: opens about.html and jumps to its id="hours" -->
+          <a href="about.html#hours">When are you open?</a>
+        </script>
+      </div>
+      <div data-tab="mailto">
+        <p><strong>What it is.</strong> An <code>href</code> that starts with <code>mailto:</code>. Selecting it opens the visitor's email program with a new message already addressed. Add <code>?subject=</code> to fill in the subject line too, writing each space as <code>%20</code>.</p>
+        <p><strong>When to use it.</strong> For an address visitors will want to write to: catering orders, job applications, questions.</p>
+        <p><strong>Watch out.</strong> Many people read email in a web browser (Gmail, Outlook on the web) and have no email program set up, so for them the link does nothing useful. Always show the address itself as the link text, so anyone can copy it. And spam robots collect addresses from web pages, so publish one you don't mind getting junk mail at.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The address is the link text, so visitors without an email program can copy it -->
+          <p>Planning a party? Email <a href="mailto:catering@sliceoflife.example?subject=Party%20order">catering@sliceoflife.example</a>.</p>
+        </script>
+      </div>
+      <div data-tab="tel">
+        <p><strong>What it is.</strong> An <code>href</code> that starts with <code>tel:</code>, followed by a phone number. On a phone, tapping it offers to call the number. On a computer, it may open a calling app or do nothing.</p>
+        <p><strong>When to use it.</strong> For numbers people are likely to call from their phone: the order line, the front desk, a support number.</p>
+        <p><strong>Watch out.</strong> Write the number in the <code>href</code> in international format: a <code>+</code>, the country code (1 for the United States and Canada), then only digits, with no spaces, dashes or brackets. The link text can use whatever format people are used to reading, and it should: desktop visitors need to see the number to dial it themselves.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- href: + and the country code, then digits only. Link text: the familiar format -->
+          <p>Order by phone: <a href="tel:+15555550123">(555) 555-0123</a></p>
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which kind of link should I use?</strong>
+      <ul>
+        <li><strong>A page, image or file in your own site:</strong> a relative path. Example: <code>href="menu.html"</code> or <code>href="../index.html"</code></li>
+        <li><strong>A page on another website:</strong> an absolute URL. Example: <code>href="https://www.w3.org/"</code></li>
+        <li><strong>A spot on the same page:</strong> a fragment. Example: <code>href="#hours"</code></li>
+        <li><strong>A spot on another page of your site:</strong> a relative path plus a fragment. Example: <code>href="about.html#hours"</code></li>
+        <li><strong>An email address:</strong> <code>mailto:</code>, with the address as the link text. Example: <code>href="mailto:catering@sliceoflife.example"</code></li>
+        <li><strong>A phone number:</strong> <code>tel:</code>, with the number as the link text. Example: <code>href="tel:+15555550123"</code></li>
+        <li><strong>Root-relative (<code>/menu.html</code>):</strong> skip it for now. It breaks when you open files from your disk and on GitHub Pages project sites.</li>
+      </ul>
+    </aside>
+
+    <h4>Link text and new tabs</h4>
+    <p>Make link text meaningful on its own. Screen reader users often pull up a list of all links on a page and jump straight to one, and search engines use link text to learn what the target page is about. A list of "click here, click here, click here" tells them nothing. Describe where the link goes, in a few words.</p>
+    <div class="grid-2">
+      <script type="text/plain" class="code" data-lang="html" data-title="Vague">
+        <!-- Read out of context, "click here" could lead anywhere -->
+        <p>To see our menu, <a href="menu.html">click here</a>.</p>
+      </script>
+      <script type="text/plain" class="code" data-lang="html" data-title="Clear">
+        <!-- The link text alone says where it goes -->
+        <p>See <a href="menu.html">our full menu</a>.</p>
+      </script>
+    </div>
+    <p>Add <code>target="_blank"</code> to open a link in a new tab. Use it sparingly, since it takes control away from the visitor. (Older code also adds <code>rel="noopener"</code> for security; modern browsers now apply that automatically.)</p>
 
     <h4>Relative paths</h4>
     <p>A relative path is a set of directions starting from <em>the folder the current file is in</em>:</p>
@@ -886,24 +1256,147 @@ Open   late!</textarea>
     <h3>Inline text elements</h3>
     <p>Inside a paragraph, inline elements add meaning to individual words and phrases. Each of these is rendered live in the last column (hover over <abbr title="HyperText Markup Language">HTML</abbr> to see how <code>&lt;abbr&gt;</code> works):</p>
     <div class="table-wrap">
-      <table class="data-table">
-        <thead><tr><th scope="col">Element</th><th scope="col">Meaning</th><th scope="col">Example</th></tr></thead>
+      <table class="data-table c3-inline-table">
+        <thead><tr><th scope="col">Element</th><th scope="col">Meaning</th><th scope="col">Use it when</th><th scope="col">Example</th></tr></thead>
         <tbody>
-          <tr><td><code>&lt;strong&gt;</code></td><td>Strong importance</td><td><strong>Do not</strong> open the oven door.</td></tr>
-          <tr><td><code>&lt;em&gt;</code></td><td>Stress emphasis</td><td>I <em>love</em> anchovies.</td></tr>
-          <tr><td><code>&lt;mark&gt;</code></td><td>Highlighted as relevant</td><td>Results for <mark>pizza</mark></td></tr>
-          <tr><td><code>&lt;small&gt;</code></td><td>Side comment, fine print</td><td><small>Prices include tax.</small></td></tr>
-          <tr><td><code>&lt;code&gt;</code></td><td>A fragment of computer code</td><td>Wrap menus in <code>&lt;nav&gt;</code>.</td></tr>
-          <tr><td><code>&lt;kbd&gt;</code></td><td>Keyboard input</td><td>Press <kbd>Ctrl</kbd> + <kbd>S</kbd></td></tr>
-          <tr><td><code>&lt;abbr&gt;</code></td><td>Abbreviation, expanded in <code>title</code></td><td><abbr title="HyperText Markup Language">HTML</abbr></td></tr>
-          <tr><td><code>&lt;time&gt;</code></td><td>A date or time; <code>datetime</code> holds a machine-readable version</td><td><time datetime="2026-10-31">Halloween</time></td></tr>
-          <tr><td><code>&lt;q&gt;</code></td><td>A short inline quotation (the browser adds the quotation marks)</td><td>She said <q>best crust in town</q>.</td></tr>
-          <tr><td><code>&lt;cite&gt;</code></td><td>The title of a creative work</td><td>I read <cite>Fundamentals of Web Development</cite>.</td></tr>
-          <tr><td><code>&lt;sub&gt;</code>, <code>&lt;sup&gt;</code></td><td>Subscript, superscript</td><td>H<sub>2</sub>O, 10<sup>3</sup></td></tr>
-          <tr><td><code>&lt;br&gt;</code></td><td>A line break inside a block</td><td>12 Main St.<br>Riverside</td></tr>
+          <tr><td><code>&lt;strong&gt;</code></td><td>Strong importance</td><td>A warning, a deadline, the one thing a reader must not miss</td><td><strong>Do not</strong> open the oven door.</td></tr>
+          <tr><td><code>&lt;em&gt;</code></td><td>Stress emphasis</td><td>Reading aloud, you'd lean on the word, and that changes the meaning</td><td>I <em>love</em> anchovies.</td></tr>
+          <tr><td><code>&lt;mark&gt;</code></td><td>Highlighted as relevant</td><td>Showing why text matters to what the reader is doing right now, such as search matches</td><td>Results for <mark>pizza</mark></td></tr>
+          <tr><td><code>&lt;small&gt;</code></td><td>Side comment, fine print</td><td>Legal notes, disclaimers, copyright lines</td><td><small>Prices include tax.</small></td></tr>
+          <tr><td><code>&lt;code&gt;</code></td><td>A fragment of computer code</td><td>Naming a tag, a file or a command inside a sentence</td><td>Wrap menus in <code>&lt;nav&gt;</code>.</td></tr>
+          <tr><td><code>&lt;kbd&gt;</code></td><td>Keyboard input</td><td>Telling the reader which keys to press or what to type</td><td>Press <kbd>Ctrl</kbd> + <kbd>S</kbd></td></tr>
+          <tr><td><code>&lt;abbr&gt;</code></td><td>Abbreviation, expanded in <code>title</code></td><td>An abbreviation your readers might not know</td><td><abbr title="HyperText Markup Language">HTML</abbr></td></tr>
+          <tr><td><code>&lt;time&gt;</code></td><td>A date or time; <code>datetime</code> holds a machine-readable version</td><td>Event dates, posting dates, opening hours</td><td><time datetime="2026-10-31">Halloween</time></td></tr>
+          <tr><td><code>&lt;q&gt;</code></td><td>A short inline quotation (the browser adds the quotation marks)</td><td>Quoting a few words inside your own sentence</td><td>She said <q>best crust in town</q>.</td></tr>
+          <tr><td><code>&lt;cite&gt;</code></td><td>The title of a creative work</td><td>Naming a book, film, song, article or game</td><td>I read <cite>Fundamentals of Web Development</cite>.</td></tr>
+          <tr><td><code>&lt;sub&gt;</code>, <code>&lt;sup&gt;</code></td><td>Subscript, superscript</td><td>Chemical formulas, exponents, footnote numbers</td><td>H<sub>2</sub>O, 10<sup>3</sup></td></tr>
+          <tr><td><code>&lt;br&gt;</code></td><td>A line break inside a block</td><td>The line break is part of the content: an address, a poem</td><td>12 Main St.<br>Riverside</td></tr>
         </tbody>
       </table>
     </div>
+
+    <p>Most of these have a look-alike: another element that looks the same in the browser but means something different. The tabs group related elements, say when each is the right choice, and show it in realistic markup.</p>
+    <div class="tabs">
+      <div data-tab="strong, em">
+        <p><strong>What they are.</strong> <code>&lt;strong&gt;</code> marks importance, seriousness or urgency. <code>&lt;em&gt;</code> marks stress emphasis: the word you'd lean on if you read the sentence aloud, where moving the stress would change the meaning.</p>
+        <p><strong>When to use them.</strong> <code>&lt;strong&gt;</code> for warnings, deadlines and the one sentence a reader must not miss. <code>&lt;em&gt;</code> when the meaning depends on which word is stressed: "We <em>do</em> deliver" answers someone who doubted it.</p>
+        <p><strong>The look-alikes.</strong> <code>&lt;b&gt;</code> is also bold and <code>&lt;i&gt;</code> is also italic, but they carry no extra importance or stress (you met all four in 3.3). Ask yourself: is this word <em>more important</em>? Use <code>&lt;strong&gt;</code>. Is it just set apart, like a product name? Use <code>&lt;b&gt;</code>. Would you <em>say</em> it with stress? Use <code>&lt;em&gt;</code>. Is it a different kind of text, like a foreign phrase or a technical term? Use <code>&lt;i&gt;</code>.</p>
+        <p><strong>Watch out.</strong> If a whole paragraph is <code>&lt;strong&gt;</code>, nothing stands out; keep it to a few words. Some icon libraries use <code>&lt;i&gt;</code> for icons out of habit, but an icon isn't "a different voice", so a <code>&lt;span&gt;</code> is the honest choice.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- strong: this matters for safety, so it's marked as important -->
+          <p><strong>Careful:</strong> the pizza stone stays hot for an hour.</p>
+          <!-- em: stressing "do" answers the doubt "Do you really deliver that late?" -->
+          <p>Yes, we <em>do</em> deliver after 10 PM.</p>
+          <!-- b: draws the eye to the product name without making it more important -->
+          <p>Try the <b>Garden Veggie</b>, back for the fall.</p>
+          <!-- i: a phrase in another language; lang tells screen readers to pronounce it in Italian -->
+          <p>Every pie is baked <i lang="it">al forno</i>, in our wood-fired oven.</p>
+        </script>
+      </div>
+      <div data-tab="mark, small">
+        <p><strong>What they are.</strong> <code>&lt;mark&gt;</code> highlights text because it's relevant to what the reader is doing right now; browsers give it a yellow background. <code>&lt;small&gt;</code> marks side comments and fine print; browsers show it in a smaller font.</p>
+        <p><strong>When to use them.</strong> <code>&lt;mark&gt;</code> for the words that matched a search, or to point at one phrase inside a quotation you're discussing. <code>&lt;small&gt;</code> for legal notes, disclaimers, copyright lines and "prices include tax".</p>
+        <p><strong>The look-alikes.</strong> <code>&lt;mark&gt;</code> is not <code>&lt;strong&gt;</code>: highlighted text isn't more important, it's relevant to the current search or discussion. Neither element is a styling tool. If you only want a colored background or smaller text, give the text a class and use CSS (Chapter 4).</p>
+        <p><strong>Watch out.</strong> <code>&lt;small&gt;</code> doesn't hide anything or make it matter less to search engines. Fine print is still content that visitors are expected to read, so keep it readable.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- On a search results page: mark shows why this result matched the search "vegan" -->
+          <p>Every pizza can be made with <mark>vegan</mark> cheese.</p>
+          <!-- small: fine print that belongs with the price, but isn't the main message -->
+          <p>Large pizza, $18 <small>Prices include tax. Delivery fee extra.</small></p>
+        </script>
+      </div>
+      <div data-tab="code, kbd">
+        <p><strong>What they are.</strong> <code>&lt;code&gt;</code> marks a fragment of computer code: a tag name, a file name, a CSS property, a command. <code>&lt;kbd&gt;</code> marks keyboard input: keys the reader presses or text they type. Both are shown in a monospace (fixed-width) font.</p>
+        <p><strong>When to use them.</strong> <code>&lt;code&gt;</code> whenever you mention code inside a sentence. For several lines of code, put <code>&lt;code&gt;</code> inside <code>&lt;pre&gt;</code>, which keeps the line breaks and indentation. <code>&lt;kbd&gt;</code> for instructions such as "press Ctrl + S", with each key in its own <code>&lt;kbd&gt;</code>.</p>
+        <p><strong>The look-alike.</strong> The two look almost the same, so remember the direction: <code>&lt;code&gt;</code> is what the <em>computer</em> reads, <code>&lt;kbd&gt;</code> is what the <em>person</em> presses or types. (A third relative, <code>&lt;samp&gt;</code>, marks what the computer prints back, such as an error message.)</p>
+        <p><strong>Watch out.</strong> Code about HTML contains angle brackets, and a raw <code>&lt;</code> inside <code>&lt;code&gt;</code> still starts a real tag. Write <code>&amp;lt;</code> and <code>&amp;gt;</code> instead (see Character entities below).</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- code: a tag name in a sentence; &lt; and &gt; display the angle brackets -->
+          <p>Wrap the site menu in a <code>&lt;nav&gt;</code> element.</p>
+          <!-- code: file names count as code too -->
+          <p>Save the page as <code>index.html</code>.</p>
+          <!-- kbd: keys the reader presses, one kbd per key -->
+          <p>Press <kbd>Ctrl</kbd> + <kbd>S</kbd> (<kbd>Cmd</kbd> + <kbd>S</kbd> on a Mac) to save.</p>
+        </script>
+      </div>
+      <div data-tab="abbr, time">
+        <p><strong>What they are.</strong> <code>&lt;abbr&gt;</code> marks an abbreviation or acronym, with the full version in its <code>title</code> attribute; hovering with a mouse shows it as a tooltip. <code>&lt;time&gt;</code> marks a date or time that people read, and its <code>datetime</code> attribute holds the same moment in a standard format that software can read.</p>
+        <p><strong>When to use them.</strong> <code>&lt;abbr&gt;</code> for abbreviations your readers might not know (FDA, CSS, RSVP). <code>&lt;time&gt;</code> for dates and times that a calendar, a search engine or a translation tool could use: event dates, when a post was published, opening hours.</p>
+        <p><strong>Watch out.</strong></p>
+        <ul>
+          <li>The <code>title</code> tooltip only appears when a mouse hovers over it. Phone and keyboard users never see it, and most screen readers don't read it. So the first time an abbreviation appears, spell it out in the sentence itself; the <code>title</code> is a bonus reminder, not the explanation.</li>
+          <li><code>datetime</code> must use the exact standard format: year-month-day with hyphens (<code>2026-10-31</code>), a 24-hour time (<code>19:30</code>), or both joined by a <code>T</code> (<code>2026-10-31T19:30</code>). <code>10/31/2026</code> is invalid.</li>
+          <li>If the visible text is already in the standard format, such as <code>&lt;time&gt;2026-10-31&lt;/time&gt;</code>, you can leave <code>datetime</code> off. Don't wrap numbers that aren't dates or times.</li>
+        </ul>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- First mention: the full name in the text, the short form in abbr -->
+          <p>We follow the Food and Drug Administration (<abbr title="Food and Drug Administration">FDA</abbr>) Food Code.</p>
+          <!-- Later on the page: the short form alone; title gives mouse users a reminder -->
+          <p>Every cook is trained on the <abbr title="Food and Drug Administration">FDA</abbr> rules for safe temperatures.</p>
+          <!-- time: people read the friendly version; software reads 2026-10-31T19:30 -->
+          <p>Pumpkin pizza night: <time datetime="2026-10-31T19:30">Saturday, October 31 at 7:30 PM</time>.</p>
+          <!-- A time of day only: datetime uses the 24-hour clock -->
+          <p>The kitchen closes at <time datetime="22:30">10:30 PM</time>.</p>
+        </script>
+      </div>
+      <div data-tab="q, cite">
+        <p><strong>What they are.</strong> <code>&lt;q&gt;</code> is a short quotation inside a sentence; the browser adds the quotation marks for you, in the style of the page's language. <code>&lt;cite&gt;</code> is the title of a creative work: a book, film, song, article, TV show, game or painting. Browsers show it in italics.</p>
+        <p><strong>When to use them.</strong> <code>&lt;q&gt;</code> when you quote a few words within your own sentence. <code>&lt;cite&gt;</code> when you name the work the words came from, or mention any creative work by title.</p>
+        <p><strong>The look-alikes.</strong></p>
+        <ul>
+          <li><strong><code>&lt;q&gt;</code> vs <code>&lt;blockquote&gt;</code>:</strong> a longer quotation that stands on its own, like a whole customer review, goes in <code>&lt;blockquote&gt;</code>. It's a block element, so it starts on its own line (browsers indent it) and holds its own paragraphs.</li>
+          <li><strong><code>&lt;cite&gt;</code> vs <code>&lt;q&gt;</code>:</strong> <code>&lt;cite&gt;</code> names the work; <code>&lt;q&gt;</code> holds the words quoted from it. They often appear in the same sentence.</li>
+          <li><strong><code>&lt;cite&gt;</code> vs a person's name:</strong> the HTML standard says <code>&lt;cite&gt;</code> is for titles only, so the name of the person being quoted is plain text.</li>
+        </ul>
+        <p><strong>Watch out.</strong> Don't type your own quotation marks around a <code>&lt;q&gt;</code>, or you'll get two pairs. And don't confuse the <code>&lt;cite&gt;</code> <em>element</em> with the <code>cite</code> <em>attribute</em>, which you can put on <code>&lt;q&gt;</code> or <code>&lt;blockquote&gt;</code> to record the web address of the source. Browsers don't display the attribute.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- cite names the article; q holds the words quoted from it (no typed quote marks) -->
+          <p>In <cite>Ten Pizzas Worth the Drive</cite>, the reviewer called our crust <q>the best in town</q>.</p>
+          <!-- blockquote: a longer quote on its own; the cite attribute records where it came from -->
+          <blockquote cite="https://reviews.example/slice-of-life">
+            <!-- A blockquote holds its own paragraphs -->
+            <p>Blistered, chewy and smoky from the oven. I drove 40 miles for it and would do it again.</p>
+          </blockquote>
+          <!-- The reviewer's name is plain text: cite is only for the titles of works -->
+          <p>Dana Ruiz, food writer</p>
+        </script>
+      </div>
+      <div data-tab="sub, sup, br">
+        <p><strong>What they are.</strong> <code>&lt;sub&gt;</code> lowers text (subscript) and <code>&lt;sup&gt;</code> raises it (superscript), where a writing convention requires it. <code>&lt;br&gt;</code> ends a line without ending the paragraph.</p>
+        <p><strong>When to use them.</strong> <code>&lt;sub&gt;</code> for chemical formulas such as CO<sub>2</sub>. <code>&lt;sup&gt;</code> for exponents (m<sup>2</sup>, 10<sup>3</sup>) and footnote numbers. <code>&lt;br&gt;</code> when the line break is part of the content itself: the lines of a postal address, a poem or song lyrics.</p>
+        <p><strong>The look-alike.</strong> <code>&lt;br&gt;</code> vs <code>&lt;p&gt;</code>: separate ideas are separate paragraphs. Never stack <code>&lt;br&gt;&lt;br&gt;</code> to leave a gap between them. That's spacing, spacing is CSS's job, and to screen readers and search engines the result is still one long paragraph.</p>
+        <p><strong>Watch out.</strong> Don't use <code>&lt;sup&gt;</code> just to make text small and raised for looks. For a trademark sign, type the ™ character (or <code>&amp;trade;</code>) instead.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- sub: chemists write the 2 in CO2 low, so it's a real subscript -->
+          <p>Our dough rises on the CO<sub>2</sub> the yeast gives off.</p>
+          <!-- sup: an exponent, as in square feet -->
+          <p>The dining room is 900 ft<sup>2</sup>.</p>
+          <!-- br: the line breaks are part of the address, so br is right here -->
+          <p>Slice of Life<br>12 Main Street<br>Riverside</p>
+          <!-- Two separate ideas are two paragraphs, never one paragraph with br br between -->
+          <p>We open at 11 AM.</p>
+          <!-- CSS, not br, controls the space between these paragraphs -->
+          <p>Delivery starts at noon.</p>
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which one should I pick?</strong>
+      <ul>
+        <li><strong>It's important or urgent:</strong> <code>&lt;strong&gt;</code>. Example: <code>&lt;strong&gt;Careful:&lt;/strong&gt;</code></li>
+        <li><strong>You'd stress the word when reading aloud:</strong> <code>&lt;em&gt;</code>. Example: <code>we &lt;em&gt;do&lt;/em&gt; deliver</code></li>
+        <li><strong>It matches what the reader searched for:</strong> <code>&lt;mark&gt;</code></li>
+        <li><strong>Fine print or a side note:</strong> <code>&lt;small&gt;</code></li>
+        <li><strong>Code, a tag name or a file name:</strong> <code>&lt;code&gt;</code>. <strong>Keys to press:</strong> <code>&lt;kbd&gt;</code></li>
+        <li><strong>An abbreviation readers may not know:</strong> spell it out once in the text, and wrap it in <code>&lt;abbr title="…"&gt;</code></li>
+        <li><strong>A date or time:</strong> <code>&lt;time datetime="2026-10-31"&gt;</code></li>
+        <li><strong>A few quoted words:</strong> <code>&lt;q&gt;</code>. <strong>A long quotation:</strong> <code>&lt;blockquote&gt;</code>. <strong>The title of a work:</strong> <code>&lt;cite&gt;</code></li>
+        <li><strong>A formula or exponent:</strong> <code>&lt;sub&gt;</code> or <code>&lt;sup&gt;</code></li>
+        <li><strong>A line break that belongs to the content:</strong> <code>&lt;br&gt;</code>. <strong>A new idea:</strong> a new <code>&lt;p&gt;</code></li>
+        <li><strong>You only want it to look different:</strong> none of these. Use a <code>&lt;span&gt;</code> with a class and style it with CSS.</li>
+      </ul>
+    </aside>
 
     <div class="playground" data-id="c3-pg-inline" data-title="Mark up a restaurant notice" data-height="230" data-challenge="Add the right inline element to each line">
       <textarea data-lang="html"><p>Warning: the pizza stone is extremely hot.</p>
@@ -934,8 +1427,6 @@ Open   late!</textarea>
       <li><strong><code>width</code></strong> and <strong><code>height</code></strong> (in pixels, no unit) let the browser reserve space before the file arrives, so the page doesn't jump around as images load.</li>
       <li><strong><code>loading="lazy"</code></strong> tells the browser not to download an image until it's about to scroll into view.</li>
     </ul>
-    <p>Pick the format for the job: <strong>JPEG</strong> for photos, <strong>PNG</strong> for graphics that need sharp edges or transparency, <strong>SVG</strong> for logos and icons (it's vector-based, so it stays crisp at any size), <strong>GIF</strong> for simple animations, and <strong>WebP</strong> or <strong>AVIF</strong>, modern formats that produce smaller files and work in all current browsers.</p>
-
     <div class="widget" data-kind="Coach" data-title="Alt text coach" id="c3-alt">
       <div class="seg" role="group" aria-label="Choose an image" id="c3-alt-seg">
         <button type="button" aria-pressed="true" data-s="0">News photo</button>
@@ -960,9 +1451,103 @@ Open   late!</textarea>
       </div>
     </div>
 
+    <h4>Choosing an image format</h4>
+    <p>The <code>&lt;img&gt;</code> element works the same with every format, but the file you point it at still matters. Each format stores pictures in a different way, so the wrong choice gives you a blurry logo, a jagged edge, or a photo ten times bigger than it needs to be, and big images are the most common reason a page loads slowly. There are two families:</p>
+    <ul>
+      <li><strong>Raster</strong> formats (JPEG, PNG, GIF, WebP, AVIF) store a grid of colored dots called pixels. They can hold any picture, including photos, but they blur or turn blocky when stretched beyond their size.</li>
+      <li><strong>Vector</strong> format (SVG) stores instructions for drawing shapes. It stays sharp at any size, but it only suits pictures made of shapes and flat colors.</li>
+    </ul>
+    <div class="table-wrap">
+      <table class="data-table c3-img-table">
+        <thead><tr><th scope="col">Format</th><th scope="col">Best for</th><th scope="col">See-through areas</th><th scope="col">Animation</th><th scope="col">Example file</th></tr></thead>
+        <tbody>
+          <tr><td><strong>JPEG</strong> <code>.jpg</code></td><td>Photos</td><td>No</td><td>No</td><td><code>margherita.jpg</code></td></tr>
+          <tr><td><strong>PNG</strong> <code>.png</code></td><td>Screenshots, graphics with text or sharp edges</td><td>Yes, including soft edges</td><td>Rarely used for it</td><td><code>order-screen.png</code></td></tr>
+          <tr><td><strong>SVG</strong> <code>.svg</code></td><td>Logos, icons, simple illustrations and charts</td><td>Yes</td><td>Possible, with code</td><td><code>logo.svg</code></td></tr>
+          <tr><td><strong>GIF</strong> <code>.gif</code></td><td>Short, simple animations you already have</td><td>On or off only</td><td>Yes</td><td><code>dough-toss.gif</code></td></tr>
+          <tr><td><strong>WebP</strong> <code>.webp</code>, <strong>AVIF</strong> <code>.avif</code></td><td>Photos and graphics, in smaller files than JPEG or PNG</td><td>Yes</td><td>Yes</td><td><code>margherita.webp</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tabs">
+      <div data-tab="JPEG">
+        <p><strong>What it is.</strong> The standard format for photographs since the early 1990s. It keeps files small with <strong>lossy</strong> compression: it throws away fine detail your eye is unlikely to miss. You choose how much when you save; a quality setting around 70 to 85 percent usually looks the same as the original at a fraction of the size.</p>
+        <p><strong>When to use it.</strong> Photos: food, people, places, products.</p>
+        <p><strong>When not to.</strong> Logos, screenshots, text and line drawings. The compression smears sharp edges into fuzzy blotches, which is most visible around lettering. JPEG also has no transparency, so a JPEG logo always sits on a solid rectangle. And every edit-and-save throws away a little more detail, so keep your original file and save a fresh copy for the web.</p>
+        <p><strong>Watch out.</strong> Photos straight from a phone are often 4000 pixels wide and several megabytes. Resize them to the largest size they'll be displayed (1200 to 2000 pixels wide is plenty for a full-width photo) before adding them to your site. iPhones save photos as <strong>HEIC</strong>, which only Safari can display, so export or convert those to JPEG first.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A photo: JPEG keeps the file small, and width and height reserve its space while it loads -->
+          <img src="images/margherita.jpg" alt="Margherita pizza with melted mozzarella and fresh basil" width="1200" height="800">
+        </script>
+      </div>
+      <div data-tab="PNG">
+        <p><strong>What it is.</strong> A <strong>lossless</strong> format: every pixel is saved exactly as it was, so text and edges stay crisp no matter how many times you save. It supports transparency, including soft, partly see-through edges such as a drop shadow.</p>
+        <p><strong>When to use it.</strong> Screenshots, diagrams, graphics that contain text, the favicon, and logos when you don't have an SVG version.</p>
+        <p><strong>When not to.</strong> Photos. Because it keeps every detail, the same photo saved as PNG is often several times larger than a JPEG that looks identical.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A screenshot with small text: PNG keeps every letter sharp -->
+          <img src="images/order-screen.png" alt="The online order form, with the large size and thin crust selected" width="900" height="600">
+        </script>
+      </div>
+      <div data-tab="SVG">
+        <p><strong>What it is.</strong> Scalable Vector Graphics. Instead of a grid of pixels, an SVG file is text that describes shapes: "a red circle here, a curved line there". The browser draws it fresh at whatever size it's shown, so it's sharp on every screen, and a simple logo is often only a few kilobytes. The pictures in the alt text coach above and the bar chart in 3.6 are drawn in SVG.</p>
+        <p><strong>When to use it.</strong> Logos, icons, simple illustrations, charts and diagrams: anything made of shapes and flat colors.</p>
+        <p><strong>When not to.</strong> Photos. A photograph can't be described as a handful of shapes.</p>
+        <p><strong>Watch out.</strong> An SVG has no fixed pixel size of its own, so give the <code>&lt;img&gt;</code> a <code>width</code> and <code>height</code> to show it at the size you want.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A logo: SVG stays sharp on a small phone and on a huge monitor alike -->
+          <img src="images/logo.svg" alt="Slice of Life" width="180" height="60">
+        </script>
+      </div>
+      <div data-tab="GIF">
+        <p><strong>What it is.</strong> A format from 1987 that holds only 256 colors, but can store several frames that play one after another as a simple animation. Its transparency is all or nothing: each pixel is either fully see-through or solid, so curved edges look jagged against a colored background.</p>
+        <p><strong>When to use it.</strong> Rarely, today: a short, simple animation that you already have as a GIF.</p>
+        <p><strong>When not to.</strong> Photos, which look blotchy in 256 colors, and long animations, which make huge files. An animated WebP, or a short video file, is usually far smaller.</p>
+        <p><strong>Watch out.</strong> Visitors can't pause a GIF, and movement that goes on and on makes it hard to concentrate on the rest of the page. Keep animations short, and never use anything that flashes more than three times a second, which can trigger seizures.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- An animated GIF still needs alt text: describe what the animation shows -->
+          <img src="images/dough-toss.gif" alt="Animation: a cook tossing and spinning pizza dough in the air" width="480" height="270">
+        </script>
+      </div>
+      <div data-tab="WebP, AVIF">
+        <p><strong>What they are.</strong> Modern formats (WebP from 2010, AVIF from 2019) that do everything the older ones do: lossy or lossless compression, transparency and animation. At the same visual quality, their files are usually a quarter to a half smaller than JPEG or PNG, so pages load faster. All current browsers display both.</p>
+        <p><strong>When to use them.</strong> For any photo or graphic on your site, if your image editor or converter can save them. Many free tools can.</p>
+        <p><strong>Watch out.</strong> Some older software, such as image viewers, email programs and upload forms, can't open them, so keep your originals. And renaming a file doesn't convert it: a JPEG renamed <code>photo.webp</code> is still a JPEG inside, and just as large. Use an image editor or converter to save a real WebP.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The same photo as WebP: it looks the same as the JPEG but downloads faster -->
+          <img src="images/margherita.webp" alt="Margherita pizza with melted mozzarella and fresh basil" width="1200" height="800">
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which format should I pick?</strong>
+      <ul>
+        <li><strong>A photo:</strong> JPEG, or WebP for a smaller file. Example: <code>margherita.jpg</code></li>
+        <li><strong>A logo or icon:</strong> SVG if you have one, otherwise PNG. Example: <code>logo.svg</code></li>
+        <li><strong>A screenshot, or a graphic with text in it:</strong> PNG. Example: <code>order-screen.png</code></li>
+        <li><strong>Anything with a see-through background:</strong> PNG, SVG or WebP, never JPEG.</li>
+        <li><strong>A short animation:</strong> animated WebP, or GIF if that's what you have.</li>
+        <li><strong>An iPhone photo (<code>.heic</code>):</strong> convert it to JPEG or WebP first.</li>
+      </ul>
+    </aside>
+
     <h3>Character entities</h3>
     <p>Some characters are special in HTML: <code>&lt;</code> starts a tag and <code>&amp;</code> starts an entity. To show them as ordinary text, you write a <strong>character entity</strong>: an ampersand, a name or number, and a semicolon. <code>&amp;lt;</code> displays <code>&lt;</code>, and <code>&amp;amp;</code> displays <code>&amp;</code>.</p>
     <p>Every character also has numeric forms: <code>&amp;#169;</code> (decimal) and <code>&amp;#xA9;</code> (hexadecimal) both display ©, just like <code>&amp;copy;</code>. Because your pages declare UTF-8, you can type most symbols (é, ©, —, emoji) directly. In practice you only <em>need</em> entities for <code>&lt;</code>, <code>&amp;</code>, quotation marks inside attribute values, and invisible characters such as the non-breaking space <code>&amp;nbsp;</code>, which keeps two words on the same line, as in <code>10&amp;nbsp;km</code>.</p>
+    <div class="table-wrap">
+      <table class="data-table c3-ent-table">
+        <thead><tr><th scope="col">Write</th><th scope="col">Displays</th><th scope="col">You need it when</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>&amp;lt;</code> and <code>&amp;gt;</code></td><td>&lt; and &gt;</td><td>You want to show a tag, or a less-than sign, as text. A raw <code>&lt;</code> starts a real tag.</td><td><code>Use the &amp;lt;nav&amp;gt; element</code></td></tr>
+          <tr><td><code>&amp;amp;</code></td><td>&amp;</td><td>Any ampersand in your text or inside a link's address. A lone <code>&amp;</code> often works, but <code>&amp;</code> followed by letters can be misread as the start of an entity, so write <code>&amp;amp;</code> every time.</td><td><code>Mac &amp;amp; Cheese Pizza</code></td></tr>
+          <tr><td><code>&amp;quot;</code></td><td>"</td><td>A double quotation mark inside an attribute value that is itself wrapped in double quotes. A raw <code>"</code> would end the value early.</td><td><code>alt="The &amp;quot;Big Slice&amp;quot; sign"</code></td></tr>
+          <tr><td><code>&amp;nbsp;</code></td><td>(a space that never breaks)</td><td>Two words must stay on the same line: a number and its unit, a time and AM or PM. Not for adding extra space; that's CSS.</td><td><code>10&amp;nbsp;km</code>, <code>11&amp;nbsp;PM</code></td></tr>
+          <tr><td><code>&amp;copy;</code></td><td>©</td><td>Only if you can't type © on your keyboard. With UTF-8 you can paste the symbol itself.</td><td><code>&amp;copy; 2026 Slice of Life</code></td></tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="widget" data-kind="Tool" data-title="Entity encoder and lookup" id="c3-ent">
       <div class="c3-split">
@@ -986,13 +1571,103 @@ Open   late!</textarea>
     </div>
 
     <h3>Lists</h3>
-    <p>HTML has three kinds of list:</p>
+    <p>Whenever you have several items of the same kind, you have a list, and marking it up as one pays off: screen readers announce "list, 3 items" so listeners know how much is coming, and CSS can style every item at once. HTML has three kinds of list:</p>
     <ul>
       <li><strong>Unordered</strong> <code>&lt;ul&gt;</code>: items whose order doesn't matter, like ingredients, features or a navigation menu. Bullets by default.</li>
       <li><strong>Ordered</strong> <code>&lt;ol&gt;</code>: items whose sequence matters, like steps or rankings. Numbered by default. The <code>start</code>, <code>reversed</code> and <code>type</code> attributes control the numbering.</li>
       <li><strong>Description</strong> <code>&lt;dl&gt;</code>: groups of terms (<code>&lt;dt&gt;</code>) and descriptions (<code>&lt;dd&gt;</code>), like a glossary or FAQ.</li>
     </ul>
+    <div class="table-wrap">
+      <table class="data-table c3-lists-table">
+        <thead><tr><th scope="col">List</th><th scope="col">Use it when</th><th scope="col">Looks like by default</th><th scope="col">Real examples</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;ul&gt;</code> + <code>&lt;li&gt;</code></td><td>Shuffling the items wouldn't change the meaning</td><td>Bullets</td><td>Toppings, features, the links in a navigation menu</td></tr>
+          <tr><td><code>&lt;ol&gt;</code> + <code>&lt;li&gt;</code></td><td>Shuffling the items would change the meaning or break the instructions</td><td>Numbers: 1, 2, 3</td><td>Recipe steps, driving directions, a top-10 ranking</td></tr>
+          <tr><td><code>&lt;dl&gt;</code> + <code>&lt;dt&gt;</code> + <code>&lt;dd&gt;</code></td><td>Each item is a name followed by its description or value</td><td>Names flush left, descriptions indented below, no bullets</td><td>A glossary, an FAQ, a menu with dish descriptions, product details such as "Size: 14 inches"</td></tr>
+        </tbody>
+      </table>
+    </div>
     <p>List items (<code>&lt;li&gt;</code>) are the only elements that belong directly inside <code>&lt;ul&gt;</code> and <code>&lt;ol&gt;</code>. To nest a list, put the whole inner list <em>inside</em> an <code>&lt;li&gt;</code>, not between two items.</p>
+
+    <div class="tabs">
+      <div data-tab="ul">
+        <p><strong>What it is.</strong> An unordered list: a group of items where the order doesn't matter. Each item is an <code>&lt;li&gt;</code> (list item), and browsers put a bullet in front of each one. CSS can change the bullets or remove them.</p>
+        <p><strong>When to use it.</strong> The toppings on a pizza, a list of features, the links in a navigation menu. Menus are almost always a <code>&lt;ul&gt;</code> inside a <code>&lt;nav&gt;</code>, even though the finished design shows no bullets, because a screen reader can then announce "navigation, list, 4 items". The test: if you shuffled the items, would the meaning change? If not, it's a <code>&lt;ul&gt;</code>.</p>
+        <p><strong>When not to.</strong> Steps that must happen in order (use <code>&lt;ol&gt;</code>). And never use a list just to indent text; indentation is CSS's job.</p>
+        <p><strong>Watch out.</strong> Only <code>&lt;li&gt;</code> elements go directly inside <code>&lt;ul&gt;</code>. A link, heading or paragraph has to sit inside an <code>&lt;li&gt;</code>, not beside one.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The main menu: nav says "this is navigation" -->
+          <nav aria-label="Main">
+            <!-- The links are a list, and their order doesn't change what they mean -->
+            <ul>
+              <!-- One li per link; the a goes INSIDE the li, never directly in the ul -->
+              <li><a href="index.html">Home</a></li>
+              <!-- Every link gets its own li -->
+              <li><a href="menu.html">Menu</a></li>
+              <li><a href="about.html">About</a></li>
+            </ul>
+          </nav>
+        </script>
+      </div>
+      <div data-tab="ol">
+        <p><strong>What it is.</strong> An ordered list: a group of items whose order matters. Browsers number the items for you.</p>
+        <p><strong>When to use it.</strong> Recipe steps, directions, instructions, a ranking. The test: would reordering the items change the meaning or break the instructions? Then it's an <code>&lt;ol&gt;</code>.</p>
+        <p><strong>Controlling the numbers.</strong> Three attributes on <code>&lt;ol&gt;</code> change the numbering; try them in the list builder below.</p>
+        <ul>
+          <li><code>start="4"</code> begins counting at 4, which is handy when a list continues after a paragraph.</li>
+          <li><code>reversed</code> (a boolean attribute) counts down, as in a top-10 countdown.</li>
+          <li><code>type</code> picks the marker style: <code>1</code> (the default), <code>a</code>, <code>A</code>, <code>i</code> or <code>I</code>.</li>
+        </ul>
+        <p><strong>Watch out.</strong> Don't type the numbers yourself (<code>&lt;li&gt;1. Stretch the dough&lt;/li&gt;</code>). The browser already numbers each item, so you'd see "1. 1. Stretch the dough", and your typed numbers go wrong the moment you insert a step. And don't pick <code>&lt;ol&gt;</code> just because you like the look of numbers; if the order doesn't matter, it's a <code>&lt;ul&gt;</code>.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The steps must happen in this order, so it's an ordered list -->
+          <ol>
+            <!-- No numbers in the text: the browser adds 1, 2, 3 -->
+            <li>Stretch the dough into a 12-inch circle.</li>
+            <!-- The second step, numbered 2 automatically -->
+            <li>Spread the sauce, leaving a border for the crust.</li>
+            <!-- Insert a new step anywhere and the numbers stay right -->
+            <li>Bake for 90 seconds at 850°F.</li>
+          </ol>
+          <!-- Our top 3, counted down: reversed numbers the items 3, 2, 1 -->
+          <ol reversed>
+            <!-- This first item is numbered 3 -->
+            <li>Garden Veggie</li>
+            <li>Pepperoni</li>
+            <!-- And the last item is number 1 -->
+            <li>Margherita</li>
+          </ol>
+        </script>
+      </div>
+      <div data-tab="dl">
+        <p><strong>What it is.</strong> A description list: groups of names and values. Each <code>&lt;dt&gt;</code> (description term) is a name, and the <code>&lt;dd&gt;</code> (description details) after it describes that name. One term can have several descriptions, and several terms can share one.</p>
+        <p><strong>When to use it.</strong> A glossary, an FAQ, a menu where each dish has a description, or product details such as "Size: 14 inches, Serves: 3 to 4".</p>
+        <p><strong>When not to.</strong> Plain lists of single items (use <code>&lt;ul&gt;</code>), or a conversation between people. A dialogue isn't pairs of names and descriptions, so write it as paragraphs.</p>
+        <p><strong>Watch out.</strong> Only <code>&lt;dt&gt;</code> and <code>&lt;dd&gt;</code> go directly inside <code>&lt;dl&gt;</code> (you may wrap each group in a <code>&lt;div&gt;</code> for styling). A <code>&lt;dd&gt;</code> always comes after the <code>&lt;dt&gt;</code> it describes.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A menu: each pizza name is followed by its description -->
+          <dl>
+            <!-- dt: the term, here the name of the pizza -->
+            <dt>Margherita</dt>
+            <!-- dd: the description of the term just above it -->
+            <dd>Tomato, fresh mozzarella and basil.</dd>
+            <!-- The next pair: another term, then its description -->
+            <dt>Garden Veggie</dt>
+            <dd>Roasted peppers, mushrooms, red onion and olives.</dd>
+          </dl>
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which list should I pick?</strong>
+      <ul>
+        <li><strong>Would shuffling the items change the meaning?</strong> No: <code>&lt;ul&gt;</code>. Yes: <code>&lt;ol&gt;</code>.</li>
+        <li><strong>Is each item a name with its own description or value?</strong> <code>&lt;dl&gt;</code>.</li>
+        <li><strong>A menu of links?</strong> A <code>&lt;ul&gt;</code> inside a <code>&lt;nav&gt;</code>.</li>
+        <li><strong>Want indentation, or bullets on something that isn't really a list?</strong> None of them: that's CSS.</li>
+      </ul>
+    </aside>
 
     <div class="widget" data-kind="Builder" data-title="List builder" id="c3-list">
       <div class="c3-row">
@@ -1062,6 +1737,181 @@ Open   late!</textarea>
       <div class="card"><h4><code>&lt;aside&gt;</code></h4><p>Content tangentially related to what's around it: a sidebar, a pull quote, related links, an ad.</p><span class="pill info">complementary landmark</span></div>
       <div class="card"><h4><code>&lt;footer&gt;</code></h4><p>Closing information for the page or for an article: author, copyright, related links, contact details.</p><span class="pill info">page-level: contentinfo landmark</span></div>
       <div class="card"><h4><code>&lt;figure&gt;</code></h4><p>Self-contained content the text refers to, such as an image, chart or code listing, with an optional <code>&lt;figcaption&gt;</code>.</p></div>
+    </div>
+
+    <p>The cards give the one-line version. These elements barely change how anything looks (most are plain blocks until you add CSS), so you choose them purely by what the content <em>is</em>. Pick an element to see when to use it, the element it gets confused with, and a commented example from the Slice of Life site. <code>&lt;figure&gt;</code> has its own tab further down.</p>
+    <div class="tabs">
+      <div data-tab="header">
+        <p><strong>What it is.</strong> Introductory content, either for the whole page or for one article or section. The page's header usually holds the logo or site name and the main menu. An article's header holds its title plus details such as the author and date.</p>
+        <p><strong>When to use it.</strong> At the top of every page, for the site's banner. Inside an article or section when its heading comes with extra introductory material, such as a date.</p>
+        <p><strong>When not to.</strong> Around a lone heading with nothing else to introduce; the heading alone is enough. A header can't go inside a <code>&lt;footer&gt;</code> or another <code>&lt;header&gt;</code>.</p>
+        <p><strong>The look-alikes.</strong> <code>&lt;header&gt;</code> is not <code>&lt;head&gt;</code>, which holds the invisible information about the page (3.4), and it's not a heading (<code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code>). A header usually <em>contains</em> a heading. Only the page-level header, the one not inside an article, section, aside, nav or main, becomes the banner landmark.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The page's header: the site's name and menu, the same on every page -->
+          <header>
+            <!-- The site name, linking to the home page -->
+            <p><a href="index.html">Slice of Life</a></p>
+            <!-- The main menu usually goes here too: see the nav tab -->
+          </header>
+          <!-- An article can have a header of its own -->
+          <article>
+            <!-- It groups the article's title with details about the post -->
+            <header>
+              <!-- The heading goes inside the header; a header is not a heading -->
+              <h2>How We Stretch Our Dough</h2>
+              <!-- When it was posted, readable by people and by software -->
+              <p>Posted <time datetime="2026-09-24">September 24, 2026</time></p>
+            </header>
+            <!-- The article's content follows its header -->
+            <p>Every pizza starts with dough that rests for 48 hours.</p>
+          </article>
+        </script>
+      </div>
+      <div data-tab="nav">
+        <p><strong>What it is.</strong> A major block of navigation: links that move you around the site or around the page.</p>
+        <p><strong>When to use it.</strong> The site's main menu, a table of contents for a long page, breadcrumbs (Home › Blog › This post), and Previous / Next links between pages.</p>
+        <p><strong>When not to.</strong> Every group of links. Links inside a paragraph are just links. A few small links in the page footer, such as Privacy and Terms, don't need a <code>&lt;nav&gt;</code> either; the <code>&lt;footer&gt;</code> already describes them.</p>
+        <p><strong>Watch out.</strong> If a page has more than one <code>&lt;nav&gt;</code>, give each a name with <code>aria-label</code> ("Main", "Breadcrumb", "On this page") so screen reader users can tell them apart. The links inside are usually a <code>&lt;ul&gt;</code>.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The main menu; aria-label names it, since a page can have more than one nav -->
+          <nav aria-label="Main">
+            <!-- The menu items are a list of links -->
+            <ul>
+              <!-- One link per list item -->
+              <li><a href="index.html">Home</a></li>
+              <li><a href="menu.html">Menu</a></li>
+              <li><a href="blog/index.html">Blog</a></li>
+            </ul>
+          </nav>
+          <!-- Small print links: the footer already says what they are, so no nav is needed -->
+          <footer>
+            <!-- An ordinary link inside the footer -->
+            <p><a href="privacy.html">Privacy policy</a></p>
+          </footer>
+        </script>
+      </div>
+      <div data-tab="main">
+        <p><strong>What it is.</strong> The page's main content: the part that's unique to this page, as opposed to the header, menu and footer that repeat on every page.</p>
+        <p><strong>When to use it.</strong> Once on every page, wrapping everything between the page header and the page footer that belongs to this page alone.</p>
+        <p><strong>When not to.</strong> Never more than one visible <code>&lt;main&gt;</code>, and never inside <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;nav&gt;</code> or <code>&lt;section&gt;</code>. Don't put the site header, menu or footer inside it either.</p>
+        <p><strong>Why it matters.</strong> Screen reader users can jump straight to the main landmark, skipping a menu they've already heard on every page. A "Skip to main content" link does the same for keyboard users: it's a fragment link to an <code>id</code> on <code>&lt;main&gt;</code>.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Inside the body: header, main and footer sit side by side as siblings -->
+          <body>
+            <!-- A skip link: the first thing a keyboard user reaches; it jumps past the menu -->
+            <a href="#main">Skip to main content</a>
+            <!-- The header repeats on every page, so it stays outside main -->
+            <header>
+              <!-- The site name (the menu is left out to keep this short) -->
+              <p>Slice of Life</p>
+            </header>
+            <!-- main: this page's own content; its id is the skip link's target -->
+            <main id="main">
+              <!-- The page's one h1 usually opens main -->
+              <h1>Tonight's Specials</h1>
+              <!-- Everything unique to this page goes in here -->
+              <p>Pumpkin and sage pizza, until Halloween.</p>
+            </main>
+            <!-- The footer repeats on every page too, so it's also outside main -->
+            <footer>
+              <!-- Site-wide closing information -->
+              <p>© 2026 Slice of Life</p>
+            </footer>
+          </body>
+        </script>
+      </div>
+      <div data-tab="article">
+        <p><strong>What it is.</strong> A self-contained piece of content that would still make sense if you lifted it out of the page: shared on social media, shown in a news feed, or printed on its own.</p>
+        <p><strong>When to use it.</strong> A blog post, a news story, a product card, a customer review, a forum post or a comment. A list of blog post previews is a list of articles. The test: could it appear somewhere else, on its own, and still make sense? Then it's an <code>&lt;article&gt;</code>.</p>
+        <p><strong>When not to.</strong> For one part of something bigger (that's a <code>&lt;section&gt;</code>) or for a wrapper that only exists for styling (that's a <code>&lt;div&gt;</code>). A page isn't an article just because it has a lot of text.</p>
+        <p><strong>Watch out.</strong> Articles can nest: the comments under a blog post are articles inside the post's article. Give every article a heading that says what it is.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- One review: it makes sense on its own, so it's an article -->
+          <article>
+            <!-- Every article gets a heading; h2 because the page's h1 is "Reviews" -->
+            <h2>Worth the drive</h2>
+            <!-- The review itself -->
+            <p>Blistered crust, fresh basil and friendly staff. We'll be back.</p>
+            <!-- An article can have its own footer: who wrote it, and when -->
+            <footer>Review by Sam, <time datetime="2026-09-12">September 12, 2026</time></footer>
+          </article>
+          <!-- The next review is a separate, equally self-contained article -->
+          <article>
+            <!-- Its own heading, at the same level -->
+            <h2>Best Margherita in Riverside</h2>
+            <!-- Its own text -->
+            <p>Simple, perfectly balanced, and the crust stays crisp to the last bite.</p>
+          </article>
+        </script>
+      </div>
+      <div data-tab="section">
+        <p><strong>What it is.</strong> A group of content on one theme, with its own heading: one part of something bigger.</p>
+        <p><strong>When to use it.</strong> The parts of a long page ("Our history", "Our team" and "Visit us" on an About page), or the chapters of a long article. The test: can you give it a heading that names its theme? If yes, it's a <code>&lt;section&gt;</code>.</p>
+        <p><strong>When not to.</strong> As a wrapper for layout or styling (use <code>&lt;div&gt;</code>), for self-contained content (use <code>&lt;article&gt;</code>), or for a sidebar (use <code>&lt;aside&gt;</code>). If you can't think of a heading for it, it probably isn't a section.</p>
+        <p><strong>Watch out.</strong> A section doesn't change heading levels for you. On a page whose title is an <code>&lt;h1&gt;</code>, each section's heading is an <code>&lt;h2&gt;</code>, following the outline rules from 3.5.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The About page's main content, split into themed parts -->
+          <main>
+            <!-- The page's one h1 -->
+            <h1>About Slice of Life</h1>
+            <!-- A section: one theme of the page, with its own heading -->
+            <section>
+              <!-- The heading names the theme; it's an h2 because it sits under the h1 -->
+              <h2>Our history</h2>
+              <!-- The section's content -->
+              <p>We opened in 2014 with one oven and three tables.</p>
+            </section>
+            <!-- The next theme is the next section, at the same level -->
+            <section>
+              <!-- Another h2, a sibling of "Our history" -->
+              <h2>Visit us</h2>
+              <!-- This section's content -->
+              <p>12 Main Street, open daily from 11 AM.</p>
+            </section>
+          </main>
+        </script>
+      </div>
+      <div data-tab="aside">
+        <p><strong>What it is.</strong> Content that's related to what's around it but isn't part of its main flow. Take it out and the main content still makes complete sense.</p>
+        <p><strong>When to use it.</strong> A sidebar, a "You might also like" box, a pull quote, a box explaining a term, an advertisement.</p>
+        <p><strong>When not to.</strong> For anything the reader needs in order to follow the main text; that belongs in the main text. And not just for "whatever sits at the side of the screen": where things appear is CSS's decision, and an aside can sit anywhere.</p>
+        <p><strong>Watch out.</strong> Give an aside a heading, so screen reader users know what the box is before they read it. An aside at page level becomes the complementary landmark.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The blog post itself -->
+          <article>
+            <!-- The post's title -->
+            <h1>How We Stretch Our Dough</h1>
+            <!-- The post's main text -->
+            <p>Every pizza starts with dough that rests for 48 hours.</p>
+            <!-- A side note: related, but the post reads fine without it, so it's an aside -->
+            <aside>
+              <!-- A heading tells readers what this box is about -->
+              <h2>Why 48 hours?</h2>
+              <!-- The side note itself -->
+              <p>A slow rise gives the yeast time to build flavor and air bubbles.</p>
+            </aside>
+            <!-- The main text carries on after the aside -->
+            <p>When the dough is ready, we stretch it by hand, from the center out.</p>
+          </article>
+        </script>
+      </div>
+      <div data-tab="footer">
+        <p><strong>What it is.</strong> Closing information, either for the whole page or for the article or section it sits in.</p>
+        <p><strong>When to use it.</strong> The page footer: copyright, contact details, links to small print, a "Back to top" link. An article's footer: the author, the date, tags or share links.</p>
+        <p><strong>When not to.</strong> A footer is about meaning, not position: it doesn't have to be at the very bottom, and not everything at the bottom is a footer. It can't contain a <code>&lt;header&gt;</code>, another <code>&lt;footer&gt;</code> or <code>&lt;main&gt;</code>.</p>
+        <p><strong>Watch out.</strong> Only the page-level footer becomes the contentinfo landmark; an article's footer is just part of the article.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The page's footer: closing information that repeats on every page -->
+          <footer>
+            <!-- How to reach the business behind the page belongs in address (see "More elements" below) -->
+            <address>12 Main Street, Riverside · <a href="tel:+15555550123">(555) 555-0123</a></address>
+            <!-- Small print links; #top is special: it scrolls to the very top, no id needed -->
+            <p><a href="privacy.html">Privacy policy</a> · <a href="#top">Back to top</a></p>
+            <!-- The copyright line is fine print, so small fits -->
+            <p><small>© 2026 Slice of Life</small></p>
+          </footer>
+        </script>
+      </div>
     </div>
 
     <div class="widget" data-kind="Game" data-title="Label the wireframe" id="c3-wf">
@@ -1190,6 +2040,23 @@ Open   late!</textarea>
           <li><code>&lt;search&gt;</code>: wraps a search or filter form, and becomes a search landmark (added to HTML in 2023).</li>
           <li><code>&lt;mark&gt;</code>: text highlighted for relevance, such as matches for a search term.</li>
         </ul>
+        <p><strong>When to use address.</strong> For how to reach whoever is behind the page or article: a restaurant's phone and street address on its own site, or a blog author's email. <strong>Not</strong> for every postal address that appears in your text. A sentence like "we deliver to 40 Elm Street" is just a sentence.</p>
+        <p><strong>When to use hgroup.</strong> When a heading has a subtitle or tagline that belongs with it. Write the tagline as a <code>&lt;p&gt;</code>, not a smaller heading: an <code>&lt;h2&gt;</code> would add a fake section to the page's outline.</p>
+        <p><strong>When to use search.</strong> Around the search box of a site, or a form that filters a list (for example, "vegetarian only"). It lets screen reader users jump straight to search. You'll build the form inside it in Chapter 5.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- hgroup: the heading and its tagline stay together as one unit -->
+          <hgroup>
+            <!-- The heading itself -->
+            <h1>Slice of Life</h1>
+            <!-- The tagline is a p, not an h2: it doesn't start a new section -->
+            <p>Wood-fired pizza, open late</p>
+          </hgroup>
+          <!-- address: how to reach the owner of this page, here the restaurant itself -->
+          <address>
+            <!-- A phone link and an email link, both from 3.5 -->
+            <a href="tel:+15555550123">(555) 555-0123</a> · <a href="mailto:hello@sliceoflife.example">hello@sliceoflife.example</a>
+          </address>
+        </script>
       </div>
     </div>
 
