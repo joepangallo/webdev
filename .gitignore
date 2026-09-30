@@ -9,3 +9,7 @@
 # Textbook table-of-contents screenshots. They stay in the private working
 # copy; this public repository carries only the course content.
 ch*/*.png
+
+# Quiz import files and answer keys contain the answers, so they stay out of
+# this repo (and out of the public mirror).
+quizzes/
