@@ -44,6 +44,19 @@
 
     /* 4.1 */
     .c4-theme-grid .code-block pre { max-height: 330px; }
+    /* 4.2 units table: keep four readable columns; the wrapper scrolls sideways on phones */
+    .c4-units-table { min-width: 680px; }
+    /* Other four-column reference tables (colors, selectors, backgrounds, fonts, text): same idea */
+    .c4-ref-table { min-width: 720px; }
+    .c4-ref-table td:nth-child(2), .c4-ref-table td:nth-child(3) { min-width: 10em; }
+    /* 4.7 generic families: each sample cell is drawn in the family it names */
+    .c4-ff { font-size: 1.1rem; white-space: nowrap; }
+    .c4-ff-serif { font-family: serif; }
+    .c4-ff-sans { font-family: sans-serif; }
+    .c4-ff-mono { font-family: monospace; }
+    .c4-ff-system { font-family: system-ui; }
+    .c4-ff-cursive { font-family: cursive; }
+    .c4-ff-fantasy { font-family: fantasy; }
     .c4-timeline { list-style: none; padding: 0 0 0 4px; margin: 0 0 1.4em; }
     .c4-timeline li { position: relative; padding: 2px 0 12px 22px; margin: 0; border-left: 3px solid var(--mod); }
     .c4-timeline li:last-child { border-left-color: transparent; }
@@ -369,13 +382,13 @@
           <iframe class="c4-frame" id="c4-theme-frame" title="Sample page preview" height="380"></iframe>
         </div>
         <div>
-          <p class="c4-mini-label">The stylesheet (<span id="c4-theme-stats">0 rules</span>)</p>
+          <p class="c4-mini-label">The stylesheet, styles.css (<span id="c4-theme-stats">0 rules</span>)</p>
           <div class="code-block c4-live"><span class="code-lang">CSS</span><pre><code id="c4-theme-css"></code></pre></div>
         </div>
       </div>
       <p class="c4-note" id="c4-theme-note" aria-live="polite">No stylesheet: you are seeing the browser's built-in defaults (a serif font, blue underlined links, bullet points).</p>
-      <details class="reveal" style="margin-top:12px">
-        <summary>Show the HTML (it is identical for every stylesheet)</summary>
+      <details class="reveal" style="margin-top:12px" open>
+        <summary>The complete HTML file, index.html (identical for every stylesheet)</summary>
         <div id="c4-theme-html"></div>
       </details>
     </div>
@@ -503,8 +516,126 @@
     </div>
 
     <h3>Color values</h3>
-    <p>CSS gives you several ways to write the same color. <strong>Named colors</strong> (<code>tomato</code>, <code>navy</code>) are easy to read. <strong>Hex</strong> (<code>#1f4fd1</code>) packs red, green and blue into two hex digits each (00 to ff). <strong><code>rgb()</code></strong> uses numbers from 0 to 255, and <strong><code>hsl()</code></strong> describes hue (an angle on the color wheel), saturation and lightness, which makes it easy to create lighter or darker shades of one color. Add an <strong>alpha</strong> value for transparency: <code>rgb(31 79 209 / 50%)</code> or <code>#1f4fd180</code>.</p>
+    <p>Every color on a screen is a mix of red, green and blue light. CSS lets you write that mix in several <strong>notations</strong>. Most of them can describe exactly the same colors; each one is simply easier for a particular job. <strong>Named colors</strong> (<code>tomato</code>, <code>navy</code>) are easy to read. <strong>Hex</strong> (<code>#1f4fd1</code>) packs red, green and blue into two hex digits each (00 to ff). <strong><code>rgb()</code></strong> uses numbers from 0 to 255, and <strong><code>hsl()</code></strong> describes hue (an angle on the color wheel), saturation and lightness, which makes it easy to create lighter or darker shades of one color. Add an <strong>alpha</strong> value for transparency: <code>rgb(31 79 209 / 50%)</code> or <code>#1f4fd180</code>.</p>
+    <p>The examples below all use the Riverside Hiking Club's brand green, <code>#2f6f4e</code>, written each way.</p>
+    <div class="table-wrap">
+      <table class="data-table c4-ref-table">
+        <thead><tr><th>Notation</th><th>Looks like</th><th>Example, worked out</th><th>Handy when</th></tr></thead>
+        <tbody>
+          <tr><td>Named</td><td><code>navy</code>, <code>white</code>, <code>transparent</code></td><td><span class="c4-sw" style="background: navy"></span><code>navy</code> is the same color as <code>#000080</code>: no red, no green, half-strength blue</td><td>Quick tests; black, white and see-through</td></tr>
+          <tr><td>Hex</td><td><code>#2f6f4e</code>, <code>#fff</code></td><td><span class="c4-sw" style="background: #2f6f4e"></span><code>2f</code> = 47 red, <code>6f</code> = 111 green, <code>4e</code> = 78 blue</td><td>Copying a color from a design tool or brand guide</td></tr>
+          <tr><td><code>rgb()</code></td><td><code>rgb(47 111 78)</code></td><td><span class="c4-sw" style="background: rgb(128 128 128)"></span>Equal amounts of all three, <code>rgb(128 128 128)</code>, make a middle gray</td><td>A tool gives you RGB numbers, or you need transparency</td></tr>
+          <tr><td><code>hsl()</code></td><td><code>hsl(150 40% 30%)</code></td><td><span class="c4-sw" style="background: hsl(150 40% 22%)"></span>Same hue and saturation, lightness 30% → 22%: a darker shade of the same green</td><td>Making lighter and darker shades of one color</td></tr>
+          <tr><td>Alpha</td><td><code>rgb(0 0 0 / 60%)</code>, <code>#2f6f4e1a</code></td><td><code>1a</code> = 26, and 26 ÷ 255 ≈ 10%: the green at 10% strength over whatever is behind it</td><td>Overlays on photos, faint tints, shadows</td></tr>
+        </tbody>
+      </table>
+    </div>
     <p class="small muted">Modern syntax separates the numbers with spaces and puts alpha after a slash. The older comma syntax (<code>rgba(31, 79, 209, 0.5)</code>) still works everywhere, so you will see both. Newer functions such as <code>oklch()</code> exist too; you can explore them later.</p>
+
+    <p>Pick a notation to see what it is, when to use it, what to watch out for, and a commented example.</p>
+    <div class="tabs">
+      <div data-tab="Named">
+        <p><strong>What it is.</strong> Nearly 150 English color names, such as <code>red</code>, <code>tomato</code>, <code>navy</code> and <code>rebeccapurple</code>, plus two useful keywords: <code>transparent</code> (fully see-through) and <code>currentColor</code> (whatever this element's text color is).</p>
+        <p><strong>When to use it.</strong> While learning and for quick experiments, when you just want to see <em>something</em> change. In a finished stylesheet, <code>white</code>, <code>black</code> and <code>transparent</code> are perfectly normal. <code>currentColor</code> is handy for a border or icon that should always match the text around it.</p>
+        <p><strong>Watch out.</strong> A brand's colors almost never match a name exactly, so real designs use hex or <code>hsl()</code>. The names are not consistent either: <code>darkgray</code> (<code>#a9a9a9</code>) is actually <em>lighter</em> than <code>gray</code> (<code>#808080</code>). And <code>gray</code> text on a white background has a contrast of only 3.9 : 1, below the 4.5 : 1 that body text needs. Names are one word with no spaces: <code>darkgreen</code>, not <code>dark green</code>.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* A trail-closure notice, roughed out quickly while building the page */
+          .notice {
+            /* Easy to read in code; you will probably swap in an exact brand color later */
+            background-color: lightyellow;
+            /* The border uses the text color, and follows it if the text color ever changes */
+            border: 2px solid currentColor;
+          }
+        </script>
+      </div>
+      <div data-tab="Hex">
+        <p><strong>What it is.</strong> A <code>#</code> followed by three pairs of <strong>hexadecimal</strong> (base 16) digits: one pair each for red, green and blue. Hex digits run from 0 to 9 and then a to f (which stand for 10 to 15), so a pair can go from <code>00</code> (none of that light) to <code>ff</code> (the full amount, 255). To turn a pair into a normal number, multiply the first digit by 16 and add the second.</p>
+        <p><strong>Worked example.</strong> <code>#2f6f4e</code>: <code>2f</code> = 2 × 16 + 15 = <strong>47</strong> red, <code>6f</code> = 6 × 16 + 15 = <strong>111</strong> green, <code>4e</code> = 4 × 16 + 14 = <strong>78</strong> blue. More green than anything else, and all three fairly low, so it is a dark forest green. It is the same color as <code>rgb(47 111 78)</code>. A three-digit hex is shorthand that doubles each digit: <code>#f60</code> means <code>#ff6600</code>, a bright orange. It only works when both digits of every pair are the same.</p>
+        <p><strong>When to use it.</strong> It is the most common notation in real stylesheets, because design tools, color pickers and brand guides hand you hex codes. Copy the code exactly and the color matches everywhere.</p>
+        <p><strong>Watch out.</strong> Hex is hard to adjust by eye: which digits would you change to make <code>#2f6f4e</code> slightly lighter? (<code>hsl()</code> makes that easy.) Do not forget the <code>#</code>: without it the value is invalid and the browser drops the declaration. Upper and lower case mean the same thing (<code>#2F6F4E</code> = <code>#2f6f4e</code>). An eight-digit hex adds transparency; see the Alpha tab.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The club's brand green, copied from the logo file */
+          h1 {
+            /* 47 red, 111 green, 78 blue */
+            color: #2f6f4e;
+          }
+          /* Text on the green banner */
+          .banner {
+            /* Shorthand for #ffffff: full red, green and blue, which is white */
+            color: #fff;
+          }
+        </script>
+      </div>
+      <div data-tab="rgb()">
+        <p><strong>What it is.</strong> The same three amounts of red, green and blue as hex, written as ordinary numbers from 0 to 255. <code>rgb(0 0 0)</code> is black (no light at all), <code>rgb(255 255 255)</code> is white (every light at full), and any three equal numbers make a gray.</p>
+        <p><strong>When to use it.</strong> When a color picker or an image editor gives you RGB numbers, and when you need transparency: add a slash and an alpha value, <code>rgb(47 111 78 / 50%)</code>. Because the numbers are plain decimals, it is also the easiest notation for seeing how much of each light is in a color.</p>
+        <p><strong>Watch out.</strong> A "slightly lighter green" means raising all three numbers by the right amounts, which is guesswork; <code>hsl()</code> does that with one number. There are two ways to write it: the modern <code>rgb(47 111 78)</code> with spaces, and the older <code>rgb(47, 111, 78)</code> with commas. Both work, but do not mix them: <code>rgb(47, 111 78)</code> is invalid and silently dropped.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The sign-up button, in the same brand green as #2f6f4e */
+          .button {
+            /* 47 red, 111 green, 78 blue */
+            background-color: rgb(47 111 78);
+            /* All three at full strength is white: about 6 : 1 contrast on this green */
+            color: rgb(255 255 255);
+          }
+        </script>
+      </div>
+      <div data-tab="hsl()">
+        <p><strong>What it is.</strong> A color described the way people talk about color. <strong>Hue</strong> is an angle on the color wheel, from 0 to 360: 0 is red, 60 yellow, 120 green, 180 cyan, 240 blue, 300 magenta. <strong>Saturation</strong> runs from 0% (gray) to 100% (full, vivid color). <strong>Lightness</strong> runs from 0% (black) through 50% (the pure color) to 100% (white).</p>
+        <p><strong>When to use it.</strong> Whenever you need a family of shades from one color: keep the hue and saturation, change only the lightness. The club's green is about <code>hsl(150 40% 31%)</code>. Lower the lightness to 22% and you have a darker green for a button's hover state; raise it to 94% and you have a pale tint for a background. With hex you would have to recalculate all six digits each time.</p>
+        <p><strong>Watch out.</strong> The same lightness does not look equally bright in every hue. <code>hsl(60 100% 50%)</code> (yellow) is so bright that white text on it has a contrast of just 1.07 : 1, while <code>hsl(240 100% 50%)</code> (blue) is dark enough to reach 8.6 : 1. So check the contrast of every shade you make; the Color lab below measures it for you.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The sign-up button: hue 150 (green), 40% saturation, 30% lightness */
+          .button {
+            /* The main brand green */
+            background-color: hsl(150 40% 30%);
+            /* White text: 6.3 : 1 contrast on this green */
+            color: white;
+          }
+          /* Pointer over the button: same hue and saturation, only the lightness changes */
+          .button:hover {
+            /* 22% lightness: a darker green from the same family */
+            background-color: hsl(150 40% 22%);
+          }
+          /* The panel behind the sign-up form */
+          .signup {
+            /* 94% lightness: nearly white, but clearly the same green */
+            background-color: hsl(150 40% 94%);
+          }
+        </script>
+      </div>
+      <div data-tab="Alpha">
+        <p><strong>What it is.</strong> A fourth value that sets how <strong>opaque</strong> (solid) the color is: <code>1</code> or <code>100%</code> is solid, <code>0</code> is invisible, and anything in between lets the background show through. The modern syntax puts it after a slash: <code>rgb(0 0 0 / 60%)</code> or <code>hsl(150 40% 30% / 0.5)</code>. Hex adds a fourth pair: <code>#2f6f4e80</code>.</p>
+        <p><strong>Worked example.</strong> In <code>#2f6f4e1a</code>, the last pair <code>1a</code> = 1 × 16 + 10 = 26, and 26 ÷ 255 ≈ 0.10: the brand green at 10% strength, a faint tint of whatever is behind it. <code>80</code> = 128, which is about 50%.</p>
+        <p><strong>When to use it.</strong> A dark, see-through panel behind white text on top of a photo; a faint tinted background when the pointer is over a table row; soft shadows (the card in the <code>px</code> units tab uses <code>rgb(0 0 0 / 0.1)</code>).</p>
+        <p><strong>Watch out.</strong> A see-through color looks different depending on what is behind it, so check contrast against the real background, not against white. Alpha on a color is also not the same as the <code>opacity</code> property: <code>opacity: 0.5</code> fades the <em>whole element</em>, text and children included, while an alpha background fades only the background and leaves the text solid.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* A caption that sits on top of a trail photo */
+          .photo-caption {
+            /* Black at 60%: darkens the photo behind the caption, so the text stays readable */
+            background-color: rgb(0 0 0 / 60%);
+            /* Solid white text on top of the dark panel */
+            color: white;
+          }
+          /* Rows of the trip table, while the pointer is over them */
+          tr:hover {
+            /* The brand green at 1a alpha (about 10%): a faint tint, the text stays solid */
+            background-color: #2f6f4e1a;
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which notation should I pick?</strong>
+      <ul>
+        <li><strong>A color from a design file or brand guide:</strong> hex, copied exactly. Example: <code>color: #2f6f4e;</code></li>
+        <li><strong>Several shades of one color (hover, tint, border):</strong> <code>hsl()</code>, changing only the lightness. Example: <code>background-color: hsl(150 40% 22%);</code></li>
+        <li><strong>Something see-through (an overlay, a tint, a shadow):</strong> <code>rgb()</code> or <code>hsl()</code> with <code>/ alpha</code>. Example: <code>background-color: rgb(0 0 0 / 60%);</code></li>
+        <li><strong>Plain white, black or invisible:</strong> the names. Example: <code>color: white;</code></li>
+        <li><strong>Whatever you pick:</strong> check the contrast. Body text needs at least 4.5 : 1, large text 3 : 1. Try your colors in the lab below.</li>
+      </ul>
+    </aside>
 
     <div class="widget" data-kind="Lab" data-title="Color lab">
       <div class="c4-row" style="margin-bottom:10px">
@@ -533,20 +664,154 @@
     </div>
 
     <h3>Units: px, em, rem, %, vw, vh, ch</h3>
-    <p>Lengths need a unit (only <code>0</code> may skip it). <strong>Absolute</strong> units like <code>px</code> are fixed. <strong>Relative</strong> units scale with something else, which is what makes designs flexible:</p>
+    <p>Every length in CSS (a width, a font size, some padding) is a number plus a <strong>unit</strong>: <code>16px</code>, <code>1.5rem</code>, <code>50%</code>. Leave the unit off and the browser ignores the whole declaration. The one exception is <code>0</code>, because zero pixels and zero percent are the same thing.</p>
+    <p>Units come in two families:</p>
+    <ul>
+      <li><strong>Absolute</strong> units are a fixed size. <code>px</code> is the only one you will use on screen. <code>20px</code> is 20px on every page, in every box, on every device.</li>
+      <li><strong>Relative</strong> units are a fraction of something else: the text size, the parent's width, or the browser window. When that something changes, the length changes with it. That is what lets one stylesheet look right on a phone and on a wide monitor, and lets the page grow when a visitor turns up their browser's text size.</li>
+    </ul>
     <div class="table-wrap">
-      <table class="data-table">
-        <thead><tr><th>Unit</th><th>Relative to</th><th>Typical use</th></tr></thead>
+      <table class="data-table c4-units-table">
+        <thead><tr><th>Unit</th><th>Relative to</th><th>Example, worked out</th><th>Use it for</th></tr></thead>
         <tbody>
-          <tr><td><code>px</code></td><td>Nothing; a fixed CSS pixel</td><td>Borders, small fixed details</td></tr>
-          <tr><td><code>em</code></td><td>The element's own font size (for <code>font-size</code> itself: the parent's)</td><td>Padding that should grow with the text</td></tr>
-          <tr><td><code>rem</code></td><td>The root (<code>&lt;html&gt;</code>) font size, usually 16px</td><td>Font sizes and spacing that stay predictable</td></tr>
-          <tr><td><code>%</code></td><td>The parent (for widths: the containing block's width)</td><td>Fluid widths</td></tr>
-          <tr><td><code>vw</code> / <code>vh</code></td><td>1% of the viewport's width / height</td><td>Full-screen sections, fluid headings</td></tr>
-          <tr><td><code>ch</code></td><td>The width of the "0" character in the current font</td><td>Limiting line length for readability</td></tr>
+          <tr><td><code>px</code></td><td>Nothing; a fixed CSS pixel</td><td><code>border: 1px solid</code> is always a 1px line</td><td>Borders, shadows, small fixed details</td></tr>
+          <tr><td><code>em</code></td><td>The element's own font size (for <code>font-size</code> itself: the parent's)</td><td>On 20px text, <code>padding: 0.5em</code> = 10px</td><td>Padding that should grow with the text, like inside a button</td></tr>
+          <tr><td><code>rem</code></td><td>The root (<code>&lt;html&gt;</code>) font size, usually 16px</td><td><code>font-size: 1.5rem</code> = 24px anywhere on the page</td><td>Font sizes and page-wide spacing</td></tr>
+          <tr><td><code>%</code></td><td>The parent (for widths: the containing block's width)</td><td>In a 600px column, <code>width: 50%</code> = 300px</td><td>Widths that adapt to their container</td></tr>
+          <tr><td><code>vw</code> / <code>vh</code></td><td>1% of the viewport's (browser window's) width / height</td><td>In a 900px-tall window, <code>100vh</code> = 900px</td><td>Full-screen sections, headings that scale with the window</td></tr>
+          <tr><td><code>ch</code></td><td>The width of the "0" character in the current font</td><td><code>max-width: 65ch</code> ≈ 65-75 characters per line</td><td>Keeping lines of text a readable length</td></tr>
         </tbody>
       </table>
     </div>
+
+    <p>Pick a unit to see what it measures, when to use it, when not to, and a commented example.</p>
+    <div class="tabs">
+      <div data-tab="px">
+        <p><strong>What it measures.</strong> A fixed length. One CSS pixel is about 1/96 of an inch seen at arm's length. It is not a dot on the screen: a high-resolution phone draws each CSS pixel with two or three physical dots, so <code>1px</code> looks about the same size on every device.</p>
+        <p><strong>When to use it.</strong> For details that should never grow or shrink with the text: hairline borders, outlines, the offset and blur of a shadow, the rounding on a small corner.</p>
+        <p><strong>When not to.</strong> Font sizes. Many people set their browser's default text size larger so they can read comfortably. Text in <code>rem</code> or <code>em</code> grows with that setting; text in <code>px</code> ignores it.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* A card with a thin border and a soft shadow */
+          .card {
+            /* A 1px line looks right at every text size, so px is the natural choice */
+            border: 1px solid #d0d7de;
+            /* Slightly rounded corners, fixed in size */
+            border-radius: 8px;
+            /* Shadow: 0 sideways, 2px down, 4px of blur, black at 10% opacity */
+            box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+          }
+        </script>
+      </div>
+      <div data-tab="em">
+        <p><strong>What it measures.</strong> A multiple of the element's own font size. If a button's text is 20px, then <code>1em</code> is 20px and <code>0.5em</code> is 10px. On the <code>font-size</code> property itself, <code>em</code> uses the parent's font size, because the element's own size is the thing being set.</p>
+        <p><strong>When to use it.</strong> For spacing that should stay in proportion to the text beside it: padding inside buttons, badges and tags, or the gap between an icon and its label. Make the text bigger and the padding grows with it, so a large button keeps the same shape as a small one.</p>
+        <p><strong>When not to.</strong> Font sizes on elements that nest inside each other. <code>em</code> multiplies at every level: <code>font-size: 1.2em</code> inside <code>1.2em</code> inside <code>1.2em</code> ends up 1.2 × 1.2 × 1.2 = 1.728 times the size. The explorer below shows this happening. Use <code>rem</code> for font sizes instead.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Every button: the padding is measured in em, so it follows the text size */
+          .button {
+            /* The text size: 1rem = 16px */
+            font-size: 1rem;
+            /* 0.5em top and bottom, 1em left and right: here that is 8px and 16px */
+            padding: 0.5em 1em;
+          }
+          /* A bigger button: only the text size changes... */
+          .button.big {
+            /* 1.5rem = 24px, so the padding above becomes 12px and 24px on its own */
+            font-size: 1.5rem;
+          }
+        </script>
+      </div>
+      <div data-tab="rem">
+        <p><strong>What it measures.</strong> "Root em": a multiple of the font size on the <code>&lt;html&gt;</code> element, the root of the page. Browsers set that to 16px by default, so <code>1rem</code> = 16px, <code>1.5rem</code> = 24px and <code>0.875rem</code> = 14px. Unlike <code>em</code>, it means the same thing everywhere on the page, however deeply an element is nested.</p>
+        <p><strong>When to use it.</strong> Font sizes (the body text, <code>h1</code> to <code>h3</code>) and spacing that should be consistent across the whole page, such as the space between sections. Because everything is based on the browser's text-size setting, a visitor who turns it up gets a larger page that keeps its proportions.</p>
+        <p><strong>Converting from a design in px.</strong> Divide by 16: 24px is 1.5rem, 12px is 0.75rem, 40px is 2.5rem.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The page title: 2 × 16px = 32px */
+          h1 {
+            font-size: 2rem;
+          }
+          /* Section headings: 1.5 × 16px = 24px */
+          h2 {
+            font-size: 1.5rem;
+          }
+          /* Body text and the space after each paragraph */
+          p {
+            /* 16px, the browser's default size */
+            font-size: 1rem;
+            /* 24px of space below every paragraph, on every page */
+            margin-bottom: 1.5rem;
+          }
+        </script>
+      </div>
+      <div data-tab="%">
+        <p><strong>What it measures.</strong> A percentage of something that belongs to the parent. For <code>width</code>, it is the parent's content width: <code>width: 50%</code> inside a 600px-wide parent is 300px, and the same rule gives 180px inside a 360px phone column. Other properties measure against other things: <code>font-size: 150%</code> is 1.5 × the parent's font size, and <code>padding</code> and <code>margin</code> in % are based on the parent's width, even for top and bottom.</p>
+        <p><strong>When to use it.</strong> For sizes that should adapt to whatever box they are in: a form field that fills its form, an image that must never be wider than its column, two boxes that share a row.</p>
+        <p><strong>When not to.</strong> Heights, usually. <code>height: 50%</code> only works when the parent has a height set explicitly; most parents are as tall as their content, so the percentage has nothing to measure against and is ignored.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Images shrink to fit small screens instead of spilling out of the page */
+          img {
+            /* Never wider than the element that contains the image */
+            max-width: 100%;
+            /* Let the height follow, so the picture keeps its proportions */
+            height: auto;
+          }
+          /* Text fields fill the width of their form, whatever that width is */
+          input[type="text"] {
+            width: 100%;
+          }
+        </script>
+      </div>
+      <div data-tab="vw / vh">
+        <p><strong>What they measure.</strong> The <strong>viewport</strong>, the visible area of the browser window. <code>1vw</code> is 1% of its width and <code>1vh</code> is 1% of its height. They ignore the parent entirely: in a 1280px-wide window, <code>50vw</code> is 640px no matter where the element sits.</p>
+        <p><strong>When to use them.</strong> For layouts tied to the screen itself: a welcome banner that fills the whole window (<code>min-height: 100vh</code>), or a big headline that shrinks on phones and grows on wide monitors.</p>
+        <p><strong>Watch out.</strong> On phones the address bar slides in and out, so <code>100vh</code> can be a little taller than what is visible; the newer unit <code>100dvh</code> ("dynamic") follows the visible height. <code>width: 100vw</code> includes the scrollbar on desktop computers and makes the page scroll sideways, so use <code>width: 100%</code> for full-width boxes. Never set body text in <code>vw</code> alone: it becomes tiny on phones and ignores the visitor's text-size setting.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* A welcome banner that fills the screen when the page opens */
+          .hero {
+            /* At least as tall as the browser window; taller if the content needs it */
+            min-height: 100vh;
+            /* Space inside the banner, based on the text size */
+            padding: 2rem;
+          }
+          /* The banner's headline scales with the window width */
+          .hero h1 {
+            /* 6% of the width: about 77px on a 1280px screen, about 23px on a 390px phone */
+            font-size: 6vw;
+          }
+        </script>
+      </div>
+      <div data-tab="ch">
+        <p><strong>What it measures.</strong> The width of the "0" (zero) character in the element's current font. Most letters are a little narrower than a zero, so <code>60ch</code> holds a few more than 60 characters of ordinary text. It changes with the font and the font size, which is exactly what you want when sizing a box to fit text.</p>
+        <p><strong>When to use it.</strong> To keep lines of text a comfortable length. Lines of roughly 45 to 75 characters are the easiest to read; much longer, and your eye loses its place jumping back to the start of the next line. It is also handy for inputs that hold a known number of characters, such as a ZIP code.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The main text column */
+          main {
+            /* Lines stop growing at about 65 characters, even on a wide monitor */
+            max-width: 65ch;
+            /* Center the column: no space above or below, equal automatic space left and right */
+            margin: 0 auto;
+          }
+          /* A ZIP code field only needs room for 5 digits */
+          input.zip {
+            /* Room for about 7 characters: the 5 digits plus a little breathing space */
+            width: 7ch;
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which unit should I pick?</strong>
+      <ul>
+        <li><strong>Text size:</strong> <code>rem</code>. Example: <code>font-size: 1.125rem;</code></li>
+        <li><strong>Padding inside a button, badge or tag:</strong> <code>em</code>, so it grows with the text. Example: <code>padding: 0.5em 1em;</code></li>
+        <li><strong>Space between sections and paragraphs:</strong> <code>rem</code>. Example: <code>margin-bottom: 2rem;</code></li>
+        <li><strong>Borders and shadows:</strong> <code>px</code>. Example: <code>border: 1px solid gray;</code></li>
+        <li><strong>A width that should fit its container:</strong> <code>%</code>. Example: <code>width: 100%;</code></li>
+        <li><strong>A readable column of text:</strong> <code>ch</code>. Example: <code>max-width: 65ch;</code></li>
+        <li><strong>A section as tall as the screen:</strong> <code>vh</code>. Example: <code>min-height: 100vh;</code></li>
+      </ul>
+    </aside>
 
     <div class="widget" data-kind="Explorer" data-title="Units explorer: watch em compound while rem stays put">
       <div class="c4-stack">
@@ -593,44 +858,62 @@
       <div data-tab="Inline">
         <p>An <strong>inline style</strong> lives in a <code>style</code> attribute on one element. It affects only that element.</p>
         <script type="text/plain" class="code" data-lang="html">
+          <!-- The declarations go inside style="...", with no selector and no braces; only this one paragraph turns red and bold -->
           <p style="color: crimson; font-weight: bold;">Registration closes Friday.</p>
         </script>
         <p><span class="pill warn">Use sparingly</span> Inline styles mix presentation back into your HTML, cannot be reused, and beat every normal rule in your stylesheets, which makes them hard to override later. They are handy for quick tests and for values set by JavaScript.</p>
+        <p><strong>When to use it.</strong> Almost never in a finished site. It is fine for a quick test ("does red work here?"), and you will see it in HTML emails, where many email programs ignore stylesheets, and in values that a script sets while the page runs.</p>
+        <p><strong>Watch out.</strong> Ten paragraphs styled this way means ten places to edit when the color changes. Because an inline style beats your stylesheet, a rule in <code>styles.css</code> cannot change it later without <code>!important</code>. And a <code>style</code> attribute cannot describe states or parts: there is no way to write <code>:hover</code> or <code>::before</code> inside it.</p>
       </div>
       <div data-tab="Embedded">
         <p>An <strong>embedded style sheet</strong> (also called internal) sits in a <code>&lt;style&gt;</code> element, normally in the <code>&lt;head&gt;</code>. It affects only this one page.</p>
         <script type="text/plain" class="code" data-lang="html">
           <head>
+            <!-- Normal CSS rules, but they only reach the elements of THIS page -->
             <style>
+              /* Every paragraph on this page: dark gray-blue */
               p { color: darkslategray; }
+              /* Elements with class="alert": red and bold */
               .alert { color: crimson; font-weight: bold; }
             </style>
           </head>
         </script>
         <p><span class="pill info">Good for</span> single-page experiments, demos, and styles that truly belong to one page only.</p>
+        <p><strong>When to use it.</strong> A page with a look that no other page shares, a quick experiment, or a demo you want to keep in one file. This lesson page does both: it links the course's shared stylesheet, and keeps the few styles that only its own widgets need in a <code>&lt;style&gt;</code> element.</p>
+        <p><strong>Watch out.</strong> The moment a second page needs the same styles, you are tempted to copy the <code>&lt;style&gt;</code> block, and now two copies must be kept in step. When two pages share styles, move them into an external file. Keep the <code>&lt;style&gt;</code> element in the <code>&lt;head&gt;</code> so the styles are ready before the content is drawn.</p>
       </div>
       <div data-tab="External">
         <p>An <strong>external style sheet</strong> is a separate <code>.css</code> file. Every page that links to it gets its styles.</p>
         <script type="text/plain" class="code" data-lang="html" data-title="index.html">
           <head>
+            <!-- href is the path from THIS HTML file to the CSS file -->
             <link rel="stylesheet" href="css/styles.css">
           </head>
         </script>
         <script type="text/plain" class="code" data-lang="css" data-title="css/styles.css">
+          /* Just rules: no <style> tags in a .css file */
           p { color: darkslategray; }
+          /* Every page that links this file gets the same alert style */
           .alert { color: crimson; font-weight: bold; }
         </script>
         <p><span class="pill good">Best practice</span> One file for the whole site: consistent design, one place to edit, and the browser caches it so later pages load faster. This is what your project will use.</p>
+        <p><strong>When to use it.</strong> For every real site, even a small one: add the same <code>&lt;link&gt;</code> to every page and they all share one look.</p>
+        <p><strong>Watch out.</strong> If the <code>href</code> path is wrong, nothing warns you: the browser quietly fails to download the file and the page appears unstyled, like the "No CSS" view in 4.1. The Console or Network panel in DevTools shows the failed request. A page inside a subfolder needs a path that climbs out first, such as <code>href="../css/styles.css"</code>. And if an edit does not seem to show up, the browser may be using its cached copy: reload with Ctrl+Shift+R (Cmd+Shift+R on a Mac).</p>
       </div>
       <div data-tab="@import">
         <p>A stylesheet can pull in another stylesheet with <code>@import</code>. It must come before every other rule in the file.</p>
         <script type="text/plain" class="code" data-lang="css" data-title="css/styles.css">
+          /* First: pull in a file that clears browser defaults (the path is relative to THIS css file) */
           @import url("reset.css");
+          /* Second: pull in the font and text rules */
           @import url("typography.css");
 
+          /* This file's own rules come after every @import */
           p { color: darkslategray; }
         </script>
         <p><span class="pill warn">Prefer &lt;link&gt;</span> The browser cannot discover an imported file until it has downloaded and read the file that imports it, so downloads happen one after another instead of in parallel. Several <code>&lt;link&gt;</code> elements are usually faster. Imported rules count as if they were written where the <code>@import</code> sits: before the rest of the importing file.</p>
+        <p><strong>When to use it.</strong> Rarely, in plain CSS. You will meet it in older sites and in the instructions of some font services. It is common in preprocessors such as Sass (4.8), which combine the files into one before the browser ever sees them, so the slowdown does not apply.</p>
+        <p><strong>Watch out.</strong> An <code>@import</code> placed after any normal rule is ignored, silently. Its path is measured from the CSS file that contains it, not from the HTML page.</p>
       </div>
     </div>
 
@@ -689,26 +972,260 @@
     <h2>Selectors</h2>
     <p>A <strong>selector</strong> is a pattern that matches elements in the page. The better your selectors, the less extra markup you need: instead of adding a class to every link in the navigation, you can write <code>nav a</code> and reach them all.</p>
 
+    <p>Selectors come in a handful of kinds. Some match elements by <em>what they are</em> (their tag, class, id or attributes), some by <em>where they are</em> (inside something, or next to something), and some by <em>what state they are in</em> (hovered, first in a list). The table sums them up; the tabs below it show when you would reach for each one.</p>
     <div class="table-wrap">
-      <table class="data-table">
-        <thead><tr><th>Selector</th><th>Name</th><th>Matches</th></tr></thead>
+      <table class="data-table c4-ref-table">
+        <thead><tr><th>Selector</th><th>Name</th><th>Matches</th><th>Example, worked out</th></tr></thead>
         <tbody>
-          <tr><td><code>p</code></td><td>Element (type)</td><td>Every <code>&lt;p&gt;</code></td></tr>
-          <tr><td><code>.note</code></td><td>Class</td><td>Every element whose <code>class</code> list includes <code>note</code> (an element can have several classes: <code>class="note urgent"</code>)</td></tr>
-          <tr><td><code>#signup</code></td><td>Id</td><td>The element with <code>id="signup"</code> (an id must be unique on the page)</td></tr>
-          <tr><td><code>*</code></td><td>Universal</td><td>Every element</td></tr>
-          <tr><td><code>h1, h2</code></td><td>Grouping (selector list)</td><td>Everything either selector matches</td></tr>
-          <tr><td><code>p.note</code></td><td>Compound</td><td><code>&lt;p&gt;</code> elements that also have class <code>note</code> (no space!)</td></tr>
-          <tr><td><code>nav a</code></td><td>Descendant combinator (a space)</td><td><code>a</code> anywhere inside a <code>nav</code>, at any depth</td></tr>
-          <tr><td><code>ul &gt; li</code></td><td>Child combinator</td><td><code>li</code> whose parent is a <code>ul</code></td></tr>
-          <tr><td><code>h2 + p</code></td><td>Adjacent sibling combinator</td><td>The <code>p</code> immediately after an <code>h2</code> (same parent)</td></tr>
-          <tr><td><code>h2 ~ p</code></td><td>General sibling combinator</td><td>Every <code>p</code> after an <code>h2</code> (same parent)</td></tr>
-          <tr><td><code>[type="email"]</code></td><td>Attribute</td><td>Elements whose attribute equals the value. Also <code>[title]</code> (has it), <code>^=</code> (starts with), <code>$=</code> (ends with), <code>*=</code> (contains)</td></tr>
-          <tr><td><code>li:first-child</code></td><td>Pseudo-class</td><td>Elements in a state or position: <code>:hover</code>, <code>:focus</code>, <code>:first-child</code>, <code>:last-child</code>, <code>:nth-child(odd)</code>, <code>:not(.x)</code></td></tr>
-          <tr><td><code>p::first-line</code></td><td>Pseudo-element</td><td>A part of an element, or generated content: <code>::before</code>, <code>::after</code>, <code>::first-letter</code>, <code>::placeholder</code></td></tr>
+          <tr><td><code>p</code></td><td>Element (type)</td><td>Every <code>&lt;p&gt;</code></td><td>The paragraphs in the header, the article and the footer: all of them</td></tr>
+          <tr><td><code>.note</code></td><td>Class</td><td>Every element whose <code>class</code> list includes <code>note</code> (an element can have several classes: <code>class="note urgent"</code>)</td><td><code>&lt;p class="note urgent"&gt;</code> and <code>&lt;div class="note"&gt;</code> match; <code>&lt;p class="notes"&gt;</code> does not</td></tr>
+          <tr><td><code>#signup</code></td><td>Id</td><td>The element with <code>id="signup"</code> (an id must be unique on the page)</td><td>Only <code>&lt;form id="signup"&gt;</code>, the one element with that id</td></tr>
+          <tr><td><code>*</code></td><td>Universal</td><td>Every element</td><td><code>* { box-sizing: border-box; }</code> changes every element on the page</td></tr>
+          <tr><td><code>h1, h2</code></td><td>Grouping (selector list)</td><td>Everything either selector matches</td><td>Every <code>h1</code> and every <code>h2</code> get the same declarations; the comma means "and also"</td></tr>
+          <tr><td><code>p.note</code></td><td>Compound</td><td><code>&lt;p&gt;</code> elements that also have class <code>note</code> (no space!)</td><td><code>&lt;p class="note"&gt;</code> matches; <code>&lt;div class="note"&gt;</code> does not</td></tr>
+          <tr><td><code>nav a</code></td><td>Descendant combinator (a space)</td><td><code>a</code> anywhere inside a <code>nav</code>, at any depth</td><td>The menu links match, even inside <code>&lt;ul&gt;&lt;li&gt;</code>; a link in the article does not</td></tr>
+          <tr><td><code>ul &gt; li</code></td><td>Child combinator</td><td><code>li</code> whose parent is a <code>ul</code></td><td><code>.menu &gt; li</code> matches the top-level menu items, not the items of a sub-list nested inside one of them</td></tr>
+          <tr><td><code>h2 + p</code></td><td>Adjacent sibling combinator</td><td>The <code>p</code> immediately after an <code>h2</code> (same parent)</td><td>After <code>h2, p, p, p</code>: only the first <code>p</code>. After <code>h2, img, p</code>: nothing</td></tr>
+          <tr><td><code>h2 ~ p</code></td><td>General sibling combinator</td><td>Every <code>p</code> after an <code>h2</code> (same parent)</td><td>After <code>h2, p, img, p</code>: both paragraphs. A <code>p</code> before the <code>h2</code>: no</td></tr>
+          <tr><td><code>[type="email"]</code></td><td>Attribute</td><td>Elements whose attribute equals the value. Also <code>[title]</code> (has it), <code>^=</code> (starts with), <code>$=</code> (ends with), <code>*=</code> (contains)</td><td><code>a[href$=".pdf"]</code> matches <code>href="maps/ridge.pdf"</code>, not <code>href="trips.html"</code></td></tr>
+          <tr><td><code>li:first-child</code></td><td>Pseudo-class</td><td>Elements in a state or position: <code>:hover</code>, <code>:focus</code>, <code>:first-child</code>, <code>:last-child</code>, <code>:nth-child(odd)</code>, <code>:not(.x)</code></td><td>In a four-item list, only the first item. Covered in detail under <a href="#c4-states">States and parts</a></td></tr>
+          <tr><td><code>p::first-line</code></td><td>Pseudo-element</td><td>A part of an element, or generated content: <code>::before</code>, <code>::after</code>, <code>::first-letter</code>, <code>::placeholder</code></td><td>The first line as drawn on screen, so it holds different words on a phone and on a monitor</td></tr>
         </tbody>
       </table>
     </div>
+
+    <p>Pick a kind of selector to see exactly what it matches in a small piece of the club's site, when to use it, what to watch out for, and a commented rule.</p>
+    <div class="tabs">
+      <div data-tab="Element and *">
+        <p><strong>What it matches.</strong> A bare tag name such as <code>p</code>, <code>h2</code> or <code>a</code> matches every element of that type on the page, wherever it is. The <strong>universal selector</strong> <code>*</code> matches every element of every type.</p>
+        <p><strong>When to use it.</strong> For site-wide defaults, the rules you write first at the top of a stylesheet: the font and text color on <code>body</code>, the size of every <code>h1</code>, the spacing of every paragraph, the color of every link. Use <code>*</code> almost only for the <code>box-sizing</code> reset you will meet in 4.6.</p>
+        <p><strong>Watch out.</strong> An element selector hits <em>every</em> element of that type, including ones you forgot about: a <code>p</code> rule also restyles the paragraphs in the footer and inside every card. When a style belongs to one area, use a class or a descendant selector instead. Element selectors score only 0-0-1 for specificity, which is exactly right for defaults: any class can override them. Be careful with <code>*</code> and inherited properties: <code>* { color: navy; }</code> sets the color on every element <em>directly</em>, so a child can no longer inherit a different color from its parent.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <header>
+            <p>Riverside Hiking Club</p>          <!-- p: matched -->
+          </header>
+          <main>
+            <h2>Ridge Walk</h2>                   <!-- p: not matched, it is an h2 -->
+            <p>Saturday, 6 miles.</p>             <!-- p: matched -->
+          </main>
+          <footer>
+            <p>Contact the trip leaders</p>       <!-- p: matched too, every p on the page -->
+          </footer>
+        </script>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Every paragraph on every page */
+          p {
+            /* 1.6 × the font size from line to line: easier to read than the default */
+            line-height: 1.6;
+          }
+          /* Every element on the page, whatever its tag */
+          * {
+            /* width includes padding and border (explained in 4.6) */
+            box-sizing: border-box;
+          }
+        </script>
+      </div>
+      <div data-tab="Class">
+        <p><strong>What it matches.</strong> A dot and a name, such as <code>.featured</code>, matches every element whose <code>class</code> attribute contains that name, whatever its tag. An element can carry several classes separated by spaces (<code>class="trip featured"</code>) and matches a selector for any one of them. Join selectors with <em>no space</em> to require both: <code>p.note</code> is a <code>&lt;p&gt;</code> that has the class <code>note</code>, and <code>.trip.featured</code> is an element with both classes.</p>
+        <p><strong>When to use it.</strong> Most of the time. Classes are the everyday styling tool: put a class on the elements that should share a look and write one rule for it. A class can be reused on any number of elements of any type, and its specificity (0-1-0) is strong enough to override element defaults while staying easy to override with another class.</p>
+        <p><strong>Watch out.</strong> The dot belongs only in the CSS: write <code>class="featured"</code> in the HTML and <code>.featured</code> in the stylesheet. Class names are case-sensitive, so <code>.Featured</code> does not match <code>class="featured"</code>. Name a class after what the thing <em>is</em> (<code>.trip-card</code>, <code>.warning</code>), not how it looks (<code>.green-box</code>), so the name still makes sense after a redesign. And mind the space: <code>p.note</code> and <code>p .note</code> mean different things.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <article class="trip">                    <!-- .trip: matched -->
+            <h2>Lake Loop</h2>
+          </article>
+          <article class="trip featured">           <!-- .trip, .featured and .trip.featured: all matched -->
+            <h2>Ridge Walk</h2>
+            <p class="note">Bring poles.</p>        <!-- .note and p.note: matched -->
+          </article>
+          <div class="note">Carpool at 6:30.</div>  <!-- .note: matched; p.note: not, it is a div -->
+        </script>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Every trip card, however many there are */
+          .trip {
+            /* A thin light border around each card */
+            border: 1px solid #c8d3cc;
+            /* Room between the border and the text */
+            padding: 1rem;
+          }
+          /* Only cards with BOTH classes (no space); scores 0-2-0, so it beats .trip */
+          .trip.featured {
+            /* A thicker brand-green border marks the featured trip */
+            border: 3px solid #2f6f4e;
+          }
+          /* Only <p> elements with class note; the div with class note is left alone */
+          p.note {
+            /* Italic sets the tip apart from the description */
+            font-style: italic;
+          }
+        </script>
+      </div>
+      <div data-tab="Id">
+        <p><strong>What it matches.</strong> <code>#</code> and a name matches the one element with that <code>id</code>. An id must be unique: no two elements on a page may share it.</p>
+        <p><strong>When to use it.</strong> Ids have important jobs outside CSS: they are the targets of in-page links (<code>&lt;a href="#signup"&gt;</code> jumps to <code>id="signup"</code>), they connect a <code>&lt;label for="…"&gt;</code> to its input, and JavaScript uses them to find elements. For styling, you rarely need them.</p>
+        <p><strong>Watch out.</strong> An id selector scores 1-0-0, which beats any number of classes. That sounds useful until you want to change one small thing about that element: every later override now needs an id too. Style with a class, even for a one-off, and keep ids for links, labels and scripts. The <code>#</code> goes in the CSS and in link addresses, never in the <code>id</code> attribute itself, and using the same id twice is invalid HTML.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <nav>
+            <a href="#signup">Join the club</a>        <!-- clicking jumps down to id="signup" -->
+          </nav>
+          <form id="signup" class="signup-form">       <!-- #signup and .signup-form: both match this form -->
+            <label for="email">Email</label>           <!-- for="email" points at the input's id -->
+            <input id="email" type="email">
+          </form>
+        </script>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Works, but scores 1-0-0: any later change to this form will need an id too */
+          #signup {
+            /* A pale green panel behind the form */
+            background-color: #eaf6f0;
+          }
+          /* Usually better: the class reaches the same form and scores only 0-1-0 */
+          .signup-form {
+            /* Room inside the panel */
+            padding: 1.5rem;
+          }
+        </script>
+      </div>
+      <div data-tab="Grouping">
+        <p><strong>What it matches.</strong> A comma-separated <strong>selector list</strong> matches everything that <em>any</em> of its selectors matches. <code>h1, h2, h3 { … }</code> is shorthand for writing the same declarations in three separate rules.</p>
+        <p><strong>When to use it.</strong> Whenever different selectors should share the same declarations: one font and color for all the headings, the same look for real buttons and links styled as buttons. The value then lives in one place, so a later change is one edit instead of three.</p>
+        <p><strong>Watch out.</strong> A comma and a space are completely different: <code>h2, p</code> means "every <code>h2</code> <em>and</em> every <code>p</code>", while <code>h2 p</code> means "a <code>p</code> inside an <code>h2</code>". Each selector in the list keeps its own specificity. And if one selector in the list is invalid, whether from a typo or a stray trailing comma, the browser throws away the whole rule, not just the broken part.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* All three heading levels share one font and one color */
+          h1, h2, h3 {
+            /* A classic serif for headings, with a generic fallback */
+            font-family: Georgia, serif;
+            /* The club's brand green */
+            color: #2f6f4e;
+          }
+          /* Real buttons and links styled as buttons look identical */
+          button, .button {
+            /* White text on a green background */
+            color: white;
+            /* The same brand green */
+            background-color: #2f6f4e;
+          }
+          /* BROKEN: the comma before the brace leaves an empty selector, so the WHOLE rule is dropped */
+          h4, h5, {
+            /* Never applied, not even to the h4 and h5 elements */
+            color: #2f6f4e;
+          }
+        </script>
+      </div>
+      <div data-tab="Descendant and child">
+        <p><strong>What they match.</strong> A space between two selectors (<code>nav a</code>) is the <strong>descendant combinator</strong>: it matches an <code>a</code> anywhere inside a <code>nav</code>, at any depth, whether child, grandchild or deeper. A <code>&gt;</code> (<code>.menu &gt; li</code>) is the <strong>child combinator</strong>: the second element must be a <em>direct</em> child of the first, exactly one level down.</p>
+        <p><strong>When to use them.</strong> Use a descendant selector to style things by where they sit, without putting a class on each one: links in the navigation look different from links in the article, paragraphs inside a card get smaller text. Use the child combinator when the same structure nests inside itself and you only want the outer level, such as the top-level items of a menu but not the items of a sub-menu inside it.</p>
+        <p><strong>Watch out.</strong> Descendant selectors reach further than you expect: <code>.menu li</code> also styles every <code>li</code> of any list nested inside the menu. Child selectors break just as easily the other way: <code>nav &gt; a</code> matches nothing when the links sit inside a <code>&lt;ul&gt;</code>, because then their parent is an <code>li</code>, not the <code>nav</code>. And every part adds specificity: <code>nav a</code> scores 0-0-2, so a later <code>a { color: … }</code> rule (0-0-1) will not change the menu links. Two parts is usually enough; long chains are hard to override.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <nav>
+            <ul class="menu">
+              <li><a href="index.html">Home</a></li>          <!-- li: .menu > li matches; a: nav a matches -->
+              <li><a href="trips.html">Trips</a>               <!-- li: .menu > li matches; a: nav a matches -->
+                <ul>
+                  <li><a href="ridge.html">Ridge Walk</a></li> <!-- li: NOT .menu > li (its parent is the inner ul); a: nav a still matches -->
+                </ul>
+              </li>
+            </ul>
+          </nav>
+          <main>
+            <p>See every <a href="trips.html">trip</a>.</p>   <!-- a: NOT nav a, it is outside the nav -->
+          </main>
+        </script>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Links anywhere inside <nav>, however deep: all three menu links */
+          nav a {
+            /* White text on the dark navigation bar */
+            color: white;
+            /* No underline: in a menu bar, everything is obviously a link */
+            text-decoration: none;
+          }
+          /* Only the list items directly inside .menu: Home and Trips, not Ridge Walk */
+          .menu > li {
+            /* Top-level items in bold; the sub-menu stays normal weight */
+            font-weight: bold;
+          }
+        </script>
+      </div>
+      <div data-tab="Siblings">
+        <p><strong>What they match.</strong> <strong>Siblings</strong> are elements with the same parent. <code>h3 + p</code> (the <strong>adjacent sibling</strong> combinator) matches a <code>p</code> that comes <em>immediately</em> after an <code>h3</code>, with no other element in between. <code>.cancelled ~ p</code> (the <strong>general sibling</strong> combinator) matches every <code>p</code> that comes anywhere after a <code>.cancelled</code> element under the same parent. Both only look forward, never at earlier siblings, and never inside other elements.</p>
+        <p><strong>When to use them.</strong> <code>+</code> is handy for "the thing right after": the first line after a heading, or a divider <em>between</em> list items with <code>li + li</code> (every item that has an item before it, so the first one gets no line). <code>~</code> is needed less often; it styles "everything after this point" within the same parent.</p>
+        <p><strong>Watch out.</strong> <code>+</code> needs the two elements side by side: put an <code>&lt;img&gt;</code> between the heading and the paragraph and the rule stops matching. (Text and comments in between do not count; only elements do.) And <code>~</code> matches <em>all</em> later siblings, including ones far below, so it can reach further than you meant.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <section class="trip">
+            <p class="date">Sunday, May 4</p>                 <!-- h3 + p: no, it comes BEFORE the h3 -->
+            <h3>Lake Loop</h3>
+            <p class="cancelled">Cancelled: trail flooded.</p> <!-- h3 + p: yes, directly after the h3 -->
+            <p>3 miles, easy.</p>                             <!-- .cancelled ~ p: yes -->
+            <img src="lake.jpg" alt="The Lake Loop trail">
+            <p>Meet at the boat ramp.</p>                     <!-- .cancelled ~ p: yes, the img between does not matter for ~ -->
+          </section>
+          <ul class="gear">
+            <li>Boots</li>                                    <!-- li + li: no item before it -->
+            <li>Water</li>                                    <!-- li + li: yes -->
+            <li>Map</li>                                      <!-- li + li: yes -->
+          </ul>
+        </script>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The paragraph directly after a trip's heading */
+          h3 + p {
+            /* Bold, so the most important line stands out */
+            font-weight: bold;
+          }
+          /* Every later paragraph, once a trip is marked cancelled */
+          .cancelled ~ p {
+            /* Cross out the details that no longer apply */
+            text-decoration: line-through;
+          }
+          /* Every gear item that has another item before it */
+          .gear li + li {
+            /* A divider line between items, never above the first one */
+            border-top: 1px solid #c8d3cc;
+          }
+        </script>
+      </div>
+      <div data-tab="Attribute">
+        <p><strong>What it matches.</strong> Square brackets match elements by their attributes. <code>[title]</code> matches any element that <em>has</em> a <code>title</code> attribute. <code>[type="email"]</code> matches when the value is exactly <code>email</code>. Three operators match part of the value: <code>^=</code> starts with, <code>$=</code> ends with, <code>*=</code> contains.</p>
+        <p><strong>When to use it.</strong> When the HTML already says what something is, so you do not need to add a class: style form fields by type (<code>input[type="checkbox"]</code>), mark links to other sites (<code>a[href^="https"]</code>), or highlight links that download a PDF (<code>a[href$=".pdf"]</code>). An attribute selector scores 0-1-0, the same as a class.</p>
+        <p><strong>Watch out.</strong> Values are compared as text, character by character, and usually case matters: <code>[href$=".pdf"]</code> misses <code>href="MAP.PDF"</code> (add <code>i</code> before the bracket, <code>[href$=".pdf" i]</code>, to ignore case). Put quotes around the value; they are required when it contains a dot, a space or starts with a digit, and never wrong. <code>[class="note"]</code> only matches when the whole attribute is exactly <code>note</code>, so <code>class="note urgent"</code> fails: use <code>.note</code> for classes. And <code>a[href^="https"]</code> also catches full addresses that point to your own site.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <input type="email" name="email">             <!-- input[type="email"]: yes -->
+          <input type="text" name="name">               <!-- input[type="email"]: no, the value is "text" -->
+          <a href="maps/ridge.pdf">Trail map (PDF)</a>  <!-- a[href$=".pdf"]: yes, the address ends with .pdf -->
+          <a href="https://www.nps.gov">Park info</a>   <!-- a[href^="https"]: yes, the address starts with https -->
+          <a href="trips.html">Trips</a>                <!-- neither: a relative link that is not a PDF -->
+        </script>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Email fields only; other inputs keep their width */
+          input[type="email"] {
+            /* Room for about 30 characters: long addresses fit */
+            width: 30ch;
+          }
+          /* Links whose address starts with https: other websites */
+          a[href^="https"] {
+            /* A dotted underline hints that the link leaves the club's site */
+            text-decoration-style: dotted;
+          }
+          /* Links whose address ends with .pdf: downloads */
+          a[href$=".pdf"] {
+            /* A pale highlight; the link text itself still says "PDF" for everyone */
+            background-color: #fff4d6;
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which selector should I pick?</strong>
+      <ul>
+        <li><strong>Site-wide defaults (body text, headings, links):</strong> an element selector. Example: <code>p { line-height: 1.6; }</code></li>
+        <li><strong>Anything you are styling on purpose:</strong> a class. Example: <code>.trip-card { padding: 1rem; }</code></li>
+        <li><strong>The same look for several things:</strong> a selector list. Example: <code>h1, h2, h3 { color: #2f6f4e; }</code></li>
+        <li><strong>Everything of one kind inside one area, without adding classes:</strong> a descendant selector. Example: <code>nav a { color: white; }</code></li>
+        <li><strong>Only the outer level of something nested:</strong> the child combinator. Example: <code>.menu &gt; li</code></li>
+        <li><strong>Lines or space between repeated items:</strong> the adjacent sibling combinator. Example: <code>li + li { border-top: 1px solid #c8d3cc; }</code></li>
+        <li><strong>Form fields by type, links by address:</strong> an attribute selector. Example: <code>input[type="email"]</code></li>
+        <li><strong>Ids:</strong> for link targets, labels and scripts. Style the same element with a class instead.</li>
+      </ul>
+    </aside>
 
     <p>Reading selectors takes practice, so here is a game. Each level shows a small HTML document with some elements marked as targets. Type a selector that matches <strong>exactly</strong> the targets: all of them, and nothing else. Your browser matches it live, the same way CSS would.</p>
 
@@ -764,7 +1281,7 @@
       <p class="c4-note" id="c4-t-list" aria-live="polite"></p>
     </div>
 
-    <h3>States and parts: pseudo-classes and pseudo-elements</h3>
+    <h3 id="c4-states">States and parts: pseudo-classes and pseudo-elements</h3>
     <p>A <strong>pseudo-class</strong> (one colon) matches an element when it is in a certain state or position: being hovered (<code>:hover</code>), having keyboard focus (<code>:focus</code>), being the first child (<code>:first-child</code>). A <strong>pseudo-element</strong> (two colons) lets you style a <em>part</em> of an element that has no tag of its own, such as its first line, or insert decorative content with <code>::before</code> and <code>::after</code>.</p>
     <p>States like <code>:hover</code> change as you interact, and pseudo-elements are not real elements, so the tester above cannot show them. Switch them on here and interact with the sample instead:</p>
 
@@ -783,6 +1300,188 @@
         </div>
       </div>
     </div>
+
+    <p>Pick a pseudo-class or pseudo-element to see what it matches, when to use it, what to watch out for (several of these affect people using a keyboard or a screen reader), and a commented example.</p>
+    <div class="tabs">
+      <div data-tab=":hover and :active">
+        <p><strong>What they match.</strong> <code>:hover</code> matches an element while the mouse pointer is over it. <code>:active</code> matches while it is being pressed: the mouse button is down, or a finger is on the screen. Links have two more states: <code>:link</code> (an address not visited yet) and <code>:visited</code> (an address already in the browser's history).</p>
+        <p><strong>When to use them.</strong> To give feedback: a link changes color under the pointer, a button darkens when hovered and looks pushed in while clicked, a table row lights up so the eye can follow it across.</p>
+        <p><strong>Watch out.</strong> Phones and tablets have no hover: a finger either taps or does not. So hover may only <em>add</em> feedback; never hide something people need (a menu, a price, the only copy of some instructions) until the pointer is over it. Give keyboard users the same feedback with <code>:focus-visible</code> (next tab). For links, write the four states in the order <code>:link</code>, <code>:visited</code>, <code>:hover</code>, <code>:active</code> (remember "LoVe HAte"). They all have the same specificity, so the later rule wins: a <code>:hover</code> color written before <code>:visited</code> would lose to it, and visited links would never change on hover. For privacy, <code>:visited</code> may only change colors.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* 1. Links the visitor has not opened yet */
+          a:link {
+            /* The brand green */
+            color: #2f6f4e;
+          }
+          /* 2. Links already visited: purple shows readers where they have been */
+          a:visited {
+            /* Only color changes are allowed here, for privacy */
+            color: #6a4c93;
+          }
+          /* 3. Pointer over a link: after :visited, so it also works on visited links */
+          a:hover {
+            /* A thicker underline as feedback */
+            text-decoration-thickness: 3px;
+          }
+          /* 4. While the link is being pressed */
+          a:active {
+            /* A darker green, just for that moment */
+            color: #1f4a34;
+          }
+        </script>
+      </div>
+      <div data-tab=":focus-visible">
+        <p><strong>What it matches.</strong> An element has <strong>focus</strong> when it will receive the keyboard: the text box you are typing in, or the link or button you reached by pressing Tab. <code>:focus</code> matches whenever an element has focus, however it got it. <code>:focus-visible</code> matches only when the browser decides a visible marker is needed: always for text fields, and for links and buttons when the visitor is using the keyboard, but not after a mouse click.</p>
+        <p><strong>When to use it.</strong> To design a focus ring that fits your site instead of the browser's default one. <code>:focus-visible</code> is the usual choice for links and buttons: keyboard users always see where they are, and mouse users do not get a ring after every click.</p>
+        <p><strong>Watch out.</strong> Never remove the focus outline (<code>outline: none</code>) without putting something at least as visible in its place. People who navigate with a keyboard, including many people with motor disabilities, rely on it to know where they are on the page; without it they are lost. Try it now: press Tab a few times on this page and watch the ring move from link to link.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Links and buttons reached with the keyboard */
+          a:focus-visible, button:focus-visible {
+            /* A thick ring in the brand green, easy to spot */
+            outline: 3px solid #2f6f4e;
+            /* A small gap, so the ring does not sit on top of the text */
+            outline-offset: 3px;
+          }
+          /* The text box the visitor is typing in */
+          input:focus {
+            /* Its border turns brand green while it has focus */
+            border-color: #2f6f4e;
+          }
+        </script>
+      </div>
+      <div data-tab=":first-child and :nth-child()">
+        <p><strong>What they match.</strong> These match an element by its <em>position</em> among its siblings. <code>:first-child</code> and <code>:last-child</code> match the first and last. <code>:nth-child()</code> takes a pattern: <code>odd</code> (1st, 3rd, 5th...), <code>even</code> (2nd, 4th, 6th...), a single number such as <code>3</code> (only the third), or a formula such as <code>3n</code> (every third: 3, 6, 9...). Counting starts at 1, not 0.</p>
+        <p><strong>When to use them.</strong> For repeated items where every piece of HTML looks the same: zebra stripes on table rows, removing the extra space under the last item of a list, a special look for the first card. You get the effect without adding a class to every other row by hand, and it stays correct when rows are added or removed.</p>
+        <p><strong>Watch out.</strong> <code>p:first-child</code> means "a <code>p</code> that is the first child of its parent", not "the first <code>p</code>". If an <code>&lt;h2&gt;</code> comes first, <code>p:first-child</code> matches nothing at all. When you mean "the first <code>p</code> among its siblings", use <code>p:first-of-type</code>. Likewise, <code>:nth-child()</code> counts every sibling element, whatever its tag.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <table>
+            <tr><th>Trip</th><th>Miles</th></tr>      <!-- row 1: odd -->
+            <tr><td>Lake Loop</td><td>3</td></tr>     <!-- row 2: even, striped -->
+            <tr><td>Ridge Walk</td><td>6</td></tr>    <!-- row 3: odd -->
+            <tr><td>Summit Push</td><td>9</td></tr>   <!-- row 4: even, striped -->
+          </table>
+          <article>
+            <h2>Trip report</h2>                      <!-- the article's first child -->
+            <p>We started early.</p>                  <!-- p:first-child: NO, the h2 is first; p:first-of-type: yes -->
+            <p>Views all day.</p>
+          </article>
+        </script>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Every second row of the trip table: easier to follow a row across */
+          tr:nth-child(even) {
+            /* A very pale green stripe */
+            background-color: #eaf6f0;
+          }
+          /* The last item of every list */
+          li:last-child {
+            /* No gap under the final item, so the list ends cleanly */
+            margin-bottom: 0;
+          }
+          /* The first paragraph in each article, even though a heading comes before it */
+          article p:first-of-type {
+            /* A slightly larger opening paragraph */
+            font-size: 1.125rem;
+          }
+        </script>
+      </div>
+      <div data-tab=":not()">
+        <p><strong>What it matches.</strong> <code>:not(X)</code> matches elements that do <em>not</em> match <code>X</code>. <code>li:not(:last-child)</code> is every list item except the last; <code>input:not([type="checkbox"])</code> is every input except checkboxes.</p>
+        <p><strong>When to use it.</strong> When "all of these except one kind" is shorter than listing the ones you want: a divider under every item but the last, one width for every text-like field but not for checkboxes and radio buttons.</p>
+        <p><strong>Watch out.</strong> On its own it reaches everywhere: <code>:not(p)</code> matches <code>&lt;html&gt;</code>, <code>&lt;body&gt;</code> and every other element that is not a paragraph. Always attach it to something, as in <code>li:not(…)</code>. It is as specific as its argument: <code>:not(.done)</code> scores 0-1-0, and <code>:not(#main)</code> scores 1-0-0.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Every gear item except the last one */
+          .gear li:not(:last-child) {
+            /* A divider under each item, but not under the final one */
+            border-bottom: 1px solid #c8d3cc;
+          }
+          /* Every input except checkboxes and radio buttons */
+          input:not([type="checkbox"]):not([type="radio"]) {
+            /* Text fields fill the form's width; tick boxes keep their small size */
+            width: 100%;
+          }
+        </script>
+      </div>
+      <div data-tab="::before and ::after">
+        <p><strong>What they are.</strong> Two extra boxes the browser can generate inside an element: <code>::before</code> becomes its first child and <code>::after</code> its last. They only appear when you give them a <code>content</code> property, even an empty one (<code>content: "";</code>), and you style them like any other element.</p>
+        <p><strong>When to use them.</strong> For decoration that does not belong in the HTML: an arrow after "Read more" links, a small colored bar in front of each section heading, the check marks you switched on in the lab above.</p>
+        <p><strong>Watch out.</strong> Generated content is not really part of the page's text. It cannot be selected or copied, and screen readers are inconsistent: some read it aloud, some skip it. So anything a reader must know, such as a price, a warning, "(required)" or "opens in a new tab", belongs in the HTML. Also, <code>::before</code> and <code>::after</code> generally do not work on elements that cannot hold content, such as <code>&lt;img&gt;</code>, <code>&lt;input&gt;</code> and <code>&lt;br&gt;</code>.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* "Read more" links get an arrow after their text */
+          a.more::after {
+            /* Pure decoration: the link text already says where it goes */
+            content: " →";
+          }
+          /* A short green bar in front of every section heading */
+          h2::before {
+            /* Empty content: the box exists, but holds no text */
+            content: "";
+            /* inline-block, so the width and height below apply (see 4.6) */
+            display: inline-block;
+            /* 0.4 × the heading's font size wide... */
+            width: 0.4em;
+            /* ...and as tall as the text */
+            height: 1em;
+            /* The brand green */
+            background-color: #2f6f4e;
+            /* A small gap between the bar and the heading text */
+            margin-right: 0.4em;
+          }
+        </script>
+      </div>
+      <div data-tab="::first-letter and ::first-line">
+        <p><strong>What they are.</strong> <code>::first-letter</code> is the first letter of a block of text, and <code>::first-line</code> is its first line <em>as drawn on screen</em>. Neither exists in the HTML: the browser works them out as it lays out the page.</p>
+        <p><strong>When to use them.</strong> Magazine-style touches: a large, colored first letter (a "drop cap") at the start of a story, or the first line of an article in small capitals to draw the reader in.</p>
+        <p><strong>Watch out.</strong> The first line depends on the width of the window, so a phone and a monitor show different words in that style (switch on the <code>::first-line</code> rule in the lab above and resize the window to see it). Both only work on block elements such as <code>&lt;p&gt;</code>, not on inline ones such as <code>&lt;span&gt;</code> or <code>&lt;a&gt;</code>. And only some properties apply: fonts, colors, backgrounds and text spacing work; things like <code>width</code> do not.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The first letter of the opening paragraph of each trip report */
+          .report p:first-of-type::first-letter {
+            /* Twice the size of the surrounding text */
+            font-size: 2em;
+            /* Bold, so the big letter has some weight */
+            font-weight: bold;
+            /* The brand green */
+            color: #2f6f4e;
+          }
+          /* The first line of that same paragraph, however many words fit */
+          .report p:first-of-type::first-line {
+            /* Small capital letters lead the reader in */
+            font-variant: small-caps;
+          }
+        </script>
+      </div>
+      <div data-tab="::placeholder">
+        <p><strong>What it is.</strong> The hint text inside an empty form field, taken from its <code>placeholder</code> attribute. It disappears as soon as the visitor starts typing.</p>
+        <p><strong>When to use it.</strong> To match the hint text to your design, or to make the browser's very light default gray a little easier to read.</p>
+        <p><strong>Watch out.</strong> A placeholder is not a label. It vanishes while the person types, so they can forget what the field was for, and some screen readers do not announce it. Always keep a real <code>&lt;label&gt;</code>. Make the hint dark enough to read (aim for 4.5 : 1 like other text) but styled differently from typed text, for example in italics, so nobody mistakes it for an answer already filled in.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the field; the placeholder only shows an example answer -->
+          <label for="name">Your name</label>
+          <input id="name" type="text" placeholder="e.g. Sam Rivera">
+        </script>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The hint text inside empty inputs */
+          input::placeholder {
+            /* A mid gray that still reaches 5.3 : 1 on white */
+            color: #6b6b6b;
+            /* Italic, so it never looks like something already typed */
+            font-style: italic;
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which one should I pick?</strong>
+      <ul>
+        <li><strong>Feedback when the pointer is over something:</strong> <code>:hover</code>, always paired with <code>:focus-visible</code> for keyboard users. Example: <code>a:hover, a:focus-visible { … }</code></li>
+        <li><strong>A clear focus ring:</strong> <code>:focus-visible</code>. Example: <code>outline: 3px solid #2f6f4e;</code></li>
+        <li><strong>Zebra stripes on a table:</strong> <code>:nth-child()</code>. Example: <code>tr:nth-child(even)</code></li>
+        <li><strong>Something on every item except the last:</strong> <code>:not()</code>. Example: <code>li:not(:last-child)</code></li>
+        <li><strong>A decorative icon, arrow or bar:</strong> <code>::before</code> or <code>::after</code>. Never for information the reader needs.</li>
+        <li><strong>A drop cap:</strong> <code>::first-letter</code>. Example: <code>p::first-letter { font-size: 2em; }</code></li>
+        <li><strong>Hint text in form fields:</strong> <code>::placeholder</code>, with a real <code>&lt;label&gt;</code> as well.</li>
+      </ul>
+    </aside>
 
     <div class="match" data-title="Match each selector to what it selects">
       <script type="application/json">
@@ -1026,6 +1725,96 @@
       <p class="c4-note" id="c4-dp-note" aria-live="polite"></p>
     </div>
 
+    <p>The browser gives every element a sensible <code>display</code> type, but you can change it with the <code>display</code> property. Changing it changes only how the box behaves, never what the element means: a <code>&lt;span&gt;</code> set to <code>display: block</code> is still a span to a screen reader. Pick a value to see when you would switch an element to it.</p>
+    <div class="tabs">
+      <div data-tab="block">
+        <p><strong>What it does.</strong> The element starts on a new line, stretches across all the width available, and respects <code>width</code>, <code>height</code>, padding and margins on every side.</p>
+        <p><strong>When to use it.</strong> To make a link fill a whole row, so the entire row of a vertical menu is clickable, not just the words. To put an image on its own line: images are inline by default, so they sit in the line of text; as a block they stand alone, and <code>margin: 0 auto</code> can then center them.</p>
+        <p><strong>Watch out.</strong> A block stretches to the full width even when its content is short, so its background and border stretch too. Give it a <code>width</code> or <code>max-width</code> if it should be narrower.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* A vertical menu: each link becomes a full-width row */
+          .side-menu a {
+            /* Block: a new line for each link, stretched across the menu */
+            display: block;
+            /* The padding now takes up real space, so the whole padded row is clickable */
+            padding: 0.5rem 1rem;
+          }
+          /* A trail map on its own line, centered */
+          img.map {
+            /* Out of the line of text and onto its own line */
+            display: block;
+            /* Equal automatic margins left and right center a block narrower than its parent */
+            margin: 0 auto;
+          }
+        </script>
+      </div>
+      <div data-tab="inline">
+        <p><strong>What it does.</strong> The element flows inside a line of text like a word. <code>width</code> and <code>height</code> are ignored, and top and bottom margins do not push the lines above and below away.</p>
+        <p><strong>When to use it.</strong> Not often, because text-level elements are inline already. One classic use: a short list shown on one line, such as a "breadcrumb" trail (Home / Trips / Ridge Walk) that is still a real list in the HTML.</p>
+        <p><strong>Watch out.</strong> Vertical padding on an inline element is drawn but takes no space, so a background can overlap the lines above and below. List items set to <code>inline</code> also lose their bullets. When you need a real box that sits in a line, use <code>inline-block</code> (next tab); for rows of side-by-side boxes, you will learn flexbox later.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* A breadcrumb trail, written in the HTML as an ordinary list */
+          .breadcrumb li {
+            /* The items flow along one line, like words in a sentence */
+            display: inline;
+          }
+          /* A slash before every item except the first (li + li from 4.4) */
+          .breadcrumb li + li::before {
+            /* Decoration only: the list already separates the items for screen readers */
+            content: " / ";
+          }
+        </script>
+      </div>
+      <div data-tab="inline-block">
+        <p><strong>What it does.</strong> The element sits in the line like an inline element, but it is a real box: <code>width</code>, <code>height</code>, padding and margins all work and take up space.</p>
+        <p><strong>When to use it.</strong> Small boxes that live in a line of text or a row: buttons, badges and tags ("Ridge Walk <em>Hard</em>"), navigation links that need padding.</p>
+        <p><strong>Watch out.</strong> The spaces and line breaks between inline-block elements in your HTML show up as small gaps between them, because they are ordinary spaces in a line of text. Boxes of different heights line up along the baseline of their text (the line the letters sit on), which can look uneven; <code>vertical-align: top</code> fixes that. For whole layouts of side-by-side boxes, flexbox (later) is the better tool.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Difficulty tags next to a trip name: Ridge Walk [Hard] */
+          .tag {
+            /* In the line like a word, but a real box */
+            display: inline-block;
+            /* Top and bottom padding now take up space, so the tag keeps its shape */
+            padding: 0.15em 0.6em;
+            /* A small gap from the trip name before it */
+            margin-left: 0.5em;
+            /* A pale green background */
+            background-color: #eaf6f0;
+            /* Fully rounded ends: a pill shape */
+            border-radius: 999px;
+          }
+        </script>
+      </div>
+      <div data-tab="none">
+        <p><strong>What it does.</strong> <code>display: none</code> removes the element from the page completely: it is not drawn, it takes up no space, and screen readers skip it too.</p>
+        <p><strong>When to use it.</strong> For content that should not appear right now: a "Thanks, you are signed up!" message that a script will reveal after the form is sent, or a block you want to switch off while testing without deleting it.</p>
+        <p><strong>Watch out.</strong> It hides the element from <em>everyone</em>, including screen reader users, so it is not a way to keep text "just for screen readers". It is not a security feature either: the content is still in the HTML, and anyone can read it with View Source. If you want an element invisible but still holding its space, use <code>visibility: hidden</code> instead.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The thank-you message waits, hidden, until a script shows it */
+          .thanks {
+            /* Not drawn, takes no space, skipped by screen readers */
+            display: none;
+          }
+          /* For comparison: invisible, but it still takes up its space in the layout */
+          .spacer {
+            /* A blank gap exactly the size of the element */
+            visibility: hidden;
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which display should I pick?</strong>
+      <ul>
+        <li><strong>A link or image that should have a whole row to itself:</strong> <code>block</code>. Example: <code>.side-menu a { display: block; }</code></li>
+        <li><strong>A small box that sits in a line (tag, badge, button):</strong> <code>inline-block</code>. Example: <code>.tag { display: inline-block; }</code></li>
+        <li><strong>A short list shown on one line:</strong> <code>inline</code>. Example: <code>.breadcrumb li { display: inline; }</code></li>
+        <li><strong>Something that should not appear at all right now:</strong> <code>none</code>. Example: <code>.thanks { display: none; }</code></li>
+        <li><strong>Several boxes side by side in a real layout:</strong> none of these; that is what flexbox and grid are for, and you will meet them later.</li>
+      </ul>
+    </aside>
+
     <h3>Margin collapsing</h3>
     <p>When two block boxes sit one above the other, the bottom margin of the first and the top margin of the second do not add up. They <strong>collapse</strong> into one gap as big as the <em>larger</em> margin. Horizontal margins never collapse, and margins inside flex and grid containers (which you will meet later) do not collapse either.</p>
 
@@ -1052,6 +1841,149 @@
     <p><strong>Backgrounds</strong> fill the content and padding (and show through gaps in a dashed border). Use <code>background-color</code>, or <code>background-image: url("trail.jpg")</code> with <code>background-repeat</code>, <code>background-position</code> and <code>background-size</code> (<code>cover</code> fills the box, <code>contain</code> fits the whole image). Gradients such as <code>linear-gradient()</code> count as images too.</p>
     <p><strong>Borders</strong> need a width, a color and, most importantly, a <strong>style</strong>: with <code>border-style: none</code> (the default), no border appears no matter how wide you make it. <code>border-radius</code> rounds the corners.</p>
     <p><strong>Overflow</strong> decides what happens when content is too big for a box with a fixed size: <code>visible</code> (default: it spills out), <code>hidden</code> (clipped), <code>scroll</code> (always scrollbars) or <code>auto</code> (scrollbars only when needed).</p>
+    <div class="table-wrap">
+      <table class="data-table c4-ref-table">
+        <thead><tr><th>Property</th><th>What it does</th><th>Common values</th><th>Example, worked out</th></tr></thead>
+        <tbody>
+          <tr><td><code>background-color</code></td><td>Fills the content and padding area (and under the border)</td><td>Any color</td><td><code>background-color: #eaf6f0</code> gives a card a pale green fill; the margin around it stays clear</td></tr>
+          <tr><td><code>background-image</code></td><td>Paints an image or gradient on top of the background color</td><td><code>url("../images/ridge.jpg")</code>, <code>linear-gradient(…)</code></td><td>The path is measured from the CSS file, so a sheet in <code>css/</code> climbs up with <code>../</code> first</td></tr>
+          <tr><td><code>background-size</code></td><td>How large the image is drawn</td><td><code>cover</code>, <code>contain</code>, <code>auto</code>, <code>200px</code></td><td>A 1000 × 1000 photo in a 1200 × 400 banner: <code>cover</code> scales it to 1200 × 1200 and crops 800px of height; <code>contain</code> scales it to 400 × 400 and leaves 800px of width uncovered</td></tr>
+          <tr><td><code>background-repeat</code></td><td>Whether a small image tiles to fill the box</td><td><code>repeat</code> (default), <code>no-repeat</code>, <code>repeat-x</code></td><td>A 40 × 40 leaf pattern tiles 30 times across a 1200px-wide strip</td></tr>
+          <tr><td><code>background-position</code></td><td>Which part of the image stays in view</td><td><code>center</code>, <code>top</code>, <code>right bottom</code>, <code>50% 30%</code></td><td><code>center</code> keeps the middle of a cropped photo visible</td></tr>
+          <tr><td><code>border</code></td><td>A line around the padding: width, style and color</td><td><code>1px solid #c8d3cc</code>, <code>2px dashed</code></td><td><code>border: 2px #2f6f4e</code> shows <em>nothing</em>: it has no style</td></tr>
+          <tr><td><code>border-radius</code></td><td>Rounds the corners</td><td><code>6px</code>, <code>50%</code>, <code>999px</code></td><td><code>50%</code> on an 80 × 80 image makes a circle; on a 160 × 80 box, an oval</td></tr>
+          <tr><td><code>overflow</code></td><td>What happens to content bigger than its box</td><td><code>visible</code>, <code>hidden</code>, <code>auto</code>, <code>scroll</code></td><td>A 700px-wide table in a 390px phone column: <code>auto</code> adds a sideways scrollbar, <code>hidden</code> cuts off the last columns</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Pick a property to see when to use it, what to watch out for, and a commented example.</p>
+    <div class="tabs">
+      <div data-tab="background-color">
+        <p><strong>What it does.</strong> Fills the element's content and padding area with a color. It also runs underneath the border, which is why it shows through the gaps of a dashed or dotted border. The margin always stays transparent.</p>
+        <p><strong>When to use it.</strong> To set a panel apart from the page: cards, notices, highlighted table rows, a banner, or the page itself on <code>body</code>.</p>
+        <p><strong>Watch out.</strong> Whenever you set a background color, set the text color in the same rule and check the contrast (4.5 : 1 for body text). Otherwise the text color is inherited from somewhere else and may be unreadable on your new background. Backgrounds do not inherit: a child with no background of its own is transparent, so the parent's color shows through it.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The trail-closure notice at the top of the trips page */
+          .notice {
+            /* Pale yellow fills the content and the padding */
+            background-color: #fff4d6;
+            /* Dark brown text set in the same rule: 10.6 : 1 on the yellow */
+            color: #4a3500;
+            /* Padding gives the color room around the words */
+            padding: 1rem;
+          }
+        </script>
+      </div>
+      <div data-tab="background-image">
+        <p><strong>What it does.</strong> Paints an image behind the element's content, on top of its background color. Three helper properties control it: <code>background-size</code> (<code>cover</code> fills the whole box and crops what does not fit; <code>contain</code> shows the whole image and leaves empty space), <code>background-position</code> (which part stays in view) and <code>background-repeat</code> (whether it tiles). Gradients such as <code>linear-gradient()</code> are images too, so they go in the same property.</p>
+        <p><strong>When to use it.</strong> For <em>decoration</em>: a photo behind a banner's headline, a subtle pattern, a color fade. Use <code>cover</code> for photos that should fill a banner, and <code>contain</code> for a logo or illustration that must never be cut off.</p>
+        <p><strong>Watch out.</strong> The path inside <code>url()</code> is measured from the <strong>CSS file</strong>, not from the HTML page. With your stylesheet in <code>css/</code> and your photos in <code>images/</code>, you need <code>url("../images/ridge.jpg")</code>. This is the most common reason a background image "does not show up". A background image has no <code>alt</code> text and screen readers skip it, so a photo that carries information belongs in an <code>&lt;img&gt;</code>. Always set a <code>background-color</code> as well: it shows while the image loads and if it fails. And an empty element is 0px tall, so its background has nowhere to appear until you give it content, padding or a <code>min-height</code>.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The photo banner at the top of the trips page (this file is css/styles.css) */
+          .banner {
+            /* Shown while the photo loads, and if it never arrives */
+            background-color: #2f6f4e;
+            /* From css/, go up one folder with ../, then into images/ */
+            background-image: url("../images/ridge.jpg");
+            /* Scale the photo to cover the whole banner; the edges may be cropped */
+            background-size: cover;
+            /* Keep the middle of the photo in view when it is cropped */
+            background-position: center;
+            /* A photo should never tile */
+            background-repeat: no-repeat;
+            /* Without a height or content the banner would be 0px tall and show nothing */
+            min-height: 300px;
+          }
+          /* The strip across the top of each trip card */
+          .card-header {
+            /* A gradient counts as an image: brand green fading to a lighter green, left to right */
+            background-image: linear-gradient(to right, #2f6f4e, #6fa287);
+          }
+        </script>
+      </div>
+      <div data-tab="border">
+        <p><strong>What it does.</strong> Draws a line around the padding. The shorthand takes a width, a style and a color in any order: <code>border: 2px dashed #2f6f4e;</code>. To draw only one side, use <code>border-top</code>, <code>border-right</code>, <code>border-bottom</code> or <code>border-left</code>. The styles are <code>solid</code>, <code>dashed</code>, <code>dotted</code>, <code>double</code>, <code>groove</code>, <code>ridge</code>, <code>inset</code>, <code>outset</code> and <code>none</code>; you will use the first three almost every time.</p>
+        <p><strong>When to use it.</strong> To outline cards, images and form fields; one side only for a divider (<code>border-bottom</code> under a heading) or an accent bar (<code>border-left</code> on a tip box).</p>
+        <p><strong>Watch out.</strong> Without a style, nothing appears: the default style is <code>none</code>, so <code>border: 2px #2f6f4e;</code> draws no line at all. Leave out the color and the border uses the text color. And with the default <code>box-sizing</code>, a border adds to the box's size (a 300px box with a 2px border is 304px wide), which is why the <code>border-box</code> reset above is so popular.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Trip cards: a light outline all the way around */
+          .trip-card {
+            /* 1px wide, solid, light gray-green: width, style and color together */
+            border: 1px solid #c8d3cc;
+          }
+          /* Section headings: a line underneath only */
+          h2 {
+            /* Just the bottom side gets a border */
+            border-bottom: 2px solid #2f6f4e;
+            /* A little room between the words and their line */
+            padding-bottom: 0.25rem;
+          }
+          /* Tip boxes: a thick accent bar down the left edge */
+          .tip {
+            /* 4px of solid green on the left side only */
+            border-left: 4px solid #2f6f4e;
+          }
+        </script>
+      </div>
+      <div data-tab="border-radius">
+        <p><strong>What it does.</strong> Rounds the corners of the box. The background and the border follow the curve. One value rounds all four corners; four values go clockwise from the top-left corner.</p>
+        <p><strong>When to use it.</strong> Softer cards and buttons (a few pixels, typically 4 to 12), pill-shaped tags (a huge value such as <code>999px</code>: anything bigger than half the height rounds the ends completely), and round profile photos (<code>50%</code> on a square image).</p>
+        <p><strong>Watch out.</strong> <code>50%</code> gives a circle only when the element is square; on a rectangle it gives an oval. Content inside a rounded box is not clipped automatically: a photo at the top of a rounded card still pokes out with square corners until you add <code>overflow: hidden</code> to the card (next tab).</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Buttons: gently rounded corners */
+          .button {
+            /* The same 6px curve on all four corners */
+            border-radius: 6px;
+          }
+          /* Difficulty tags such as "Easy": fully rounded ends */
+          .tag {
+            /* Far more than half the tag's height, so the ends become half circles */
+            border-radius: 999px;
+          }
+          /* Trip leader photos, which are square image files */
+          .leader img {
+            /* 80px wide... */
+            width: 80px;
+            /* ...and 80px tall: still square */
+            height: 80px;
+            /* Half the width and height on every corner: a circle */
+            border-radius: 50%;
+          }
+        </script>
+      </div>
+      <div data-tab="overflow">
+        <p><strong>What it does.</strong> Decides what happens when content is bigger than its box. That only happens when the box has a fixed size (a <code>width</code>, <code>height</code> or <code>max-height</code>) or holds something wide such as a table or a long line of code. <code>visible</code> (the default) lets the content spill out over whatever comes next; <code>hidden</code> clips it; <code>auto</code> adds a scrollbar only when needed; <code>scroll</code> always shows scrollbars. <code>overflow-x</code> and <code>overflow-y</code> set one direction only.</p>
+        <p><strong>When to use it.</strong> <code>auto</code> for things that may be wider than a phone, such as tables and code samples. Every table on this page sits in a box with <code>overflow-x: auto</code>: narrow your window and the tables scroll sideways instead of stretching the page. <code>hidden</code> to clip a photo to a card's rounded corners.</p>
+        <p><strong>Watch out.</strong> <code>hidden</code> can cut off real content and make it impossible to reach, especially when visitors enlarge the text; do not use it to hide something that spills out. The better fix is usually to remove the fixed <code>height</code> so the box grows with its content. <code>scroll</code> shows empty scrollbars on some systems even when nothing overflows, so prefer <code>auto</code>.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The box around the trip table: the table may be wider than a phone */
+          .table-scroll {
+            /* A sideways scrollbar appears only when the table does not fit */
+            overflow-x: auto;
+          }
+          /* Trip cards with rounded corners and a photo at the top */
+          .trip-card {
+            /* Rounded corners on the card */
+            border-radius: 12px;
+            /* Clip the photo's square corners to the card's rounded ones */
+            overflow: hidden;
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which one should I pick?</strong>
+      <ul>
+        <li><strong>A tinted panel:</strong> <code>background-color</code>, with a matching <code>color</code> in the same rule. Example: <code>background-color: #fff4d6; color: #4a3500;</code></li>
+        <li><strong>A decorative photo behind a banner:</strong> <code>background-image</code> with <code>cover</code>, <code>center</code>, <code>no-repeat</code> and a fallback color.</li>
+        <li><strong>A photo that is part of the content:</strong> not a background at all, but an <code>&lt;img&gt;</code> with <code>alt</code> text.</li>
+        <li><strong>An outline or a divider:</strong> <code>border</code>, or one side of it. Example: <code>border-bottom: 2px solid #2f6f4e;</code></li>
+        <li><strong>Rounded corners:</strong> <code>border-radius</code>: 4 to 12px for cards, <code>999px</code> for pills, <code>50%</code> on a square for a circle.</li>
+        <li><strong>Content that may be too wide for a phone:</strong> <code>overflow-x: auto</code> on a box around it.</li>
+      </ul>
+    </aside>
 
     <div class="widget" data-kind="Studio" data-title="Border, background and overflow studio">
       <div class="grid-2">
@@ -1097,6 +2029,103 @@
       body { font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
       code { font-family: Consolas, Menlo, "Courier New", monospace; }
     </script>
+    <p>Three rules apply to every stack you write:</p>
+    <ul>
+      <li><strong>Quote font names that contain spaces:</strong> <code>"Segoe UI"</code>, <code>"Times New Roman"</code>. Single-word names such as <code>Georgia</code> need no quotes.</li>
+      <li><strong>Never quote the generic family.</strong> <code>sans-serif</code> is a keyword; <code>"sans-serif"</code> in quotes asks for a font that is literally <em>named</em> sans-serif, which does not exist, so your safety net silently disappears.</li>
+      <li><strong>A stack only chooses among fonts already on the device.</strong> Naming a font does not download it. To send a font with your page, you need a web font (later in this section).</li>
+    </ul>
+    <p>Each generic family is a kind of lettering, and every device has at least one font of each kind. The samples in the second column are drawn in <em>your</em> device's version of each family, so they may look different on another computer or phone.</p>
+    <div class="table-wrap">
+      <table class="data-table c4-ref-table">
+        <thead><tr><th>Generic family</th><th>On your device</th><th>What it looks like</th><th>Use it for</th></tr></thead>
+        <tbody>
+          <tr><td><code>sans-serif</code></td><td class="c4-ff c4-ff-sans">Ridge Walk 6 mi</td><td>Plain letters with no small strokes at the ends</td><td>Most web text: body copy, menus, buttons, forms</td></tr>
+          <tr><td><code>serif</code></td><td class="c4-ff c4-ff-serif">Ridge Walk 6 mi</td><td>Small finishing strokes ("serifs") at the ends of letters, like a printed book</td><td>Headings with a classic feel; long articles</td></tr>
+          <tr><td><code>monospace</code></td><td class="c4-ff c4-ff-mono">Ridge Walk 6 mi</td><td>Every character exactly the same width</td><td>Code, and text that must line up in columns</td></tr>
+          <tr><td><code>system-ui</code></td><td class="c4-ff c4-ff-system">Ridge Walk 6 mi</td><td>The operating system's own interface font: Segoe UI on Windows, San Francisco on Apple devices, Roboto on Android</td><td>Forms and app-like pages that should feel native</td></tr>
+          <tr><td><code>cursive</code></td><td class="c4-ff c4-ff-cursive">Ridge Walk 6 mi</td><td>Handwriting or script; differs a lot from device to device</td><td>Rare decorative touches, never body text</td></tr>
+          <tr><td><code>fantasy</code></td><td class="c4-ff c4-ff-fantasy">Ridge Walk 6 mi</td><td>Decorative display lettering; completely unpredictable</td><td>Almost never</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Pick a family to see when to use it, what to watch out for, and a commented stack you can copy.</p>
+    <div class="tabs">
+      <div data-tab="sans-serif">
+        <p><strong>What it is.</strong> Letters built from simple strokes with no finishing marks at the ends. Arial, Helvetica, Segoe UI and Roboto are all sans-serif fonts.</p>
+        <p><strong>When to use it.</strong> The safe default for web text of every size: body copy, navigation, buttons, labels and forms. Simple letter shapes stay clear at small sizes on screens.</p>
+        <p><strong>Watch out.</strong> The fonts in a stack are not identical: some are wider than others, so the same sentence can wrap onto a different number of lines on Windows, a Mac and a phone. Leave some room in your design rather than fitting text to the exact pixel.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Body text for the whole club site */
+          body {
+            /* Windows has Segoe UI, Android has Roboto, Apple devices have Helvetica, almost everyone has Arial; sans-serif catches the rest */
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          }
+        </script>
+      </div>
+      <div data-tab="serif">
+        <p><strong>What it is.</strong> Letters with small finishing strokes, the <strong>serifs</strong>, at the ends of their lines, as in most printed books and newspapers. Georgia and Times New Roman are serif fonts.</p>
+        <p><strong>When to use it.</strong> Headings that should feel traditional or editorial, such as the club's newsletter, or long articles meant for reading. A popular combination is serif headings with sans-serif body text.</p>
+        <p><strong>Watch out.</strong> Delicate serif fonts can look thin and spindly at small sizes on low-resolution screens; Georgia was designed for screens and holds up well. Two font families per site is plenty; more starts to look messy.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Headings in a classic serif, body text stays sans-serif */
+          h1, h2, h3 {
+            /* Georgia is on nearly every Windows and Apple computer; Times New Roman is the backup; serif catches the rest */
+            font-family: Georgia, "Times New Roman", serif;
+          }
+        </script>
+      </div>
+      <div data-tab="monospace">
+        <p><strong>What it is.</strong> Fonts in which every character, from a narrow <code>i</code> to a wide <code>W</code>, takes up exactly the same width, like an old typewriter.</p>
+        <p><strong>When to use it.</strong> Code (browsers already use it for <code>&lt;code&gt;</code>, <code>&lt;pre&gt;</code> and <code>&lt;kbd&gt;</code>), and anything whose characters should line up in columns, such as a plain-text schedule.</p>
+        <p><strong>Watch out.</strong> It is tiring to read in long paragraphs, so keep it for code. Most browsers also give text whose only font is the bare keyword <code>monospace</code> a smaller default size (13px instead of 16px). Setting the size in <code>rem</code>, as below, avoids that surprise.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Code samples and keyboard keys */
+          code, kbd {
+            /* Consolas on Windows, Menlo on Macs, Courier New almost everywhere; monospace catches the rest */
+            font-family: Consolas, Menlo, "Courier New", monospace;
+            /* A little smaller than the text around it: 15px when the root is 16px */
+            font-size: 0.9375rem;
+          }
+        </script>
+      </div>
+      <div data-tab="system-ui">
+        <p><strong>What it is.</strong> Whatever font the visitor's operating system uses for its own menus and buttons: Segoe UI on Windows, San Francisco on iPhones and Macs, Roboto on Android.</p>
+        <p><strong>When to use it.</strong> Forms, dashboards and other app-like pages that should feel like part of the device. It costs no download and every visitor already knows the font well.</p>
+        <p><strong>Watch out.</strong> It looks different on every system, on purpose, so check that your design works with all of them. Very old browsers do not know the keyword, which is why the stack still ends with <code>sans-serif</code>.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The trip sign-up form and its buttons */
+          form, button, input {
+            /* The device's own interface font; sans-serif for browsers that do not know system-ui */
+            font-family: system-ui, sans-serif;
+          }
+        </script>
+      </div>
+      <div data-tab="cursive and fantasy">
+        <p><strong>What they are.</strong> <code>cursive</code> asks for some handwriting or script font; <code>fantasy</code> asks for some decorative display font. The device chooses which one. <code>cursive</code> often turns out to be Comic Sans MS on Windows and Apple Chancery on a Mac, and <code>fantasy</code> can be anything from Impact to Papyrus.</p>
+        <p><strong>When to use them.</strong> Almost never on their own. If a design needs a particular handwriting font, load it as a web font and put <code>cursive</code> at the end of the stack only as the last fallback.</p>
+        <p><strong>Watch out.</strong> Because you cannot know what visitors will see, the result may look nothing like your design, and script fonts are hard to read beyond a few words. Never use them for body text.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The hand-lettered "Happy trails!" line in the footer */
+          .signature {
+            /* A web font named Caveat, loaded with @font-face; cursive only if it fails */
+            font-family: "Caveat", cursive;
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which stack should I pick?</strong>
+      <ul>
+        <li><strong>Body text of a content site:</strong> a sans-serif stack. Example: <code>font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;</code></li>
+        <li><strong>Headings with a classic feel:</strong> a serif stack. Example: <code>font-family: Georgia, "Times New Roman", serif;</code></li>
+        <li><strong>Code:</strong> a monospace stack. Example: <code>font-family: Consolas, Menlo, "Courier New", monospace;</code></li>
+        <li><strong>Forms and app-like pages:</strong> <code>font-family: system-ui, sans-serif;</code></li>
+        <li><strong>Anything decorative:</strong> a web font, with a generic family as the last fallback.</li>
+      </ul>
+    </aside>
 
     <div class="widget" data-kind="Simulator" data-title="Font stack fallback">
       <div class="c4-field-row">
@@ -1111,6 +2140,194 @@
 
     <h3>Size, weight, style and spacing</h3>
     <p>Set <code>font-size</code> in <code>rem</code> so text respects the reader's browser settings. <code>font-weight</code> runs from 100 to 900 (<code>normal</code> is 400, <code>bold</code> is 700), but a font only looks different at the weights it actually has. Give <code>line-height</code> as a plain number like <code>1.5</code>: it multiplies each element's own font size, so it scales correctly for headings and small print alike. Then the text properties: <code>text-align</code>, <code>text-decoration</code>, <code>text-transform</code>, <code>text-indent</code>, <code>letter-spacing</code>, <code>word-spacing</code> and <code>text-shadow</code>.</p>
+    <p>All of these except <code>text-decoration</code> are inherited, so a declaration on <code>body</code> reaches every piece of text on the page, and you only override it where something should differ.</p>
+    <div class="table-wrap">
+      <table class="data-table c4-ref-table">
+        <thead><tr><th>Property</th><th>What it changes</th><th>Typical values</th><th>Example, worked out</th></tr></thead>
+        <tbody>
+          <tr><td><code>font-size</code></td><td>How big the letters are</td><td><code>1rem</code> body, <code>0.875rem</code> small print, <code>1.5rem</code> to <code>2.5rem</code> headings</td><td><code>1.25rem</code> = 1.25 × 16px = 20px</td></tr>
+          <tr><td><code>font-weight</code></td><td>How thick the strokes are</td><td><code>400</code> (normal), <code>700</code> (bold); anything from 100 to 900</td><td><code>600</code> is semi-bold, but only if the font has a 600 weight</td></tr>
+          <tr><td><code>font-style</code></td><td>Upright or italic</td><td><code>normal</code>, <code>italic</code></td><td><code>cite { font-style: normal; }</code> stops book titles from being italic</td></tr>
+          <tr><td><code>line-height</code></td><td>The distance from one line to the next</td><td><code>1.5</code> for body text, <code>1.2</code> for headings (no unit)</td><td><code>1.5</code> on 16px text = 24px lines; <code>1.2</code> on a 36px heading ≈ 43px</td></tr>
+          <tr><td><code>text-align</code></td><td>Where each line sits inside its box</td><td><code>left</code>, <code>center</code>, <code>right</code>, <code>justify</code></td><td><code>center</code> centers the lines of text, not the box itself</td></tr>
+          <tr><td><code>text-indent</code></td><td>Indents the first line only</td><td><code>0</code>, <code>1.5em</code></td><td><code>2em</code> on 16px text indents the first line by 32px</td></tr>
+          <tr><td><code>text-decoration</code></td><td>Lines drawn on the text</td><td><code>none</code>, <code>underline</code>, <code>line-through</code></td><td><code>nav a { text-decoration: none; }</code> removes the underline from menu links</td></tr>
+          <tr><td><code>text-transform</code></td><td>Capitalization on screen, without changing the HTML</td><td><code>uppercase</code>, <code>lowercase</code>, <code>capitalize</code>, <code>none</code></td><td>"Trail rules" with <code>uppercase</code> is shown as TRAIL RULES</td></tr>
+          <tr><td><code>letter-spacing</code></td><td>Extra space between letters</td><td><code>0.05em</code>, <code>-0.01em</code></td><td><code>0.1em</code> on 14px text adds 1.4px between letters</td></tr>
+          <tr><td><code>word-spacing</code></td><td>Extra space between words</td><td><code>normal</code>, <code>0.2em</code></td><td>Rarely needed; <code>0.25em</code> on 16px text adds 4px between words</td></tr>
+          <tr><td><code>text-shadow</code></td><td>A shadow behind the letters</td><td><code>1px 2px 4px rgb(0 0 0 / 50%)</code></td><td>1px right, 2px down, 4px of blur, black at 50%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Pick a property to see when to use it, what typical values look like, the readability traps to avoid, and a commented example.</p>
+    <div class="tabs">
+      <div data-tab="font-size">
+        <p><strong>What it does.</strong> Sets how big the text is. It also sets what <code>1em</code> means on that element, so padding in <code>em</code> and a unitless <code>line-height</code> follow along.</p>
+        <p><strong>When to use it.</strong> To build a clear scale. Body text at <code>1rem</code> (16px, the browser default) or a little larger for reading-heavy pages (<code>1.125rem</code> = 18px); headings stepping up from there (<code>h3</code> 1.25rem, <code>h2</code> 1.5rem, <code>h1</code> 2 to 2.5rem); small print no smaller than <code>0.875rem</code> (14px).</p>
+        <p><strong>Watch out.</strong> Use <code>rem</code>, not <code>px</code>, so the text grows when a visitor turns up their browser's text size. Body text below 16px is hard for many people to read. And choose heading tags for structure (the page title is an <code>h1</code>, sections are <code>h2</code>), then size them with CSS; never pick <code>h4</code> just because it looks the right size.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Body text: 1 × the root size, 16px unless the visitor changed it */
+          body {
+            font-size: 1rem;
+          }
+          /* The page title: 2.25 × 16px = 36px */
+          h1 {
+            font-size: 2.25rem;
+          }
+          /* Photo credits and other small print: 0.875 × 16px = 14px, the smallest comfortable size */
+          .credit {
+            font-size: 0.875rem;
+          }
+        </script>
+      </div>
+      <div data-tab="font-weight and font-style">
+        <p><strong>What they do.</strong> <code>font-weight</code> sets how thick the strokes are, from 100 (thin) to 900 (black); <code>normal</code> is 400 and <code>bold</code> is 700. <code>font-style</code> switches between <code>normal</code> (upright) and <code>italic</code>.</p>
+        <p><strong>When to use them.</strong> Weight builds a visual hierarchy: headings at 700, labels and buttons at 600, body text at 400. <code>font-style: italic</code> suits captions and photo credits; <code>font-style: normal</code> undoes the browser's italics on elements such as <code>&lt;cite&gt;</code>, <code>&lt;address&gt;</code> and <code>&lt;em&gt;</code> when your design marks them another way.</p>
+        <p><strong>Watch out.</strong> A font can only show the weights it actually has. Many system fonts have just 400 and 700, so <code>600</code> may look exactly like bold; if a font has no bold at all, the browser fakes one by thickening the letters ("faux bold"), which looks smudged. Thin weights (100 to 300) are hard to read at small sizes. And for <em>meaning</em>, use HTML: <code>&lt;strong&gt;</code> for importance, <code>&lt;em&gt;</code> for emphasis. These properties only change the look.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Section headings */
+          h2 {
+            /* 700 is the same as the keyword bold */
+            font-weight: 700;
+          }
+          /* Photo credits under images */
+          .credit {
+            /* Italic sets the credit apart from the caption above it */
+            font-style: italic;
+          }
+          /* Book and trail-guide titles: browsers show <cite> in italics */
+          cite {
+            /* Undo the italics... */
+            font-style: normal;
+            /* ...and use semi-bold instead (bold, if the font has no 600) */
+            font-weight: 600;
+          }
+        </script>
+      </div>
+      <div data-tab="line-height">
+        <p><strong>What it does.</strong> Sets the distance from one line of text to the next. The extra space is shared equally above and below the letters.</p>
+        <p><strong>When to use it.</strong> Almost always on <code>body</code>: browsers default to about 1.2, which is cramped for paragraphs. Body text reads best around <code>1.4</code> to <code>1.6</code>. Headings need less, around <code>1.1</code> to <code>1.3</code>, because large text with wide gaps falls apart when it wraps onto a second line.</p>
+        <p><strong>Watch out.</strong> Write it as a plain number with no unit. A plain number is inherited as a <em>multiplier</em>, so every element multiplies its own font size: 16px text gets 24px lines, a 36px heading gets 54px. With a unit, the finished <em>length</em> is inherited instead: <code>body { line-height: 24px; }</code> gives a 36px heading 24px lines, and when it wraps, the lines overlap. <code>1.5em</code> has the same problem, because it is converted to 24px on <code>body</code> first.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Body text: 16px × 1.5 = 24px from one line to the next */
+          body {
+            /* A plain number, so each element multiplies its OWN font size */
+            line-height: 1.5;
+          }
+          /* The page title: 36px × 1.2 ≈ 43px, tighter so a two-line title holds together */
+          h1 {
+            line-height: 1.2;
+          }
+          /* DON'T: every element would inherit exactly 24px, and a wrapped 36px heading would overlap itself */
+          .do-not-copy {
+            line-height: 24px;
+          }
+        </script>
+      </div>
+      <div data-tab="text-align and text-indent">
+        <p><strong>What they do.</strong> <code>text-align</code> places each line of text inside its box: <code>left</code>, <code>right</code>, <code>center</code>, or <code>justify</code> (stretched so both edges are straight). <code>text-indent</code> moves only the first line of a block in from the left.</p>
+        <p><strong>When to use them.</strong> <code>left</code> (the default in English) for paragraphs and most text. <code>center</code> for short items: a banner headline, a button label, a one-line footer. <code>right</code> for columns of numbers in a table, so the digits line up. <code>text-indent</code> is rare on the web: books indent paragraphs, but web pages usually separate them with space instead.</p>
+        <p><strong>Watch out.</strong> <code>text-align</code> moves the <em>text inside</em> the box, not the box. To center a whole box that has a width, use <code>margin: 0 auto</code> (4.6). Centered paragraphs are hard to read because every line starts in a different place. Justified text leaves uneven gaps between words, which get worse in narrow columns such as a phone screen.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The headline in the club's banner: short, so centering works */
+          .banner h1 {
+            /* Each line of the heading is centered inside the banner */
+            text-align: center;
+          }
+          /* The miles column of the trip table */
+          td.miles {
+            /* 3, 12 and 125 all end at the same right edge, so the digits line up */
+            text-align: right;
+          }
+        </script>
+      </div>
+      <div data-tab="text-decoration">
+        <p><strong>What it does.</strong> Draws lines on text: <code>underline</code>, <code>line-through</code>, <code>overline</code>, or <code>none</code> to remove them. Related properties fine-tune the underline: <code>text-decoration-color</code>, <code>text-decoration-style</code> (<code>solid</code>, <code>dotted</code>, <code>wavy</code>...), <code>text-decoration-thickness</code> and <code>text-underline-offset</code>.</p>
+        <p><strong>When to use it.</strong> Mostly for links: removing the underline in a navigation bar, or restyling it in running text so it fits the design. <code>line-through</code> suits an old price, a cancelled date or a crossed-off item.</p>
+        <p><strong>Watch out.</strong> Links inside paragraphs need something besides color to stand out, and the underline is what readers expect; many people cannot tell the difference between two colors. Removing underlines is fine where everything is obviously a link, as in a menu bar. And never underline text that is not a link: people will try to click it.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Menu links: obviously links already, so no underline */
+          nav a {
+            text-decoration: none;
+          }
+          /* Links inside paragraphs keep their underline, restyled */
+          main p a {
+            /* The line is brand green, even if the link text is darker */
+            text-decoration-color: #2f6f4e;
+            /* Move the line a little below the letters so it is easier to read over */
+            text-underline-offset: 0.2em;
+          }
+          /* The old price of a discounted trip */
+          .old-price {
+            /* Crossed out, but still readable */
+            text-decoration: line-through;
+          }
+        </script>
+      </div>
+      <div data-tab="text-transform">
+        <p><strong>What it does.</strong> Changes the capitalization you see without changing the HTML: <code>uppercase</code>, <code>lowercase</code>, <code>capitalize</code> (the first letter of every word), or <code>none</code>.</p>
+        <p><strong>When to use it.</strong> For small labels, buttons, navigation items and table headings in capitals. The HTML keeps normal writing ("Difficulty"), so if the design changes you edit one CSS line instead of retyping every label.</p>
+        <p><strong>Watch out.</strong> Text in all capitals is slower to read, so keep it to a few words, never whole paragraphs. <code>capitalize</code> is not real title case: it raises every word, including the small ones, so "a walk in the woods" becomes "A Walk In The Woods". Capital letters look cramped, so pair <code>uppercase</code> with a little <code>letter-spacing</code>.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The small label above each trip card, e.g. "Difficulty" */
+          .label {
+            /* Shown as DIFFICULTY; the HTML still says Difficulty */
+            text-transform: uppercase;
+            /* Capitals look cramped, so open them up slightly */
+            letter-spacing: 0.08em;
+            /* Small text: 0.875 × 16px = 14px */
+            font-size: 0.875rem;
+          }
+        </script>
+      </div>
+      <div data-tab="letter-spacing and word-spacing">
+        <p><strong>What they do.</strong> <code>letter-spacing</code> adds space between every pair of characters (a negative value removes some). <code>word-spacing</code> adds space between words.</p>
+        <p><strong>When to use them.</strong> A little positive letter-spacing for uppercase labels and small capitals (about <code>0.05em</code> to <code>0.1em</code>); a tiny negative value for very large headings, whose letters can look too far apart. <code>word-spacing</code> is rarely needed.</p>
+        <p><strong>Watch out.</strong> Use <code>em</code>, so the spacing grows with the text: <code>0.1em</code> is 1.6px on 16px text and 4px on 40px text, while a fixed <code>2px</code> that looks right on a label looks wrong on a heading. Do not space out lowercase body text: words start to fall apart into single letters and reading slows down.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The big page title */
+          h1 {
+            /* Pull the letters very slightly together: large text looks loose by default */
+            letter-spacing: -0.01em;
+          }
+          /* Uppercase button labels */
+          .button {
+            /* Capitals */
+            text-transform: uppercase;
+            /* Open them up: 0.05 × the font size between each pair of letters */
+            letter-spacing: 0.05em;
+          }
+        </script>
+      </div>
+      <div data-tab="text-shadow">
+        <p><strong>What it does.</strong> Draws a shadow behind the letters. The value is sideways offset, downward offset, blur, and color: <code>1px 2px 4px rgb(0 0 0 / 50%)</code> is 1px right, 2px down, softened over 4px, in black at 50%.</p>
+        <p><strong>When to use it.</strong> A subtle lift for white text on top of a photo, or a soft glow on a big display heading.</p>
+        <p><strong>Watch out.</strong> Keep it subtle: a hard or large shadow makes letters look blurry or doubled. A shadow alone does not make text readable over a busy photo; put a see-through dark panel behind the text (the alpha colors from 4.2) and check the contrast.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The white headline on the banner photo */
+          .banner h1 {
+            /* White text */
+            color: white;
+            /* 1px right, 2px down, 4px blur, black at 50%: a soft edge that separates the letters from the photo */
+            text-shadow: 1px 2px 4px rgb(0 0 0 / 50%);
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which property do I reach for?</strong>
+      <ul>
+        <li><strong>Text bigger or smaller:</strong> <code>font-size</code> in <code>rem</code>. Example: <code>h2 { font-size: 1.5rem; }</code></li>
+        <li><strong>Heavier or lighter:</strong> <code>font-weight</code> (and <code>&lt;strong&gt;</code> in the HTML when it means "important"). Example: <code>font-weight: 700;</code></li>
+        <li><strong>Lines feel cramped:</strong> <code>line-height</code> as a plain number. Example: <code>body { line-height: 1.5; }</code></li>
+        <li><strong>Center a heading:</strong> <code>text-align: center;</code> To center a box, use <code>margin: 0 auto;</code> instead.</li>
+        <li><strong>Remove or restyle a link underline:</strong> <code>text-decoration</code>, keeping underlines on links inside paragraphs.</li>
+        <li><strong>A label in capitals:</strong> <code>text-transform: uppercase;</code> with <code>letter-spacing: 0.05em;</code></li>
+        <li><strong>White text over a photo:</strong> a dark see-through background for contrast, plus a soft <code>text-shadow</code> if you like.</li>
+      </ul>
+    </aside>
 
     <div class="widget" data-kind="Playground" data-title="Typography playground">
       <div class="c4-ty-grid">
@@ -1616,30 +2833,79 @@ WD1.ready(() => {
      ===================================================================== */
   safe('theme switcher', () => {
     const frame = byId('c4-theme-frame');
-    const HTML = [
-      '<header>',
-      '  <p class="site-name">Riverside Hiking Club</p>',
-      '  <nav>',
-      '    <ul>',
-      '      <li><a href="#">Home</a></li>',
-      '      <li><a href="#">Trips</a></li>',
-      '      <li><a href="#">Join</a></li>',
+    /* BODY is what the preview renders; FULL is the complete index.html shown to students. */
+    const BODY = [
+      '  <!-- The header is the banner at the top of the page: who the site is and how to get around it -->',
+      '  <header>',
+      '    <!-- The site name is a <p>, not an <h1>: each page gets one <h1>, and on this page that is the walk -->',
+      '    <p class="site-name">Riverside Hiking Club</p>',
+      '    <!-- The main menu sits in the header because it is part of the banner that repeats on every page -->',
+      '    <nav>',
+      '      <!-- A menu is a list of links, so it is marked up as a list -->',
+      '      <ul>',
+      '        <!-- Relative link to the home page, a file in the same folder -->',
+      '        <li><a href="index.html">Home</a></li>',
+      '        <!-- Relative link to the page that lists every trip -->',
+      '        <li><a href="trips.html">Trips</a></li>',
+      '        <!-- Relative link to the membership page -->',
+      '        <li><a href="join.html">Join</a></li>',
+      '      <!-- End of the list of links -->',
+      '      </ul>',
+      '    <!-- End of the menu -->',
+      '    </nav>',
+      '  <!-- End of the banner -->',
+      '  </header>',
+      '  <!-- main holds the content that belongs to this page only -->',
+      '  <main>',
+      '    <!-- The one top-level heading: what this page is about -->',
+      '    <h1>Autumn Ridge Walk</h1>',
+      '    <!-- A short line of details; the class lets CSS style it smaller and quieter -->',
+      '    <p class="meta">Saturday · 6 miles · moderate</p>',
+      '    <!-- An ordinary paragraph of description -->',
+      '    <p>The leaves are turning and the ridge views are at their best. Bring water, warm layers and a snack for the summit.</p>',
+      '    <!-- Two quick facts; order does not matter, so an unordered list -->',
+      '    <ul class="facts">',
+      '      <!-- Where to meet -->',
+      '      <li>Meet at the north trailhead</li>',
+      '      <!-- When to arrive -->',
+      '      <li>Start at 8:30 a.m.</li>',
+      '    <!-- End of the facts list -->',
       '    </ul>',
-      '  </nav>',
-      '</header>',
-      '<main>',
-      '  <h1>Autumn Ridge Walk</h1>',
-      '  <p class="meta">Saturday · 6 miles · moderate</p>',
-      '  <p>The leaves are turning and the ridge views are at their best. Bring water, warm layers and a snack for the summit.</p>',
-      '  <ul class="facts">',
-      '    <li>Meet at the north trailhead</li>',
-      '    <li>Start at 8:30 a.m.</li>',
-      '  </ul>',
-      '  <a class="button" href="#">Save my spot</a>',
-      '</main>',
-      '<footer>',
-      '  <p>Riverside Hiking Club · walks every weekend</p>',
-      '</footer>'
+      '    <!-- A link that CSS can make look like a button, thanks to its class -->',
+      '    <a class="button" href="join.html">Save my spot</a>',
+      '  <!-- End of this page\'s own content -->',
+      '  </main>',
+      '  <!-- The footer closes the page: the same short note on every page -->',
+      '  <footer>',
+      '    <!-- A single line about the club -->',
+      '    <p>Riverside Hiking Club · walks every weekend</p>',
+      '  <!-- End of the footer -->',
+      '  </footer>'
+    ].join('\n');
+    const HTML = [
+      '<!-- Switches the browser to modern standards mode; always the first line -->',
+      '<!DOCTYPE html>',
+      '<!-- The root element; lang="en" says the page is in English -->',
+      '<html lang="en">',
+      '<!-- The head holds information about the page; nothing in it shows on the page itself -->',
+      '<head>',
+      '  <!-- Read the file as UTF-8 so symbols like the · dots display correctly -->',
+      '  <meta charset="utf-8">',
+      '  <!-- Tell phones to use their real screen width instead of zooming out -->',
+      '  <meta name="viewport" content="width=device-width, initial-scale=1">',
+      '  <!-- The page name shown in the browser tab and in search results -->',
+      '  <title>Autumn Ridge Walk · Riverside Hiking Club</title>',
+      '  <!-- Connects the stylesheet. Picking a stylesheet above swaps this one file; the HTML never changes -->',
+      '  <link rel="stylesheet" href="styles.css">',
+      '<!-- End of the head -->',
+      '</head>',
+      '<!-- The body holds everything the visitor sees -->',
+      '<body>',
+      BODY,
+      '<!-- End of the body -->',
+      '</body>',
+      '<!-- End of the document -->',
+      '</html>'
     ].join('\n');
     const THEMES = {
       none: '',
@@ -1705,7 +2971,7 @@ WD1.ready(() => {
     };
     byId('c4-theme-html').appendChild(WD1.codeBlock(HTML, 'html', 'index.html'));
     const docFor = (css) => '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Preview</title><style id="theme">' + css +
-      '</style></head><body>' + HTML + '<script>document.addEventListener("click",function(e){if(e.target.closest("a"))e.preventDefault();});<\/script></body></html>';
+      '</style></head><body>' + BODY + '<script>document.addEventListener("click",function(e){if(e.target.closest("a"))e.preventDefault();});<\/script></body></html>';
     function apply(t) {
       const css = THEMES[t];
       let done = false;
@@ -1714,7 +2980,7 @@ WD1.ready(() => {
         if (st) { st.textContent = css; done = true; }
       } catch (e) { done = false; }
       if (!done) frame.srcdoc = docFor(css);
-      setCode('c4-theme-css', css || '/* No stylesheet at all.\n   The browser falls back to its\n   built-in default styles. */', 'css');
+      setCode('c4-theme-css', css || '/* styles.css is empty.\n   With no rules of its own, the page\n   uses the browser\'s built-in default styles. */', 'css');
       const n = (css.match(/\{/g) || []).length;
       byId('c4-theme-stats').textContent = n ? n + ' rules, ' + css.split('\n').length + ' lines' : 'empty';
       byId('c4-theme-note').innerHTML = fmt(NOTES[t]);
