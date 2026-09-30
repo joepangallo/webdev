@@ -206,6 +206,10 @@
     .c5-gal-table th { font-family: var(--font-mono); font-size: .7rem; text-transform: uppercase; color: var(--ink-3); }
     .c5-gal-table tr.is-active td { background: color-mix(in srgb, var(--mod) 16%, transparent); }
 
+    /* ---------- Reference tables: wide ones scroll inside .table-wrap on phones ---------- */
+    .c5-gp-table, .c5-text-table, .c5-choice-table, .c5-spec-table, .c5-ac-table { min-width: 680px; }
+    .c5-ref-table { min-width: 560px; }
+
     /* ---------- 5.5 Accessible name inspector ---------- */
     .c5-sr-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
     @media (max-width: 820px) { .c5-sr-layout { grid-template-columns: minmax(0, 1fr); } }
@@ -446,6 +450,179 @@
     </div>
 
     <aside class="callout tip"><strong>The invisible <code>&lt;tbody&gt;</code></strong> If you put rows straight inside <code>&lt;table&gt;</code>, the browser quietly wraps them in a <code>&lt;tbody&gt;</code>. Inspect any simple table in DevTools and you will find it. This matters for CSS: the selector <code>table &gt; tr</code> matches nothing, because no row is a direct child of the table.</aside>
+
+    <p>Knowing where each part goes is half the job. The other half is knowing which parts a particular table needs. A three-row price list and a gradebook with a totals row need different pieces. Pick a part to see what it is for, when to use it, when to leave it out, and a commented example.</p>
+    <div class="tabs">
+      <div data-tab="caption">
+        <p><strong>What it is.</strong> The table's title, written as the first child of <code>&lt;table&gt;</code>. Because it lives inside the table, it stays attached to it: screen readers announce it as soon as a user reaches the table, before any cell, so they know what the numbers are about before they start moving through them.</p>
+        <p><strong>When to use it.</strong> On every data table. Write what you would otherwise put in a heading above the table, and be specific about what and when: "Campus parking permits, 2026-27" tells the reader far more than "Prices".</p>
+        <p><strong>Watch out.</strong> It must come first, before any row or group. A heading or bold paragraph placed <em>above</em> the table looks the same on screen, but nothing connects it to the table, so a screen reader user who jumps straight to the table never hears it. If you want the title below the table, keep the caption first in the code and move it with the CSS <code>caption-side: bottom</code>.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A price list: the caption says what the prices are for and when they apply -->
+          <table>
+            <!-- The caption is the very first thing inside the table -->
+            <caption>Campus parking permits, 2026-27</caption>
+            <!-- The first row names the two columns -->
+            <tr>
+              <th scope="col">Permit</th>   <!-- labels the column of permit names -->
+              <th scope="col">Price</th>    <!-- labels the column of prices -->
+            </tr>
+            <!-- One row per permit -->
+            <tr>
+              <th scope="row">Semester</th> <!-- names this row -->
+              <td>$95</td>                  <!-- the price for a semester permit -->
+            </tr>
+            <tr>
+              <th scope="row">Full year</th> <!-- names the second row -->
+              <td>$170</td>                  <!-- its price -->
+            </tr>
+          </table>
+        </script>
+      </div>
+      <div data-tab="thead, tbody, tfoot">
+        <p><strong>What they are.</strong> Three containers that group rows by their job. <code>&lt;thead&gt;</code> holds the row (or rows) of column headings, <code>&lt;tbody&gt;</code> holds the data rows, and <code>&lt;tfoot&gt;</code> holds summary rows such as a total or an average. They change almost nothing on screen by themselves.</p>
+        <p><strong>When to use them.</strong> Use <code>&lt;thead&gt;</code> whenever the table has a header row, which is almost always, and write <code>&lt;tbody&gt;</code> around the data rows whenever you have a <code>&lt;thead&gt;</code>, so the structure is clear to you and to CSS. Add <code>&lt;tfoot&gt;</code> only when there is a summary row: the total of an invoice, the class average under a gradebook. You may use several <code>&lt;tbody&gt;</code> elements to split long data into groups, such as one per semester.</p>
+        <p><strong>Why bother.</strong> They give CSS clean targets (<code>thead th</code> for the header style, <code>tbody tr:nth-child(even)</code> for stripes that skip the header), they let a sticky header work (5.2), and when a long table is printed, browsers can repeat the <code>&lt;thead&gt;</code> at the top of every page.</p>
+        <p><strong>Watch out.</strong> Write them in the order <code>thead</code>, <code>tbody</code>, <code>tfoot</code>. Some old tutorials put <code>&lt;tfoot&gt;</code> before the body; that is outdated. And <code>&lt;tfoot&gt;</code> is for rows that summarize the columns, not for a note about where the data came from: put a source note in a paragraph below the table.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <table>
+            <!-- What the table is about -->
+            <caption>Monthly budget, October</caption>
+            <!-- thead: the one row that names the columns -->
+            <thead>
+              <tr>
+                <th scope="col">Expense</th>  <!-- column heading -->
+                <th scope="col">Amount</th>   <!-- column heading -->
+              </tr>
+            </thead>
+            <!-- tbody: the actual data, one row per expense -->
+            <tbody>
+              <tr>
+                <th scope="row">Rent</th>     <!-- names this row -->
+                <td>$900</td>                 <!-- the amount for rent -->
+              </tr>
+              <tr>
+                <th scope="row">Groceries</th> <!-- names this row -->
+                <td>$320</td>                  <!-- the amount for groceries -->
+              </tr>
+            </tbody>
+            <!-- tfoot: the summary row, written after the body -->
+            <tfoot>
+              <tr>
+                <th scope="row">Total</th>    <!-- labels the summary row -->
+                <td>$1,220</td>               <!-- the sum of the column above -->
+              </tr>
+            </tfoot>
+          </table>
+        </script>
+      </div>
+      <div data-tab="th and scope">
+        <p><strong>What it is.</strong> <code>&lt;th&gt;</code> is a header cell: a cell that labels other cells. The <code>scope</code> attribute says which ones. <code>scope="col"</code> means "I label every cell below me in my column", and <code>scope="row"</code> means "I label every cell to my right in my row". Two more values exist for headers over a group: <code>colgroup</code> (a header above several columns) and <code>rowgroup</code> (a header for a group of rows, such as the first row of a <code>&lt;tbody&gt;</code>).</p>
+        <p><strong>When to use it.</strong> For every cell that names something: the headings across the top, and the first cell of each row when that cell names the row (a day, a product, a student). In a timetable both exist: the days across the top are column headers and the times down the side are row headers.</p>
+        <p><strong>When not to.</strong> Do not use <code>&lt;th&gt;</code> just to get bold, centered text; use CSS for that. And do not do the reverse, a <code>&lt;td&gt;</code> styled bold to look like a header: it looks right, but a screen reader has no idea it is a label, so the cells under it are read without context. 5.5 lets you hear the difference.</p>
+        <p><strong>Watch out.</strong> In a very simple table, browsers can often guess what a header labels. Adding <code>scope</code> removes the guessing and costs nothing, so make it a habit. Tables with two levels of headings need the <code>headers</code> attribute instead, covered in 5.5.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <table>
+            <caption>Fitness center classes</caption>
+            <tr>
+              <!-- Empty corner cell above the column of times -->
+              <td></td>
+              <th scope="col">Monday</th>     <!-- labels the Monday column -->
+              <th scope="col">Wednesday</th>  <!-- labels the Wednesday column -->
+            </tr>
+            <tr>
+              <th scope="row">7:00</th>       <!-- labels the 7:00 row -->
+              <td>Spin</td>                   <!-- read as "7:00, Monday, Spin" -->
+              <td>Yoga</td>                   <!-- read as "7:00, Wednesday, Yoga" -->
+            </tr>
+            <tr>
+              <th scope="row">12:00</th>      <!-- labels the 12:00 row -->
+              <td>Boxing</td>                 <!-- read as "12:00, Monday, Boxing" -->
+              <td>Pilates</td>                <!-- read as "12:00, Wednesday, Pilates" -->
+            </tr>
+          </table>
+        </script>
+      </div>
+      <div data-tab="colspan and rowspan">
+        <p><strong>What they are.</strong> Attributes that make one cell cover several slots. <code>colspan="2"</code> makes a cell two columns wide; <code>rowspan="2"</code> makes it two rows tall. The cells it covers must be deleted from the code.</p>
+        <p><strong>When to use them.</strong> When one label or one value truly belongs to several slots: a heading that sits over a group of columns ("North campus" over "Opens" and "Closes"), a booking that lasts two hours in a schedule, an event that uses two rooms at once, or the "Total" label in a footer row that stretches across the label columns.</p>
+        <p><strong>When not to.</strong> To merge cells just because they happen to hold the same text, or to arrange things visually. Every span makes a table harder to read cell by cell with a screen reader, and harder to sort or edit later. If each slot really has its own value, repeat the value.</p>
+        <p><strong>Watch out.</strong> After adding a span, count the columns in every row. A row that is too long pushes cells past the right edge; the builder above does this bookkeeping for you.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <table>
+            <caption>Study room bookings, Friday</caption>
+            <!-- Header row: 3 columns, so every row below must fill 3 slots -->
+            <tr>
+              <th scope="col">Time</th>
+              <th scope="col">Room A</th>
+              <th scope="col">Room B</th>
+            </tr>
+            <tr>
+              <th scope="row">9:00</th>                 <!-- slot 1 -->
+              <!-- This group has Room A for two hours: the cell is 2 rows tall -->
+              <td rowspan="2">Biology study group</td>  <!-- slot 2, and slot 2 of the next row -->
+              <td>Free</td>                             <!-- slot 3 -->
+            </tr>
+            <tr>
+              <th scope="row">10:00</th>                <!-- slot 1 -->
+              <!-- No Room A cell here: the rowspan above already fills slot 2 -->
+              <td>Free</td>                             <!-- slot 3 -->
+            </tr>
+            <tr>
+              <th scope="row">11:00</th>                <!-- slot 1 -->
+              <!-- One event uses both rooms: the cell is 2 columns wide -->
+              <td colspan="2">Career fair setup</td>    <!-- slots 2 and 3 -->
+            </tr>
+          </table>
+        </script>
+      </div>
+      <div data-tab="colgroup and col">
+        <p><strong>What they are.</strong> The only way to talk about a whole column at once. A <code>&lt;colgroup&gt;</code> goes right after the caption, and each <code>&lt;col&gt;</code> inside it stands for one column (or several, with <code>span</code>). They hold no content; they exist so CSS can reach the column.</p>
+        <p><strong>When to use them.</strong> To give a whole column a background (highlighting the column a reader should compare), a border, or a fixed width, without adding a class to every cell in it.</p>
+        <p><strong>Watch out.</strong> Only four properties work on columns: <code>background</code>, <code>border</code> (with collapsed borders), <code>width</code> and <code>visibility</code>. Text color, alignment and fonts do nothing on a <code>&lt;col&gt;</code>, because the text lives in the cells. To right-align a column of numbers, style the cells instead, for example with a class like <code>td.num</code>.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <table>
+            <caption>Phone plans compared</caption>
+            <!-- One <col> per column, in order -->
+            <colgroup>
+              <col>                     <!-- column 1: plan names -->
+              <col>                     <!-- column 2: price -->
+              <col class="highlight">   <!-- column 3: data, the column to compare -->
+            </colgroup>
+            <!-- The header row: one heading per column -->
+            <tr>
+              <th scope="col">Plan</th>
+              <th scope="col">Price</th>
+              <th scope="col">Data</th>
+            </tr>
+            <!-- A data row: its third cell sits in the highlighted column -->
+            <tr>
+              <th scope="row">Basic</th>
+              <td>$25</td>
+              <td>5 GB</td>              <!-- shaded by col.highlight -->
+            </tr>
+          </table>
+        </script>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The whole Data column gets a pale background */
+          col.highlight {
+            /* background is one of the few properties a column accepts */
+            background: #fff4cc;
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which parts does my table need?</strong>
+      <ul>
+        <li><strong>Every data table:</strong> a <code>&lt;caption&gt;</code>, and <code>&lt;th&gt;</code> with <code>scope</code> for every heading.</li>
+        <li><strong>A row of column headings:</strong> put it in <code>&lt;thead&gt;</code> and the data rows in <code>&lt;tbody&gt;</code>.</li>
+        <li><strong>A totals or average row:</strong> <code>&lt;tfoot&gt;</code>, after the body.</li>
+        <li><strong>One label or value covering several slots:</strong> <code>colspan</code> or <code>rowspan</code>, and delete the cells it covers.</li>
+        <li><strong>A whole column shaded or sized:</strong> <code>&lt;colgroup&gt;</code> and <code>&lt;col&gt;</code>. For anything else about a column, style its cells.</li>
+      </ul>
+    </aside>
 
     <h3>Tables are for data, not layout</h3>
     <p>Before CSS could position things, developers built entire pages from invisible tables: one cell for the header, one for the sidebar, one for the content. That technique is long dead, for good reasons. A layout table makes a screen reader announce "table, 3 rows, 2 columns" around your navigation, it refuses to rearrange itself on a phone, and it buries your content in markup. Today you lay out pages with CSS Flexbox and Grid, and you save <code>&lt;table&gt;</code> for real data.</p>
@@ -762,14 +939,113 @@ caption {
         <thead><tr><th scope="col">&nbsp;</th><th scope="col">GET</th><th scope="col">POST</th></tr></thead>
         <tbody>
           <tr><th scope="row">Where the data goes</th><td>The URL's query string</td><td>The request body</td></tr>
+          <tr><th scope="row">Example request</th><td><code>GET /search?q=rain+jacket</code></td><td><code>POST /login</code> with <code>user=ana_r&amp;password=…</code> in the body</td></tr>
           <tr><th scope="row">Shows up in the address bar, history and server logs</th><td>Yes</td><td>No</td></tr>
           <tr><th scope="row">Can be bookmarked or shared as a link</th><td>Yes</td><td>No</td></tr>
           <tr><th scope="row">Size</th><td>Limited by URL length (many servers cap URLs around 8&nbsp;KB)</td><td>Large amounts; file uploads require POST</td></tr>
           <tr><th scope="row">Refresh or Back</th><td>Re-sends silently</td><td>The browser asks before sending again</td></tr>
+          <tr><th scope="row">Works on a static host such as GitHub Pages</th><td>Yes, when the <code>action</code> is a page you made</td><td>No: it needs a program on a server</td></tr>
           <tr><th scope="row">Use it for</th><td>Searches, filters, sorting: requests that only <em>read</em> data</td><td>Logins, sign-ups, orders, uploads: anything that changes data or is private</td></tr>
         </tbody>
       </table>
     </div>
+
+    <p>The table is the summary. The tabs below show each method at work: which forms it suits, exactly what the browser sends, and the mistakes that cause real problems.</p>
+    <div class="tabs">
+      <div data-tab="GET">
+        <p><strong>What it does.</strong> The browser adds a <code>?</code> and the name=value pairs to the end of the <code>action</code> URL, then requests that address, exactly as if you had clicked a link to it. The results page therefore has its own address.</p>
+        <p><strong>When to use it.</strong> For forms that only <em>look something up</em> and change nothing on the server: a site search box, filters on a product list (size, color, price range), a sort order, "page 2 of results", a "find a class" form. Because the answers live in the URL, the results can be bookmarked, texted to a friend, reloaded and reached again with Back. For these forms, that is exactly what you want.</p>
+        <p><strong>When not to.</strong> Never for passwords or personal details: the URL is saved in the browser history, shown in the address bar (and in any screenshot or screen share), written to server logs, and copied whenever someone shares the link. And never for an action that changes something, such as deleting, buying or subscribing: browsers, link previews and search engine crawlers all assume a GET is safe to repeat, so they may send it again without asking.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A filter form only reads data, so GET is the right method -->
+          <form action="/jackets" method="get">
+            <!-- The label names the search box -->
+            <label for="q">Search jackets</label>
+            <!-- Whatever is typed here is sent as q=... -->
+            <input type="search" id="q" name="q">
+            <!-- The label names the drop-down -->
+            <label for="size">Size</label>
+            <!-- The chosen option is sent as size=... -->
+            <select id="size" name="size">
+              <!-- The user sees "Medium"; the server receives size=m -->
+              <option value="m">Medium</option>
+              <!-- The user sees "Large"; the server receives size=l -->
+              <option value="l">Large</option>
+            </select>
+            <!-- Pressing the button builds the URL shown below -->
+            <button type="submit">Show jackets</button>
+          </form>
+        </script>
+        <p>Type <em>rain</em>, choose Medium and submit. The address bar shows the URL below, and the request the browser sends is just that URL; nothing follows the headers:</p>
+        <pre class="c5-req">GET /jackets?q=rain&amp;size=m HTTP/1.1
+Host: shop.example.com</pre>
+      </div>
+      <div data-tab="POST">
+        <p><strong>What it does.</strong> The same name=value pairs travel in the <strong>body</strong> of the request, after the headers. The URL stays clean (<code>/login</code>), and nothing the user typed appears in the address bar, history or bookmarks.</p>
+        <p><strong>When to use it.</strong> For anything private, and for anything that <em>changes</em> data on the server: logging in, creating an account, changing a password, placing an order, paying, posting a comment, sending a contact message, subscribing or unsubscribing. File uploads <em>must</em> use POST.</p>
+        <p><strong>Watch out.</strong> POST needs a program on the server to receive it. A <strong>static host</strong> such as GitHub Pages only hands out files; it has no program to receive the data, so it rejects a POST with an error. If you refresh a page that was the result of a POST, the browser warns "Confirm Form Resubmission", because sending again could place the same order twice. Well-built sites avoid this by answering every POST with a redirect to an ordinary page.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- POST keeps the password out of the URL. /login must be a program on a real server:
+               a static host such as GitHub Pages cannot receive this form. -->
+          <form action="/login" method="post">
+            <!-- The label names the username field -->
+            <label for="user">Username</label>
+            <!-- Sent as user=... in the request body -->
+            <input type="text" id="user" name="user" autocomplete="username">
+            <!-- The label names the password field -->
+            <label for="pw">Password</label>
+            <!-- Sent as password=... in the body, never in the address bar -->
+            <input type="password" id="pw" name="password" autocomplete="current-password">
+            <!-- Submitting sends the request shown below -->
+            <button type="submit">Log in</button>
+          </form>
+        </script>
+        <p>The request line holds only the path. The data follows the headers and a blank line:</p>
+        <pre class="c5-req">POST /login HTTP/1.1
+Host: shop.example.com
+Content-Type: application/x-www-form-urlencoded
+
+user=ana_r&amp;password=sunflower42</pre>
+      </div>
+      <div data-tab="Form by form">
+        <p>Ask one question about each form: <em>would it be fine if this exact request were bookmarked, shared and sent twice?</em> If yes, use GET. If no, use POST.</p>
+        <div class="table-wrap">
+          <table class="data-table c5-gp-table">
+            <caption class="sr-only">Which method to use for common forms, and why</caption>
+            <thead><tr><th scope="col">Form</th><th scope="col">Method</th><th scope="col">What gets sent</th><th scope="col">Why</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Site search box</th><td>GET</td><td><code>/search?q=parking</code></td><td>It only reads, and a results link is worth sharing</td></tr>
+              <tr><th scope="row">Filters and sorting on a product list</th><td>GET</td><td><code>/jackets?size=m&amp;sort=price</code></td><td>The filtered page can be bookmarked and reloaded</td></tr>
+              <tr><th scope="row">Page 2 of results</th><td>GET</td><td><code>/search?q=parking&amp;page=2</code></td><td>Back and Forward work as users expect</td></tr>
+              <tr><th scope="row">Sign-up</th><td>POST</td><td>Username, email and password in the body</td><td>Creates an account and contains a password</td></tr>
+              <tr><th scope="row">Login</th><td>POST</td><td>Username and password in the body</td><td>The password must stay out of the URL, history and logs</td></tr>
+              <tr><th scope="row">Checkout and payment</th><td>POST</td><td>Address and order details in the body</td><td>Charges a card; sending it twice would charge twice</td></tr>
+              <tr><th scope="row">Profile photo upload</th><td>POST</td><td>The file itself, with <code>enctype="multipart/form-data"</code></td><td>GET cannot carry a file at all</td></tr>
+              <tr><th scope="row">Contact form</th><td>POST</td><td>Name, email and message in the body</td><td>Creates a message and holds personal details</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div data-tab="Common mistakes">
+        <p><strong>1. A login form with no <code>method</code>.</strong> GET is the default, so the password lands in the URL, then in the history, the address bar's suggestions and the server's logs:</p>
+        <pre class="c5-req">https://shop.example.com/login?user=ana_r&amp;password=sunflower42</pre>
+        <p>Fix: <code>method="post"</code> on every form that has a password field.</p>
+        <p><strong>2. A GET that changes data.</strong> A link or GET form such as <code>/cart/remove?item=42</code> can be triggered by a browser that loads links ahead of time, by a crawler, or by a refresh. Anything that deletes, buys or saves belongs in a POST form with a button.</p>
+        <p><strong>3. An upload without the right encoding.</strong> Without <code>method="post"</code> and <code>enctype="multipart/form-data"</code>, the browser sends only the file's <em>name</em>, such as <code>photo=door.jpg</code>, and the picture itself never leaves the computer.</p>
+        <p><strong>4. A POST form on a static site.</strong> A page opened from your own disk, or published on GitHub Pages, has no server program behind it, so a POST form fails. On a static site, point the form at a page you made and use GET, as in <code>&lt;form action="thanks.html" method="get"&gt;</code>; after submitting, the address bar shows every name=value pair. Actually receiving and storing the data takes server code, which you will write in a later course.</p>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>GET or POST: which should I pick?</strong>
+      <ul>
+        <li><strong>Search box, filters, sorting, page numbers:</strong> GET. Example: <code>&lt;form action="/search" method="get"&gt;</code></li>
+        <li><strong>Anything with a password (login, sign-up):</strong> POST. Example: <code>&lt;form action="/login" method="post"&gt;</code></li>
+        <li><strong>Anything that saves, buys, sends or deletes:</strong> POST.</li>
+        <li><strong>File uploads:</strong> POST with <code>enctype="multipart/form-data"</code>.</li>
+        <li><strong>A form on a static site such as GitHub Pages:</strong> GET, with <code>action</code> pointing at a page you made, such as <code>thanks.html</code>.</li>
+      </ul>
+    </aside>
 
     <div class="widget" id="c5-gp" data-kind="Simulator" data-title="GET vs POST: what the browser actually sends">
       <div class="c5-gp-top">
@@ -1057,6 +1333,420 @@ caption {
     <aside class="callout tip"><strong>Dates travel in one format</strong> Whatever the user sees (9/24/2026 or 24/09/2026, depending on their settings), a date input always submits <code>YYYY-MM-DD</code>, such as <code>2026-09-24</code>. Times submit as 24-hour <code>HH:MM</code>, like <code>18:30</code>.</aside>
     <aside class="callout warn"><strong>Not everything made of digits is a number</strong> Use <code>type="number"</code> only for real quantities. For ZIP codes, card numbers and ID numbers, use <code>type="text"</code> with <code>inputmode="numeric"</code>: phones still show a number pad, but there are no spinner arrows or scroll-wheel changes to accidentally alter the value.</aside>
 
+    <h3>Text entry: which type?</h3>
+    <p>The gallery shows what each control does. The next four groups explain <em>when</em> to choose each one. The rule behind all of them: pick the most specific control that fits the answer. A specific type gives phone users the right keyboard, gives everyone better autofill, and often gives you a free format check.</p>
+    <p>Seven controls take typed text. On a laptop most of them look like the same plain box; on a phone they bring up different keyboards, and some check what was typed.</p>
+    <div class="table-wrap">
+      <table class="data-table c5-text-table">
+        <caption class="sr-only">Text entry controls compared: phone keyboard, format check and typical use</caption>
+        <thead><tr><th scope="col">Control</th><th scope="col">Phone keyboard</th><th scope="col">Checks the format?</th><th scope="col">Use it for</th></tr></thead>
+        <tbody>
+          <tr><td><code>type="text"</code></td><td>Standard letters</td><td>No</td><td>Names, street addresses, titles; codes such as ZIP codes and IDs with <code>inputmode="numeric"</code></td></tr>
+          <tr><td><code>type="email"</code></td><td>Adds <kbd>@</kbd> and <kbd>.</kbd>; no automatic capital letter</td><td>Yes: needs <code>name@domain</code></td><td>Email addresses</td></tr>
+          <tr><td><code>type="tel"</code></td><td>A phone keypad: digits plus <kbd>+</kbd> <kbd>*</kbd> <kbd>#</kbd></td><td>No: phone formats vary too much</td><td>Phone numbers</td></tr>
+          <tr><td><code>type="url"</code></td><td>Adds <kbd>/</kbd> and <kbd>.</kbd> (often <kbd>.com</kbd> too)</td><td>Yes: needs a scheme such as <code>https://</code></td><td>Websites, portfolio and profile links</td></tr>
+          <tr><td><code>type="search"</code></td><td>Standard, but the Enter key reads "Search" or "Go"</td><td>No</td><td>Site search boxes</td></tr>
+          <tr><td><code>type="password"</code></td><td>Standard, with autocorrect off; characters are hidden</td><td>No</td><td>Passwords and PINs</td></tr>
+          <tr><td><code>&lt;textarea&gt;</code></td><td>Standard; Enter starts a new line</td><td>No</td><td>Comments, messages, anything longer than one line</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Pick a control to see when it is the right choice, what to watch out for, and a labeled, commented example.</p>
+    <div class="tabs">
+      <div data-tab="text">
+        <p><strong>What it is.</strong> The plain one-line box. It accepts any characters and checks nothing. It is also what you get when you leave out <code>type</code> or use a type the browser does not know.</p>
+        <p><strong>When to use it.</strong> For short answers that have no more specific type: a name, a street address, a city, a job title. Also for codes that are made of digits but are not quantities, such as a ZIP code, a student ID or a card number. Add <code>inputmode="numeric"</code> to those so phones still show a number pad.</p>
+        <p><strong>When not to.</strong> When a more specific type fits. A <code>type="text"</code> email field works, but you lose the <kbd>@</kbd> keyboard, the format check and the autofill hint.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The visible label; for="full-name" ties it to the input's id -->
+          <label for="full-name">Full name</label>
+          <!-- Plain text, because names can hold letters, spaces, hyphens and apostrophes -->
+          <input type="text" id="full-name" name="name" autocomplete="name">
+
+          <!-- A second label for the ID field -->
+          <label for="sid">Student ID</label>
+          <!-- Still type="text": an ID is a code, not a quantity. inputmode shows a number pad -->
+          <input type="text" id="sid" name="student_id" inputmode="numeric">
+        </script>
+      </div>
+      <div data-tab="email">
+        <p><strong>What it is.</strong> A box for one email address. Phones show a keyboard with <kbd>@</kbd> and <kbd>.</kbd> keys and skip the automatic capital letter, browsers offer the addresses they have saved, and the form will not submit unless the value looks like <code>name@domain</code>. Add the <code>multiple</code> attribute to accept a comma-separated list.</p>
+        <p><strong>When to use it.</strong> Every time you ask for an email address: sign-up, contact, newsletter, receipts.</p>
+        <p><strong>Watch out.</strong> The check is about shape only. <code>ana@campus</code> passes (a dot is not required), and so does the typo <code>ana@gmial.com</code>, because the browser cannot know whether an address exists. The only real proof is sending a message to it, which is why sites email you a confirmation link.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label says what to enter -->
+          <label for="email">Email</label>
+          <!-- type="email": @ keyboard on phones and a format check before sending -->
+          <!-- autocomplete="email" lets the browser offer the user's saved address -->
+          <input type="email" id="email" name="email" autocomplete="email" aria-describedby="email-hint">
+          <!-- A hint that says why you need it, read along with the field -->
+          <p id="email-hint">We'll send your receipt here.</p>
+        </script>
+        <p>Type <code>ana</code> and submit, and Chrome says: "Please include an '@' in the email address. 'ana' is missing an '@'." Other browsers word it differently, always in the user's own language.</p>
+      </div>
+      <div data-tab="tel">
+        <p><strong>What it is.</strong> A box for a phone number. On a phone it brings up a keypad with digits and <kbd>+</kbd> <kbd>*</kbd> <kbd>#</kbd>, which is much faster than hunting for digits on the letter keyboard.</p>
+        <p><strong>When to use it.</strong> For phone numbers, and only phone numbers. The type also tells autofill "this is a phone number", so using it for a ZIP code would invite the wrong suggestion.</p>
+        <p><strong>Watch out.</strong> Unlike email and url, <code>tel</code> checks <em>nothing</em>, because phone numbers are written in too many ways: <code>(305) 555-0142</code>, <code>305.555.0142</code>, <code>+44 20 7946 0958</code>. Accept spaces, dashes and parentheses and clean them up on the server. If you truly need one format, add a <code>pattern</code> and say the format in a hint.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the field -->
+          <label for="phone">Mobile phone</label>
+          <!-- type="tel": phone keypad on phones; autocomplete="tel" offers the saved number -->
+          <input type="tel" id="phone" name="phone" autocomplete="tel" aria-describedby="phone-hint">
+          <!-- Say why you want it, so people are more willing to give it -->
+          <p id="phone-hint">Only used to text you when your order is ready.</p>
+        </script>
+      </div>
+      <div data-tab="url">
+        <p><strong>What it is.</strong> A box for a web address. Phones add <kbd>/</kbd> and <kbd>.</kbd> keys, and the form will not submit unless the value is a complete, absolute URL.</p>
+        <p><strong>When to use it.</strong> For a website, a portfolio link, a LinkedIn or GitHub profile.</p>
+        <p><strong>Watch out.</strong> "Complete" means it includes a scheme. <code>www.example.com</code> and <code>example.com</code> both fail with "Please enter a URL.", which confuses people who never type <code>https://</code>. Say so in a hint. The check also accepts any scheme, even <code>ftp:</code> or <code>javascript:</code>, so the server must confirm the address starts with <code>https://</code> before it ever shows it as a link.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the field -->
+          <label for="site">Portfolio website</label>
+          <!-- type="url": the value must be a full address, including https:// -->
+          <input type="url" id="site" name="site" aria-describedby="site-hint">
+          <!-- The hint prevents the most common error before it happens -->
+          <p id="site-hint">The full address, starting with https://</p>
+        </script>
+      </div>
+      <div data-tab="search">
+        <p><strong>What it is.</strong> A text box meant for search terms. It behaves like <code>text</code>, with a few extras: the phone's Enter key reads "Search" or "Go", many browsers show a small &times; button to clear it, and <kbd>Esc</kbd> clears it in some browsers.</p>
+        <p><strong>When to use it.</strong> For the search box of a site or a page, and for a box that filters a list as you type.</p>
+        <p><strong>Watch out.</strong> It does not search anything by itself. The form around it does the work, and a search form should use GET so the results have a shareable URL. A search box still needs a label; if the design shows only a magnifying glass icon, give the input an <code>aria-label</code> (5.5 shows why).</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A search reads data and changes nothing, so it uses GET -->
+          <form action="/search" method="get">
+            <!-- A visible label is best; it can be short -->
+            <label for="site-search">Search the course catalog</label>
+            <!-- type="search": a "Search" key on phones; name="q" becomes ?q=... in the URL -->
+            <input type="search" id="site-search" name="q">
+            <!-- The button that sends the search -->
+            <button type="submit">Search</button>
+          </form>
+        </script>
+      </div>
+      <div data-tab="password">
+        <p><strong>What it is.</strong> A box that shows dots instead of the characters typed, so nobody reads the password over your shoulder. Phones turn off autocorrect and suggestions for it, and password managers recognize it as the place to fill a saved password.</p>
+        <p><strong>When to use it.</strong> For passwords, PINs and other secrets.</p>
+        <p><strong>Watch out.</strong> The dots only hide the password on screen. It is protected on its way to the server by HTTPS, and it stays out of the URL only if the form uses <code>method="post"</code>. Help password managers with <code>autocomplete="current-password"</code> on a login form and <code>autocomplete="new-password"</code> on sign-up, so they can suggest a strong one. Never block pasting into a password box: that breaks password managers and pushes people toward short passwords.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Sign-up form: POST keeps the password out of the URL.
+               /signup must be a program on a server; GitHub Pages cannot receive it. -->
+          <form action="/signup" method="post">
+            <!-- The label names the field -->
+            <label for="new-pw">Choose a password</label>
+            <!-- new-password: a password manager can offer a strong, generated password -->
+            <input type="password" id="new-pw" name="password" autocomplete="new-password"
+                   minlength="12" aria-describedby="pw-hint">  <!-- minlength: at least 12 characters -->
+            <!-- Tell people the rule before they type -->
+            <p id="pw-hint">At least 12 characters. A short sentence works well.</p>
+            <!-- The button names the action -->
+            <button type="submit">Create account</button>
+          </form>
+        </script>
+      </div>
+      <div data-tab="textarea">
+        <p><strong>What it is.</strong> A box for several lines of text. It is its own element, not an <code>&lt;input&gt;</code>: the starting text goes <em>between</em> the tags instead of in a <code>value</code> attribute, <code>rows</code> sets how many lines tall it starts, and Enter adds a line break instead of submitting the form.</p>
+        <p><strong>When to use it.</strong> For anything that might be longer than one line: a message, a comment, a review, delivery instructions, a short bio.</p>
+        <p><strong>Watch out.</strong> Everything between <code>&lt;textarea&gt;</code> and <code>&lt;/textarea&gt;</code> becomes the starting value, spaces and line breaks included. Put the closing tag right after the opening one, or the box starts with invisible spaces. If you set a <code>maxlength</code>, tell people the limit, because typing and pasting simply stop there.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the box -->
+          <label for="notes">Delivery instructions</label>
+          <!-- rows="4": about four lines tall; maxlength: stops at 300 characters -->
+          <!-- The closing tag follows immediately, so the box starts empty -->
+          <textarea id="notes" name="notes" rows="4" maxlength="300" aria-describedby="notes-hint"></textarea>
+          <!-- State the limit, because the box silently stops accepting text -->
+          <p id="notes-hint">Up to 300 characters, such as a gate code or which door to use.</p>
+        </script>
+      </div>
+    </div>
+
+    <h3>Choices: radio buttons, checkboxes, select or datalist?</h3>
+    <p>When the answer comes from a list, four controls compete. Two questions settle it: <em>how many answers are allowed</em>, and <em>how long is the list</em>?</p>
+    <div class="table-wrap">
+      <table class="data-table c5-choice-table">
+        <caption class="sr-only">Choice controls compared: number of answers, visibility of options, free typing and typical use</caption>
+        <thead><tr><th scope="col">Control</th><th scope="col">How many answers</th><th scope="col">Options visible?</th><th scope="col">Best for</th></tr></thead>
+        <tbody>
+          <tr><td>Radio buttons</td><td>Exactly one</td><td>Yes, all at once</td><td>2 to about 6 options: shipping speed, T-shirt size, yes or no</td></tr>
+          <tr><td>Checkboxes</td><td>Any number, including none</td><td>Yes, all at once</td><td>Toppings, available days; one box alone for "I agree" or "Email me"</td></tr>
+          <tr><td><code>&lt;select&gt;</code></td><td>One (several with <code>multiple</code>)</td><td>No, only when opened</td><td>Long, fixed lists: state, country, graduation year</td></tr>
+          <tr><td><code>&lt;datalist&gt;</code></td><td>One typed answer</td><td>As suggestions while typing</td><td>Common answers, but others allowed: city, school, job title</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tabs">
+      <div data-tab="Radio buttons">
+        <p><strong>What they are.</strong> A group of options where choosing one clears the others. Buttons become a group by sharing one <code>name</code>; each has its own <code>value</code>, which is what gets sent.</p>
+        <p><strong>When to use them.</strong> When the user must pick exactly one answer from a short list they should see all at once: shipping speed, size, payment method, a yes/no question. Seeing every option side by side makes comparing easy, and picking one takes a single tap.</p>
+        <p><strong>When not to.</strong> For more than about six options (the list gets long; use a <code>&lt;select&gt;</code>), when several answers are allowed (use checkboxes), or for a single on/off choice (use one checkbox).</p>
+        <p><strong>Watch out.</strong> Once one is chosen, the user cannot get back to "none", so add a "No preference" option if that is a real answer. Pre-select an option with <code>checked</code> only when there is a sensible default; pre-choosing answers to a question like "How did you hear about us?" skews the results. Adding <code>required</code> to any one button makes the whole group required. Keyboard users move between the buttons of a group with the arrow keys and to the next group with <kbd>Tab</kbd>.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- fieldset groups the buttons; legend holds the question -->
+          <fieldset>
+            <legend>Shipping speed</legend>
+            <!-- Same name = one group. checked: a sensible default most people want -->
+            <label><input type="radio" name="shipping" value="standard" checked> Standard (5-7 days, free)</label>
+            <!-- Each value is what the server receives: shipping=express -->
+            <label><input type="radio" name="shipping" value="express"> Express (2 days, $9)</label>
+            <!-- The visible text can say more than the value -->
+            <label><input type="radio" name="shipping" value="overnight"> Overnight ($25)</label>
+          </fieldset>
+        </script>
+      </div>
+      <div data-tab="Checkboxes">
+        <p><strong>What they are.</strong> Independent on/off boxes. A checked box sends its name=value pair; an unchecked box sends nothing at all.</p>
+        <p><strong>When to use them.</strong> For "choose all that apply" questions (which days can you attend, which toppings), and alone for a single yes/no that the user opts into: "Email me about new courses", "I agree to the terms".</p>
+        <p><strong>When not to.</strong> When only one answer is allowed. Checkboxes let people pick two shipping speeds at once, and you would have to catch that yourself.</p>
+        <p><strong>Watch out.</strong> Always give a <code>value</code>; without one the browser sends the unhelpful <code>on</code>. Boxes that share a name send one pair per checked box (<code>days=mon&amp;days=wed</code>). <code>required</code> on a checkbox means <em>that</em> box must be checked, which suits "I agree"; HTML alone cannot require "at least one box in this group".</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A "choose all that apply" group -->
+          <fieldset>
+            <legend>Which days can you attend? (choose all that apply)</legend>
+            <!-- Shared name, different values: sends days=mon&days=wed for two boxes -->
+            <label><input type="checkbox" name="days" value="mon"> Monday</label>
+            <label><input type="checkbox" name="days" value="wed"> Wednesday</label>  <!-- same name, next value -->
+            <label><input type="checkbox" name="days" value="fri"> Friday</label>     <!-- same name, next value -->
+          </fieldset>
+
+          <!-- A single opt-in box: unchecked sends nothing, checked sends updates=yes -->
+          <label><input type="checkbox" name="updates" value="yes"> Email me about new courses</label>
+        </script>
+      </div>
+      <div data-tab="select">
+        <p><strong>What it is.</strong> A drop-down list. The user opens it and picks one <code>&lt;option&gt;</code>; the option's <code>value</code> is sent, and its visible text can be different. On phones it opens the system's own picker.</p>
+        <p><strong>When to use it.</strong> For one answer from a long, fixed list: state, country, graduation year, a course section. It keeps a 50-item list down to one line.</p>
+        <p><strong>When not to.</strong> For two to five options: radio buttons show everything and take one tap instead of three (open, pick, close). And when people should be able to type their own answer, use a <code>&lt;datalist&gt;</code>.</p>
+        <p><strong>Watch out.</strong> The first option is selected automatically, so a required select needs a first "prompt" option with an empty value; otherwise the form accepts whatever happened to be first. <code>multiple</code> exists, but most people do not know to hold <kbd>Ctrl</kbd> or <kbd>&#8984;</kbd> to pick several, so checkboxes are friendlier. For long lists, <code>&lt;optgroup label="..."&gt;</code> adds headings inside the list.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the drop-down -->
+          <label for="term">Graduation term</label>
+          <!-- required: the prompt option below does not count as an answer -->
+          <select id="term" name="term" required>
+            <!-- value="" makes this a prompt, not a real choice -->
+            <option value="">Choose a term</option>
+            <!-- optgroup adds a heading inside the list -->
+            <optgroup label="2027">
+              <!-- The user sees "Spring 2027"; the server receives term=2027-spring -->
+              <option value="2027-spring">Spring 2027</option>
+              <option value="2027-fall">Fall 2027</option>  <!-- sends term=2027-fall -->
+            </optgroup>
+          </select>
+        </script>
+      </div>
+      <div data-tab="datalist">
+        <p><strong>What it is.</strong> A list of suggestions attached to an ordinary text input. The input's <code>list</code> attribute points at the datalist's <code>id</code>; as the user types, matching suggestions appear, and they can pick one or keep typing something else.</p>
+        <p><strong>When to use it.</strong> When there is a set of common answers but other answers are fine too: a city, a high school, a job title, a favorite programming language. People with a common answer save typing; everyone else is not blocked.</p>
+        <p><strong>When not to.</strong> When the answer <em>must</em> be one of the list. A datalist only suggests, so the user can still submit anything. Use a <code>&lt;select&gt;</code> or radio buttons for a fixed set.</p>
+        <p><strong>Watch out.</strong> The <code>name</code> goes on the input, not the datalist. How the suggestions look differs from browser to browser, so test on a phone.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the input -->
+          <label for="city">City</label>
+          <!-- list="city-list" connects the input to the suggestions; name is what gets sent -->
+          <input type="text" id="city" name="city" list="city-list" autocomplete="address-level2">
+          <!-- The suggestions: the user can pick one or type any other city -->
+          <datalist id="city-list">
+            <option value="Fort Lauderdale"></option>  <!-- a common answer -->
+            <option value="Miami"></option>            <!-- another common answer -->
+            <option value="West Palm Beach"></option>  <!-- and another -->
+          </datalist>
+        </script>
+      </div>
+    </div>
+
+    <h3>Buttons: submit, reset or button?</h3>
+    <p>A button's <code>type</code> decides what happens when it is pressed. Getting it wrong is one of the most common form bugs, so decide on purpose every time.</p>
+    <div class="tabs">
+      <div data-tab="submit">
+        <p><strong>What it does.</strong> Runs the browser's validation and, if everything passes, sends the form. A <code>&lt;button&gt;</code> inside a form with no <code>type</code> is a submit button. Pressing Enter in a one-line text field also submits the form, as if the submit button had been pressed.</p>
+        <p><strong>When to use it.</strong> Once per form, at the end, named for what it does: "Create account", "Search", "Place order". A specific label tells people what will happen before they commit.</p>
+        <p><strong>Watch out.</strong> "Submit" is vague. If a form needs two actions, such as "Save draft" and "Publish", give each submit button the same <code>name</code> and a different <code>value</code>; only the pair of the button that was pressed is sent, so the server knows which one it was.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A search form reads data, so it uses GET -->
+          <form action="/search" method="get">
+            <!-- The label names the search box -->
+            <label for="find">Find a class</label>
+            <!-- The search terms, sent as q=... -->
+            <input type="search" id="find" name="q">
+            <!-- type="submit" written out, even though it is the default: clearer to read -->
+            <button type="submit">Search classes</button>
+          </form>
+        </script>
+      </div>
+      <div data-tab="reset">
+        <p><strong>What it does.</strong> Puts every field back to its <em>starting</em> value, the <code>value</code>, <code>checked</code> and <code>selected</code> from the HTML. That is not the same as clearing the form.</p>
+        <p><strong>When to use it.</strong> Almost never. Usability studies keep finding that people press it by accident, often mistaking it for the submit button, and lose everything they typed with no undo.</p>
+        <p><strong>If you must.</strong> Make it look clearly secondary, place it away from the submit button, and label it plainly. Recognize it in other people's code; rarely write it in yours.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Restores the starting values from the HTML. Rarely worth including. -->
+          <button type="reset">Start over</button>
+        </script>
+      </div>
+      <div data-tab="button">
+        <p><strong>What it does.</strong> Nothing, until JavaScript gives it a job. It never submits or resets the form.</p>
+        <p><strong>When to use it.</strong> For actions that should happen on the page without sending the form: a "Show password" toggle, "Add another guest", opening a help panel, a "Calculate total" button that updates a number on the page.</p>
+        <p><strong>Watch out.</strong> Inside a form, forgetting <code>type="button"</code> turns it into a submit button, so pressing "Show password" suddenly sends the half-finished form. Always write the type.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the password box -->
+          <label for="pw2">Password</label>
+          <!-- The password field the button will reveal -->
+          <input type="password" id="pw2" name="password" autocomplete="current-password">
+          <!-- type="button": pressing it must not send the form. JavaScript does the work. -->
+          <button type="button" id="show-pw">Show password</button>
+        </script>
+      </div>
+      <div data-tab="&lt;button&gt; or &lt;input&gt;?">
+        <p><strong>Two ways to write a button.</strong> <code>&lt;input type="submit" value="Search"&gt;</code> takes its text from the <code>value</code> attribute and can hold nothing else. <code>&lt;button type="submit"&gt;Search&lt;/button&gt;</code> holds content between its tags, so it can include an icon or a bold word, and it is easier to style.</p>
+        <p><strong>Which to use.</strong> Prefer <code>&lt;button&gt;</code> in new code. You will still see <code>&lt;input type="submit"&gt;</code> in older pages; it works the same way.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Older style: the text lives in value and cannot contain other elements -->
+          <input type="submit" value="Search">
+
+          <!-- Preferred: the content between the tags is the button's text, and it can hold an icon -->
+          <button type="submit">
+            <!-- A decorative icon, hidden from screen readers because the text already says "Search" -->
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+            Search  <!-- the visible text is also the button's accessible name -->
+          </button>
+        </script>
+      </div>
+    </div>
+
+    <h3>Specialized inputs</h3>
+    <p>These types give users a purpose-built control (a picker, a slider, a file chooser) and send the answer in a fixed, predictable format. The last column shows a value each one might send.</p>
+    <div class="table-wrap">
+      <table class="data-table c5-spec-table">
+        <caption class="sr-only">Specialized input types: what the user gets, an example of what is sent, and typical use</caption>
+        <thead><tr><th scope="col">Type</th><th scope="col">What the user gets</th><th scope="col">Use it for</th><th scope="col">Sends, for example</th></tr></thead>
+        <tbody>
+          <tr><td><code>number</code></td><td>A box with spinner arrows; digits on phones</td><td>Quantities: tickets, guests, age</td><td><code>tickets=2</code></td></tr>
+          <tr><td><code>range</code></td><td>A slider; no typing</td><td>Rough amounts: volume, spice level</td><td><code>spice=7</code></td></tr>
+          <tr><td><code>date</code></td><td>A calendar picker</td><td>Deadlines, bookings, birthdays</td><td><code>due=2026-09-24</code></td></tr>
+          <tr><td><code>time</code></td><td>A time picker</td><td>Appointment or pickup times</td><td><code>pickup=18:30</code></td></tr>
+          <tr><td><code>datetime-local</code></td><td>Date and time in one control</td><td>An event's start</td><td><code>start=2026-09-24T18:30</code></td></tr>
+          <tr><td><code>month</code>, <code>week</code></td><td>A month or week picker, in some browsers</td><td>A billing month, a timesheet week</td><td><code>2026-09</code>, <code>2026-W39</code></td></tr>
+          <tr><td><code>color</code></td><td>The system color picker</td><td>Any custom color: a theme or highlight</td><td><code>theme=#237089</code></td></tr>
+          <tr><td><code>file</code></td><td>A file chooser; camera or photos on phones</td><td>Uploads: a photo, a r&eacute;sum&eacute;, a PDF</td><td>The file itself (POST and multipart only)</td></tr>
+          <tr><td><code>hidden</code></td><td>Nothing: it is invisible</td><td>Data the server needs but the user does not type</td><td><code>category=jackets</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tabs">
+      <div data-tab="number">
+        <p><strong>What it is.</strong> A box that accepts only a number. It has spinner arrows on desktop, a keyboard with digits on phones, and supports <code>min</code>, <code>max</code> and <code>step</code>.</p>
+        <p><strong>When to use it.</strong> For quantities, things you could count or do arithmetic with: tickets, guests, credit hours, an age, a score.</p>
+        <p><strong>When not to.</strong> For codes made of digits, such as ZIP codes, phone numbers, card numbers and student IDs (see the callout above). You would never add 1 to a ZIP code, and spinner arrows on one make no sense.</p>
+        <p><strong>Watch out.</strong> The default <code>step</code> is 1, so a price such as 9.99 is rejected with "Please enter a valid value. The two nearest valid values are 9 and 10." Set <code>step="0.01"</code> for money, or <code>step="any"</code> for any decimal.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the quantity -->
+          <label for="tickets">Number of tickets</label>
+          <!-- A quantity: whole tickets only (the default step of 1), between 1 and 8 -->
+          <input type="number" id="tickets" name="tickets" min="1" max="8" value="1">
+
+          <!-- The label for a money amount -->
+          <label for="tip">Tip amount ($)</label>
+          <!-- step="0.01": cents are allowed; min="0": no negative tips -->
+          <input type="number" id="tip" name="tip" min="0" step="0.01">
+        </script>
+      </div>
+      <div data-tab="range">
+        <p><strong>What it is.</strong> A slider between a <code>min</code> and a <code>max</code> (0 and 100 unless you say otherwise). It always holds a value: without a <code>value</code> attribute it starts in the middle.</p>
+        <p><strong>When to use it.</strong> For rough, relative settings where the exact number does not matter: volume, brightness, spice level, how far from campus you are willing to travel.</p>
+        <p><strong>When not to.</strong> For exact values such as an age or a quantity. Dragging to exactly 37 is fiddly, especially on a phone or for anyone with a shaky hand.</p>
+        <p><strong>Watch out.</strong> Because it always has a value, you cannot tell whether the user touched it, and <code>required</code> means nothing. The user also cannot see the number it will send, so label both ends in words, or show the current value (a line of JavaScript can copy it into an <code>&lt;output&gt;</code> element). Keyboard users can move it with the arrow keys.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the setting -->
+          <label for="spice">Spice level</label>
+          <!-- Words at both ends tell users what the slider means -->
+          <span>Mild</span>
+          <!-- 0 to 10; value="3" is the starting position -->
+          <input type="range" id="spice" name="spice" min="0" max="10" value="3">
+          <!-- The other end of the scale -->
+          <span>Very hot</span>
+        </script>
+      </div>
+      <div data-tab="date and time">
+        <p><strong>What they are.</strong> Pickers that make an impossible date such as "February 31" impossible to enter. <code>date</code> gives a calendar, <code>time</code> a time picker, and <code>datetime-local</code> both together. <code>month</code> and <code>week</code> pick a whole month or week.</p>
+        <p><strong>When to use them.</strong> For deadlines, delivery dates, bookings and appointment times. Use <code>min</code> and <code>max</code> to rule out dates or times that make no sense, such as a pickup outside opening hours.</p>
+        <p><strong>Watch out.</strong> The user sees dates in their own local style, but the value is always sent in one fixed format (see the callout above). <code>datetime-local</code> carries no time zone, so the server has to know which one you mean. And <code>month</code> and <code>week</code> have no picker in Firefox or desktop Safari, where they fall back to a plain text box that accepts any typing; for something like a card's expiry month, two <code>&lt;select&gt;</code>s (month and year) are more reliable.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the date -->
+          <label for="pickup-day">Pickup day</label>
+          <!-- min: no days before October 1, 2026. Sent as pickup-day=2026-10-01 -->
+          <input type="date" id="pickup-day" name="pickup-day" min="2026-10-01">
+
+          <!-- The label names the time -->
+          <label for="pickup-time">Pickup time</label>
+          <!-- Opening hours, 9:00 to 17:00, written in 24-hour format. Sent as 14:30 -->
+          <input type="time" id="pickup-time" name="pickup-time" min="09:00" max="17:00">
+        </script>
+      </div>
+      <div data-tab="color">
+        <p><strong>What it is.</strong> A swatch that opens the system's color picker. It sends the chosen color as a lowercase hex code, such as <code>#237089</code>, and it always has a value (black, <code>#000000</code>, unless you set one).</p>
+        <p><strong>When to use it.</strong> When any color at all is a valid answer: a theme color for a profile, a highlight color, a design tool.</p>
+        <p><strong>When not to.</strong> For choosing among a few fixed options. If a T-shirt comes in four colors, use radio buttons with the color names: a picker would let people choose colors you do not sell, and names work for people who cannot tell the swatches apart.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label names the setting -->
+          <label for="theme">Profile accent color</label>
+          <!-- value sets the starting color (otherwise black). Sent as theme=#237089 -->
+          <input type="color" id="theme" name="theme" value="#237089">
+        </script>
+      </div>
+      <div data-tab="file">
+        <p><strong>What it is.</strong> A button that opens the file chooser. On a phone it also offers the camera and the photo library. <code>accept</code> narrows which files are offered, and <code>multiple</code> allows several at once.</p>
+        <p><strong>When to use it.</strong> For uploads: a profile photo, a r&eacute;sum&eacute;, a homework PDF.</p>
+        <p><strong>Watch out.</strong> The file is only sent with <code>method="post"</code> and <code>enctype="multipart/form-data"</code>; otherwise just its name goes. That means a server program must receive it, so an upload cannot work on a static host such as GitHub Pages. <code>accept</code> is only a convenience: users can switch the chooser to "All files", and anyone can send any file straight to your server, so the server must check the type and size itself.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- POST and multipart are required to send the file itself.
+               /apply must be a program on a server; a static host cannot receive uploads. -->
+          <form action="/apply" method="post" enctype="multipart/form-data">
+            <!-- The label says what to upload and in which format -->
+            <label for="resume">Résumé (PDF)</label>
+            <!-- accept=".pdf": the chooser offers PDF files first -->
+            <input type="file" id="resume" name="resume" accept=".pdf,application/pdf">
+            <!-- The button names the action -->
+            <button type="submit">Send application</button>
+          </form>
+        </script>
+      </div>
+      <div data-tab="hidden">
+        <p><strong>What it is.</strong> A field nobody sees. It is sent with the form like any other named field.</p>
+        <p><strong>When to use it.</strong> For information the server needs but the user should not have to type: which product an "Add to cart" form is about, which section of the site a search box is in, a referral code carried over from a link.</p>
+        <p><strong>Watch out.</strong> Hidden is not secret. Anyone can read it with View Source and change it in DevTools before submitting. Never trust a hidden field for anything that matters, such as a price: the server must look up the real price itself.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- A search box on the Jackets page: GET, because a search only reads data -->
+          <form action="/search" method="get">
+            <!-- Invisible, but sent: limits the search to jackets -->
+            <input type="hidden" name="category" value="jackets">
+            <!-- The visible label for the search box -->
+            <label for="jq">Search jackets</label>
+            <!-- The search terms -->
+            <input type="search" id="jq" name="q">
+            <!-- Sends /search?category=jackets&q=... -->
+            <button type="submit">Search</button>
+          </form>
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which control should I pick?</strong>
+      <ul>
+        <li><strong>A short typed answer:</strong> the most specific type that fits: <code>email</code>, <code>tel</code>, <code>url</code>, <code>search</code> or <code>password</code>; otherwise <code>text</code>.</li>
+        <li><strong>More than one line:</strong> <code>&lt;textarea&gt;</code>.</li>
+        <li><strong>Exactly one of a few options, all visible:</strong> radio buttons sharing a <code>name</code>.</li>
+        <li><strong>Any number of options, or a single opt-in:</strong> checkboxes.</li>
+        <li><strong>One of a long, fixed list:</strong> <code>&lt;select&gt;</code>. <strong>Suggestions, but any answer allowed:</strong> <code>&lt;datalist&gt;</code>.</li>
+        <li><strong>A quantity:</strong> <code>number</code>. <strong>A rough amount:</strong> <code>range</code>. <strong>A date or time:</strong> <code>date</code> or <code>time</code>.</li>
+        <li><strong>A file:</strong> <code>file</code>, with POST and <code>enctype="multipart/form-data"</code>.</li>
+        <li><strong>Send the form:</strong> <code>&lt;button type="submit"&gt;</code>. <strong>Run JavaScript:</strong> <code>&lt;button type="button"&gt;</code>.</li>
+      </ul>
+    </aside>
+
     <div class="match" data-title="Pick the right control for the job">
       <script type="application/json">
       {"leftTitle": "The user needs to...", "rightTitle": "Best control", "monoLeft": false, "pairs": [
@@ -1243,6 +1933,57 @@ label {
 
     <aside class="callout tip"><strong>The first rule of ARIA</strong> If a native HTML element or attribute can do the job, use it instead of ARIA. <code>aria-label</code> is a patch for controls with no visible text, like the icon-only search box above. A visible <code>&lt;label&gt;</code> is better whenever you can have one, because it helps everyone, not only screen reader users.</aside>
 
+    <h3>Which autocomplete value?</h3>
+    <p>The <code>autocomplete</code> attribute tells the browser what a field is <em>for</em>. With that, it can fill in the user's saved name, address or card in one tap, and a password manager knows which box gets which password. That saves everyone time and typos, and for people who find typing slow or painful, or who struggle to remember details, it can decide whether they finish the form at all. That is why WCAG asks for it.</p>
+    <p><strong>When to use it.</strong> On every field that asks about the user themselves: name, email, phone, address, birthday, username, password, payment details. The value must be spelled exactly as listed; a made-up value such as <code>zipcode</code> is ignored.</p>
+    <p><strong>When not to.</strong> On fields about someone or something else. A "Friend's email" field marked <code>email</code> would be filled with the user's own address. Leave <code>autocomplete</code> off those, or set <code>autocomplete="off"</code> (browsers may still offer suggestions, especially on login forms, to keep password managers working).</p>
+    <div class="table-wrap">
+      <table class="data-table c5-ac-table">
+        <caption class="sr-only">Common autocomplete values, where to use them, and what the browser fills in</caption>
+        <thead><tr><th scope="col">Value</th><th scope="col">Put it on</th><th scope="col">The browser might fill in</th></tr></thead>
+        <tbody>
+          <tr><td><code>name</code></td><td>A single "Full name" field</td><td>Ana Ruiz</td></tr>
+          <tr><td><code>given-name</code>, <code>family-name</code></td><td>Separate first-name and last-name fields</td><td>Ana / Ruiz</td></tr>
+          <tr><td><code>email</code></td><td>The user's own email</td><td>ana@example.com</td></tr>
+          <tr><td><code>tel</code></td><td>The user's own phone number</td><td>(305) 555-0142</td></tr>
+          <tr><td><code>address-line1</code>, <code>address-line2</code></td><td>Street address, then apartment or suite</td><td>120 Ocean Dr / Apt 4</td></tr>
+          <tr><td><code>address-level2</code></td><td>City</td><td>Miami</td></tr>
+          <tr><td><code>address-level1</code></td><td>State</td><td>FL</td></tr>
+          <tr><td><code>postal-code</code></td><td>ZIP code</td><td>33139</td></tr>
+          <tr><td><code>country-name</code></td><td>Country</td><td>United States</td></tr>
+          <tr><td><code>bday</code></td><td>Date of birth</td><td>2004-03-17</td></tr>
+          <tr><td><code>username</code></td><td>The login name on a sign-in form</td><td>ana_r</td></tr>
+          <tr><td><code>current-password</code></td><td>The password on a login form</td><td>The saved password</td></tr>
+          <tr><td><code>new-password</code></td><td>Sign-up and change-password forms</td><td>A strong, generated password</td></tr>
+          <tr><td><code>one-time-code</code></td><td>A code sent by text message</td><td>The code from the latest text</td></tr>
+          <tr><td><code>cc-number</code>, <code>cc-exp</code>, <code>cc-csc</code></td><td>Card number, expiry date, security code</td><td>A saved card</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <script type="text/plain" class="code" data-lang="html">
+      <!-- Part of a shipping form: each label + field pair asks for one saved detail -->
+
+      <!-- Full name: autocomplete="name" fills the user's whole name in one field -->
+      <label for="ship-name">Full name</label>
+      <input type="text" id="ship-name" name="name" autocomplete="name">
+
+      <!-- Street: address-line1 is the house number and street -->
+      <label for="ship-street">Street address</label>
+      <input type="text" id="ship-street" name="street" autocomplete="address-line1">
+
+      <!-- City: address-level2 is the city (address-level1 would be the state) -->
+      <label for="ship-city">City</label>
+      <input type="text" id="ship-city" name="city" autocomplete="address-level2">
+
+      <!-- ZIP: postal-code, plus inputmode="numeric" for a number pad on phones -->
+      <label for="ship-zip">ZIP code</label>
+      <input type="text" id="ship-zip" name="zip" autocomplete="postal-code" inputmode="numeric">
+
+      <!-- Someone else's email: "off", so autofill does not insert the user's own address -->
+      <label for="gift-email">Gift recipient's email (optional)</label>
+      <input type="email" id="gift-email" name="gift_email" autocomplete="off">
+    </script>
+
     <h3>Audit a form</h3>
     <p>Time to put on the auditor's hat. Read the code, look at the rendered form, and find the six problems.</p>
 
@@ -1394,6 +2135,133 @@ label {
       }
     </script>
     <p>A few pseudo-classes target control states: <code>:focus-visible</code> (focused, and the browser decided the focus should show, as it always does for keyboard users), <code>:checked</code>, <code>:disabled</code>, <code>:required</code> and <code>:optional</code>, <code>:invalid</code> and <code>:user-invalid</code>, plus the <code>::placeholder</code> pseudo-element.</p>
+    <p>Each one matches a control only while it is in a certain <em>state</em>, so your styles switch on and off by themselves as the user works through the form. No JavaScript is needed.</p>
+    <div class="table-wrap">
+      <table class="data-table c5-ref-table">
+        <caption class="sr-only">Form state selectors, what they match, and a typical use</caption>
+        <thead><tr><th scope="col">Selector</th><th scope="col">Matches</th><th scope="col">Typical use</th></tr></thead>
+        <tbody>
+          <tr><td><code>:focus-visible</code></td><td>The focused control, when a focus ring should show</td><td>Your own clear focus ring</td></tr>
+          <tr><td><code>:checked</code></td><td>A checked checkbox or radio button</td><td>Highlighting the chosen option</td></tr>
+          <tr><td><code>:disabled</code></td><td>Controls with the <code>disabled</code> attribute</td><td>Making unavailable controls look unavailable</td></tr>
+          <tr><td><code>:required</code>, <code>:optional</code></td><td>Fields with or without <code>required</code></td><td>A subtle visual difference between the two</td></tr>
+          <tr><td><code>:invalid</code>, <code>:user-invalid</code></td><td>Fields that break a validation rule (<code>:user-invalid</code> only after the user has interacted)</td><td>Error borders and icons</td></tr>
+          <tr><td><code>::placeholder</code></td><td>The placeholder text inside an empty field</td><td>Keeping example text readable</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tabs">
+      <div data-tab=":focus-visible">
+        <p><strong>What it matches.</strong> The control that has focus, but only when the browser decides a focus indicator should show: always for keyboard users, always in text fields, and usually not when a button is clicked with a mouse. Plain <code>:focus</code> matches every time, which is why mouse users see rings on buttons they click.</p>
+        <p><strong>When to use it.</strong> For your own focus style, so it matches your design and stands out clearly against the background. Keyboard users rely on it to know where they are on the page.</p>
+        <p><strong>Watch out.</strong> Never remove the outline without putting something just as visible in its place. A form with no visible focus is unusable from the keyboard, and it fails WCAG.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Any control focused from the keyboard gets a thick ring */
+          input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible {
+            /* 3px is easy to spot; a dark blue has strong contrast on white */
+            outline: 3px solid #1f4fd1;
+            /* A small gap so the ring does not hide the field's own border */
+            outline-offset: 2px;
+          }
+        </script>
+      </div>
+      <div data-tab=":checked">
+        <p><strong>What it matches.</strong> A checkbox or radio button that is currently checked (and a selected <code>&lt;option&gt;</code>). It updates instantly as the user clicks.</p>
+        <p><strong>When to use it.</strong> To make the chosen answer stand out, for example by bolding the label next to the checked radio button. Combine it with the adjacent sibling combinator <code>+</code> from Chapter 4 to style the element right after the input.</p>
+        <p><strong>Watch out.</strong> The HTML order matters: <code>+</code> only reaches the element that comes directly <em>after</em> the input, so put the input first and its text in a <code>&lt;span&gt;</code> right after it.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* The text right after a checked radio button turns bold */
+          input[type="radio"]:checked + span {
+            /* Bold makes the chosen plan easy to spot */
+            font-weight: bold;
+            /* An underline adds a second cue besides weight */
+            text-decoration: underline;
+          }
+        </script>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Input first, then its text in a span, so "+ span" can reach it -->
+          <label><input type="radio" name="plan" value="basic"> <span>Basic</span></label>
+          <!-- Same structure for every option in the group -->
+          <label><input type="radio" name="plan" value="pro"> <span>Pro</span></label>
+        </script>
+      </div>
+      <div data-tab=":disabled">
+        <p><strong>What it matches.</strong> Controls with the <code>disabled</code> attribute. A disabled control cannot be focused, clicked or changed, and its value is not sent with the form.</p>
+        <p><strong>When to use it.</strong> To make a control that does not apply right now look unavailable, such as a "Company name" field that only matters for business accounts.</p>
+        <p><strong>Watch out.</strong> Keyboard users cannot even focus a disabled control, so they cannot find out why it is off. A disabled submit button with no explanation is a classic frustration: it is usually better to leave the button enabled and explain what is missing when it is pressed. The <code>cursor</code> change only helps mouse users.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Every disabled control in a form */
+          :disabled {
+            /* Faded, but the text must still be readable */
+            opacity: 0.6;
+            /* The "not allowed" pointer when a mouse hovers over it */
+            cursor: not-allowed;
+          }
+        </script>
+      </div>
+      <div data-tab=":required and :optional">
+        <p><strong>What they match.</strong> <code>:required</code> matches fields that have the <code>required</code> attribute; <code>:optional</code> matches the fields that do not.</p>
+        <p><strong>When to use them.</strong> For a subtle visual difference between the two, such as a slightly heavier border on required fields.</p>
+        <p><strong>Watch out.</strong> Styling alone does not tell anyone which fields are required: screen readers do not announce a border, and many people would not notice it. Say it in words, in the label, as the design advice at the top of this section explains: "(optional)" on the few optional fields.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Required fields: a slightly heavier border */
+          input:required {
+            /* 2px instead of 1px: noticeable but calm */
+            border-width: 2px;
+          }
+          /* Optional fields: a faint gray fill instead */
+          input:optional {
+            /* Only the background changes, so the border keeps its full contrast */
+            background: #f6f7f9;
+          }
+        </script>
+      </div>
+      <div data-tab=":invalid and :user-invalid">
+        <p><strong>What they match.</strong> Both match a field that currently breaks one of its rules (<code>required</code>, <code>type</code>, <code>pattern</code>, <code>min</code> and so on). The difference is timing. <code>:invalid</code> matches from the moment the page loads, so an empty required field is "invalid" before the user has even reached it. <code>:user-invalid</code> matches only after the user has changed the field and moved on, or has tried to submit. The opposites, <code>:valid</code> and <code>:user-valid</code>, work the same way.</p>
+        <p><strong>When to use them.</strong> Use <code>:user-invalid</code> for error borders and icons, so people are not greeted by a form full of red. <code>:user-valid</code> can add a quiet "looks good" mark after a correct answer.</p>
+        <p><strong>Watch out.</strong> Red alone is not an error message. Pair the style with text that says what is wrong and how to fix it (5.7), because people who cannot see the color, and screen reader users, get nothing from a border.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Only after the user has had a chance to answer */
+          input:user-invalid {
+            /* A red border marks the problem visually */
+            border-color: #c62828;
+            /* A thicker border, so it does not depend on color alone */
+            border-width: 2px;
+          }
+          /* Avoid this: every empty required field looks wrong as soon as the page opens */
+          input:invalid {
+            /* Shown only as the example to avoid; do not ship this */
+            border-color: #c62828;
+          }
+        </script>
+      </div>
+      <div data-tab="::placeholder">
+        <p><strong>What it matches.</strong> The placeholder text shown inside an empty field. It has two colons because it is a <em>pseudo-element</em>, a part of the field, not a state.</p>
+        <p><strong>When to use it.</strong> When a field shows an example of the format, such as "e.g. 33101", to make that text readable. Browsers often draw it too pale.</p>
+        <p><strong>Watch out.</strong> A placeholder is never a replacement for a label (5.5). Make it readable but clearly lighter than real input, so nobody mistakes the example for an answer they already typed.</p>
+        <script type="text/plain" class="code" data-lang="css">
+          /* Example text inside empty fields */
+          input::placeholder {
+            /* Darker than most browser defaults, still lighter than typed text */
+            color: #5f6b7a;
+            /* Italic is one more hint that this is an example, not an answer */
+            font-style: italic;
+          }
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which selector should I pick?</strong>
+      <ul>
+        <li><strong>A focus ring:</strong> <code>:focus-visible</code>. Example: <code>input:focus-visible { outline: 3px solid #1f4fd1; }</code></li>
+        <li><strong>Error styling:</strong> <code>:user-invalid</code>, never plain <code>:invalid</code>. Example: <code>input:user-invalid { border-color: #c62828; }</code></li>
+        <li><strong>Highlighting the chosen option:</strong> <code>:checked</code> with <code>+</code>. Example: <code>input:checked + span { font-weight: bold; }</code></li>
+        <li><strong>Unavailable controls:</strong> <code>:disabled</code>. Example: <code>:disabled { opacity: 0.6; }</code></li>
+        <li><strong>Readable example text:</strong> <code>::placeholder</code>. Example: <code>input::placeholder { color: #5f6b7a; }</code></li>
+      </ul>
+    </aside>
     <aside class="callout warn"><strong><code>:invalid</code> or <code>:user-invalid</code>?</strong> <code>:invalid</code> matches immediately, so every empty required field glows red before the user has typed a thing. <code>:user-invalid</code> waits until the user has changed the field or tried to submit. It works in all current major browsers, so prefer it for error styling. Try both in the lab.</aside>
 
     <div class="widget c5-lab" id="c5-flab" data-kind="Lab" data-title="Form design lab">
@@ -1568,6 +2436,187 @@ form {
       </table>
     </div>
 
+    <p>The first five kinds are built into HTML: add an attribute and the browser enforces it. Pick a kind to see when it applies, the exact markup, the message the browser shows when it fails, and why the server has to check it again anyway.</p>
+    <div class="tabs">
+      <div data-tab="Required">
+        <p><strong>What it checks.</strong> That the field is not empty. On a checkbox, <code>required</code> means that box must be checked; on a radio group, that one option must be picked; on a <code>&lt;select&gt;</code>, that the chosen option has a non-empty <code>value</code>.</p>
+        <p><strong>When to use it.</strong> On every field you truly cannot do without: the email you will send the receipt to, the password on a sign-up, the "I agree" box. Not on nice-to-have fields: every required field is another reason for someone to give up.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label says what to enter -->
+          <label for="r-email">Email</label>
+          <!-- required: the form will not send while this is empty -->
+          <input type="email" id="r-email" name="email" required>
+
+          <!-- On a checkbox, required means "this box must be checked" -->
+          <label><input type="checkbox" name="terms" value="agreed" required> I agree to the terms</label>
+
+          <!-- The label for the drop-down -->
+          <label for="r-major">Major</label>
+          <!-- On a select, required rejects an option whose value is empty -->
+          <select id="r-major" name="major" required>
+            <option value="">Choose your major</option>           <!-- empty value: a prompt, not an answer -->
+            <option value="cs">Computer Science</option>          <!-- a real answer: major=cs -->
+            <option value="it">Information Technology</option>    <!-- a real answer: major=it -->
+          </select>
+        </script>
+        <p><strong>What the user sees.</strong> In Chrome (each browser words it a little differently, always in the user's own language):</p>
+        <ul>
+          <li>An empty text box: "Please fill out this field."</li>
+          <li>An unchecked required checkbox: "Please check this box if you want to proceed."</li>
+          <li>A select still on its prompt: "Please select an item in the list."</li>
+        </ul>
+        <p>In every case the <code>validity</code> flag is <code>valueMissing</code>.</p>
+        <p><strong>Why the server checks again.</strong> <code>required</code> only means "not empty", so a single space passes. And anyone can delete the attribute in DevTools or send the request without the field at all. The server must trim the value and treat blank or missing as an error.</p>
+      </div>
+      <div data-tab="Data type">
+        <p><strong>What it checks.</strong> That the value has the right shape for its <code>type</code>: <code>email</code> needs <code>name@domain</code>, <code>url</code> needs a full address with a scheme such as <code>https://</code>, and <code>number</code> accepts only numbers. Date, time and color pickers cannot produce a wrong shape in the first place.</p>
+        <p><strong>When to use it.</strong> Whenever a field holds an email address, a web address or a quantity. You get the matching phone keyboard as a bonus. Note that <code>type="tel"</code> checks nothing, because phone formats vary too much.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label for the email field -->
+          <label for="t-email">Email</label>
+          <!-- type="email": rejects values without name@domain -->
+          <input type="email" id="t-email" name="email">
+
+          <!-- The label for the web address -->
+          <label for="t-site">Website</label>
+          <!-- type="url": rejects "example.com"; it needs "https://example.com" -->
+          <input type="url" id="t-site" name="site">
+
+          <!-- The label for the quantity -->
+          <label for="t-guests">Number of guests</label>
+          <!-- type="number": letters are rejected -->
+          <input type="number" id="t-guests" name="guests">
+        </script>
+        <p><strong>What the user sees.</strong> In Chrome:</p>
+        <ul>
+          <li><code>ana</code> in the email box: "Please include an '@' in the email address. 'ana' is missing an '@'." (flag: <code>typeMismatch</code>)</li>
+          <li><code>example.com</code> in the URL box: "Please enter a URL." (<code>typeMismatch</code>)</li>
+          <li>Something that is not a number in the number box: "Please enter a number." (<code>badInput</code>)</li>
+        </ul>
+        <p><strong>Why the server checks again.</strong> The server receives plain text; it has no idea which <code>type</code> the field had in the browser, and a script can send anything. The shape check also cannot prove an email address exists (<code>ana@gmial.com</code> passes), which is why sites send a confirmation link.</p>
+      </div>
+      <div data-tab="Format">
+        <p><strong>What it checks.</strong> That the <em>whole</em> value matches a <code>pattern</code>, a regular expression (the Patterns section below explains the syntax).</p>
+        <p><strong>When to use it.</strong> For values with one fixed, known shape: a ZIP code, a student ID, a course code, a username limited to certain characters.</p>
+        <p><strong>When not to.</strong> For values that come in many valid shapes. Names contain spaces, hyphens and apostrophes, and some people have only one name; addresses and international phone numbers vary endlessly. A strict pattern on those locks real people out.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label for the ZIP code -->
+          <label for="f-zip">ZIP code</label>
+          <!-- pattern: exactly 5 digits, optionally a hyphen and 4 more. inputmode: a number pad on phones -->
+          <input type="text" id="f-zip" name="zip" inputmode="numeric" pattern="\d{5}(-\d{4})?" required aria-describedby="f-zip-hint">
+          <!-- The hint states the format before anyone gets it wrong -->
+          <p id="f-zip-hint">5 digits, like 33101</p>
+        </script>
+        <p><strong>What the user sees.</strong> In Chrome: "Please match the requested format." That tells nobody what the format <em>is</em>, which is why the hint matters. (Some browsers add the text of a <code>title</code> attribute to the message, but a visible hint helps everyone, before they make the mistake.) The flag is <code>patternMismatch</code>.</p>
+        <p><strong>Watch out.</strong> An empty field skips the pattern, so add <code>required</code> if the field must be filled in. <code>pattern</code> does not work on <code>type="number"</code>.</p>
+        <p><strong>Why the server checks again.</strong> The same pattern must run on the server, because a script can send <code>zip=hello</code> or a line of code straight to your URL.</p>
+      </div>
+      <div data-tab="Length">
+        <p><strong>What it checks.</strong> The number of characters. <code>minlength</code> sets the fewest allowed; <code>maxlength</code> sets the most.</p>
+        <p><strong>When to use it.</strong> <code>minlength</code> for passwords (12 or more is a common modern minimum). <code>maxlength</code> when there is a real limit, such as a 20-character username or a 160-character bio that has to fit on a profile card.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label for the password -->
+          <label for="l-pw">Password</label>
+          <!-- minlength: at least 12 characters; required: cannot be left empty -->
+          <input type="password" id="l-pw" name="password" minlength="12" required autocomplete="new-password" aria-describedby="l-pw-hint">
+          <!-- State the rule up front -->
+          <p id="l-pw-hint">At least 12 characters.</p>
+
+          <!-- The label for the bio -->
+          <label for="l-bio">Short bio (up to 160 characters)</label>
+          <!-- maxlength: typing and pasting simply stop at 160 characters -->
+          <textarea id="l-bio" name="bio" maxlength="160"></textarea>
+        </script>
+        <p><strong>What the user sees.</strong> For a short password, Chrome says "Please lengthen this text to 12 characters or more (you are currently using 5 characters)." (flag: <code>tooShort</code>). <code>maxlength</code> shows no message at all: the field just stops accepting characters, so say the limit in the label.</p>
+        <p><strong>Watch out.</strong> <code>minlength</code> ignores an empty field (pair it with <code>required</code>) and only complains once the user has typed something.</p>
+        <p><strong>Why the server checks again.</strong> <code>maxlength</code> only limits typing in the browser. A script can send a bio of five million characters; the server must refuse anything longer than it can store.</p>
+      </div>
+      <div data-tab="Range">
+        <p><strong>What it checks.</strong> That a number, date or time lies between <code>min</code> and <code>max</code>, and that it lands on an allowed <code>step</code> (whole numbers, quarters, every 15 minutes).</p>
+        <p><strong>When to use it.</strong> Age limits, quantities (1 to 8 tickets), dates that cannot be in the past, times within opening hours, prices in cents.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The label for the quantity -->
+          <label for="g-tickets">Tickets</label>
+          <!-- min/max: 1 to 8 tickets. The default step of 1 allows whole tickets only -->
+          <input type="number" id="g-tickets" name="tickets" min="1" max="8" value="1">
+
+          <!-- The label for the date -->
+          <label for="g-date">Check-in date</label>
+          <!-- min: no dates before October 1, 2026 -->
+          <input type="date" id="g-date" name="checkin" min="2026-10-01">
+
+          <!-- The label for the price -->
+          <label for="g-price">Price ($)</label>
+          <!-- step="0.01": allows cents. Without it, 9.99 would be rejected -->
+          <input type="number" id="g-price" name="price" min="0" step="0.01">
+        </script>
+        <p><strong>What the user sees.</strong> In Chrome:</p>
+        <ul>
+          <li>Below <code>min</code>: "Value must be greater than or equal to 1." (flag: <code>rangeUnderflow</code>)</li>
+          <li>Above <code>max</code>: "Value must be less than or equal to 8." (<code>rangeOverflow</code>)</li>
+          <li>A date before <code>min</code>: "Value must be 10/01/2026 or later.", with the date shown in the user's own style (<code>rangeUnderflow</code>)</li>
+          <li><code>2.5</code> tickets, which misses the step: "Please enter a valid value. The two nearest valid values are 2 and 3." (<code>stepMismatch</code>)</li>
+        </ul>
+        <p><strong>Watch out.</strong> Values in HTML are fixed. "No dates in the past" means a <code>min</code> that changes every day, so a real site writes today's date into the page with JavaScript or on the server.</p>
+        <p><strong>Why the server checks again.</strong> A script can send <code>tickets=-3</code>. If the server trusted it, a negative quantity could turn a charge into a refund.</p>
+      </div>
+      <div data-tab="Comparison">
+        <p><strong>What it checks.</strong> One field against another: "Confirm password" matches "Password", an end date comes after the start date, a confirmation email matches the first one.</p>
+        <p><strong>When to use it.</strong> Only when the second field really prevents mistakes. "Confirm password" is common on sign-up forms; many sites now use a single password field with a "Show password" button instead.</p>
+        <p><strong>The tool.</strong> No HTML attribute can compare two fields. JavaScript does it with <code>setCustomValidity()</code>, covered below in "Custom rules with JavaScript", where you will build the password version yourself. Here is the date version:</p>
+        <script type="text/plain" class="code" data-lang="js">
+          // The two date inputs, found by their ids
+          const start = document.querySelector('#start');
+          const end = document.querySelector('#end');
+
+          // Compare them whenever either one changes
+          function checkDates() {
+            // Dates arrive as YYYY-MM-DD text, which sorts correctly, so < works
+            if (start.value && end.value && end.value < start.value) {
+              // A non-empty message marks the field invalid and blocks the form
+              end.setCustomValidity('The end date must be on or after the start date.');
+            } else {
+              // An empty string marks it valid again
+              end.setCustomValidity('');
+            }
+          }
+          // Run the check when the user changes either date
+          start.addEventListener('change', checkDates);
+          end.addEventListener('change', checkDates);
+        </script>
+        <p><strong>What the user sees.</strong> Exactly your message, in the browser's usual error bubble. The flag is <code>customError</code>.</p>
+        <p><strong>Why the server checks again.</strong> JavaScript can be turned off, and a request sent by a script never runs your page's code at all.</p>
+      </div>
+      <div data-tab="Business rule">
+        <p><strong>What it checks.</strong> Rules that depend on data only the server has: the username is already taken, the email is already registered, the coupon code has expired, the class section is full, the item is out of stock.</p>
+        <p><strong>When to use it.</strong> Whenever the answer depends on your database. The browser cannot know, so there is no HTML attribute for it.</p>
+        <p><strong>What the user sees.</strong> The server checks after the form is sent and, if something fails, sends the form back with the user's answers still filled in and a message beside the problem field:</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- The server re-sends the form; value keeps what the user typed -->
+          <label for="b-user">Username</label>
+          <!-- aria-invalid tells screen readers the field has a problem; aria-describedby links the message -->
+          <input type="text" id="b-user" name="username" value="ana_r" aria-invalid="true" aria-describedby="b-user-error">
+          <!-- The message says what is wrong and how to fix it -->
+          <p id="b-user-error">That username is taken. Try ana_r2 or ana_ruiz.</p>
+        </script>
+        <p><strong>Watch out.</strong> Some sites check while you type, with JavaScript asking the server in the background. That is a nice touch, but the server must still check again when the form arrives: two people could choose the same name in the same second.</p>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which check do I need?</strong>
+      <ul>
+        <li><strong>The field cannot be empty:</strong> <code>required</code>.</li>
+        <li><strong>It is an email address, a web address or a number:</strong> the matching <code>type</code>.</li>
+        <li><strong>It has one fixed format, such as a ZIP code or an ID:</strong> <code>pattern</code>, plus a hint that shows the format.</li>
+        <li><strong>A password minimum or a character limit:</strong> <code>minlength</code> or <code>maxlength</code>.</li>
+        <li><strong>A number, date or time within limits:</strong> <code>min</code>, <code>max</code> and <code>step</code>.</li>
+        <li><strong>Two fields must agree:</strong> JavaScript's <code>setCustomValidity()</code>.</li>
+        <li><strong>It depends on your data (taken, full, expired):</strong> the server.</li>
+        <li><strong>And every time:</strong> the server checks again.</li>
+      </ul>
+    </aside>
+
     <h3>Built-in validation</h3>
     <p>Add those attributes and the browser does the rest with no JavaScript: when the user submits, it blocks the request, focuses the first bad field and shows a message in the user's own language. Behind the scenes, every field has a <code>validity</code> property, a <strong>ValidityState</strong> object with one true/false flag per rule. Pick a preset (or set attributes yourself), type in the test field, and watch the flags change.</p>
 
@@ -1685,7 +2734,19 @@ form {
         }
       });
     </script>
-    <p>Related tools: <code>form.checkValidity()</code> returns <code>true</code> or <code>false</code>, <code>field.reportValidity()</code> also shows the message, <code>field.validationMessage</code> holds the text, and the <code>novalidate</code> attribute on a form turns built-in validation off (useful when your own JavaScript takes over the messages).</p>
+    <p>A few related tools round out the Constraint Validation API. You will not need them on every form, but each solves one specific problem:</p>
+    <div class="table-wrap">
+      <table class="data-table c5-ref-table">
+        <caption class="sr-only">Related constraint validation tools, what they do, and when to use them</caption>
+        <thead><tr><th scope="col">Tool</th><th scope="col">What it does</th><th scope="col">When you would use it</th></tr></thead>
+        <tbody>
+          <tr><td><code>form.checkValidity()</code></td><td>Returns <code>true</code> or <code>false</code> for the whole form, silently</td><td>To enable a step or show a summary only when everything is valid</td></tr>
+          <tr><td><code>field.reportValidity()</code></td><td>Checks one field and, if it fails, shows the browser's message</td><td>To show an error the moment a user leaves a field, instead of waiting for submit</td></tr>
+          <tr><td><code>field.validationMessage</code></td><td>Holds the text of the current error (empty when valid)</td><td>To put the browser's message in your own element beside the field</td></tr>
+          <tr><td><code>novalidate</code> on <code>&lt;form&gt;</code></td><td>Turns off the built-in bubbles and blocking; the rules and <code>validity</code> flags still work</td><td>When your JavaScript shows every message itself and decides when to submit</td></tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="playground" data-title="Confirm the password" data-height="360" data-challenge="Finish the JavaScript so mismatched passwords block the form">
       <textarea data-lang="html"><h1>Choose a password</h1>
