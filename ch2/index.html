@@ -329,6 +329,19 @@
       .c2-parts td:nth-child(2) { min-width: 0; }
       .c2-parts td:nth-child(3) { grid-column: 1 / -1; font-size: .88rem; color: var(--ink-2); }
     }
+
+    /* Expanded reference tables: wide enough to read, so they scroll inside .table-wrap on phones */
+    .c2-layers-table { min-width: 780px; }
+    .c2-urlparts-table { min-width: 760px; }
+    .c2-relurl-table { min-width: 720px; }
+    .c2-methods-table { min-width: 860px; }
+    .c2-headers-table { min-width: 780px; }
+    .c2-dnsrec-table { min-width: 780px; }
+    .c2-relurl-table td:last-child code, .c2-headers-table td:nth-child(3) code, .c2-dnsrec-table td:nth-child(3) code { white-space: normal; overflow-wrap: anywhere; }
+    .c2-methods-table td:first-child, .c2-dnsrec-table td:first-child { white-space: nowrap; }
+    /* Notes under a raw message or terminal sample, one item per line of the sample */
+    .c2-lines { font-size: .93rem; }
+    .c2-lines li { margin-bottom: 4px; }
   </style>
 </head>
 <body data-module="ch2">
@@ -383,16 +396,96 @@
     <h3>The four layers of TCP/IP</h3>
     <p>Networking is split into <strong>layers</strong>. Each layer solves one problem and relies on the layer below it, so Wi-Fi engineers never think about web pages and web developers rarely think about radio signals. The internet's family of protocols is called <strong>TCP/IP</strong>, after its two most famous members, and it's usually described with four layers:</p>
     <div class="table-wrap">
-      <table class="data-table c2-layer-t">
-        <thead><tr><th scope="col">Layer</th><th scope="col">Its job</th><th scope="col">Examples</th><th scope="col">Unit of data</th></tr></thead>
+      <table class="data-table c2-layer-t c2-layers-table">
+        <thead><tr><th scope="col">Layer</th><th scope="col">Its job</th><th scope="col">Examples</th><th scope="col">Unit of data</th><th scope="col">In your request for www.example.com, it says…</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><span class="c2-dot l0"></span>4 · Application</th><td>The conversation between programs: what is actually being said</td><td>HTTP, HTTPS, DNS, SMTP, IMAP, SSH, FTP</td><td>message</td></tr>
-          <tr><th scope="row"><span class="c2-dot l1"></span>3 · Transport</th><td>Delivers data to the right program, optionally with guaranteed, in-order delivery</td><td>TCP, UDP (and QUIC, which runs on UDP)</td><td>segment (TCP), datagram (UDP)</td></tr>
-          <tr><th scope="row"><span class="c2-dot l2"></span>2 · Internet</th><td>Addresses packets and routes them from network to network</td><td>IPv4, IPv6, ICMP</td><td>packet</td></tr>
-          <tr><th scope="row"><span class="c2-dot l3"></span>1 · Link</th><td>Moves bits across one physical connection to the next device</td><td>Ethernet, Wi-Fi, fiber, cellular</td><td>frame</td></tr>
+          <tr><th scope="row"><span class="c2-dot l0"></span>4 · Application</th><td>The conversation between programs: what is actually being said</td><td>HTTP, HTTPS, DNS, SMTP, IMAP, SSH, FTP</td><td>message</td><td>"Please send me <code>/index.html</code> from <code>www.example.com</code>"</td></tr>
+          <tr><th scope="row"><span class="c2-dot l1"></span>3 · Transport</th><td>Delivers data to the right program, optionally with guaranteed, in-order delivery</td><td>TCP, UDP (and QUIC, which runs on UDP)</td><td>segment (TCP), datagram (UDP)</td><td>"From port <code>51544</code> to port <code>443</code>, and this is byte 1 of the conversation"</td></tr>
+          <tr><th scope="row"><span class="c2-dot l2"></span>2 · Internet</th><td>Addresses packets and routes them from network to network</td><td>IPv4, IPv6, ICMP</td><td>packet</td><td>"From <code>192.168.1.23</code> to <code>203.0.113.80</code>"</td></tr>
+          <tr><th scope="row"><span class="c2-dot l3"></span>1 · Link</th><td>Moves bits across one physical connection to the next device</td><td>Ethernet, Wi-Fi, fiber, cellular</td><td>frame</td><td>"From this laptop's Wi-Fi card to the router, one hop only"</td></tr>
         </tbody>
       </table>
     </div>
+
+    <p>The layers matter to you in practice when something breaks. A page that won't load failed at one particular layer, and each layer fails with its own recognizable message. Knowing which layer is complaining tells you where to look: your Wi-Fi, the address, the port number, or your own files. Pick a layer to see what it does, where you run into it as a web developer, and what it looks like when it fails.</p>
+    <div class="tabs" id="c2-layers-tabs">
+      <div data-tab="4 · Application">
+        <p><strong>What it does.</strong> This is where programs say something meaningful to each other. Each application protocol has its own vocabulary: HTTP has methods (<code>GET</code>, <code>POST</code>) and status codes (<code>200</code>, <code>404</code>), DNS has questions and record types (<code>A</code>, <code>MX</code>). The layers below only carry these messages; they never read them.</p>
+        <p><strong>Where you meet it.</strong> All the time. Every link you write starts with the name of an application protocol (<code>https:</code>, <code>mailto:</code>), and everything in the DevTools <strong>Network</strong> tab (URLs, methods, status codes, headers) belongs to this layer. When you publish your project, it is HTTP that carries your files to visitors.</p>
+        <p><strong>When it fails.</strong> Two kinds of failure land here. If DNS can't find the name, you get an error page before any connection is made, usually because the domain is misspelled or was never set up. If HTTP gets through but the server says no, you get a page with a status code such as <code>404 Not Found</code> (wrong file name) or <code>500 Internal Server Error</code> (the server's code crashed). In both cases the network itself is fine: fix the address, your files, or the server.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Chrome's page when DNS fails">
+          This site can't be reached
+          Check if there is a typo in wwww.example.com.
+          DNS_PROBE_FINISHED_NXDOMAIN
+        </script>
+        <ul class="c2-lines">
+          <li><strong>This site can't be reached</strong>: Chrome never got as far as sending an HTTP request.</li>
+          <li><strong>Check if there is a typo</strong>: the name has four w's. No such name exists, so DNS has no address to give back.</li>
+          <li><strong><code>DNS_PROBE_FINISHED_NXDOMAIN</code></strong>: the technical code. <code>NXDOMAIN</code> is DNS for "non-existent domain." Firefox and Safari word it differently, but they mean the same thing.</li>
+        </ul>
+      </div>
+      <div data-tab="3 · Transport">
+        <p><strong>What it does.</strong> It gets data to the right <em>program</em> on a computer, using port numbers, and (with TCP) makes delivery reliable: it numbers the data, resends anything lost and puts it back in order. You'll meet TCP, UDP and ports properly later in this section.</p>
+        <p><strong>Where you meet it.</strong> Mostly through port numbers. The <code>:5500</code> in <code>http://localhost:5500/</code> is a transport-layer detail: it picks the program (your development server) that should get the request. On the public web you rarely see ports, because <code>https</code> quietly means port 443.</p>
+        <p><strong>When it fails.</strong> The computer was reached, but no program was listening on that port, so the operating system turned the connection away. The classic cause during development: your local server isn't running (you closed VS Code or stopped Live Server), or you typed the wrong port number. Start the server, or check which port it says it is using.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Chrome: nothing on that port">
+          This site can't be reached
+          localhost refused to connect.
+          ERR_CONNECTION_REFUSED
+        </script>
+        <ul class="c2-lines">
+          <li><strong>localhost</strong>: the address was fine; it's your own computer.</li>
+          <li><strong>refused to connect</strong>: the computer answered the TCP handshake with a "no": nothing is listening on the port you asked for.</li>
+          <li><strong><code>ERR_CONNECTION_REFUSED</code></strong>: the error code to search for if you're stuck.</li>
+        </ul>
+      </div>
+      <div data-tab="2 · Internet">
+        <p><strong>What it does.</strong> It gives every device an IP address and moves packets across the internet, from router to router, toward the destination address. It makes no promises: a packet can be lost or arrive out of order, and fixing that is the transport layer's job.</p>
+        <p><strong>Where you meet it.</strong> As IP addresses. DevTools shows the <strong>Remote Address</strong> each file came from, DNS turns names into these addresses, and <code>127.0.0.1</code> means your own computer. You can test this layer yourself with <code>ping</code>, which sends small ICMP packets to an address and times the replies.</p>
+        <p><strong>When it fails.</strong> Packets go out but nothing comes back, so the browser waits and then gives up with <code>ERR_CONNECTION_TIMED_OUT</code>. Common causes are a wrong IP address in the domain's DNS records, a server that is switched off, or a firewall silently dropping the traffic. <strong>Watch out:</strong> many servers deliberately ignore <code>ping</code>, so "no reply to ping" does not prove a site is down. Try loading the site too.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Terminal (macOS or Linux)">
+          $ ping -c 3 www.example.com
+          PING www.example.com (203.0.113.80): 56 data bytes
+          64 bytes from 203.0.113.80: icmp_seq=0 ttl=56 time=18.4 ms
+          64 bytes from 203.0.113.80: icmp_seq=1 ttl=56 time=17.9 ms
+          64 bytes from 203.0.113.80: icmp_seq=2 ttl=56 time=18.1 ms
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>ping -c 3 www.example.com</code></strong>: send 3 pings, then stop. On Windows, type <code>ping www.example.com</code>; it sends 4 and stops by itself.</li>
+          <li><strong><code>(203.0.113.80)</code></strong>: ping looked the name up with DNS first. This is the address the packets are going to.</li>
+          <li><strong><code>icmp_seq=0</code>, <code>1</code>, <code>2</code></strong>: each reply is numbered, so you can spot one that went missing.</li>
+          <li><strong><code>ttl=56</code></strong>: the packet's hop counter. Each router it passed subtracted 1, which stops a lost packet from circling forever.</li>
+          <li><strong><code>time=18.4 ms</code></strong>: the round trip, there and back, in milliseconds (thousandths of a second).</li>
+        </ul>
+      </div>
+      <div data-tab="1 · Link">
+        <p><strong>What it does.</strong> It moves bits across one physical connection: the radio link from your laptop to the Wi-Fi router, the cable from the router to the modem, and so on. Each hop is a separate link, and each one wraps the packet in its own frame addressed to the next device.</p>
+        <p><strong>Where you meet it.</strong> Rarely, and that's the point of layers: whether a visitor is on Wi-Fi, a phone network or a cable, your HTML and CSS are exactly the same. You notice this layer only when your own device is offline.</p>
+        <p><strong>When it fails.</strong> Your device has no working network connection at all: Wi-Fi switched off, airplane mode, an unplugged cable, or a Wi-Fi network you joined but whose router has lost its own connection. Nothing above this layer can work, so every site fails at once. Check the Wi-Fi or network icon before you suspect your code.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Chrome's page when offline">
+          No internet
+          Try: Checking the network cables, modem, and router
+               Reconnecting to Wi-Fi
+          ERR_INTERNET_DISCONNECTED
+        </script>
+        <ul class="c2-lines">
+          <li><strong>No internet</strong>: the browser didn't even try DNS; the operating system reports no working connection.</li>
+          <li><strong>Try:</strong> both suggestions are link-layer fixes: cables and Wi-Fi.</li>
+          <li><strong><code>ERR_INTERNET_DISCONNECTED</code></strong>: the error code. If only one site fails while others load, the problem is <em>not</em> this layer.</li>
+        </ul>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which layer is broken? A quick guide</strong>
+      <ul>
+        <li><strong>Every site fails, "No internet":</strong> link layer. Check Wi-Fi, cables, airplane mode.</li>
+        <li><strong>"Check if there is a typo," <code>NXDOMAIN</code>:</strong> DNS, at the application layer. Check the spelling of the domain name.</li>
+        <li><strong>"Took too long to respond," <code>ERR_CONNECTION_TIMED_OUT</code>:</strong> usually the internet layer. The address is wrong, or something is blocking the packets.</li>
+        <li><strong>"Refused to connect," <code>ERR_CONNECTION_REFUSED</code>:</strong> transport layer. Nothing is listening on that port; start your local server or fix the port number.</li>
+        <li><strong>The page loads but says 404, 403 or 500:</strong> HTTP, at the application layer. The network worked perfectly; the problem is the path, the permissions or the server's code.</li>
+      </ul>
+    </aside>
     <p>Sending data means passing it <em>down</em> the stack. Each layer wraps what it receives in its own header, the way a letter goes into an envelope, the envelope into a mail sack, and the sack onto a truck. This is called <strong>encapsulation</strong>. The receiver passes the data back <em>up</em>, and each layer removes only its own header.</p>
 
     <div class="widget" data-kind="Visualizer" data-title="Encapsulation: wrap a request, layer by layer">
@@ -695,6 +788,118 @@
       </script>
     </div>
 
+    <p>In a registrar's or host's dashboard, each record is one row in a form with four boxes: <strong>Type</strong>, <strong>Name</strong> (sometimes called Host), <strong>Value</strong> (sometimes "Points to" or "Data") and <strong>TTL</strong>. In the Name box, <code>@</code> means the domain itself (<code>example.com</code>), and <code>www</code> means <code>www.example.com</code>. Documentation and DNS tools write the same record as one line of a <strong>zone file</strong>:</p>
+    <script type="text/plain" class="code" data-lang="text" data-title="One record, as a zone file line">
+      ; Name  TTL   Class  Type  Value
+      www     3600  IN     A     203.0.113.80
+    </script>
+    <ul class="c2-lines">
+      <li><strong><code>; Name TTL …</code>:</strong> a comment labeling the columns. In a zone file, <code>;</code> starts a comment.</li>
+      <li><strong><code>www</code>:</strong> the Name, so this record is for <code>www.example.com</code>.</li>
+      <li><strong><code>3600</code>:</strong> the TTL: caches may keep this answer for up to 3600 seconds (an hour).</li>
+      <li><strong><code>IN</code>:</strong> the class, "Internet," the only one you'll ever see.</li>
+      <li><strong><code>A</code> and <code>203.0.113.80</code>:</strong> the type and the value: this name's IPv4 address.</li>
+    </ul>
+    <p>The examples below use the same format, with a comment line above every record. Here is what each type is for and when you'd touch it:</p>
+    <div class="table-wrap">
+      <table class="data-table c2-dnsrec-table">
+        <thead><tr><th scope="col">Type</th><th scope="col">Holds</th><th scope="col">Example (Name → Value)</th><th scope="col">You add or edit it when…</th></tr></thead>
+        <tbody>
+          <tr><td><code>A</code></td><td>An IPv4 address</td><td><code>@</code> → <code>203.0.113.80</code></td><td>Your web host gives you an IP address to point your domain at</td></tr>
+          <tr><td><code>AAAA</code></td><td>An IPv6 address</td><td><code>@</code> → <code>2001:db8::80</code></td><td>Your host also gives you an IPv6 address</td></tr>
+          <tr><td><code>CNAME</code></td><td>Another name (an alias)</td><td><code>www</code> → <code>your-username.github.io</code></td><td>A hosting service gives you a host name instead of an address</td></tr>
+          <tr><td><code>MX</code></td><td>Mail servers, with a priority</td><td><code>@</code> → <code>10 mail1.example.net</code></td><td>You set up email at your own domain</td></tr>
+          <tr><td><code>NS</code></td><td>The authoritative name servers</td><td><code>@</code> → <code>ns1.dns-host.example</code></td><td>You move your DNS to another provider</td></tr>
+          <tr><td><code>TXT</code></td><td>Any text</td><td><code>@</code> → <code>"v=spf1 include:mail.example.net ~all"</code></td><td>A service asks you to prove you own the domain, or you set up email security</td></tr>
+          <tr><td><code>SOA</code></td><td>The zone's admin details and timers</td><td>Created for you</td><td>Almost never: your DNS provider manages it</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tabs" id="c2-dnsrec-tabs">
+      <div data-tab="A">
+        <p><strong>What it holds.</strong> An IPv4 address for a name. Together with AAAA, it's the record the browser ultimately needs, because you can only connect to an address.</p>
+        <p><strong>When you edit it.</strong> When you point a domain you bought at a web host. The host's instructions say something like "create an A record for <code>@</code> with the value <code>203.0.113.80</code>." Some hosts give you several addresses for the bare domain; create one A record for each, so that visitors still get through if one address is down.</p>
+        <p><strong>Watch out.</strong> A server's address can change when a host moves you to new hardware, and then every A record pointing at the old one breaks. If your host offers a host name for you to point at instead, a CNAME is easier to maintain for subdomains. Before a planned move, lower the TTL a day ahead, just as you saw in the caching lab.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Zone file">
+          ; @ is example.com itself
+          @      3600  IN  A  203.0.113.80
+          ; www.example.com: the same server
+          www    3600  IN  A  203.0.113.80
+          ; shop.example.com: a different server
+          shop   3600  IN  A  203.0.113.95
+        </script>
+      </div>
+      <div data-tab="AAAA">
+        <p><strong>What it holds.</strong> An IPv6 address for a name. An IPv6 address is four times as long as an IPv4 one, hence the four A's.</p>
+        <p><strong>When you edit it.</strong> Alongside your A records, if your host gives you an IPv6 address too. Many phone networks run on IPv6 first, so visitors on them may use this record rather than the A record.</p>
+        <p><strong>Watch out.</strong> A wrong AAAA record is worse than none: visitors on IPv6 networks may get slow loads or errors while you, on an IPv4 connection, see the site working perfectly. If your host doesn't give you an IPv6 address, don't create one.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Zone file">
+          ; example.com over IPv6
+          @      3600  IN  AAAA  2001:db8::80
+          ; www.example.com, same server
+          www    3600  IN  AAAA  2001:db8::80
+        </script>
+      </div>
+      <div data-tab="CNAME">
+        <p><strong>What it holds.</strong> Another name. It says "this name is really an alias for that one; look that one up instead." The value is a host name, never an IP address, never a URL.</p>
+        <p><strong>When you edit it.</strong> When you point a subdomain at a hosting service that gives you a name. To show your GitHub Pages site at <code>www.example.com</code>, for example, you create a CNAME from <code>www</code> to <code>your-username.github.io</code>. If the service later changes its IP addresses, your site keeps working without any edit from you.</p>
+        <p><strong>Watch out.</strong> A name that has a CNAME can't have any other record. The bare domain (<code>@</code>) always needs NS and SOA records, so it can't be a CNAME: use A (and AAAA) records there. Some DNS providers offer a workaround called ALIAS, ANAME or "CNAME flattening." And type only the host name: <code>https://</code> or a path in a CNAME value breaks it.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Zone file">
+          ; www shows the GitHub Pages site
+          www    3600  IN  CNAME  your-username.github.io.
+          ; shop runs on a store company's servers
+          shop   3600  IN  CNAME  stores.example.net.
+          ; A final dot marks a complete name.
+          ; Dashboards add it for you.
+        </script>
+      </div>
+      <div data-tab="MX">
+        <p><strong>What it holds.</strong> The mail servers that accept email for addresses like <code>hello@example.com</code>, each with a priority number. Lower numbers are tried first.</p>
+        <p><strong>When you edit it.</strong> When you set up email at your domain. Your email provider gives you the exact MX values to copy in. MX records have nothing to do with your website: visitors never use them.</p>
+        <p><strong>Watch out.</strong> Deleting MX records while "tidying up" your DNS, or when you switch web hosts, silently stops your email. Leave them alone unless you're changing email providers. The value must be a host name, not an IP address.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Zone file">
+          ; Tried first: lower number wins
+          @      3600  IN  MX  10 mail1.example.net.
+          ; Backup, if mail1 doesn't answer
+          @      3600  IN  MX  20 mail2.example.net.
+        </script>
+      </div>
+      <div data-tab="NS">
+        <p><strong>What it holds.</strong> The names of the domain's authoritative name servers: the servers that answer every other question about it. You set them at your registrar, and the TLD's servers hand them out as the referral you saw in step 5 of the lookup.</p>
+        <p><strong>When you edit it.</strong> When a web host or DNS provider tells you to "change your name servers to theirs." After that change, you edit every other record in <em>that</em> provider's dashboard, not the registrar's.</p>
+        <p><strong>Watch out.</strong> Changing NS records moves the whole domain at once. The records you had at the old provider, including the MX records for your email, don't come along automatically, so copy them over first. NS changes are also cached for a long time (often up to two days), so be patient.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Zone file">
+          ; One server that answers for it
+          @      86400  IN  NS  ns1.dns-host.example.
+          ; A second, in case the first is down
+          @      86400  IN  NS  ns2.dns-host.example.
+        </script>
+      </div>
+      <div data-tab="TXT">
+        <p><strong>What it holds.</strong> Any text. Other services read it: some to check that you control the domain, and email systems to decide whether a message claiming to be from your domain is genuine.</p>
+        <p><strong>When you edit it.</strong> When a service such as a search console, an email provider or GitHub Pages says "add this TXT record to verify your domain," and when you set up <strong>SPF</strong>, which lists the servers allowed to send email as <code>@example.com</code>.</p>
+        <p><strong>Watch out.</strong> Copy values exactly; one missing character and verification fails. A name may have only one SPF record (the one starting <code>v=spf1</code>); two of them break SPF. And anyone can look up TXT records, so never put anything secret in one.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Zone file">
+          ; Proves you control example.com
+          @      3600  IN  TXT  "site-verification=3fk2Lq9xT7"
+          ; SPF: which servers may send your mail
+          @      3600  IN  TXT  "v=spf1 include:mail.example.net ~all"
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which record do I need?</strong>
+      <ul>
+        <li><strong>Your host gave you an IP address:</strong> an A record (and an AAAA record if it also gave you an IPv6 address).</li>
+        <li><strong>Your host gave you a host name, like <code>your-username.github.io</code>:</strong> a CNAME for <code>www</code>, plus the A records the host lists for the bare domain.</li>
+        <li><strong>You want email at your domain:</strong> MX records, plus the TXT records your email provider asks for.</li>
+        <li><strong>A service wants proof that you own the domain:</strong> a TXT record.</li>
+        <li><strong>You're moving all of your DNS to another company:</strong> NS records, changed at the registrar.</li>
+      </ul>
+    </aside>
+
     <aside class="callout try">
       <strong>Try it: look up a real name</strong>
       Open a terminal (Command Prompt on Windows, Terminal on macOS or Linux) and run <code>nslookup example.com</code>. The words "Non-authoritative answer" mean a resolver answered for you, often from its cache, rather than the domain's own name server. On macOS or Linux, <code>dig example.com</code> also shows the TTL; run it twice and watch the number count down.
@@ -718,19 +923,138 @@
     <h2>Uniform Resource Locators</h2>
     <p>A <strong>URL</strong> (Uniform Resource Locator) is a complete set of directions to one resource on the internet: which protocol to use, which server to contact, and which thing on that server you want. Every link, image, stylesheet, script and form on the web points somewhere with a URL, so reading them fluently pays off every day you write HTML.</p>
     <div class="table-wrap">
-      <table class="data-table">
+      <table class="data-table c2-urlparts-table">
         <caption class="sr-only">Parts of the URL https://www.example.com:443/products/shoes.html?id=7&amp;color=red#reviews</caption>
-        <thead><tr><th scope="col">Part</th><th scope="col">Example</th><th scope="col">What it does</th></tr></thead>
+        <thead><tr><th scope="col">Part</th><th scope="col">Example</th><th scope="col">What it does</th><th scope="col">You'll notice or change it when…</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Scheme (protocol)</th><td><code>https:</code></td><td>How to talk to the server. <code>https</code> means HTTP over an encrypted TLS connection.</td></tr>
-          <tr><th scope="row">Host (domain)</th><td><code>www.example.com</code></td><td>Which server. The browser looks it up with DNS. It can also be a raw IP address.</td></tr>
-          <tr><th scope="row">Port</th><td><code>:443</code></td><td>Which program on that server. Usually left out, because each scheme has a default: 80 for <code>http</code>, 443 for <code>https</code>.</td></tr>
-          <tr><th scope="row">Path</th><td><code>/products/shoes.html</code></td><td>Which resource on the server. It often mirrors folders and files, but the server decides what it means.</td></tr>
-          <tr><th scope="row">Query string</th><td><code>?id=7&amp;color=red</code></td><td>Extra data for the server, as <code>name=value</code> pairs joined by <code>&amp;</code>. Search boxes and filters live here.</td></tr>
-          <tr><th scope="row">Fragment</th><td><code>#reviews</code></td><td>A spot inside the page, usually an element's <code>id</code>. The browser handles it alone; it is never sent to the server.</td></tr>
+          <tr><th scope="row">Scheme (protocol)</th><td><code>https:</code></td><td>How to talk to the server. <code>https</code> means HTTP over an encrypted TLS connection.</td><td>You link to another site (always write <code>https://</code>), or write an email link with <code>mailto:</code></td></tr>
+          <tr><th scope="row">Host (domain)</th><td><code>www.example.com</code></td><td>Which server. The browser looks it up with DNS. It can also be a raw IP address.</td><td>You link to a different website, or publish your own site at its new address</td></tr>
+          <tr><th scope="row">Port</th><td><code>:443</code></td><td>Which program on that server. Usually left out, because each scheme has a default: 80 for <code>http</code>, 443 for <code>https</code>.</td><td>You test on your own computer: <code>http://localhost:5500/</code></td></tr>
+          <tr><th scope="row">Path</th><td><code>/products/shoes.html</code></td><td>Which resource on the server. It often mirrors folders and files, but the server decides what it means.</td><td>You link between your own pages, images and stylesheets</td></tr>
+          <tr><th scope="row">Query string</th><td><code>?id=7&amp;color=red</code></td><td>Extra data for the server, as <code>name=value</code> pairs joined by <code>&amp;</code>. Search boxes and filters live here.</td><td>You search, filter or sort, or go to page 2 of a list</td></tr>
+          <tr><th scope="row">Fragment</th><td><code>#reviews</code></td><td>A spot inside the page, usually an element's <code>id</code>. The browser handles it alone; it is never sent to the server.</td><td>You build a "Back to top" link or a table of contents</td></tr>
         </tbody>
       </table>
     </div>
+
+    <p>You will read and write every one of these parts, so here is each one up close: what it is, when you touch it, the mistakes beginners make with it, and a commented example.</p>
+    <div class="tabs" id="c2-urlparts-tabs">
+      <div data-tab="Scheme">
+        <p><strong>What it is.</strong> Everything before the first colon. It names the protocol the browser should use. <code>https</code> is HTTP inside an encrypted TLS connection; <code>http</code> is the same thing with no encryption. Not every scheme fetches a web page: <code>mailto:</code> opens the visitor's email app, and <code>tel:</code> offers to dial a phone number.</p>
+        <p><strong>When you use it.</strong> Every link to another website starts with a scheme, so you'll type <code>https://</code> constantly. A contact page usually has a <code>mailto:</code> link, and a business site a <code>tel:</code> link. You'll also see <code>file:///</code> in the address bar when you double-click an HTML file on your computer: the browser is reading straight from your disk, with no server involved.</p>
+        <p><strong>Watch out.</strong> Leave the scheme off a link to another site and it isn't a link to that site anymore. <code>href="www.example.com"</code> has no scheme, so the browser treats it as a <em>relative</em> path: a file called <code>www.example.com</code> in your current folder, which doesn't exist, so you get a 404. Also, an <code>https</code> page that loads an image or script over plain <code>http</code> is called <strong>mixed content</strong>; browsers upgrade or block it, so use <code>https</code> everywhere.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Another website: the full URL, scheme included -->
+          <a href="https://developer.mozilla.org/">MDN Web Docs</a>
+          <!-- mailto: opens the visitor's email app with this address filled in -->
+          <a href="mailto:hello@example.com">Email me</a>
+          <!-- tel: lets a phone dial the number; start with + and the country code -->
+          <a href="tel:+15555550123">Call (555) 555-0123</a>
+          <!-- Broken: no scheme, so the browser looks for a FILE named www.example.com -->
+          <a href="www.example.com">This link goes nowhere</a>
+        </script>
+      </div>
+      <div data-tab="Host">
+        <p><strong>What it is.</strong> The name of the server (or its IP address), between <code>//</code> and the next <code>/</code> or <code>:</code>. The browser looks the name up with DNS, then connects to the address it gets back. Host names ignore capital letters: <code>WWW.Example.COM</code> is the same host as <code>www.example.com</code>.</p>
+        <p><strong>When you meet it.</strong> Whenever you link to a different website, and when you publish. Your project's host will be something like <code>your-username.github.io</code> on GitHub Pages, or a domain you register. While you develop, the host is your own computer: <code>localhost</code> or <code>127.0.0.1</code>.</p>
+        <p><strong>Watch out.</strong> <code>example.com</code> and <code>www.example.com</code> are two different host names. They usually show the same site only because the owner set up DNS records and a redirect for both; nothing makes that happen automatically. If you ever register a domain, set up both, or some visitors will get an error.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Host developer.mozilla.org: a different server from yours -->
+          <a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML reference on MDN</a>
+          <!-- Host your-username.github.io: where a GitHub Pages site is published -->
+          <a href="https://your-username.github.io/">My published portfolio</a>
+          <!-- Host 203.0.113.80: an IP address works too, but addresses change, names don't have to -->
+          <a href="http://203.0.113.80/">Test server</a>
+        </script>
+      </div>
+      <div data-tab="Port">
+        <p><strong>What it is.</strong> A number after the host and a colon that picks which program on the server gets the request (you met ports in Section 2.1). Each scheme has a default, 80 for <code>http</code> and 443 for <code>https</code>, and when a URL uses the default the port is left out. Browsers even hide it if you type it.</p>
+        <p><strong>When you meet it.</strong> Almost only during development. Tools that run a web server on your own computer choose other ports so that several can run at once: VS Code's Live Server uses 5500, many JavaScript tools use 3000 or 5173, and 8080 is a common choice for a second web server. Once your site is published, visitors never type a port.</p>
+        <p><strong>Watch out.</strong> A different port means a different program, so an old bookmark to <code>localhost:5500</code> may show another project, or "refused to connect" if nothing is running. If port 5500 is already in use (say, Live Server is running in another VS Code window), the new server has to pick a different port: read the address bar instead of trusting the bookmark.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Addresses you might type">
+          https://www.example.com/
+          http://www.example.com/
+          http://localhost:5500/index.html
+          http://localhost:3000/
+          https://www.example.com:8443/admin
+        </script>
+        <ul class="c2-lines">
+          <li><strong>Line 1:</strong> port 443, the <code>https</code> default, so it isn't written.</li>
+          <li><strong>Line 2:</strong> port 80, the <code>http</code> default.</li>
+          <li><strong>Line 3:</strong> port 5500: VS Code's Live Server on your own computer.</li>
+          <li><strong>Line 4:</strong> port 3000: a common port for JavaScript development servers.</li>
+          <li><strong>Line 5:</strong> port 8443: not a default, so it has to be written out.</li>
+        </ul>
+      </div>
+      <div data-tab="Path">
+        <p><strong>What it is.</strong> Everything from the first <code>/</code> after the host up to a <code>?</code> or <code>#</code>. On a static site like your project, the path maps straight onto the folders and files you uploaded: <code>/images/logo.png</code> is the file <code>logo.png</code> inside the <code>images</code> folder. On a dynamic site the server's code decides what a path means, so <code>/products/7</code> might not be a file at all.</p>
+        <p><strong>When you use it.</strong> In every link between your own pages and in every <code>src</code> and <code>href</code> for images, stylesheets and scripts. A path that ends in <code>/</code>, like <code>/blog/</code>, asks for a folder; the server answers with that folder's default file, usually <code>index.html</code>. That's why your home page is named <code>index.html</code>.</p>
+        <p><strong>Watch out.</strong> Paths are <strong>case-sensitive</strong> on most web servers, including GitHub Pages: <code>Images/Logo.PNG</code> and <code>images/logo.png</code> are different files there. Windows and macOS usually don't care, so a mismatch works on your laptop and breaks the moment you publish. Name files in lowercase with hyphens and no spaces: <code>about-me.html</code>, not <code>About Me.html</code> (a space turns into <code>%20</code> in the URL).</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Five paths">
+          https://www.example.com/about.html
+          https://www.example.com/images/logo.png
+          https://www.example.com/blog/
+          https://www.example.com/
+          https://www.example.com/products/7
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>/about.html</code>:</strong> the file <code>about.html</code> in the site's top folder.</li>
+          <li><strong><code>/images/logo.png</code>:</strong> <code>logo.png</code> inside the <code>images</code> folder.</li>
+          <li><strong><code>/blog/</code>:</strong> a folder, so the server sends <code>blog/index.html</code>.</li>
+          <li><strong><code>/</code>:</strong> the top folder, so the server sends <code>index.html</code>, the home page.</li>
+          <li><strong><code>/products/7</code>:</strong> on a dynamic site, a path the server's code makes sense of. No such file exists.</li>
+        </ul>
+      </div>
+      <div data-tab="Query string">
+        <p><strong>What it is.</strong> Everything from <code>?</code> up to <code>#</code> (or the end): <code>name=value</code> pairs joined by <code>&amp;</code>. The server's code reads them to decide what to send back. A plain static server ignores them and returns the same file whatever the query says.</p>
+        <p><strong>When you meet it.</strong> Search results (<code>?q=trail+shoes</code>), filters and sorting (<code>?color=red&amp;sort=price</code>), page 2 of a list (<code>?page=2</code>), and tracking tags on links shared by email or social media (<code>?utm_source=newsletter</code>). You rarely type one by hand: a form with <code>method="get"</code> builds it for you, using each field's <code>name</code> and whatever the visitor typed.</p>
+        <p><strong>Watch out.</strong> There's only one <code>?</code>; every pair after the first starts with <code>&amp;</code>. Special characters must be percent-encoded (see below): a space becomes <code>+</code> or <code>%20</code>, and an <code>&amp;</code> inside a value must be written <code>%26</code>, or it starts a new pair. The query string is saved in history, bookmarks and server logs, so never put a password or other private data in it; forms that send those use POST (Section 2.4).</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- method="get" puts the form's fields into the query string -->
+          <form action="https://www.example.com/search" method="get">
+            <!-- name="q" becomes the q in q=...; what the visitor types becomes the value -->
+            <input type="search" name="q">
+            <!-- A second field adds &sort=... after the first pair -->
+            <select name="sort">
+              <!-- The value attribute is what gets sent, not the words on screen -->
+              <option value="price">Lowest price</option>
+              <!-- Choosing this option sends sort=new -->
+              <option value="new">Newest</option>
+            </select>
+            <!-- Typing "trail shoes", choosing Newest and pressing Search requests
+                 https://www.example.com/search?q=trail+shoes&sort=new -->
+            <button>Search</button>
+          </form>
+        </script>
+      </div>
+      <div data-tab="Fragment">
+        <p><strong>What it is.</strong> Everything after <code>#</code>. It names a spot inside the page, normally the <code>id</code> of an element, and the browser scrolls to it. The fragment is <strong>never sent to the server</strong>: the browser keeps it to itself, so clicking a fragment link on the same page doesn't even make a request.</p>
+        <p><strong>When you use it.</strong> "Back to top" links, a table of contents at the top of a long page, and links to one section of another page (<code>about.html#team</code>). This course uses them everywhere: the sidebar links to sections with fragments like <code>#s2-3</code>, so you can bookmark or share one section.</p>
+        <p><strong>Watch out.</strong> The <code>id</code> must match exactly, capital letters included, and is written <em>without</em> the <code>#</code>: <code>id="team"</code>, <code>href="#team"</code>. If nothing on the page has that id, the browser just stays where it is; there's no error to warn you. Each id may appear only once per page. And because the server never sees the fragment, it can't send different content for <code>#a</code> and <code>#b</code>.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Table of contents: # plus the id of an element further down -->
+          <a href="#contact">Contact</a>
+          <!-- A section of ANOTHER page: the path first, then the fragment -->
+          <a href="about.html#team">Meet the team</a>
+          <!-- The target: the id is written without the # -->
+          <h2 id="contact">Contact</h2>
+          <!-- "Back to top": with no element whose id is "top", browsers scroll to the top of the page -->
+          <a href="#top">Back to top</a>
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which part do I write?</strong>
+      <ul>
+        <li><strong>A link to another website:</strong> the whole thing, scheme included. Example: <code>https://developer.mozilla.org/</code></li>
+        <li><strong>A link to another page of your own site:</strong> just the path, written relative to the current page (next section). Example: <code>about.html</code></li>
+        <li><strong>A jump to a section of the page:</strong> a fragment. Example: <code>#contact</code></li>
+        <li><strong>Search terms or a filter:</strong> a query string, which a GET form builds for you. Example: <code>?q=trail+shoes</code></li>
+        <li><strong>Testing on your own computer:</strong> host <code>localhost</code> plus a port. Example: <code>http://localhost:5500/</code></li>
+        <li><strong>An email or phone link:</strong> a different scheme. Example: <code>mailto:hello@example.com</code></li>
+      </ul>
+    </aside>
     <p>Browsers ship with a URL parser that JavaScript can use too: <code>new URL('https://…')</code> splits an address into exactly these parts. The dissector below runs that real parser on whatever you type.</p>
 
     <div class="widget" data-kind="Dissector" data-title="URL dissector">
@@ -743,18 +1067,147 @@
     <h3>Absolute and relative URLs</h3>
     <p>An <strong>absolute URL</strong> includes the scheme and host, so it works from anywhere. Inside your own site you'll mostly write <strong>relative URLs</strong>, which the browser resolves against the address of the current page (the <em>base URL</em>). Relative links keep working when you move the whole site from your laptop to a web host, or from one domain to another.</p>
     <div class="table-wrap">
-      <table class="data-table">
-        <thead><tr><th scope="col">You write</th><th scope="col">It means</th></tr></thead>
+      <table class="data-table c2-relurl-table">
+        <thead><tr><th scope="col">You write</th><th scope="col">It means</th><th scope="col">Worked out on <code>https://www.example.com/blog/first-post.html</code></th></tr></thead>
         <tbody>
-          <tr><td><code>page.html</code> or <code>./page.html</code></td><td>A file in the <em>same folder</em> as the current page</td></tr>
-          <tr><td><code>../page.html</code></td><td>Go <em>up one folder</em> first (repeat <code>../</code> to climb higher)</td></tr>
-          <tr><td><code>/page.html</code></td><td>Start at the <em>root of this host</em>, whatever folder you're in</td></tr>
-          <tr><td><code>?page=2</code></td><td>Same page, <em>new query string</em></td></tr>
-          <tr><td><code>#top</code></td><td>Same page, jump to the element with <code>id="top"</code></td></tr>
-          <tr><td><code>//cdn.example.net/app.js</code></td><td>Same scheme, <em>different host</em> (a scheme-relative URL)</td></tr>
+          <tr><td><code>page.html</code> or <code>./page.html</code></td><td>A file in the <em>same folder</em> as the current page</td><td><code>photo.jpg</code> → <code>https://www.example.com/blog/photo.jpg</code></td></tr>
+          <tr><td><code>../page.html</code></td><td>Go <em>up one folder</em> first (repeat <code>../</code> to climb higher)</td><td><code>../about.html</code> → <code>https://www.example.com/about.html</code></td></tr>
+          <tr><td><code>/page.html</code></td><td>Start at the <em>root of this host</em>, whatever folder you're in</td><td><code>/images/logo.png</code> → <code>https://www.example.com/images/logo.png</code></td></tr>
+          <tr><td><code>?page=2</code></td><td>Same page, <em>new query string</em></td><td><code>?page=2</code> → <code>https://www.example.com/blog/first-post.html?page=2</code></td></tr>
+          <tr><td><code>#top</code></td><td>Same page, jump to the element with <code>id="top"</code></td><td><code>#comments</code> → <code>https://www.example.com/blog/first-post.html#comments</code></td></tr>
+          <tr><td><code>//cdn.example.net/app.js</code></td><td>Same scheme, <em>different host</em> (a scheme-relative URL)</td><td><code>//cdn.example.net/app.js</code> → <code>https://cdn.example.net/app.js</code></td></tr>
+          <tr><td><code>https://…</code></td><td>An absolute URL: the current page doesn't matter at all</td><td><code>https://developer.mozilla.org/</code> → unchanged</td></tr>
         </tbody>
       </table>
     </div>
+
+    <p>Every example below comes from the same small site. The page doing the linking is <code>blog/first-post.html</code>, so its folder is <code>blog/</code>. Keep this tree in view as you read the tabs: relative URLs are directions from that folder.</p>
+    <script type="text/plain" class="code" data-lang="text" data-title="The example site's folders">
+      my-site/
+      ├── index.html
+      ├── about.html
+      ├── css/
+      │   └── styles.css
+      ├── images/
+      │   └── logo.png
+      └── blog/
+          ├── index.html
+          ├── first-post.html
+          └── photo.jpg
+    </script>
+    <ul class="c2-lines">
+      <li><strong><code>my-site/</code>:</strong> the site's top folder. Once published, it is <code>https://www.example.com/</code>.</li>
+      <li><strong><code>index.html</code> and <code>about.html</code>:</strong> the home page and a page beside it, both in the top folder.</li>
+      <li><strong><code>css/styles.css</code> and <code>images/logo.png</code>:</strong> one stylesheet and one logo, shared by every page.</li>
+      <li><strong><code>blog/</code>:</strong> a subfolder, so the pages inside it are one level down: its own <code>index.html</code> (the list of posts), <code>first-post.html</code> (<strong>the page doing the linking in every example below</strong>) and <code>photo.jpg</code>, a picture stored next to the post.</li>
+    </ul>
+
+    <div class="tabs" id="c2-relurl-tabs">
+      <div data-tab="page.html">
+        <p><strong>What it means.</strong> A bare file name (or <code>./</code> plus a name) points to a file in the same folder as the current page. The current page's own file name is dropped; only its folder counts. From <code>blog/first-post.html</code>, <code>photo.jpg</code> becomes <code>https://www.example.com/blog/photo.jpg</code>.</p>
+        <p><strong>When to use it.</strong> For pages that sit side by side and for pictures stored next to the page that shows them. Going <em>down</em> into a subfolder works the same way: from <code>index.html</code> in the top folder, <code>images/logo.png</code> means "into <code>images</code>, then <code>logo.png</code>." This is the link you'll write most often.</p>
+        <p><strong>Watch out.</strong> It's relative to the folder of the page that <em>contains</em> the link, not to the folder you happen to be looking at in your editor. The same <code>&lt;a href="about.html"&gt;</code> works in <code>index.html</code> but breaks when you paste it into <code>blog/first-post.html</code>, because there is no <code>blog/about.html</code>.</p>
+        <script type="text/plain" class="code" data-lang="html" data-title="blog/first-post.html">
+          <!-- photo.jpg is in the same folder as this page, blog/ -->
+          <img src="photo.jpg" alt="Trail at sunrise">
+          <!-- index.html here means blog/index.html, the list of posts, not the home page -->
+          <a href="index.html">All posts</a>
+          <!-- ./ means "this folder": exactly the same link as the one above -->
+          <a href="./index.html">All posts</a>
+        </script>
+      </div>
+      <div data-tab="../">
+        <p><strong>What it means.</strong> Each <code>../</code> climbs one folder up from the current page's folder. From <code>blog/first-post.html</code>, <code>../about.html</code> climbs from <code>blog/</code> to <code>my-site/</code>, then finds <code>about.html</code>: <code>https://www.example.com/about.html</code>. Write <code>../../</code> to climb two levels.</p>
+        <p><strong>When to use it.</strong> Whenever a page in a subfolder needs something higher up: the shared stylesheet, the logo, the home page. Every page inside <code>blog/</code> links the stylesheet as <code>../css/styles.css</code>, while <code>index.html</code> in the top folder writes just <code>css/styles.css</code>. Inside a CSS file, relative URLs start from the <em>CSS file's</em> folder, so <code>css/styles.css</code> reaches the logo with <code>../images/logo.png</code>.</p>
+        <p><strong>Watch out.</strong> Count folders, not files: start at the folder holding the current page and write one <code>../</code> for each level you climb. One too many is sneaky. Online, extra <code>../</code> just stop at the top of the site, so <code>../../about.html</code> from <code>blog/</code> still works there and hides the mistake; opened from your disk, the same link climbs right out of your project folder and breaks.</p>
+        <script type="text/plain" class="code" data-lang="html" data-title="blog/first-post.html">
+          <!-- Up from blog/ to my-site/, then into css/ -->
+          <link rel="stylesheet" href="../css/styles.css">
+          <!-- Up one folder, then the file about.html -->
+          <a href="../about.html">About me</a>
+          <!-- Up one folder to reach the home page; ../ alone would work too, because the server sends index.html -->
+          <a href="../index.html">Home</a>
+        </script>
+        <script type="text/plain" class="code" data-lang="css" data-title="css/styles.css">
+          /* Relative URLs in a CSS file start from the css/ folder, not from the page */
+          .site-header {
+            /* Up from css/ to my-site/, then into images/ */
+            background-image: url(../images/logo.png);
+          }
+        </script>
+      </div>
+      <div data-tab="/ (root)">
+        <p><strong>What it means.</strong> A leading slash starts at the top of the <em>host</em> and ignores the current folder. From any page on <code>www.example.com</code>, <code>/images/logo.png</code> becomes <code>https://www.example.com/images/logo.png</code>.</p>
+        <p><strong>When to use it.</strong> On large sites with deeply nested folders, where every page shares the same header: the link is identical on every page, however deep. It only works when the site sits at the very top of its host, such as its own domain.</p>
+        <p><strong>Watch out.</strong> This is the most common reason a published project suddenly loses its styles. A GitHub Pages site built from a repository called <code>portfolio</code> is published in a subfolder, <code>https://your-username.github.io/portfolio/</code>. There, <code>/css/styles.css</code> means <code>https://your-username.github.io/css/styles.css</code>, outside your site, so it's a 404. Opened from your disk, a leading slash points at the top of your whole drive, so it fails there too. Live Server usually serves your project folder as the top, so it works while you test, and the bug only shows up after you publish. For your project, leave the leading slash off.</p>
+        <script type="text/plain" class="code" data-lang="html" data-title="index.html on GitHub Pages">
+          <!-- Broken here: the leading slash jumps to https://your-username.github.io/css/styles.css -->
+          <link rel="stylesheet" href="/css/styles.css">
+          <!-- Fixed: no leading slash, so it stays inside portfolio/ -->
+          <link rel="stylesheet" href="css/styles.css">
+        </script>
+      </div>
+      <div data-tab="?query">
+        <p><strong>What it means.</strong> A link that starts with <code>?</code> keeps the current scheme, host and path and <em>replaces</em> the query string (and drops any fragment). From <code>blog/first-post.html</code>, <code>?page=2</code> becomes <code>https://www.example.com/blog/first-post.html?page=2</code>.</p>
+        <p><strong>When to use it.</strong> "Next page" and "sort by" links on a page whose server reads the query: <code>?page=2</code>, <code>?page=3</code>, <code>?sort=newest</code>. On a static site the server ignores the query and sends the same file, so you'll use this mostly on dynamic sites.</p>
+        <p><strong>Watch out.</strong> It replaces the <em>whole</em> query; it doesn't add to it. On <code>…/search?q=shoes</code>, a link to <code>?page=2</code> loses the search term and requests <code>…/search?page=2</code>. To keep both, write both: <code>?q=shoes&amp;page=2</code>.</p>
+        <script type="text/plain" class="code" data-lang="html" data-title="search results page">
+          <!-- On /search?q=shoes this requests /search?page=2: the search term is gone -->
+          <a href="?page=2">Next page (loses the search)</a>
+          <!-- Repeat every pair you want to keep, joined with & -->
+          <a href="?q=shoes&page=2">Next page of shoe results</a>
+        </script>
+      </div>
+      <div data-tab="#fragment">
+        <p><strong>What it means.</strong> A link that is only a fragment keeps the entire current URL, query string included, and swaps just the part after <code>#</code>. The browser scrolls to the element with that <code>id</code> and makes no request. From <code>blog/first-post.html</code>, <code>#comments</code> becomes <code>https://www.example.com/blog/first-post.html#comments</code>.</p>
+        <p><strong>When to use it.</strong> To move around inside one long page: a table of contents, "Back to top," "Skip to comments."</p>
+        <p><strong>Watch out.</strong> A fragment on its own always means <em>this</em> page. To reach a section of a different page, put the path first: <code>../about.html#contact</code>, not just <code>#contact</code>.</p>
+        <script type="text/plain" class="code" data-lang="html" data-title="blog/first-post.html">
+          <!-- Same page: scroll to the element with id="comments" -->
+          <a href="#comments">Jump to the comments</a>
+          <!-- A section of another page: path first (up one folder to about.html), fragment last -->
+          <a href="../about.html#contact">Contact details</a>
+          <!-- The target of the first link, further down this page -->
+          <section id="comments">…</section>
+        </script>
+      </div>
+      <div data-tab="//host">
+        <p><strong>What it means.</strong> Two leading slashes start a new host. Only the scheme is borrowed from the current page. On an <code>https</code> page, <code>//cdn.example.net/app.js</code> becomes <code>https://cdn.example.net/app.js</code>.</p>
+        <p><strong>When you meet it.</strong> Mostly in older code and in snippets copied from tutorials, written back when a site might be served over both <code>http</code> and <code>https</code>. Today almost everything is <code>https</code>, so just write the scheme.</p>
+        <p><strong>Watch out.</strong> Open the page from your disk and the borrowed scheme is <code>file:</code>, so the browser looks for <code>file://cdn.example.net/app.js</code>, which doesn't exist. That's a classic reason a copied snippet "works online but not on my computer."</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Old style: borrows the page's scheme, so it breaks when the page is opened from disk -->
+          <script src="//cdn.example.net/app.js"><\/script>
+          <!-- Today: write https:// so it works everywhere -->
+          <script src="https://cdn.example.net/app.js"><\/script>
+        </script>
+      </div>
+      <div data-tab="https://…">
+        <p><strong>What it means.</strong> An absolute URL has a scheme and a host, so the current page is ignored completely. It works identically from any page on any site.</p>
+        <p><strong>When to use it.</strong> For links to <em>other</em> websites, and anywhere your link will be read outside your site: an email, a social media post, your README. For your own pages, prefer relative links: an absolute link to your own site keeps sending you to the published copy while you test the local one, and breaks if the address ever changes.</p>
+        <p><strong>Watch out.</strong> Never link to a path on your own computer, like <code>file:///C:/Users/ana/my-site/about.html</code>. It works on your machine and nowhere else. It's easy to paste one in by copying from the address bar while you preview a page from disk.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Another site: the full address is required -->
+          <a href="https://developer.mozilla.org/">MDN Web Docs</a>
+          <!-- Broken once published: this path exists only on your own computer -->
+          <a href="file:///C:/Users/ana/my-site/about.html">About</a>
+          <!-- The fix for your own pages: a relative link -->
+          <a href="about.html">About</a>
+        </script>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which form should I write?</strong>
+      <ul>
+        <li><strong>A file in the same folder:</strong> just its name. Example: <code>about.html</code></li>
+        <li><strong>A file in a subfolder:</strong> folder, slash, name. Example: <code>images/logo.png</code></li>
+        <li><strong>A file one folder up:</strong> <code>../</code> first. Example: <code>../css/styles.css</code></li>
+        <li><strong>A section of the same page:</strong> a fragment. Example: <code>#contact</code></li>
+        <li><strong>Another website:</strong> an absolute URL. Example: <code>https://developer.mozilla.org/</code></li>
+        <li><strong>Your course project:</strong> relative links with no leading slash, so the same files work from your disk, in Live Server and on GitHub Pages without changes.</li>
+      </ul>
+    </aside>
 
     <div class="widget" data-kind="Challenge" data-title="Predict the absolute URL">
       <p>Every link below appears on this page:</p>
@@ -827,20 +1280,205 @@
 
     <h3>Request methods</h3>
     <div class="table-wrap">
-      <table class="data-table">
-        <thead><tr><th scope="col">Method</th><th scope="col">Asks the server to…</th><th scope="col">Typical use</th></tr></thead>
+      <table class="data-table c2-methods-table">
+        <thead><tr><th scope="col">Method</th><th scope="col">Asks the server to…</th><th scope="col">Typical use</th><th scope="col">Who sends it</th><th scope="col">Safe? Idempotent?</th></tr></thead>
         <tbody>
-          <tr><td><code>GET</code></td><td>Send a copy of a resource. No body. Safe to repeat.</td><td>Clicking links, loading images, search forms</td></tr>
-          <tr><td><code>POST</code></td><td>Accept data in the body and act on it. Repeating it may repeat the action.</td><td>Logins, sign-ups, checkout, posting a comment</td></tr>
-          <tr><td><code>PUT</code></td><td>Replace a resource with the body. Repeating it has the same effect.</td><td>Saving an edited record in an API</td></tr>
-          <tr><td><code>PATCH</code></td><td>Change part of a resource.</td><td>Updating one field of a record</td></tr>
-          <tr><td><code>DELETE</code></td><td>Remove a resource.</td><td>Deleting a message or file through an API</td></tr>
-          <tr><td><code>HEAD</code></td><td>Same as GET, but send only the headers.</td><td>Checking whether something exists or changed</td></tr>
-          <tr><td><code>OPTIONS</code></td><td>List which methods a URL allows.</td><td>Browsers' automatic "preflight" checks</td></tr>
+          <tr><td><code>GET</code></td><td>Send a copy of a resource. No body. Safe to repeat.</td><td>Clicking links, loading images, search forms</td><td>Links, <code>&lt;img&gt;</code>, <code>&lt;link&gt;</code>, <code>&lt;script&gt;</code>, forms (the default), the address bar</td><td>Safe and idempotent</td></tr>
+          <tr><td><code>POST</code></td><td>Accept data in the body and act on it. Repeating it may repeat the action.</td><td>Logins, sign-ups, checkout, posting a comment</td><td><code>&lt;form method="post"&gt;</code>, JavaScript</td><td>Neither</td></tr>
+          <tr><td><code>PUT</code></td><td>Replace a resource with the body. Repeating it has the same effect.</td><td>Saving an edited record in an API</td><td>JavaScript and other programs</td><td>Idempotent, not safe</td></tr>
+          <tr><td><code>PATCH</code></td><td>Change part of a resource.</td><td>Updating one field of a record</td><td>JavaScript and other programs</td><td>Neither</td></tr>
+          <tr><td><code>DELETE</code></td><td>Remove a resource.</td><td>Deleting a message or file through an API</td><td>JavaScript and other programs</td><td>Idempotent, not safe</td></tr>
+          <tr><td><code>HEAD</code></td><td>Same as GET, but send only the headers.</td><td>Checking whether something exists or changed</td><td>Link checkers, download tools, <code>curl -I</code></td><td>Safe and idempotent</td></tr>
+          <tr><td><code>OPTIONS</code></td><td>List which methods a URL allows.</td><td>Browsers' automatic "preflight" checks</td><td>The browser, automatically</td><td>Safe and idempotent</td></tr>
         </tbody>
       </table>
     </div>
     <p>Plain HTML can only send <code>GET</code> (links, and forms by default) and <code>POST</code> (<code>&lt;form method="post"&gt;</code>). The other methods come from JavaScript or other programs talking to APIs.</p>
+    <p>Two words in the last column decide how a method may be used:</p>
+    <ul>
+      <li>A method is <strong>safe</strong> if it only reads. Sending it never changes anything on the server, so browsers, search engines and link-preview tools feel free to send it on their own: they fetch pages ahead of time and follow every link they find. That is why a link must never delete or buy anything.</li>
+      <li>A method is <strong>idempotent</strong> (say "eye-dem-POH-tent") if sending the same request twice leaves the server the same as sending it once. Deleting message 7 twice still leaves message 7 deleted. That matters when the connection drops and the browser can't tell whether the request arrived: an idempotent request can simply be sent again. POST isn't idempotent, which is why the browser asks you to confirm before it resubmits a form when you reload.</li>
+    </ul>
+    <p>Pick a method to see when you'll meet it, what can go wrong, and what the request really looks like on the wire.</p>
+    <div class="tabs" id="c2-methods-tabs">
+      <div data-tab="GET">
+        <p><strong>What it asks.</strong> "Send me a copy of this." A GET has no body; everything the server needs is in the URL, including any query string.</p>
+        <p><strong>When you meet it.</strong> Constantly. Every link you click, every image, stylesheet, script and font the page loads, and every address you type is a GET. A form sends GET by default, putting its fields in the query string, which is right for search boxes and filters because the results page can be bookmarked and shared. Most rows in the DevTools Network tab are GETs.</p>
+        <p><strong>Watch out.</strong> Never use a GET for something that changes data, like <code>&lt;a href="/delete?id=7"&gt;</code>: browsers prefetch links, search engines follow every link they find, and a reload repeats the request. And because the data sits in the URL, it ends up in history, bookmarks and server logs, so passwords never go in a GET.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Clicking this link sends GET /about.html -->
+          <a href="about.html">About</a>
+          <!-- The browser fetches every image with its own GET, no click needed -->
+          <img src="images/logo.png" alt="Site logo">
+          <!-- method="get" (the default): submitting sends GET /search?q=... -->
+          <form action="https://www.example.com/search" method="get">
+            <!-- Its name, q, becomes the name in the query string -->
+            <input type="search" name="q">
+            <!-- Submitting with "trail shoes" typed in sends the request below -->
+            <button>Search</button>
+          </form>
+        </script>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request">
+          GET /search?q=trail+shoes HTTP/1.1
+          Host: www.example.com
+          Accept: text/html
+        </script>
+        <ul class="c2-lines">
+          <li><strong>Line 1:</strong> the method, the path with the form data in its query string, and the protocol version.</li>
+          <li><strong>Line 2:</strong> which website on the server the request is for.</li>
+          <li><strong>Line 3:</strong> the kind of response the browser would like: an HTML page.</li>
+          <li>Only the blank line that ends the headers comes next: a GET has no body to send.</li>
+        </ul>
+      </div>
+      <div data-tab="POST">
+        <p><strong>What it asks.</strong> "Take the data in my body and do something with it": create an account, place an order, post a comment, check a password. The result is usually something new on the server, so sending it twice may do the thing twice.</p>
+        <p><strong>When you meet it.</strong> Every form with <code>method="post"</code>: logins, sign-ups, contact forms, checkout. JavaScript also uses POST to send data to APIs. In the lab below, the <code>POST /login</code> preset shows one setting a cookie.</p>
+        <p><strong>Watch out.</strong> Reload a page you reached by POST and the browser asks whether to send the form again; say yes and the data is sent twice (two orders, two comments). Well-built sites avoid this by answering a POST with a redirect (<code>303 See Other</code>), so the page you land on was loaded with GET and reloads safely. And POST keeps data out of the URL, but it doesn't encrypt anything: only HTTPS does that.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- method="post": the fields travel in the request body, not the URL -->
+          <form action="/login" method="post">
+            <!-- Sent as username=... -->
+            <input name="username">
+            <!-- Sent as password=...; hidden on screen, but only HTTPS hides it on the network -->
+            <input name="password" type="password">
+            <!-- Submitting with ana / hunter2 sends the request below -->
+            <button>Log in</button>
+          </form>
+        </script>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request">
+          POST /login HTTP/1.1
+          Host: www.example.com
+          Content-Type: application/x-www-form-urlencoded
+          Content-Length: 29
+
+          username=ana&password=hunter2
+        </script>
+        <ul class="c2-lines">
+          <li><strong>Line 1:</strong> the method and path. No query string: the data is in the body.</li>
+          <li><strong><code>Content-Type</code>:</strong> the body's format. <code>application/x-www-form-urlencoded</code> means "form fields, encoded like a query string."</li>
+          <li><strong><code>Content-Length</code>:</strong> the body is 29 bytes long, so the server knows where it ends.</li>
+          <li><strong>The blank line:</strong> the headers are over; the body starts next.</li>
+          <li><strong>The body:</strong> each field's <code>name=value</code>, joined by <code>&amp;</code>.</li>
+        </ul>
+      </div>
+      <div data-tab="PUT">
+        <p><strong>What it asks.</strong> "Replace whatever is at this URL with my body." You send the complete new version; anything you leave out is usually gone afterward. Some APIs also let PUT create the resource if nothing is there yet.</p>
+        <p><strong>When you meet it.</strong> Not from HTML. JavaScript and other programs send it to APIs, for example when an app saves a whole edited profile or note. You'll see it in the Network tab of web apps.</p>
+        <p><strong>Watch out.</strong> PUT means the <em>whole</em> thing. Send only the field you changed and the others may be erased. It's idempotent, though: sending the same PUT twice leaves the same result, so it's safe to retry after a network error.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request">
+          PUT /api/profile HTTP/1.1
+          Host: www.example.com
+          Content-Type: application/json
+          Content-Length: 74
+
+          {"name": "Ana Silva", "city": "Austin", "bio": "Learning web development"}
+        </script>
+        <ul class="c2-lines">
+          <li><strong>Line 1:</strong> replace the resource at <code>/api/profile</code>.</li>
+          <li><strong><code>Content-Type: application/json</code>:</strong> the body is JSON, the text data format APIs use.</li>
+          <li><strong>The body:</strong> every field of the profile, including the ones that didn't change.</li>
+        </ul>
+      </div>
+      <div data-tab="PATCH">
+        <p><strong>What it asks.</strong> "Change just these fields, and leave the rest alone."</p>
+        <p><strong>When you meet it.</strong> In the same places as PUT: JavaScript talking to an API. Marking a message as read, renaming a file and changing your city in a profile are typical PATCHes.</p>
+        <p><strong>Watch out.</strong> PATCH isn't guaranteed to be idempotent: a PATCH that says "add 1 to the like count" gives a different result every time it's sent. Each API documents the body format it expects, so read its docs before sending one.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request">
+          PATCH /api/profile HTTP/1.1
+          Host: www.example.com
+          Content-Type: application/json
+          Content-Length: 18
+
+          {"city": "Denver"}
+        </script>
+        <ul class="c2-lines">
+          <li><strong>Line 1:</strong> change part of <code>/api/profile</code>.</li>
+          <li><strong>The body:</strong> only the field that changes. The name and bio stay as they were.</li>
+        </ul>
+        <p>HTML has no way to send a PATCH. Here is the JavaScript that does; you'll write code like this later in the course, so for now just notice where the method is named.</p>
+        <script type="text/plain" class="code" data-lang="js">
+          // Send a request to the profile URL
+          fetch('/api/profile', {
+            // fetch() uses GET unless you name another method
+            method: 'PATCH',
+            // Tell the server the body is JSON
+            headers: { 'Content-Type': 'application/json' },
+            // Only the field that changes, turned into JSON text
+            body: JSON.stringify({ city: 'Denver' })
+          });
+        </script>
+      </div>
+      <div data-tab="DELETE">
+        <p><strong>What it asks.</strong> "Remove the resource at this URL."</p>
+        <p><strong>When you meet it.</strong> Behind every trash-can button in a web app: JavaScript sends a DELETE to the API, and the page removes the item from the screen when the server confirms.</p>
+        <p><strong>Watch out.</strong> DELETE is idempotent even though the second attempt gets a different status code. The first DELETE of message 1 answers <code>204 No Content</code>; the second answers <code>404 Not Found</code>. Either way, message 1 is gone, and that shared end state is what idempotent means. Try it in the lab below.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request">
+          DELETE /api/messages/1 HTTP/1.1
+          Host: www.example.com
+        </script>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 204 No Content
+        </script>
+        <ul class="c2-lines">
+          <li><strong>The request:</strong> the URL names exactly which message to remove, so no body is needed.</li>
+          <li><strong>The response:</strong> <code>204 No Content</code> means "done, and I have nothing to send back."</li>
+        </ul>
+      </div>
+      <div data-tab="HEAD">
+        <p><strong>What it asks.</strong> "Answer exactly as you would for a GET, but send only the status line and headers." No body comes back, so a HEAD is quick even for a huge file.</p>
+        <p><strong>When you meet it.</strong> Rarely by hand. Link checkers use it to test whether pages still exist, and download tools use it to learn a file's size (<code>Content-Length</code>) or date before fetching it. From a terminal, <code>curl -I https://www.example.com/</code> sends a HEAD and prints the headers.</p>
+        <p><strong>Watch out.</strong> The headers describe the body you <em>would</em> have received, so <code>Content-Length</code> gives the full file size even though zero bytes of body arrived.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request">
+          HEAD /videos/intro.mp4 HTTP/1.1
+          Host: www.example.com
+        </script>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 200 OK
+          Content-Type: video/mp4
+          Content-Length: 48203776
+          Last-Modified: Tue, 15 Sep 2026 09:30:00 GMT
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>200 OK</code>:</strong> the video exists.</li>
+          <li><strong><code>Content-Length: 48203776</code>:</strong> it's about 48 MB, useful to know before you download it.</li>
+          <li><strong><code>Last-Modified</code>:</strong> when it last changed, so a tool can skip it if it already has this version.</li>
+          <li>No body follows, even though the length says 48 MB.</li>
+        </ul>
+      </div>
+      <div data-tab="OPTIONS">
+        <p><strong>What it asks.</strong> "What am I allowed to do with this URL?" The answer is in headers, such as <code>Allow</code>, or the <code>Access-Control-…</code> headers described below.</p>
+        <p><strong>When you meet it.</strong> Mostly as a row in DevTools you didn't ask for. Before a page's JavaScript sends certain requests to a <em>different</em> site (a PUT, PATCH or DELETE, or a POST of JSON), the browser automatically sends an OPTIONS <strong>preflight</strong> to ask that site's permission. You never write it yourself.</p>
+        <p><strong>Watch out.</strong> If the other site doesn't answer the preflight with permission, the browser blocks the real request and prints a <strong>CORS</strong> error (Cross-Origin Resource Sharing) in the Console. That's a setting on the other server, not a mistake in your HTML.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request (a preflight)">
+          OPTIONS /api/messages/1 HTTP/1.1
+          Host: api.example.com
+          Origin: https://www.example.com
+          Access-Control-Request-Method: DELETE
+        </script>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 204 No Content
+          Access-Control-Allow-Origin: https://www.example.com
+          Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>Origin</code>:</strong> the site whose page wants to send the request.</li>
+          <li><strong><code>Access-Control-Request-Method</code>:</strong> the method it wants to use next.</li>
+          <li><strong><code>Access-Control-Allow-Origin</code> and <code>-Methods</code>:</strong> the server's permission: this site may use these methods. The browser then sends the real DELETE.</li>
+        </ul>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Which method will I see?</strong>
+      <ul>
+        <li><strong>Clicking a link, or the page loading an image, stylesheet or script:</strong> <code>GET</code></li>
+        <li><strong>A search box or filter form:</strong> <code>GET</code>, with <code>method="get"</code> (the default)</li>
+        <li><strong>Logging in, signing up, sending a contact form, checking out:</strong> <code>POST</code>, with <code>method="post"</code></li>
+        <li><strong>JavaScript saving a whole record, changing one field, or deleting:</strong> <code>PUT</code>, <code>PATCH</code>, <code>DELETE</code></li>
+        <li><strong>An <code>OPTIONS</code> row you never asked for:</strong> the browser's automatic preflight before a request to another site</li>
+        <li><strong>The rule behind all of it:</strong> if a request changes something, it must not be a <code>GET</code>.</li>
+      </ul>
+    </aside>
 
     <h3>Status codes</h3>
     <p>Every response begins with a status code, and its first digit tells you the category: <strong>1xx</strong> informational, <strong>2xx</strong> success, <strong>3xx</strong> redirection (look elsewhere, or use your cached copy), <strong>4xx</strong> client error (the request was wrong), and <strong>5xx</strong> server error (the server failed). You'll meet 200, 301, 304, 404 and 500 constantly.</p>
@@ -856,6 +1494,172 @@
        "explain": "The first digit is all you need to sort them. A handy question for 4xx versus 5xx: would fixing the *request* help (4xx), or does the *server* need fixing (5xx)?"}
       </script>
     </div>
+
+    <p>Knowing the class is step one. Step two is knowing what to <em>do</em> when you see a code, because each one points at a different fix. Here are the codes you'll actually run into, grouped where they belong together. You'll rarely see <code>1xx</code> codes at all: <code>101 Switching Protocols</code>, for example, only appears when a page upgrades its connection for live chat or games.</p>
+    <div class="tabs" id="c2-status-tabs">
+      <div data-tab="200">
+        <p><strong>What it means.</strong> <code>200 OK</code>: the request worked, and the body holds what you asked for, whether that's an HTML page, an image or some JSON.</p>
+        <p><strong>When you meet it.</strong> On almost every row of the DevTools Network tab. On a repeat visit DevTools may instead show <code>200</code> with "(memory cache)" or "(disk cache)": the browser reused its stored copy and never contacted the server.</p>
+        <p><strong>Watch out.</strong> <code>200</code> means the server was happy, not that your page is right. A misspelled CSS property or a broken layout still arrives with <code>200 OK</code>. Some badly built sites even send <code>200</code> with a "Page not found" message (a "soft 404"), which confuses search engines.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 200 OK
+          Content-Type: text/css; charset=utf-8
+          Content-Length: 44
+          Cache-Control: max-age=86400
+
+          body { font-family: system-ui, sans-serif; }
+        </script>
+        <ul class="c2-lines">
+          <li><strong>Line 1:</strong> the version, the code and its reason phrase.</li>
+          <li><strong><code>Content-Type</code>:</strong> this body is a stylesheet, so the browser applies it as CSS.</li>
+          <li><strong><code>Content-Length</code> and <code>Cache-Control</code>:</strong> 44 bytes, which may be reused for a day.</li>
+          <li><strong>After the blank line:</strong> the file itself.</li>
+        </ul>
+      </div>
+      <div data-tab="201 / 204">
+        <p><strong>What they mean.</strong> <code>201 Created</code>: the request (usually a POST) made something new, and the <code>Location</code> header gives the new thing's URL. <code>204 No Content</code>: it worked, and there is deliberately no body to send back.</p>
+        <p><strong>When you meet them.</strong> When JavaScript talks to an API: posting a new comment gets <code>201</code>, deleting one often gets <code>204</code>. The lab below returns both.</p>
+        <p><strong>Watch out.</strong> A <code>204</code> has no body at all, so there's nothing to read or display. That's success, not an empty error.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 201 Created
+          Location: /api/messages/3
+          Content-Type: application/json
+          Content-Length: 24
+
+          {"id": 3, "text": "Hi!"}
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>201 Created</code>:</strong> a new message was stored.</li>
+          <li><strong><code>Location</code>:</strong> where the new message now lives; a GET to that URL fetches it.</li>
+          <li><strong>The body:</strong> the new message as JSON, including the id the server gave it.</li>
+        </ul>
+      </div>
+      <div data-tab="301 / 302">
+        <p><strong>What they mean.</strong> "It's not here; go to the URL in the <code>Location</code> header." The browser follows automatically, so you normally never see the redirect itself. <code>301 Moved Permanently</code> says the move is for good: browsers and search engines remember the new address. <code>302 Found</code> says it's temporary: keep using the old URL. (<code>307</code> and <code>308</code> are the same temporary and permanent pair, with a promise that the method won't change; <code>303 See Other</code> is the one sent after a form POST.)</p>
+        <p><strong>When you meet them.</strong> Typing <code>http://</code> when a site only serves <code>https://</code>; visiting <code>example.com</code> when the site lives at <code>www.example.com</code>; an old page that was renamed. GitHub Pages sends a <code>301</code> from <code>/blog</code> to <code>/blog/</code> when <code>blog</code> is a folder. In DevTools, the redirect is its own row, just above the page it led to.</p>
+        <p><strong>Watch out.</strong> Browsers cache a <code>301</code> for a long time, so a wrong one can stick in visitors' browsers after you fix it; use <code>302</code> while testing. A redirect that eventually points back to itself is a loop, and Chrome gives up with <code>ERR_TOO_MANY_REDIRECTS</code>.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 301 Moved Permanently
+          Location: https://www.example.com/about
+          Content-Length: 0
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>301 Moved Permanently</code>:</strong> the browser asked for <code>http://example.com/about</code>, and that address is retired for good.</li>
+          <li><strong><code>Location</code>:</strong> the secure <code>https</code> address on the <code>www</code> host. The browser immediately sends a new GET there.</li>
+          <li><strong><code>Content-Length: 0</code>:</strong> there's nothing to show; the Location header is the whole message.</li>
+        </ul>
+      </div>
+      <div data-tab="304">
+        <p><strong>What it means.</strong> <code>304 Not Modified</code>: "the copy you already have is still current, use it." The browser only gets this when it asked a conditional question, by sending the <code>ETag</code> it saved last time in an <code>If-None-Match</code> header. The response has no body, so almost nothing is downloaded.</p>
+        <p><strong>When you meet it.</strong> Reload any page with DevTools open, and many stylesheet, script and image rows show <code>304</code>. It's a good sign: caching is working.</p>
+        <p><strong>Watch out.</strong> Caching is also why you sometimes edit your CSS, reload, and still see the old version. Do a hard reload (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>, or <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> on a Mac), or tick <strong>Disable cache</strong> in the Network tab while DevTools is open.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request">
+          GET /style.css HTTP/1.1
+          Host: www.example.com
+          If-None-Match: "css-v7"
+        </script>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 304 Not Modified
+          ETag: "css-v7"
+          Cache-Control: max-age=86400
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>If-None-Match: "css-v7"</code>:</strong> "I have version <code>css-v7</code>. Only send the file if yours is different."</li>
+          <li><strong><code>304 Not Modified</code> and the same ETag:</strong> it isn't different, so no body is sent and the browser uses its copy.</li>
+          <li><strong><code>Cache-Control</code>:</strong> and it may reuse that copy for another day without asking.</li>
+        </ul>
+      </div>
+      <div data-tab="400 / 429">
+        <p><strong>What they mean.</strong> <code>400 Bad Request</code>: the server couldn't make sense of the request, because of broken syntax, a missing required header or invalid data. <code>429 Too Many Requests</code>: you sent too many requests too quickly, so the server is making you wait.</p>
+        <p><strong>When you meet them.</strong> Mostly when code talks to an API: a typo in the JSON you send gets a <code>400</code>, and a script that calls an API in a fast loop gets a <code>429</code>. In the lab below, deleting the <code>Host</code> header gets a <code>400</code>.</p>
+        <p><strong>Watch out.</strong> A 4xx code means the <em>request</em> needs fixing, so sending the same request again gets the same error. Read the response body: APIs usually say exactly what they didn't like. For a <code>429</code>, the <code>Retry-After</code> header says how many seconds to wait.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 400 Bad Request
+          Content-Type: application/json
+          Content-Length: 35
+
+          {"error": "Body is not valid JSON"}
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>400 Bad Request</code>:</strong> the server refused before doing anything.</li>
+          <li><strong>The body:</strong> the explanation. Here the JSON had a mistake, such as a missing quote or an extra comma.</li>
+        </ul>
+      </div>
+      <div data-tab="401 / 403">
+        <p><strong>What they mean.</strong> <code>401 Unauthorized</code> really means <em>unauthenticated</em>: you haven't proved who you are, because you aren't logged in or your login expired. <code>403 Forbidden</code> means the server knows who you are, or doesn't need to, and the answer is still no.</p>
+        <p><strong>When you meet them.</strong> Members-only pages and admin areas. You'll also see <code>403</code> on many servers when you request a folder that has no <code>index.html</code>: listing the folder's files is switched off, so the server refuses. (GitHub Pages answers <code>404</code> in that situation instead.)</p>
+        <p><strong>Watch out.</strong> Logging in fixes a <code>401</code>; it doesn't fix a <code>403</code>. If you get a <code>403</code> for your own folder, check that it contains an <code>index.html</code>, spelled exactly that way.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 403 Forbidden
+          Content-Type: text/html; charset=utf-8
+          Content-Length: 22
+
+          <h1>403 Forbidden</h1>
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>403 Forbidden</code>:</strong> the request was understood and refused. Asking again won't help.</li>
+          <li><strong>The body:</strong> a short page for the visitor. Servers often add little detail, so that attackers learn nothing useful.</li>
+        </ul>
+      </div>
+      <div data-tab="404">
+        <p><strong>What it means.</strong> <code>404 Not Found</code>: there's nothing at this URL.</p>
+        <p><strong>When you meet it.</strong> Constantly, and usually because of your own typo: a misspelled file name, a relative link missing a <code>../</code>, a capital letter that doesn't match (<code>Logo.png</code> versus <code>logo.png</code>, which only fails after you publish), or a page you renamed while old links still point to it. A 404 for an image or stylesheet doesn't stop the page from loading, so the only sign may be a missing picture or an unstyled page.</p>
+        <p><strong>What to do.</strong> Open the Network tab and reload. Failed requests show in red. Click one and compare its Request URL with where the file really is, character by character. That comparison finds nearly every 404.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="DevTools Network tab">
+          Name            Status   Type
+          index.html      200      document
+          styles.css      404      stylesheet
+          logo.png        200      png
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>index.html 200</code>:</strong> the page itself arrived.</li>
+          <li><strong><code>styles.css 404</code>:</strong> the stylesheet link points somewhere that doesn't exist, so the page shows up unstyled. Click the row to see the URL the browser tried.</li>
+          <li><strong><code>logo.png 200</code>:</strong> the other files are fine, so the problem is that one link.</li>
+        </ul>
+      </div>
+      <div data-tab="500">
+        <p><strong>What it means.</strong> <code>500 Internal Server Error</code>: the server's own program crashed or hit something it didn't expect. It's the generic "something broke on our side."</p>
+        <p><strong>When you meet it.</strong> On dynamic sites with a bug in their server code. A static site made of plain files, like your project on GitHub Pages, has no server code of yours to crash.</p>
+        <p><strong>Watch out.</strong> It isn't your request's fault, so resending won't help until the server is fixed. If the server is yours, read its error log: the browser only gets a vague message, deliberately, so that visitors and attackers don't see the details.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 500 Internal Server Error
+          Content-Type: text/html; charset=utf-8
+          Content-Length: 34
+
+          <h1>500 Internal Server Error</h1>
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>500</code>:</strong> the server knows it failed, but says nothing about why.</li>
+          <li><strong>The body:</strong> a generic apology page. The real error message is in the server's log.</li>
+        </ul>
+      </div>
+      <div data-tab="502 / 503">
+        <p><strong>What they mean.</strong> <code>502 Bad Gateway</code>: a server in the middle (a proxy, a load balancer or a CDN) asked the real server behind it and got a broken answer or none. <code>503 Service Unavailable</code>: the server is overloaded or down for maintenance, so try again later. (Its cousin <code>504 Gateway Timeout</code> means the middle server gave up waiting.)</p>
+        <p><strong>When you meet them.</strong> During outages and huge traffic spikes, like the first minute of a big ticket sale. Behind the scenes, nginx answers <code>502</code> when the application it forwards requests to has crashed or isn't running.</p>
+        <p><strong>Watch out.</strong> These are usually temporary. Wait and try again instead of reloading over and over, which only adds to the load. A <code>Retry-After</code> header, when present, says how long to wait.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 503 Service Unavailable
+          Retry-After: 120
+          Content-Type: text/html; charset=utf-8
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>503</code>:</strong> the server is up enough to answer, but not to do the work.</li>
+          <li><strong><code>Retry-After: 120</code>:</strong> come back in 120 seconds (2 minutes).</li>
+        </ul>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Something broke: what does the code tell me?</strong>
+      <ul>
+        <li><strong>2xx:</strong> the transfer worked. If the page still looks wrong, the problem is in your HTML or CSS, not the network.</li>
+        <li><strong>3xx:</strong> you were sent somewhere else, or told to use your cached copy. Check the <code>Location</code> header, or hard-reload if you're seeing old files.</li>
+        <li><strong>404:</strong> check the path: spelling, folders, <code>../</code>, and capital letters.</li>
+        <li><strong>401 or 403:</strong> log in, or you're not allowed; for your own folder, check for <code>index.html</code>.</li>
+        <li><strong>Other 4xx:</strong> fix the request before sending it again; the response body usually says what's wrong.</li>
+        <li><strong>5xx:</strong> the server's problem. Wait and retry, or fix the server code if it's yours.</li>
+      </ul>
+    </aside>
 
     <h3>Talk to a server yourself</h3>
     <p>The lab below contains a small pretend web server for <code>www.example.com</code>. Pick one of the preset requests to see a realistic raw request and response, then change the method, path, headers or body and send your own. Work through the presets in order: they tell a story about redirects, logins, cookies and caching.</p>
@@ -924,6 +1728,138 @@
       ]}
       </script>
     </div>
+
+    <p>Matching names to purposes is the start. When you read headers in DevTools, you also need to know which side sent each one, what a real value looks like, and when it's worth a closer look:</p>
+    <div class="table-wrap">
+      <table class="data-table c2-headers-table">
+        <thead><tr><th scope="col">Header</th><th scope="col">Sent in</th><th scope="col">A real value</th><th scope="col">You'll look at it when…</th></tr></thead>
+        <tbody>
+          <tr><td><code>Host</code></td><td>Request</td><td><code>www.example.com</code></td><td>A server with many sites shows the wrong one, or answers 400</td></tr>
+          <tr><td><code>User-Agent</code></td><td>Request</td><td><code>Mozilla/5.0 (Windows NT 10.0; Win64; x64) …</code></td><td>You want to know which browser made a request</td></tr>
+          <tr><td><code>Accept</code></td><td>Request</td><td><code>text/html,application/xhtml+xml,…</code></td><td>A server picks a format (say, a smaller image type) for your browser</td></tr>
+          <tr><td><code>Content-Type</code></td><td>Both</td><td><code>text/css; charset=utf-8</code></td><td>A stylesheet or script is downloaded but ignored</td></tr>
+          <tr><td><code>Content-Length</code></td><td>Both</td><td><code>5120</code></td><td>You check how big a file is</td></tr>
+          <tr><td><code>Cache-Control</code></td><td>Mostly response</td><td><code>max-age=86400</code></td><td>Your changes don't show up after a reload</td></tr>
+          <tr><td><code>Set-Cookie</code></td><td>Response</td><td><code>session=7f3a9c1e; Path=/; HttpOnly; Secure</code></td><td>A login or cart isn't remembered</td></tr>
+          <tr><td><code>Cookie</code></td><td>Request</td><td><code>session=7f3a9c1e</code></td><td>You check which cookies the browser is sending</td></tr>
+          <tr><td><code>Location</code></td><td>Response</td><td><code>https://www.example.com/about</code></td><td>A redirect goes somewhere unexpected, or loops</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tabs" id="c2-headers-tabs">
+      <div data-tab="Host">
+        <p><strong>What it is.</strong> The host name from the URL (plus the port, if it isn't the default). Every HTTP/1.1 request must include it.</p>
+        <p><strong>Why it exists.</strong> One server with one IP address often hosts hundreds of websites; shared hosting and GitHub Pages both work this way. The IP address only gets the request to the right machine; <code>Host</code> tells that machine which of its sites you want.</p>
+        <p><strong>When you meet it.</strong> In the request headers of every row in DevTools. You never write it: the browser copies it from the URL. On HTTP/2 and HTTP/3 connections, DevTools may show it as <code>:authority</code> instead, which does the same job.</p>
+        <p><strong>Watch out.</strong> Without it, an HTTP/1.1 server answers <code>400 Bad Request</code>. Try deleting it in the lab below.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request">
+          GET /about HTTP/1.1
+          Host: www.example.com
+        </script>
+        <ul class="c2-lines">
+          <li><strong>Line 1:</strong> the path, <code>/about</code>. The host name isn't in the request line at all.</li>
+          <li><strong><code>Host</code>:</strong> so it travels here: "the <code>/about</code> page of <code>www.example.com</code>, please."</li>
+        </ul>
+      </div>
+      <div data-tab="User-Agent / Accept">
+        <p><strong>What they are.</strong> <code>User-Agent</code> identifies the browser and operating system. <code>Accept</code> lists the formats the browser can handle, in order of preference; <code>Accept-Language</code> does the same for human languages.</p>
+        <p><strong>When you meet them.</strong> Servers use <code>Accept</code> to choose what to send: an image service can send a smaller modern format such as AVIF or WebP to browsers that list it, and a multilingual site can use <code>Accept-Language</code> to pick English or Spanish. Analytics tools read <code>User-Agent</code> to count visitors' browsers.</p>
+        <p><strong>Watch out.</strong> <code>User-Agent</code> strings are a mess for historical reasons: nearly every browser starts with <code>Mozilla/5.0</code>, and Chrome's even mentions Safari. Don't build a site that changes its behavior based on this string; test your page in real browsers instead.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Chrome requesting an image">
+          GET /images/hero HTTP/1.1
+          Host: www.example.com
+          User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+          Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
+          Accept-Language: en-US,en;q=0.9
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>User-Agent</code>:</strong> Chrome 140 on 64-bit Windows 10 or 11. The other names (Mozilla, AppleWebKit, Safari) are there for compatibility with old servers.</li>
+          <li><strong><code>Accept</code>:</strong> AVIF and WebP first, then other image types. <code>*/*;q=0.8</code> means "anything else, but I like it less": <code>q</code> is a preference from 0 to 1.</li>
+          <li><strong><code>Accept-Language</code>:</strong> American English, then any English.</li>
+        </ul>
+      </div>
+      <div data-tab="Content-Type">
+        <p><strong>What it is.</strong> The format of the body, written as a <strong>MIME type</strong> (<code>type/subtype</code>), plus the character encoding for text. Its partner <code>Content-Length</code> gives the body's size in bytes. The browser decides what to do with a response from this header, not from the file extension in the URL.</p>
+        <p><strong>When you meet it.</strong> On every response with a body, and on requests that carry one: forms send <code>application/x-www-form-urlencoded</code>, and JavaScript talking to APIs usually sends <code>application/json</code>. A static server picks the type from the file's extension, which is one more reason to name files correctly.</p>
+        <p><strong>Watch out.</strong> The wrong type breaks things quietly. A stylesheet served as <code>text/plain</code> is ignored, and the Console says it was refused because of its MIME type. A common cause: a file saved as <code>styles.css.txt</code> because Windows was hiding file extensions.</p>
+        <script type="text/plain" class="code" data-lang="text" data-title="Extension → Content-Type">
+          .html   text/html; charset=utf-8
+          .css    text/css; charset=utf-8
+          .js     text/javascript
+          .png    image/png
+          .jpg    image/jpeg
+          .svg    image/svg+xml
+          .json   application/json
+        </script>
+        <ul class="c2-lines">
+          <li><strong>The first three:</strong> a web page, a stylesheet and a script. Text types add <code>charset=utf-8</code> so the browser decodes the characters correctly.</li>
+          <li><strong><code>image/…</code>:</strong> pictures. <code>.jpeg</code> gets the same type as <code>.jpg</code>; <code>svg+xml</code> is a vector drawing written as text.</li>
+          <li><strong><code>application/json</code>:</strong> data, usually coming from an API rather than a file you wrote.</li>
+        </ul>
+      </div>
+      <div data-tab="Cache-Control">
+        <p><strong>What it is.</strong> The server's rules for how long a response may be reused without asking again, and by whom. The main values: <code>max-age=N</code> (reuse it for N seconds), <code>no-cache</code> (you may store it, but check with the server before each use, which is where <code>304</code> comes in), <code>no-store</code> (never store it at all), and <code>private</code> (only the visitor's own browser may keep it, not shared caches such as a CDN).</p>
+        <p><strong>When you meet it.</strong> The field report at the end of this chapter asks you to find one. Big sites give images, stylesheets and scripts a long life, up to a year, and put a version in the file name (<code>styles.3f9a1c.css</code>) so that a new version gets a new URL. The HTML page itself gets <code>no-cache</code>, so visitors always check for the latest page.</p>
+        <p><strong>Watch out.</strong> With a long <code>max-age</code> and an unchanged file name, visitors keep your old CSS until it expires, however often you publish. While developing, hard-reload or tick <strong>Disable cache</strong> in DevTools.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Three common values">
+          Cache-Control: max-age=31536000, immutable
+          Cache-Control: no-cache
+          Cache-Control: private, no-store
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>max-age=31536000, immutable</code>:</strong> keep it for a year (31,536,000 seconds) and don't even check. Used for versioned files like <code>styles.3f9a1c.css</code>.</li>
+          <li><strong><code>no-cache</code>:</strong> keep it, but ask "has it changed?" every time. Typical for HTML pages.</li>
+          <li><strong><code>private, no-store</code>:</strong> don't keep it anywhere. Used for pages with personal data, like a bank statement.</li>
+        </ul>
+      </div>
+      <div data-tab="Set-Cookie / Cookie">
+        <p><strong>What they are.</strong> <code>Set-Cookie</code> (in a response) asks the browser to store a <code>name=value</code> pair, followed by attributes that set its rules. <code>Cookie</code> (in a request) carries the stored pairs back to that site on every later request. The next heading explains why HTTP needs them.</p>
+        <p><strong>The attributes you'll see.</strong> <code>Max-Age</code> or <code>Expires</code>: how long to keep it (without either, it goes when the browser session ends). <code>Path=/</code>: send it for every page on the site. <code>Secure</code>: only over HTTPS. <code>HttpOnly</code>: JavaScript on the page can't read it, which protects login sessions from injected scripts. <code>SameSite=Lax</code>: don't send it along with most requests that start on other sites.</p>
+        <p><strong>When you meet them.</strong> Logins, shopping carts, language choices, cookie-consent banners. DevTools lists a site's cookies under <strong>Application</strong> (Chrome and Edge) or <strong>Storage</strong> (Firefox).</p>
+        <p><strong>Watch out.</strong> Anyone who gets your session cookie is logged in as you, which is why well-built sites mark it <code>Secure</code> and <code>HttpOnly</code>. Sites store a random ID in the cookie, never the password itself. And every cookie rides along on every request to the site, including each image, so cookies are kept small; browsers cap each one at about 4 KB.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response to POST /login">
+          HTTP/1.1 303 See Other
+          Location: /members
+          Set-Cookie: session=7f3a9c1e; Path=/; Max-Age=3600; HttpOnly; Secure; SameSite=Lax
+        </script>
+        <script type="text/plain" class="code" data-lang="http" data-title="The browser's next request">
+          GET /members HTTP/1.1
+          Host: www.example.com
+          Cookie: session=7f3a9c1e
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>Set-Cookie</code>:</strong> store <code>session=7f3a9c1e</code> for an hour (3,600 seconds), send it for every path, only over HTTPS, and hide it from JavaScript.</li>
+          <li><strong><code>Cookie</code>:</strong> the browser sends back just the name and value. The attributes were instructions for the browser, not data for the server.</li>
+        </ul>
+      </div>
+      <div data-tab="Location">
+        <p><strong>What it is.</strong> An address. With a 3xx status it means "go here instead," and the browser follows it automatically. With <code>201 Created</code> it's the URL of the thing that was just created.</p>
+        <p><strong>When you meet it.</strong> On redirect rows in DevTools: <code>http</code> to <code>https</code>, a bare domain to <code>www</code>, a renamed page, the page you land on after a form.</p>
+        <p><strong>Watch out.</strong> It can be absolute or relative. A relative <code>Location</code> is resolved against the request's URL with exactly the rules from Section 2.3. If it leads, directly or after several hops, back to where you started, that's a redirect loop: <code>ERR_TOO_MANY_REDIRECTS</code>.</p>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw request">
+          GET /old-page HTTP/1.1
+          Host: www.example.com
+        </script>
+        <script type="text/plain" class="code" data-lang="http" data-title="Raw response">
+          HTTP/1.1 301 Moved Permanently
+          Location: /about
+        </script>
+        <ul class="c2-lines">
+          <li><strong><code>Location: /about</code>:</strong> a relative URL, so the browser resolves it against <code>https://www.example.com/old-page</code> and requests <code>https://www.example.com/about</code> next.</li>
+        </ul>
+      </div>
+    </div>
+
+    <aside class="callout tip">
+      <strong>Request header or response header? How to tell them apart</strong>
+      <ul>
+        <li><strong>Written by the browser, about the request or the browser:</strong> <code>Host</code>, <code>User-Agent</code>, <code>Accept</code>, <code>Cookie</code>, <code>If-None-Match</code>.</li>
+        <li><strong>Written by the server, about the response:</strong> <code>Set-Cookie</code>, <code>Location</code>, <code>ETag</code>, <code>Server</code>.</li>
+        <li><strong>Either side, describing whichever message carries a body:</strong> <code>Content-Type</code>, <code>Content-Length</code>.</li>
+        <li><strong>A memory aid:</strong> <code>Set-Cookie</code> comes down from the server; <code>Cookie</code> goes back up.</li>
+      </ul>
+    </aside>
 
     <h3>HTTP is stateless (and cookies fix that)</h3>
     <p>An HTTP server treats every request as brand new. By itself it doesn't remember that you logged in a second ago or what's in your cart. That <strong>statelessness</strong> keeps servers simple and easy to scale, but web apps need memory, so they add it with <strong>cookies</strong>. The server includes a <code>Set-Cookie</code> header in a response; the browser stores that little name–value pair and sends it back in a <code>Cookie</code> header with every later request to the same site. The server looks up the session ID in the cookie and knows who you are. You watched exactly this happen in the lab with <code>POST /login</code> followed by <code>GET /members</code>.</p>
@@ -1239,7 +2175,7 @@ downloads, then runs…
 
     <aside class="callout tip">
       <strong>You already have a server</strong>
-      If you use Visual Studio Code, the Live Server extension starts a small static web server on <code>http://127.0.0.1:5500</code> and reloads the page whenever you save. Opening files directly (<code>file:///…</code>) works for plain HTML too, but some features, such as JavaScript modules and <code>fetch()</code>, behave differently or are blocked without a real HTTP server.
+      If you use Visual Studio Code, the Live Server extension starts a small static web server on <code>http://127.0.0.1:5500</code> and reloads the page whenever you save. Opening files directly (<code>file:///…</code>) works for plain HTML too, but some features, such as JavaScript modules and <code>fetch()</code>, behave differently or are blocked without a real HTTP server. To run one yourself, with every request printed in the Terminal, follow <a href="../tools/local-server.html">Run a Real Web Server on Your Mac</a>.
     </aside>
 
     <div class="quiz" data-title="Check your understanding: servers">
