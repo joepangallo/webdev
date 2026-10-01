@@ -1,0 +1,2414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Homework 4 · Web Dev I</title>
+  <meta name="description" content="Interactive practice for Module 4, CSS 1: syntax, colors and units, where styles live, selectors, the cascade, the box model, text styling and custom properties.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/course.css">
+  <script src="../assets/js/course.js"></script>
+  <style>
+    /* ---------- Homework 4 page (hw4-) ---------- */
+    body[data-page="homework"] { --mod: var(--ch4); }
+    html { scroll-padding-top: calc(var(--topbar-h) + 20px); }
+
+    /* Part badge above each h2 */
+    .hw4-part { display: inline-block; font-family: var(--font-mono); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mod); font-weight: 700; margin: 0 0 6px; }
+
+    /* Jump links */
+    .hw4-jump { list-style: none; padding: 0; margin: 8px 0 0; font-size: .9rem; }
+    .hw4-jump li { display: inline-block; margin: 0 6px 8px 0; }
+    .hw4-jump a {
+      display: inline-block; padding: 5px 12px; border-radius: 99px;
+      background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); text-decoration: none;
+    }
+    .hw4-jump a:hover { border-color: var(--mod); color: var(--ink); }
+
+    /* Name box */
+    .hw4-me label { display: block; font-weight: 700; margin-bottom: 6px; }
+    .hw4-me input { max-width: 28rem; font-size: 1.05rem; }
+    .hw4-me p { margin: 8px 0 0; }
+
+    /* Progress card */
+    .hw4-meters { list-style: none; padding: 0; margin: 0 0 12px; }
+    .hw4-meters li { margin: 0 0 12px; }
+    .hw4-meter-label { font-weight: 700; }
+    .hw4-meter-count { float: right; font-family: var(--font-mono); font-size: .9rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+    .hw4-bar { display: block; clear: both; height: 8px; margin-top: 6px; border-radius: 99px; background: var(--surface-3); overflow: hidden; }
+    .hw4-bar > span { display: block; height: 100%; width: 0; background: var(--visited); transition: width .4s ease; }
+    .hw4-sub { font-family: var(--font-display); font-size: 1rem; margin: 18px 0 8px; }
+    .hw4-chips { list-style: none; padding: 0; margin: 0; }
+    .hw4-chips li { display: inline-block; margin: 0 6px 8px 0; }
+    .hw4-chips a {
+      display: inline-block; min-width: 4.2em; padding: 4px 10px; border-radius: 99px; text-align: center;
+      border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2);
+      font-family: var(--font-mono); font-size: .82rem; text-decoration: none;
+    }
+    .hw4-chips a.done { background: var(--visited-soft); border-color: var(--visited); color: var(--visited); font-weight: 700; }
+    .hw4-chips a.done::before { content: "\2713\00a0"; }
+    .hw4-chips a.partial { border-color: var(--warn); color: var(--warn); }
+    .hw4-chips a.partial::before { content: "\2026\00a0"; }
+
+    /* Challenge blocks */
+    .hw4-ch { margin-top: 2.2em; padding-top: 18px; border-top: 1px dashed var(--line-2); }
+    .hw4-ch-num { display: block; font-family: var(--font-mono); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mod); font-weight: 700; margin-bottom: 2px; }
+    .hw4-label { font-weight: 700; color: var(--ink); }
+    .hw4-task > li { margin-bottom: 6px; }
+
+    /* Long code that must wrap on phones */
+    .hw4-url { overflow-wrap: anywhere; word-break: break-word; }
+
+    /* Explain it */
+    .hw4-written label { display: block; font-weight: 700; margin-bottom: 8px; }
+    .hw4-written textarea { min-height: 8em; resize: vertical; line-height: 1.5; }
+    .hw4-written .hw4-saved { margin: 6px 0 0; }
+    .hw4-written .hw4-saved.done { color: var(--visited); }
+
+    /* Which elements match? */
+    .hw4-sel-head { margin: 0 0 6px; font-family: var(--font-mono); font-size: .85rem; color: var(--ink-3); }
+    .hw4-sel-q { margin: 0 0 10px; }
+    .hw4-sel-q code { font-size: 1.05rem; }
+    .hw4-sel-doc {
+      list-style: none; margin: 0 0 12px; padding: 10px 0; border-radius: var(--radius-sm);
+      background: var(--code-bg); color: var(--code-ink); font-family: var(--font-mono); font-size: .85rem; overflow-x: auto;
+    }
+    .hw4-sel-doc li { margin: 0; white-space: pre; }
+    .hw4-sel-doc .hw4-sel-plain { display: block; padding: 3px 12px; color: var(--code-ink); }
+    .hw4-sel-doc button {
+      display: block; width: 100%; min-width: max-content; text-align: left; white-space: pre; cursor: pointer;
+      font: inherit; color: inherit; background: transparent; border: 0; border-left: 4px solid transparent; padding: 3px 12px 3px 8px;
+    }
+    .hw4-sel-doc button:hover { background: color-mix(in srgb, var(--code-ink) 10%, transparent); }
+    .hw4-sel-doc button[aria-pressed="true"] { border-left-color: var(--accent); background: color-mix(in srgb, var(--accent) 22%, transparent); }
+    .hw4-sel-doc button.right { border-left-color: var(--good); background: color-mix(in srgb, var(--good) 22%, transparent); }
+    .hw4-sel-doc button.missed { border-left-color: var(--warn); background: color-mix(in srgb, var(--warn) 22%, transparent); }
+    .hw4-sel-doc button.wrong { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 22%, transparent); }
+    .hw4-sel-doc .hw4-sel-mark { font-family: var(--font-body); font-size: .78rem; font-weight: 700; margin-left: 10px; }
+    .hw4-sel-score { font-family: var(--font-mono); font-size: .9rem; color: var(--ink-2); margin: 12px 0 0; }
+
+    /* Steps */
+    .hw4-steps { list-style: none; padding-left: 0; counter-reset: hw4-step; }
+    .hw4-steps > li { counter-increment: hw4-step; position: relative; padding-left: 46px; margin: 0 0 1em; }
+    .hw4-steps > li::before {
+      content: counter(hw4-step);
+      position: absolute; left: 0; top: 0;
+      width: 30px; height: 30px; line-height: 28px; text-align: center; border-radius: 50%;
+      background: var(--surface); border: 1.5px solid var(--mod); color: var(--mod);
+      font-family: var(--font-mono); font-weight: 700; font-size: .85rem;
+    }
+    .hw4-steps > li > :last-child { margin-bottom: 0; }
+
+    /* Download */
+    .hw4-status { margin: 12px 0 0; }
+    .hw4-status:empty { display: none; }
+
+    /* Submit box */
+    .hw4-submit {
+      padding: 20px 22px; border-radius: var(--radius);
+      background: var(--accent-soft); border: 2px solid var(--accent);
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink);
+    }
+    .hw4-submit p { margin: 0; }
+  </style>
+</head>
+<body data-page="homework">
+<main id="main">
+  <header class="module-hero">
+    <p class="eyebrow"><span class="tag">Homework 4</span><span>Chapter 4 · CSS 1: Selectors and Basic Styling</span></p>
+    <h1>Homework 4: Module 4</h1>
+    <p class="lede">CSS, practiced right in this page: how rules are written, colors and units, where styles live, selectors, the cascade, the box model, text and custom properties. The last challenge styles a whole page from scratch.</p>
+  </header>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="start">
+    <h2>Before you begin</h2>
+    <p>This homework happens inside this page. Each <strong>challenge</strong> is a live code editor with a preview and a list of checks underneath. The checks look at the page your CSS produces: which styles the browser actually applied, how wide a box really is, which elements a selector really reaches. Some checks even change the page for a moment, for example making the reader's text size bigger, to test that your CSS reacts the way it should. Quizzes and activities sit between the challenges so you can test an idea before you use it, and a few <strong>Explain it</strong> boxes ask you to put an idea into your own words.</p>
+    <p>Everything you type is saved in this browser as you go, so you can close the tab and come back later. When you are done, <a href="#download">Download my work</a> packs your code, your results and your answers into one file, and <a href="#submit">Submitting</a> shows how to put that file on GitHub.</p>
+    <aside class="callout warn"><strong>Stay in one browser on one computer</strong> Your work lives in this browser's storage, not online. If you switch computers or browsers, or clear your browsing data, you start over. Download your work at the end of every session and keep the file.</aside>
+
+    <div class="widget hw4-me" data-kind="Start here" data-title="Your name">
+      <label for="hw4-name">Your full name, as it should appear on your work</label>
+      <input type="text" id="hw4-name" autocomplete="name" spellcheck="false" aria-describedby="hw4-name-help">
+      <p class="small muted" id="hw4-name-help">Saved in this browser. It goes at the top of your downloaded file and into its file name.</p>
+    </div>
+
+    <div class="widget" id="hw4-progress" data-kind="Progress" data-title="Your progress">
+      <ul class="hw4-meters">
+        <li><span class="hw4-meter-label">Challenges complete</span> <span class="hw4-meter-count" id="hw4-count-challenges">0 of 12</span><span class="hw4-bar"><span id="hw4-bar-challenges"></span></span></li>
+        <li><span class="hw4-meter-label">Quizzes finished</span> <span class="hw4-meter-count" id="hw4-count-quizzes">0 of 8</span><span class="hw4-bar"><span id="hw4-bar-quizzes"></span></span></li>
+        <li><span class="hw4-meter-label">Written answers</span> <span class="hw4-meter-count" id="hw4-count-written">0 of 5</span><span class="hw4-bar"><span id="hw4-bar-written"></span></span></li>
+      </ul>
+      <p class="small muted">A challenge counts when every one of its checks passes. A quiz counts once you have answered all its questions; retry it as often as you like. A written answer counts once it has a sentence or two (at least 40 characters).</p>
+      <h3 class="hw4-sub">Challenges</h3>
+      <ol class="hw4-chips" aria-label="Challenges">
+        <li><a href="#c4-1" data-pg="hw4-c4-1">4.1</a></li>
+        <li><a href="#c4-2" data-pg="hw4-c4-2">4.2</a></li>
+        <li><a href="#c4-3" data-pg="hw4-c4-3">4.3</a></li>
+        <li><a href="#c4-4" data-pg="hw4-c4-4">4.4</a></li>
+        <li><a href="#c4-5" data-pg="hw4-c4-5">4.5</a></li>
+        <li><a href="#c4-6" data-pg="hw4-c4-6">4.6</a></li>
+        <li><a href="#c4-7" data-pg="hw4-c4-7">4.7</a></li>
+        <li><a href="#c4-8" data-pg="hw4-c4-8">4.8</a></li>
+        <li><a href="#c4-9" data-pg="hw4-c4-9">4.9</a></li>
+        <li><a href="#c4-10" data-pg="hw4-c4-10">4.10</a></li>
+        <li><a href="#c4-11" data-pg="hw4-c4-11">4.11</a></li>
+        <li><a href="#c4-12" data-pg="hw4-c4-12">4.12</a></li>
+      </ol>
+      <h3 class="hw4-sub">On this page</h3>
+      <ul class="hw4-jump">
+        <li><a href="#part-1">1. Rules and syntax</a></li>
+        <li><a href="#part-2">2. Colors and units</a></li>
+        <li><a href="#part-3">3. Where styles live</a></li>
+        <li><a href="#part-4">4. Selectors</a></li>
+        <li><a href="#part-5">5. The cascade</a></li>
+        <li><a href="#part-6">6. The box model</a></li>
+        <li><a href="#part-7">7. Text</a></li>
+        <li><a href="#part-8">8. Custom properties</a></li>
+        <li><a href="#part-9">9. Final challenge</a></li>
+        <li><a href="#download">Download my work</a></li>
+        <li><a href="#submit">Submitting</a></li>
+      </ul>
+    </div>
+
+    <aside class="callout tip"><strong>How the playgrounds work</strong> Switch between the <strong>HTML</strong> and <strong>CSS</strong> tabs to edit; in most challenges the HTML is finished and your work is in the CSS tab. The preview and the checks update a moment after you stop typing. Every line of starter code has a comment that says what it is, and lines marked <code>TODO</code> are where you work. Press <kbd>Tab</kbd> to indent; press <kbd>Esc</kbd> and then <kbd>Tab</kbd> to move out of the editor with the keyboard. <strong>Reset</strong> brings back the starter code and erases your changes, so use it only when you want a fresh start.</aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-1">
+    <p class="hw4-part">Part 1 · 4.1 and 4.2</p>
+    <h2>Rules and syntax</h2>
+    <p>HTML says what each part of a page is; CSS decides how it looks. Keeping the two apart is what lets one stylesheet restyle a whole site, so start by sorting jobs into the right language.</p>
+    <div class="buckets" data-title="Content or presentation?">
+      <script type="application/json">
+{
+  "buckets": [
+    "Content: belongs in HTML",
+    "Presentation: belongs in CSS"
+  ],
+  "items": [
+    [
+      "This line is the title of the trip page",
+      "Content: belongs in HTML"
+    ],
+    [
+      "The title is 36px and brand green",
+      "Presentation: belongs in CSS"
+    ],
+    [
+      "These three links are the site's menu",
+      "Content: belongs in HTML"
+    ],
+    [
+      "The menu links have no underline",
+      "Presentation: belongs in CSS"
+    ],
+    [
+      "The trail photo's alternative text",
+      "Content: belongs in HTML"
+    ],
+    [
+      "The trail photo has rounded corners",
+      "Presentation: belongs in CSS"
+    ],
+    [
+      "The meeting time is important (`<strong>`)",
+      "Content: belongs in HTML"
+    ],
+    [
+      "Every paragraph has 1.5 line spacing",
+      "Presentation: belongs in CSS"
+    ]
+  ],
+  "explain": "Ask whether it describes **what the thing is** (HTML) or **how it looks** (CSS). Importance is meaning, so `<strong>` stays in the HTML, even though browsers show it in bold."
+}
+      </script>
+    </div>
+    <p>A stylesheet is a list of <strong>rules</strong>. Each rule is a <strong>selector</strong> that picks elements, followed by a <strong>declaration block</strong> in curly braces. Inside the block, each <strong>declaration</strong> is a property, a colon, a value and a semicolon. A comma between selectors makes a list that shares the declarations, and comments are written <code>/* like this */</code>.</p>
+    <div class="fill" data-title="Complete the rule" data-explain="A comma joins selectors into a list; braces hold the declarations; each declaration is `property: value;`; and a length needs a unit, such as `rem`.">
+      <script type="text/plain">
+h1[[,]] .title [[{]]
+  color[[:]] #2f6f4e[[;]]
+  font-size: 2.25[[rem]];
+[[}]]
+      </script>
+    </div>
+    <p>One fact causes more confusion than any other: <strong>browsers skip CSS they do not understand, silently</strong>. There is no error message. A missing semicolon or a number without a unit just makes a declaration, or a whole rule, disappear, so "nothing happens" and you are left to find out why.</p>
+
+    <h3 class="hw4-ch" id="c4-1"><span class="hw4-ch-num">Challenge 4.1</span>Fix a broken stylesheet</h3>
+    <p><span class="hw4-label">The skill.</span> Debugging CSS means reading every declaration as four parts (property, colon, value, semicolon) and every rule as a selector plus a block that opens and closes. Because the browser never complains, you have to notice that something did not apply and then work out which piece is broken. DevTools helps on real sites: the Styles panel crosses out declarations it rejected.</p>
+    <p><span class="hw4-label">Your task.</span> The HTML is finished. In the CSS tab, every rule after <code>body</code> has one bug, except the <code>.button</code> rule, which has two. Fix them without rewriting the rules, so that:</p>
+    <ol class="hw4-task">
+      <li>The title is brand green (<code>#2f6f4e</code>) and <code>2.25rem</code> tall.</li>
+      <li>The details line (<code>.meta</code>) is <code>0.875rem</code> and keeps its gray color.</li>
+      <li>The facts list is indented <code>24px</code> from the left.</li>
+      <li>The link inside the paragraph is brand green.</li>
+      <li>The button has a brand green background.</li>
+      <li>The footer has a 2px solid brand green line above it.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-1" data-title="Challenge 4.1: Fix a broken stylesheet" data-height="400" data-layout="stacked">
+      <textarea data-lang="html">
+<main> <!-- the page's main content -->
+  <h1>Autumn Ridge Walk</h1> <!-- the page title: the h1 rule styles it -->
+  <p class="meta">Saturday · 6 miles · moderate</p> <!-- the details line: the .meta rule styles it -->
+  <p>The leaves are turning and the views are at their best. <a href="join.html">Save your spot</a> before Friday.</p> <!-- a paragraph with a link: the main a rule styles the link -->
+  <ul class="facts"> <!-- two quick facts: the .facts rule indents the list -->
+    <li>Meet at the north trailhead</li> <!-- fact 1 -->
+    <li>Start at 8:30 a.m.</li> <!-- fact 2 -->
+  </ul> <!-- end of the facts list -->
+  <a class="button" href="join.html">Join the walk</a> <!-- a link styled as a button by the .button rule -->
+</main> <!-- end of the main content -->
+<footer> <!-- the bottom of the page -->
+  <p>Riverside Hiking Club · walks every weekend</p> <!-- the footer line; the footer rule draws a line above it -->
+</footer> <!-- end of the footer --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page: this rule has no bugs */
+  font-family: Georgia, "Times New Roman", serif; /* a font stack that ends with a generic family */
+  line-height: 1.5; /* comfortable space between lines */
+  margin: 16px; /* space between the page edge and the content */
+} /* end of the body rule */
+
+h1 { /* the page title */
+  color: #2f6f4e /* brand green */
+  font-size: 2.25rem; /* 36px when the root font size is 16px */
+} /* end of the h1 rule */
+
+.meta { /* the details line */
+  font-size 0.875rem; /* 14px: smaller than the body text */
+  color: #4a5262; /* a quieter gray */
+} /* end of the .meta rule */
+
+.facts { /* the facts list */
+  margin-left: 24; /* indent the list from the left */
+} /* end of the .facts rule */
+
+// the links in the paragraphs are brand green
+main a { /* links inside main */
+  color: #2f6f4e; /* brand green */
+} /* end of the main a rule */
+
+.button { /* the link that looks like a button */
+  display: inline-block; /* a box that sits in the line of text (4.6) */
+  background-color: 2f6f4e; /* brand green background */
+  color: white; /* white text on the green */
+  padding: 0.5em 1em; /* room around the words */
+  text-decoration: none; /* no underline on a button */
+
+footer { /* the bottom of the page */
+  border-top: 2px solid #2f6f4e; /* a brand green line above the footer */
+  margin-top: 24px; /* space above the line */
+} /* end of the footer rule */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "The title is brand green (`#2f6f4e`) and `2.25rem` (36px)",
+    "test": "return style('h1','color')==='rgb(47, 111, 78)' && style('h1','font-size')==='36px';"
+  },
+  {
+    "label": "The details line (`.meta`) is `0.875rem` (14px) and keeps its gray color",
+    "test": "return style('.meta','font-size')==='14px' && style('.meta','color')==='rgb(74, 82, 98)';"
+  },
+  {
+    "label": "The facts list is indented `24px` from the left",
+    "test": "return style('.facts','margin-left')==='24px';"
+  },
+  {
+    "label": "The link inside the paragraph is brand green",
+    "test": "var a=$('main p a'); return !!a && style(a,'color')==='rgb(47, 111, 78)';"
+  },
+  {
+    "label": "The button has a brand green background",
+    "test": "return style('.button','background-color')==='rgb(47, 111, 78)';"
+  },
+  {
+    "label": "The footer has a 2px solid brand green line above it",
+    "test": "return style('footer','border-top-width')==='2px' && style('footer','border-top-style')==='solid' && style('footer','border-top-color')==='rgb(47, 111, 78)';"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.1</summary>
+      <p>Go rule by rule and read each declaration aloud as "property, colon, value, semicolon". Ask of every value: is it a real color, and does every length have a unit? Remember which comment style CSS uses. If fixing one rule seems to break a different one, count the opening and closing braces: a rule that never closes swallows the next one.</p>
+    </details>
+
+    <div class="widget hw4-written" data-kind="Explain it" data-title="Why did nothing warn you?">
+      <label for="hw4-w-syntax">Nothing on the page warned you about the bugs in Challenge 4.1. Explain what a browser does with CSS it cannot understand, and describe how you would track down a rule that "does nothing" on a real site.</label>
+      <textarea class="input" id="hw4-w-syntax" data-hw4-written="hw4-written-syntax" rows="5" aria-describedby="hw4-w-syntax-st"></textarea>
+      <p class="small muted hw4-saved" id="hw4-w-syntax-st">Saved in this browser as you type.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-2">
+    <p class="hw4-part">Part 2 · 4.2</p>
+    <h2>Colors and units</h2>
+    <p>Every color on a screen is a mix of red, green and blue light, and CSS lets you write that mix several ways. Hex (<code>#2f6f4e</code>) packs the three amounts into pairs of hexadecimal digits from <code>00</code> to <code>ff</code>. <code>rgb()</code> writes the same amounts as numbers from 0 to 255. <code>hsl()</code> describes hue, saturation and lightness, which makes lighter and darker shades of one color a one-number change. Any of them can take an alpha value for transparency after a slash: <code>rgb(47 111 78 / 50%)</code>. Whatever you write, check the contrast: body text needs at least 4.5 : 1 against its background.</p>
+    <div class="fill" data-mode="text" data-title="Read a hex color" data-explain="Multiply the first digit of a pair by 16 and add the second; the letters a to f stand for 10 to 15. A three-digit hex doubles every digit.">
+      <script type="text/plain">In `#2f6f4e`, the pair `2f` is 2 × 16 + 15 = [[47]] red, `6f` is [[111]] green and `4e` is [[78]] blue, so the same color is `rgb(47 111 78)`. The shorthand `#f60` means `#`[[ff6600]].</script>
+    </div>
+
+    <h3 class="hw4-ch" id="c4-2"><span class="hw4-ch-num">Challenge 4.2</span>Color a trail notice</h3>
+    <p><span class="hw4-label">The skill.</span> Real projects mix notations: a brand guide hands you a hex code, a design tool gives RGB numbers, and you build shades with <code>hsl()</code>. The browser turns them all into the same red, green and blue amounts, so the skill is choosing the notation that makes each job easy. Then you check that every piece of text still has enough contrast to read.</p>
+    <p><span class="hw4-label">Your task.</span> Work in the CSS tab. Some checks also look for the notation you used, because choosing the notation is what this exercise practices:</p>
+    <ol class="hw4-task">
+      <li>Give <code>.notice</code> the pale tint of the club green, <code>hsl(150 40% 94%)</code>, written with <code>hsl()</code>.</li>
+      <li>Make the heading the brand green, written in hex as <code>#2f6f4e</code>.</li>
+      <li>Make the message text dark enough for at least 4.5 : 1 contrast against the notice background. Any color that passes is fine.</li>
+      <li>Make the Open badge the brand green written with <code>rgb()</code>: <code>rgb(47 111 78)</code>.</li>
+      <li>Make the notice's left border solid, at least <code>4px</code>, in the brand green at 50% opacity, for example <code>rgb(47 111 78 / 50%)</code>.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-2" data-title="Challenge 4.2: Color a trail notice" data-height="360" data-layout="stacked">
+      <textarea data-lang="html">
+<section class="notice"> <!-- a trail notice box -->
+  <h2>Trail update</h2> <!-- the notice heading -->
+  <p>The lower bridge on the Lake Loop is closed until Friday. Use the upper crossing instead.</p> <!-- the message -->
+  <p><span class="badge">Open</span> Ridge Walk <span class="badge closed">Closed</span> Lake Loop bridge</p> <!-- two status badges -->
+</section> <!-- end of the notice --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page */
+  font-family: system-ui, sans-serif; /* a clean sans-serif font stack */
+  margin: 16px; /* space around the page */
+  background-color: white; /* a white page */
+} /* end of the body rule */
+.notice { /* the notice box */
+  padding: 16px; /* room inside the box */
+  background-color: lightyellow; /* TODO 1: the pale club-green tint, hsl(150 40% 94%) */
+  border-left: 6px solid gray; /* TODO 5: the brand green at 50% opacity */
+} /* end of the .notice rule */
+.notice h2 { /* the notice heading */
+  margin-top: 0; /* no gap above the heading */
+  color: green; /* TODO 2: the brand green, written in hex */
+} /* end of the heading rule */
+.notice p { /* the message and the badge line */
+  color: #a3aaa6; /* TODO 3: far too pale to read; choose a color with at least 4.5 : 1 contrast */
+} /* end of the paragraph rule */
+.badge { /* the status labels */
+  display: inline-block; /* a small box that sits in the line (4.6) */
+  padding: 0.1em 0.5em; /* room around the word */
+  border-radius: 999px; /* pill-shaped ends */
+  background-color: green; /* TODO 4: the brand green, written with rgb() */
+  color: white; /* white text on the badge */
+} /* end of the .badge rule */
+.badge.closed { /* the Closed badge (both classes) */
+  background-color: #c62828; /* red, dark enough for white text */
+} /* end of the .badge.closed rule */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "The notice background is the pale tint `hsl(150 40% 94%)`, written with `hsl()`",
+    "test": "var colorOf=function(c){ var t=doc.createElement('i'); t.style.color=c; doc.body.appendChild(t); var v=win.getComputedStyle(t).color; t.remove(); return v; }; var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); return style('.notice','background-color')===colorOf('hsl(150 40% 94%)') && /hsla?\\(/i.test(css);"
+  },
+  {
+    "label": "The heading is the brand green, written in hex as `#2f6f4e`",
+    "test": "var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); return style('.notice h2','color')==='rgb(47, 111, 78)' && /#2f6f4e\\b/i.test(css);"
+  },
+  {
+    "label": "The message text has at least 4.5 : 1 contrast against the notice background",
+    "test": "var nums=function(s){ var m=String(s||'rgb(255, 255, 255)').match(/[\\d.]+/g); return m ? m.map(Number) : [255,255,255]; }; var lumOf=function(c){ var f=function(v){ v/=255; return v<=0.04045 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); }; return 0.2126*f(c[0])+0.7152*f(c[1])+0.0722*f(c[2]); }; var ratio=function(a,b){ var x=lumOf(nums(a)), y=lumOf(nums(b)); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); }; var bgOf=function(n){ while(n && n.nodeType===1){ var b=win.getComputedStyle(n).backgroundColor; if(b!=='rgba(0, 0, 0, 0)' && b!=='transparent') return b; n=n.parentElement; } return ''; }; var p=$('.notice p'); if(!p) return false; return ratio(style(p,'color'), bgOf(p)) >= 4.5;"
+  },
+  {
+    "label": "The Open badge is the brand green, written with `rgb()`",
+    "test": "var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); var b=$('.badge:not(.closed)'); return !!b && style(b,'background-color')==='rgb(47, 111, 78)' && /rgba?\\(/i.test(css);"
+  },
+  {
+    "label": "The notice's left border is solid, at least 4px, in the brand green at 50% opacity",
+    "test": "var c=style('.notice','border-left-color'), m=c.match(/[\\d.]+/g); if(!m || m.length<4) return false; var a=+m[3]; return +m[0]===47 && +m[1]===111 && +m[2]===78 && a>0.45 && a<0.55 && parseFloat(style('.notice','border-left-width'))>=4 && style('.notice','border-left-style')==='solid';"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.2</summary>
+      <p>The three notations can describe exactly the same green, so the checks compare the color the browser computed with the color you were asked for. For the message, darker grays reach 4.5 : 1 sooner; the Color lab in section 4.2 of the chapter measures any color for you. For the border, the alpha value goes after a slash inside the parentheses.</p>
+    </details>
+
+    <p>Units decide what a length is measured against. <code>px</code> is fixed. <code>rem</code> follows the root font size, which is the reader's text-size setting. <code>em</code> follows the element's own font size. <code>%</code> follows the parent. <code>vh</code> follows the browser window's height. And <code>ch</code> is the width of a "0", which makes it ideal for line length.</p>
+    <div class="match" data-title="What is each unit measured against?">
+      <script type="application/json">
+{
+  "leftTitle": "Unit",
+  "rightTitle": "Measured against",
+  "monoLeft": true,
+  "pairs": [
+    [
+      "px",
+      "Nothing: a fixed CSS pixel"
+    ],
+    [
+      "em",
+      "The element's own font size"
+    ],
+    [
+      "rem",
+      "The font size of the root `<html>` element"
+    ],
+    [
+      "%",
+      "The parent (for widths, the containing block's width)"
+    ],
+    [
+      "vh",
+      "1% of the browser window's height"
+    ],
+    [
+      "ch",
+      "The width of the \"0\" character in the current font"
+    ]
+  ]
+}
+      </script>
+    </div>
+
+    <h3 class="hw4-ch" id="c4-3"><span class="hw4-ch-num">Challenge 4.3</span>Pick the right unit</h3>
+    <p><span class="hw4-label">The skill.</span> Two stylesheets can look identical on your screen and behave completely differently on someone else's. Text sized in <code>px</code> ignores a reader who turns up their browser's text size; text in <code>rem</code> grows with it. Padding in <code>em</code> keeps a button's shape at any text size, <code>%</code> adapts to whatever box something sits in, <code>ch</code> keeps lines readable, and <code>vh</code> ties a height to the screen. So these checks do more than look: they change the root text size, the button's text size and the width of <code>.wrap</code>, and see whether your lengths follow.</p>
+    <p><span class="hw4-label">Your task.</span> Work in the CSS tab:</p>
+    <ol class="hw4-task">
+      <li>Make the headline <code>2.25rem</code>.</li>
+      <li>Give the button the padding <code>0.5em 1em</code>.</li>
+      <li>Make the card always half as wide as <code>.wrap</code>.</li>
+      <li>Limit <code>.story</code> to a readable line length with <code>max-width: 60ch</code> (anything from 45ch to 75ch passes).</li>
+      <li>Make the banner at least half as tall as the browser window, with <code>min-height: 50vh</code>.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-3" data-title="Challenge 4.3: Pick the right unit" data-height="400" data-layout="stacked">
+      <textarea data-lang="html">
+<div class="hero"> <!-- the welcome banner -->
+  <h1>Riverside Hiking Club</h1> <!-- the banner headline -->
+  <a class="button" href="join.html">Join a walk</a> <!-- a link styled as a button -->
+</div> <!-- end of the banner -->
+<div class="wrap"> <!-- a box around the card; the checks change its width -->
+  <div class="card">Half as wide as the dashed box</div> <!-- a card that should always be half the width of .wrap -->
+</div> <!-- end of the wrap box -->
+<p class="story">Every walk starts at a trailhead with a map board and ends, if the weather is kind, somewhere with a view. Our leaders pick routes for every pace, from flat lake loops to steep ridge climbs, and they always wait for the last walker at every junction.</p> <!-- a long paragraph that needs a readable line length --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page */
+  font-family: system-ui, sans-serif; /* a clean sans-serif font stack */
+  margin: 16px; /* space around the page */
+} /* end of the body rule */
+.hero { /* the welcome banner */
+  background-color: #2f6f4e; /* brand green */
+  color: white; /* white text on the green */
+  padding: 16px; /* room inside the banner */
+  min-height: 200px; /* TODO 5: at least half the height of the browser window, in vh */
+} /* end of the .hero rule */
+.hero h1 { /* the headline */
+  margin-top: 0; /* no gap above the headline */
+  font-size: 36px; /* TODO 1: 2.25rem, so it follows the reader's text-size setting */
+} /* end of the headline rule */
+.button { /* the link button */
+  display: inline-block; /* a box that sits in the line (4.6) */
+  background-color: white; /* a white button */
+  color: #2f6f4e; /* green text */
+  font-size: 1.25rem; /* 20px text */
+  padding: 10px 20px; /* TODO 2: 0.5em 1em, so the padding grows with the text */
+} /* end of the .button rule */
+.wrap { /* the box around the card */
+  border: 1px dashed #8a93a3; /* a dashed line so you can see the box */
+  margin: 16px 0; /* space above and below */
+} /* end of the .wrap rule */
+.card { /* the card */
+  box-sizing: border-box; /* the width includes padding and border (4.6) */
+  background-color: #eaf6f0; /* pale green */
+  padding: 12px; /* room inside the card */
+  width: 300px; /* TODO 3: always half the width of .wrap */
+} /* end of the .card rule */
+.story { /* the long paragraph */
+  line-height: 1.5; /* comfortable line spacing */
+  /* TODO 4: a readable line length, max-width: 60ch */
+} /* end of the .story rule */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "The headline is `2.25rem`: 36px now, and it grows when the reader's text size grows",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); var h=$('.hero h1'); if(!h) return false; var a=parseFloat(style(h,'font-size')); var b=withCss('html{font-size:20px !important}', function(){ return parseFloat(style(h,'font-size')); }); return Math.abs(a-36)<0.5 && Math.abs(b-45)<0.5 && /font-size\\s*:\\s*[\\d.]+rem/i.test(css);"
+  },
+  {
+    "label": "The button's padding is `0.5em 1em`, so it grows with the button's text",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var px=function(n,p){ return parseFloat(win.getComputedStyle(n).getPropertyValue(p)); }; var b=$('.button'); if(!b) return false; var ok=function(){ var f=px(b,'font-size'); return Math.abs(px(b,'padding-top')-f*0.5)<0.6 && Math.abs(px(b,'padding-left')-f)<0.6; }; return ok() && withCss('.button{font-size:30px !important}', ok);"
+  },
+  {
+    "label": "The card is always half as wide as `.wrap`, whatever width `.wrap` has",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var c=$('.card'); if(!c) return false; var w=function(n){ return withCss('.wrap{width:'+n+'px !important}', function(){ return c.getBoundingClientRect().width; }); }; return Math.abs(w(600)-300)<1 && Math.abs(w(800)-400)<1;"
+  },
+  {
+    "label": "The story is limited to a readable measure in `ch` (45 to 75 characters per line)",
+    "test": "var zeroW=function(el){ var s=doc.createElement('span'); s.textContent='0'; el.appendChild(s); var w=s.getBoundingClientRect().width; s.remove(); return w; }; var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); var s=$('.story'); if(!s) return false; var mw=parseFloat(style(s,'max-width')); if(!(mw>0)) return false; var r=mw/zeroW(s); return r>=45 && r<=75 && /max-width\\s*:\\s*[\\d.]+ch/i.test(css);"
+  },
+  {
+    "label": "The banner is at least half as tall as the browser window (`50vh`)",
+    "test": "var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); var m=parseFloat(style('.hero','min-height')); return Math.abs(m-win.innerHeight*0.5)<1 && /min-height\\s*:\\s*[\\d.]+vh/i.test(css);"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.3</summary>
+      <p>Each TODO already names the unit; the question is which number goes with it. Remember what each unit is measured against: the root, the element's own text, the parent, the window or the "0" character. If the button check fails, compare its padding at its current 20px text with the padding you want: 0.5 of the text size and 1 times the text size.</p>
+    </details>
+
+    <div class="quiz" data-id="hw4-quiz-syntax" data-hw4-quiz data-title="Quiz: syntax, colors and units">
+      <script type="application/json">
+[
+  {
+    "q": "In `p { font-size: 1.125rem; }`, what is `font-size`?",
+    "choices": [
+      "The selector",
+      "A property",
+      "A value",
+      "The declaration block"
+    ],
+    "answer": 1,
+    "explain": "`font-size` is the property and `1.125rem` its value. Together with the colon and semicolon they make one declaration, and the braces hold the declaration block."
+  },
+  {
+    "q": "What does the browser do with this rule?",
+    "code": "h2 {\n  color: navy\n  font-size: 1.5rem;\n}",
+    "lang": "css",
+    "choices": [
+      "Applies only the color",
+      "Applies only the font size",
+      "Applies neither declaration",
+      "Shows an error message on the page"
+    ],
+    "answer": 2,
+    "explain": "Without the semicolon the browser reads one declaration, `color: navy font-size: 1.5rem`, which is not a valid color. It drops it silently, so neither line applies."
+  },
+  {
+    "q": "Which is a valid CSS comment?",
+    "choices": [
+      "`// note`",
+      "`\u003c!-- note -->`",
+      "`/* note */`",
+      "`# note`"
+    ],
+    "answer": 2,
+    "explain": "CSS only has `/* ... */`. `//` is JavaScript and `\u003c!-- -->` is HTML; inside a stylesheet both are just broken code."
+  },
+  {
+    "q": "Select every value that is the same pure red.",
+    "choices": [
+      "`red`",
+      "`#f00`",
+      "`rgb(255 0 0)`",
+      "`hsl(0 100% 50%)`",
+      "`hsl(0 100% 100%)`"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explain": "At 100% lightness, `hsl()` gives white whatever the hue. Pure red is 50% lightness."
+  },
+  {
+    "q": "You need a darker shade of the club green for a hover state. Which notation makes that a one-number change?",
+    "choices": [
+      "Hex",
+      "`rgb()`",
+      "`hsl()`",
+      "A color name"
+    ],
+    "answer": 2,
+    "explain": "With `hsl()` you keep the hue and saturation and lower only the lightness: `hsl(150 40% 30%)` becomes `hsl(150 40% 22%)`."
+  },
+  {
+    "q": "Body text must reach what contrast ratio against its background?",
+    "choices": [
+      "2 : 1",
+      "3 : 1",
+      "4.5 : 1",
+      "21 : 1"
+    ],
+    "answer": 2,
+    "explain": "4.5 : 1 for body text, 3 : 1 for large text (about 24px, or 19px bold). 21 : 1 is the maximum, black on white."
+  },
+  {
+    "q": "The root font size is 16px. A `<div>` has `font-size: 20px`, and a paragraph inside it has `padding: 2em` and no font size of its own. How much padding does the paragraph get?",
+    "choices": [
+      "32px",
+      "40px",
+      "20px",
+      "2px"
+    ],
+    "answer": 1,
+    "explain": "The paragraph inherits 20px text, and `em` on padding uses the element's own font size: 2 × 20px = 40px. `2rem` would be 32px."
+  },
+  {
+    "q": "What happens to `margin-left: 24;`?",
+    "choices": [
+      "It means 24px",
+      "It means 24em",
+      "The browser ignores it, because a length needs a unit",
+      "It means 24%"
+    ],
+    "answer": 2,
+    "explain": "Every length needs a unit; only `0` may go without one. The browser drops the declaration, and nothing tells you."
+  }
+]
+      </script>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-3">
+    <p class="hw4-part">Part 3 · 4.3</p>
+    <h2>Where styles live</h2>
+    <p>CSS can sit in three places, and all three feed the same cascade. They are not equally useful:</p>
+    <div class="tabs">
+      <div data-tab="Inline">
+        <p>A <code>style</code> attribute on one element. It affects only that element, cannot be reused, and beats every normal rule in your stylesheets, which makes it hard to change later. Fine for a quick test; almost never in a finished site.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <!-- Declarations only, no selector and no braces: only this one paragraph changes -->
+          <p style="color: crimson; font-weight: bold;">Registration closes Friday.</p>
+        </script>
+      </div>
+      <div data-tab="Embedded">
+        <p>A <code>&lt;style&gt;</code> element in the <code>&lt;head&gt;</code>. Normal rules, but they reach only this one page. As soon as a second page needs the same styles, copying the block means two copies to keep in step.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <head>
+            <style>
+              /* Only the elements of THIS page */
+              .deadline { color: crimson; font-weight: bold; }
+            </style>
+          </head>
+        </script>
+      </div>
+      <div data-tab="External">
+        <p>A separate <code>.css</code> file, linked from every page with <code>&lt;link&gt;</code>. One place to edit, a consistent look, and the browser caches it, so later pages load faster. This is what real sites, and your own project, use.</p>
+        <script type="text/plain" class="code" data-lang="html">
+          <head>
+            <!-- href is the path from THIS HTML file to the CSS file -->
+            <link rel="stylesheet" href="css/styles.css">
+          </head>
+        </script>
+      </div>
+    </div>
+
+    <h3 class="hw4-ch" id="c4-4"><span class="hw4-ch-num">Challenge 4.4</span>Move the styles into the stylesheet</h3>
+    <p><span class="hw4-label">The skill.</span> Cleaning up a page that mixes presentation into its HTML is a common first job on a real site. The goal is a refactor: the page must look exactly the same afterwards, but every style lives in one stylesheet, where it can be reused and changed in one place. In this playground, the CSS tab plays the part of your external file, <code>css/styles.css</code>.</p>
+    <p><span class="hw4-label">Your task.</span></p>
+    <ol class="hw4-task">
+      <li>Move the two rules from the <code>&lt;style&gt;</code> element in the HTML into the CSS tab, then delete the <code>&lt;style&gt;</code> element.</li>
+      <li>Replace the inline style on the deadline paragraph with a class (for example <code>class="deadline"</code>) and a rule for that class.</li>
+      <li>Replace both inline <code>margin-top</code> styles with one rule that reaches every heading inside a <code>.trip</code>.</li>
+      <li>When you finish, the preview must look exactly as it did before you started.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-4" data-title="Challenge 4.4: Move the styles into the stylesheet" data-height="380" data-layout="stacked">
+      <textarea data-lang="html">
+<style> /* an embedded style sheet: these rules only reach this one page */
+  h1 { color: #2f6f4e; letter-spacing: 0.02em; } /* the page title: brand green, letters spaced slightly */
+  .trip { border: 1px solid #c8d3cc; padding: 12px; margin-bottom: 12px; } /* each trip box */
+</style> <!-- end of the embedded style sheet -->
+<h1>Weekend trips</h1> <!-- the page title -->
+<p style="color: crimson; font-weight: bold;">Registration closes Friday.</p> <!-- an inline style: crimson and bold -->
+<div class="trip"> <!-- the first trip box -->
+  <h2 style="margin-top: 0;">Ridge Walk</h2> <!-- an inline style removes the space above this heading -->
+  <p>Saturday, 6 miles.</p> <!-- the trip details -->
+</div> <!-- end of the first trip -->
+<div class="trip"> <!-- the second trip box -->
+  <h2 style="margin-top: 0;">Lake Loop</h2> <!-- the same inline style, written a second time -->
+  <p>Sunday, 3 miles.</p> <!-- the trip details -->
+</div> <!-- end of the second trip --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page */
+  font-family: system-ui, sans-serif; /* a clean sans-serif font stack */
+  margin: 16px; /* space around the page */
+} /* end of the body rule */
+/* TODO 1: the two rules from the <style> element in the HTML go here */
+/* TODO 2: a class rule for the deadline paragraph, replacing its inline style */
+/* TODO 3: ONE rule for every heading inside a .trip, replacing both inline margin-top styles */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "No `style` attributes are left in the HTML",
+    "test": "return $$('body *').length>0 && !$('[style]');"
+  },
+  {
+    "label": "No `<style>` element is left in the HTML",
+    "test": "var html=code.html.replace(/<!-{2}[\\s\\S]*?-{2}>/g,''); var noStyleEl=!/<style[\\s>]/i.test(html); return noStyleEl;"
+  },
+  {
+    "label": "The title is still brand green with `0.02em` letter-spacing, now from the stylesheet",
+    "test": "var html=code.html.replace(/<!-{2}[\\s\\S]*?-{2}>/g,''); var noStyleEl=!/<style[\\s>]/i.test(html); var h=$('h1'); if(!h) return false; var ls=parseFloat(style(h,'letter-spacing')), fs=parseFloat(style(h,'font-size')); return noStyleEl && style(h,'color')==='rgb(47, 111, 78)' && Math.abs(ls-0.02*fs)<0.05;"
+  },
+  {
+    "label": "Both trip boxes still have their 1px border, `12px` padding and `12px` below them, now from the stylesheet",
+    "test": "var html=code.html.replace(/<!-{2}[\\s\\S]*?-{2}>/g,''); var noStyleEl=!/<style[\\s>]/i.test(html); var t=$$('.trip'); return noStyleEl && t.length===2 && t.every(function(x){ return style(x,'border-top-width')==='1px' && style(x,'border-top-style')==='solid' && style(x,'border-top-color')==='rgb(200, 211, 204)' && style(x,'padding-left')==='12px' && style(x,'padding-top')==='12px' && style(x,'margin-bottom')==='12px'; });"
+  },
+  {
+    "label": "The deadline paragraph is still crimson and bold, styled with a class instead of an inline style",
+    "test": "var p=$$('p').filter(function(x){ return /registration closes/i.test(x.textContent); })[0]; return !!p && !p.hasAttribute('style') && p.classList.length>0 && style(p,'color')==='rgb(220, 20, 60)' && style(p,'font-weight')==='700';"
+  },
+  {
+    "label": "Both trip headings still have no space above them, with no inline styles",
+    "test": "var h=$$('.trip h2'); return h.length===2 && h.every(function(x){ return !x.hasAttribute('style') && style(x,'margin-top')==='0px'; });"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.4</summary>
+      <p>Move one thing at a time and watch the preview after each step. The rules inside the <code>&lt;style&gt;</code> element are already ordinary CSS, so they can move as they are. An inline style has declarations but no selector, so the element needs something a selector can reach, such as a class. For the two headings, think about a selector that reaches headings only when they sit inside a trip box.</p>
+    </details>
+
+    <div class="fill" data-title="Link the stylesheet from a page in a subfolder" data-explain="`<link rel=&quot;stylesheet&quot;>` connects an external stylesheet. A page inside `trips/` has to climb out with `../` before it can go down into `css/`.">
+      <script type="text/plain">
+<!-- In trips/ridge.html, a page inside the trips folder -->
+<head>
+  <meta charset="utf-8">
+  <title>Ridge Walk</title>
+  <[[link]] [[rel]]="stylesheet" href="[[../css/styles.css]]">
+</head>
+      </script>
+    </div>
+
+    <div class="quiz" data-id="hw4-quiz-location" data-hw4-quiz data-title="Quiz: where styles live">
+      <script type="application/json">
+[
+  {
+    "q": "Which line correctly links an external stylesheet?",
+    "choices": [
+      "`<style src=\"css/styles.css\">`",
+      "`<link rel=\"stylesheet\" href=\"css/styles.css\">`",
+      "`<css href=\"css/styles.css\">`",
+      "`<link src=\"css/styles.css\">`"
+    ],
+    "answer": 1,
+    "explain": "External CSS uses `<link>` with `rel=\"stylesheet\"` and an `href`. `<style>` holds CSS directly and has no `src`."
+  },
+  {
+    "q": "A paragraph has `style=\"color: red\"`, and the stylesheet says `p { color: navy; }`. What color is the paragraph?",
+    "choices": [
+      "Red",
+      "Navy",
+      "Black",
+      "Purple"
+    ],
+    "answer": 0,
+    "explain": "An inline style beats every normal rule in a stylesheet. That is exactly why inline styles are hard to change later."
+  },
+  {
+    "q": "A page in the `trips/` folder links the site's stylesheet at `css/styles.css` in the root folder. Which `href` works?",
+    "choices": [
+      "`css/styles.css`",
+      "`../css/styles.css`",
+      "`/trips/css/styles.css`",
+      "`styles.css`"
+    ],
+    "answer": 1,
+    "explain": "`..` climbs out of `trips/` to the root first. A wrong path fails silently: the page just looks unstyled."
+  },
+  {
+    "q": "Select every reason real sites keep CSS in external files.",
+    "choices": [
+      "One file styles every page",
+      "The browser caches it, so later pages load faster",
+      "Content and presentation stay separate",
+      "External styles beat inline styles"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "The last one is false: inline styles beat normal rules from any stylesheet."
+  }
+]
+      </script>
+    </div>
+
+    <div class="widget hw4-written" data-kind="Explain it" data-title="One stylesheet for the site">
+      <label for="hw4-w-location">Why do real sites keep their CSS in one external stylesheet instead of inline styles or a <code>&lt;style&gt;</code> element on every page? Give at least two reasons, and name one situation where an inline style is still acceptable.</label>
+      <textarea class="input" id="hw4-w-location" data-hw4-written="hw4-written-location" rows="5" aria-describedby="hw4-w-location-st"></textarea>
+      <p class="small muted hw4-saved" id="hw4-w-location-st">Saved in this browser as you type.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-4">
+    <p class="hw4-part">Part 4 · 4.4</p>
+    <h2>Selectors</h2>
+    <p>A selector is a pattern that matches elements. Some match by what an element is: its tag (<code>p</code>), class (<code>.note</code>), id (<code>#featured</code>) or attributes (<code>[href$=".pdf"]</code>). Some match by where it is: inside something (<code>nav a</code>), directly inside (<code>.menu &gt; li</code>), right after something (<code>h2 + p</code>) or anywhere after it (<code>h2 ~ p</code>). Pseudo-classes, with one colon, match a state or position (<code>:hover</code>, <code>:nth-child(odd)</code>, <code>:not(.done)</code>), and pseudo-elements, with two colons, style a part of an element (<code>::first-letter</code>, <code>::before</code>). The better your selectors, the less extra markup you need.</p>
+
+    <h3 class="hw4-ch" id="c4-5"><span class="hw4-ch-num">Challenge 4.5</span>Style exactly the right elements</h3>
+    <p><span class="hw4-label">The skill.</span> A selector that matches too much is as wrong as one that matches too little. These checks look at both sides: the elements that should change, and the ones that must stay as they are. That makes this challenge a test of what each kind of selector really reaches.</p>
+    <p><span class="hw4-label">Your task.</span> The HTML is finished; do not add classes or ids to it. In the CSS tab, write one rule per item, using the kind of selector named:</p>
+    <ol class="hw4-task">
+      <li><strong>Element:</strong> every <code>h2</code> is brand green, <code>#2f6f4e</code>.</li>
+      <li><strong>Class:</strong> the <code>.note</code> paragraph is italic.</li>
+      <li><strong>Id:</strong> the <code>#featured</code> heading gets a 3px solid bottom border.</li>
+      <li><strong>Selector list:</strong> one rule makes both the logo and the footer paragraph uppercase.</li>
+      <li><strong>Descendant:</strong> every link inside the <code>nav</code> loses its underline.</li>
+      <li><strong>Child:</strong> only the top-level items of <code>.menu</code>, not the items of the sub-menu inside it, get a 3px solid left border.</li>
+      <li><strong>Adjacent sibling:</strong> the paragraph right after each <code>h2</code> is bold.</li>
+      <li><strong>General sibling:</strong> every paragraph after <code>#featured</code> gets the background <code>#fff4d6</code>.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-5" data-title="Challenge 4.5: Style exactly the right elements" data-height="440" data-layout="stacked">
+      <textarea data-lang="html">
+<header class="site-header"> <!-- the banner at the top -->
+  <p class="logo">Riverside Hiking Club</p> <!-- the club name: class logo -->
+  <nav> <!-- the main menu -->
+    <ul class="menu"> <!-- the top-level list of links: class menu -->
+      <li><a href="index.html">Home</a></li> <!-- top-level item 1 -->
+      <li><a href="trips.html">Trips</a> <!-- top-level item 2, which holds a sub-menu -->
+        <ul> <!-- the sub-menu: a list nested inside an item -->
+          <li><a href="ridge.html">Ridge Walk</a></li> <!-- sub-menu item 1 -->
+          <li><a href="lake.html">Lake Loop</a></li> <!-- sub-menu item 2 -->
+        </ul> <!-- end of the sub-menu -->
+      </li> <!-- end of top-level item 2 -->
+      <li><a href="join.html">Join</a></li> <!-- top-level item 3 -->
+    </ul> <!-- end of the menu list -->
+  </nav> <!-- end of the menu -->
+</header> <!-- end of the banner -->
+<main> <!-- the page's content -->
+  <h2>Lake Loop</h2> <!-- the first heading -->
+  <p>Sunday, 3 miles, easy.</p> <!-- the paragraph right after the first heading -->
+  <p>Meet at the boat ramp at 8:00.</p> <!-- a second paragraph -->
+  <h2 id="featured">Ridge Walk</h2> <!-- the second heading: id featured -->
+  <p>Saturday, 6 miles, moderate.</p> <!-- the paragraph right after the featured heading -->
+  <p class="note">Bring trekking poles.</p> <!-- a paragraph with class note -->
+  <p>See the <a href="trips.html">full schedule</a>.</p> <!-- a paragraph with a link that is not in the nav -->
+</main> <!-- end of the content -->
+<footer> <!-- the bottom of the page -->
+  <p>Questions? Ask a trip leader.</p> <!-- the footer paragraph -->
+</footer> <!-- end of the footer --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page */
+  font-family: system-ui, sans-serif; /* a clean sans-serif font stack */
+  margin: 16px; /* space around the page */
+} /* end of the body rule */
+/* TODO 1 (element): every h2 is brand green, #2f6f4e */
+/* TODO 2 (class): the note paragraph is italic */
+/* TODO 3 (id): the featured heading gets a 3px solid bottom border */
+/* TODO 4 (selector list): ONE rule makes the logo and the footer paragraph uppercase */
+/* TODO 5 (descendant): links inside the nav lose their underline */
+/* TODO 6 (child): only the top-level menu items get a 3px solid left border */
+/* TODO 7 (adjacent sibling): the paragraph right after each h2 is bold */
+/* TODO 8 (general sibling): every paragraph after the featured heading gets the background #fff4d6 */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "Element selector: both `h2` headings are brand green, and no paragraph or link is",
+    "test": "var h=$$('h2'); return h.length===2 && h.every(function(x){ return style(x,'color')==='rgb(47, 111, 78)'; }) && $$('p, li, a').every(function(x){ return style(x,'color')!=='rgb(47, 111, 78)'; });"
+  },
+  {
+    "label": "Class selector: the `.note` paragraph is italic, and no other paragraph is",
+    "test": "var n=$('.note'); return !!n && style(n,'font-style')==='italic' && $$('p:not(.note)').every(function(x){ return style(x,'font-style')==='normal'; });"
+  },
+  {
+    "label": "Id selector: only the `#featured` heading has a 3px solid bottom border",
+    "test": "var f=$('#featured'); var other=$$('h2').filter(function(x){ return x!==f; }); return !!f && style(f,'border-bottom-width')==='3px' && style(f,'border-bottom-style')==='solid' && other.length===1 && other.every(function(x){ return style(x,'border-bottom-style')==='none'; });"
+  },
+  {
+    "label": "Selector list: one rule makes both the logo and the footer paragraph uppercase, and no paragraph in `main` is",
+    "test": "var rules=[]; var walk=function(list){ Array.prototype.forEach.call(list, function(r){ if(r.selectorText) rules.push(r); if(r.cssRules) walk(r.cssRules); }); }; Array.prototype.forEach.call(doc.styleSheets, function(s){ try { walk(s.cssRules); } catch(e) {} }); var l=$('.logo'), f=$('footer p'); if(!l||!f) return false; var one=rules.some(function(r){ return r.selectorText.indexOf(',')>=0 && l.matches(r.selectorText) && f.matches(r.selectorText) && /uppercase/.test(r.style.textTransform); }); return one && style(l,'text-transform')==='uppercase' && style(f,'text-transform')==='uppercase' && $$('main p').every(function(x){ return style(x,'text-transform')==='none'; });"
+  },
+  {
+    "label": "Descendant combinator: all five menu links lose their underline, and the link in `main` keeps it",
+    "test": "var n=$$('nav a'), m=$('main a'); return n.length===5 && !!m && n.every(function(x){ return style(x,'text-decoration-line')==='none'; }) && style(m,'text-decoration-line')==='underline';"
+  },
+  {
+    "label": "Child combinator: the three top-level menu items have a 3px solid left border, and the two sub-menu items do not",
+    "test": "var top=$$('.menu > li'), sub=$$('.menu li li'); return top.length===3 && sub.length===2 && top.every(function(x){ return style(x,'border-left-width')==='3px' && style(x,'border-left-style')==='solid'; }) && sub.every(function(x){ return style(x,'border-left-style')==='none'; });"
+  },
+  {
+    "label": "Adjacent sibling combinator: only the paragraph right after each `h2` is bold",
+    "test": "var ps=$$('main p'); if(ps.length!==5) return false; return ps.every(function(p){ var prev=p.previousElementSibling; var want=!!prev && prev.tagName==='H2'; var w=parseInt(style(p,'font-weight'),10); return want ? w>=700 : w<600; });"
+  },
+  {
+    "label": "General sibling combinator: the three paragraphs after `#featured` have the background `#fff4d6`, and the two before it do not",
+    "test": "var f=$('#featured'); if(!f) return false; var ps=$$('main p'); var after=ps.filter(function(p){ return f.compareDocumentPosition(p) & 4; }); var before=ps.filter(function(p){ return after.indexOf(p)<0; }); return after.length===3 && before.length===2 && after.every(function(p){ return style(p,'background-color')==='rgb(255, 244, 214)'; }) && before.every(function(p){ return style(p,'background-color')==='rgba(0, 0, 0, 0)'; });"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.5</summary>
+      <p>Write one rule, then read its check: if it says something matched that should not have, your selector reaches too far. A space reaches any depth, while <code>&gt;</code> reaches exactly one level down. <code>+</code> takes only the very next sibling, while <code>~</code> takes every later sibling with the same parent. In a selector list, the comma means "and also".</p>
+    </details>
+
+    <div class="widget" id="hw4-selq" data-id="hw4-selq" data-hw4-quiz data-kind="Predict" data-title="Which elements match?">
+      <p>Read the selector, then select every line of the document whose element it matches, and press <strong>Check</strong>. If you think nothing matches, press <strong>Check</strong> with nothing selected. Eight rounds; your browser does the real matching, so the answer is always what CSS would do.</p>
+      <div class="hw4-sel-stage"></div>
+    </div>
+
+    <h3 class="hw4-ch" id="c4-6"><span class="hw4-ch-num">Challenge 4.6</span>Attributes, states and parts</h3>
+    <p><span class="hw4-label">The skill.</span> Attribute selectors use what the HTML already says (a link's address, a field's type) so you need no extra classes. Pseudo-classes such as <code>:nth-child()</code> and <code>:not()</code> pick items by position, so the styling stays correct when items are added or removed. Pseudo-elements style parts that have no tag of their own, or add decoration. And <code>:hover</code> with <code>:focus-visible</code> gives the same feedback to mouse and keyboard users.</p>
+    <p><span class="hw4-label">Your task.</span> The HTML is finished; do not add classes to it. In the CSS tab:</p>
+    <ol class="hw4-task">
+      <li>Links whose address ends with <code>.pdf</code> are bold (<code>$=</code>).</li>
+      <li>Links whose address starts with <code>https</code> get a dotted underline: <code>text-decoration-style: dotted</code> (<code>^=</code>).</li>
+      <li>Gear items 1, 3 and 5 get the background <code>#eaf6f0</code> (<code>:nth-child()</code>).</li>
+      <li>Every gear item except the last gets a 1px solid bottom border (<code>:not()</code>).</li>
+      <li>The first letter of <code>.intro</code> is twice the size (<code>2em</code>) and brand green (<code>::first-letter</code>).</li>
+      <li>The <code>.tip</code> paragraph starts with the generated text "Tip: " (<code>::before</code> and <code>content</code>).</li>
+      <li>Links change in some visible way under the pointer and with keyboard focus (<code>:hover</code> and <code>:focus-visible</code>). These two only happen while you interact, so the check reads your CSS for them.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-6" data-title="Challenge 4.6: Attributes, states and parts" data-height="400" data-layout="stacked">
+      <textarea data-lang="html">
+<h2>Gear list</h2> <!-- the heading -->
+<ul class="gear"> <!-- the gear list: class gear -->
+  <li>Boots</li> <!-- item 1 -->
+  <li>Water</li> <!-- item 2 -->
+  <li>Map</li> <!-- item 3 -->
+  <li>Rain jacket</li> <!-- item 4 -->
+  <li>Snacks</li> <!-- item 5, the last one -->
+</ul> <!-- end of the gear list -->
+<p class="intro">Every trip report starts with a story. Ours began before sunrise at the north trailhead.</p> <!-- the opening paragraph: class intro -->
+<p>Links for this trip: <!-- a paragraph of three links -->
+  <a href="maps/ridge.pdf">Trail map (PDF)</a>, <!-- the address ends with .pdf -->
+  <a href="https://www.nps.gov">Park info</a> and <!-- the address starts with https -->
+  <a href="trips.html">All trips</a>. <!-- a relative address: neither -->
+</p> <!-- end of the links paragraph -->
+<p class="tip">Bring two liters of water.</p> <!-- a tip: class tip --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page */
+  font-family: system-ui, sans-serif; /* a clean sans-serif font stack */
+  margin: 16px; /* space around the page */
+} /* end of the body rule */
+.gear { /* the gear list */
+  padding-left: 0; /* no indent */
+  list-style: none; /* no bullets */
+} /* end of the .gear rule */
+.gear li { /* every gear item */
+  padding: 6px 8px; /* room inside each item */
+} /* end of the .gear li rule */
+/* TODO 1 ($=): links whose address ends with .pdf are bold */
+/* TODO 2 (^=): links whose address starts with https get text-decoration-style: dotted */
+/* TODO 3 (:nth-child): gear items 1, 3 and 5 get the background #eaf6f0 */
+/* TODO 4 (:not): every gear item except the last gets a 1px solid bottom border */
+/* TODO 5 (::first-letter): the first letter of .intro is 2em and brand green */
+/* TODO 6 (::before): .tip starts with the generated text "Tip: " */
+/* TODO 7 (:hover and :focus-visible): links change under the pointer and with keyboard focus */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "Attribute selector (`$=`): the PDF link is bold, and the other links are not",
+    "test": "var a=$$('a'); var pdf=a.filter(function(x){ return /\\.pdf$/.test(x.getAttribute('href')); }); return a.length===3 && pdf.length===1 && a.every(function(x){ var w=parseInt(style(x,'font-weight'),10); return pdf.indexOf(x)>=0 ? w>=700 : w<600; });"
+  },
+  {
+    "label": "Attribute selector (`^=`): the link that starts with https has a dotted underline, and the others stay solid",
+    "test": "var a=$$('a'); return a.length===3 && a.every(function(x){ var d=style(x,'text-decoration-style'); return /^https/.test(x.getAttribute('href')) ? d==='dotted' : d==='solid'; });"
+  },
+  {
+    "label": "`:nth-child()`: gear items 1, 3 and 5 have the background `#eaf6f0`, and items 2 and 4 do not",
+    "test": "var li=$$('.gear li'); return li.length===5 && li.every(function(x,i){ var b=style(x,'background-color'); return i%2===0 ? b==='rgb(234, 246, 240)' : b==='rgba(0, 0, 0, 0)'; });"
+  },
+  {
+    "label": "`:not()`: every gear item except the last has a 1px solid bottom border",
+    "test": "var li=$$('.gear li'); return li.length===5 && li.every(function(x,i){ return i<4 ? (style(x,'border-bottom-width')==='1px' && style(x,'border-bottom-style')==='solid') : style(x,'border-bottom-style')==='none'; });"
+  },
+  {
+    "label": "`::first-letter`: the first letter of `.intro` is twice its text size and brand green",
+    "test": "var p=$('.intro'); if(!p) return false; var f=win.getComputedStyle(p,'::first-letter'); return Math.abs(parseFloat(f.fontSize)-2*parseFloat(style(p,'font-size')))<0.5 && f.color==='rgb(47, 111, 78)';"
+  },
+  {
+    "label": "`::before`: the `.tip` paragraph starts with the generated text \"Tip: \"",
+    "test": "var p=$('.tip'); if(!p) return false; var c=win.getComputedStyle(p,'::before').content; return /tip\\s*:/i.test(c);"
+  },
+  {
+    "label": "`:hover` and `:focus-visible`: links have a style for the pointer and one for keyboard focus",
+    "test": "var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); return /a:hover[^{]*\\{[^}]*[a-z-]+\\s*:[^}]+\\}/i.test(css) && /a:focus-visible[^{]*\\{[^}]*[a-z-]+\\s*:[^}]+\\}/i.test(css);"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.6</summary>
+      <p>Attribute values belong in quotes, especially when they contain a dot. <code>:nth-child()</code> takes a keyword or a pattern, and counting starts at 1. <code>:not()</code> takes another selector inside its parentheses, such as a position. A <code>::before</code> box only appears when it has a <code>content</code> value. Press <kbd>Tab</kbd> inside the preview to see your focus style.</p>
+    </details>
+
+    <div class="quiz" data-id="hw4-quiz-selectors" data-hw4-quiz data-title="Quiz: selectors">
+      <script type="application/json">
+[
+  {
+    "q": "What is the difference between `p.intro` and `p .intro`?",
+    "choices": [
+      "There is none",
+      "`p.intro` is a `<p>` with class intro; `p .intro` is any element with class intro inside a `<p>`",
+      "`p.intro` selects every `<p>` and every `.intro`",
+      "`p .intro` is invalid"
+    ],
+    "answer": 1,
+    "explain": "No space means both conditions apply to the same element. A space is the descendant combinator."
+  },
+  {
+    "q": "What is the difference between `h2, p` and `h2 p`?",
+    "choices": [
+      "None",
+      "`h2, p` is every h2 and every p; `h2 p` is a p inside an h2",
+      "`h2, p` is a p inside an h2",
+      "Both are invalid"
+    ],
+    "answer": 1,
+    "explain": "A comma makes a selector list (\"and also\"). A space means \"inside\"."
+  },
+  {
+    "q": "An `<article>` starts with an `<h2>`, followed by three `<p>` elements. What does `article p:first-child` match?",
+    "choices": [
+      "The first paragraph",
+      "All three paragraphs",
+      "Nothing",
+      "The `<h2>`"
+    ],
+    "answer": 2,
+    "explain": "`p:first-child` means a p that is the first child of its parent. The h2 is first, so nothing matches. `p:first-of-type` would match the first paragraph."
+  },
+  {
+    "q": "Type a selector that matches every link whose `href` ends in `.pdf`.",
+    "answer": [
+      "a[href$=\".pdf\"]"
+    ],
+    "pattern": "^a?\\[\\s*href\\s*\\$=\\s*(\\\"\\.pdf\\\"|'\\.pdf')\\s*\\]$",
+    "explain": "`$=` means \"ends with\". The quotes are needed because the value contains a dot."
+  },
+  {
+    "q": "Select every **pseudo-element**.",
+    "choices": [
+      "`::before`",
+      "`:hover`",
+      "`::first-letter`",
+      "`:nth-child(2)`",
+      "`::placeholder`"
+    ],
+    "answer": [
+      0,
+      2,
+      4
+    ],
+    "explain": "Pseudo-elements have two colons and style a part of an element. `:hover` and `:nth-child()` are pseudo-classes: a state or a position."
+  }
+]
+      </script>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-5">
+    <p class="hw4-part">Part 5 · 4.5</p>
+    <h2>The cascade</h2>
+    <p>Almost every element receives declarations from several places at once. When two of them set the same property, the cascade picks exactly one winner, and three ideas cover nearly every case. <strong>Inheritance:</strong> text properties flow from parents to children, box properties do not, and an inherited value is weaker than any rule that targets the element itself. <strong>Specificity:</strong> a selector scores A-B-C (ids, then classes, attributes and pseudo-classes, then elements and pseudo-elements), and the columns are compared from the left. <strong>Order:</strong> when specificity ties, the declaration that comes later wins. <code>!important</code> jumps above all of that, which is exactly why it causes trouble.</p>
+    <div class="buckets" data-title="Inherited or not?">
+      <script type="application/json">
+{
+  "buckets": [
+    "Inherited by children",
+    "Not inherited"
+  ],
+  "items": [
+    [
+      "`color`",
+      "Inherited by children"
+    ],
+    [
+      "`font-family`",
+      "Inherited by children"
+    ],
+    [
+      "`line-height`",
+      "Inherited by children"
+    ],
+    [
+      "`letter-spacing`",
+      "Inherited by children"
+    ],
+    [
+      "`text-align`",
+      "Inherited by children"
+    ],
+    [
+      "`border`",
+      "Not inherited"
+    ],
+    [
+      "`padding`",
+      "Not inherited"
+    ],
+    [
+      "`margin`",
+      "Not inherited"
+    ],
+    [
+      "`background-color`",
+      "Not inherited"
+    ],
+    [
+      "`width`",
+      "Not inherited"
+    ]
+  ],
+  "explain": "Text properties flow down to children; box properties do not. Imagine a border on `<main>` reaching every paragraph inside it. A child's background is transparent, so the parent's color shows through, but it is not inherited."
+}
+      </script>
+    </div>
+    <div class="order" data-title="How the browser picks a winner">
+      <script type="application/json">
+{
+  "prompt": "When two declarations set the same property on the same element, the browser settles it in these steps. Put them in order, first step at the top.",
+  "items": [
+    "Collect every declaration of that property, from every stylesheet and any inline style",
+    "Keep only the rules whose selectors match this element",
+    "Sort by origin and importance: your styles beat the browser's defaults, and `!important` beats normal declarations",
+    "Compare specificity: ids, then classes, then elements",
+    "If still tied, the declaration that appears last wins"
+  ],
+  "explain": "If nothing matched at all, the element inherits the value from its parent (for inherited properties) or uses the property's initial value."
+}
+      </script>
+    </div>
+
+    <h3 class="hw4-ch" id="c4-7"><span class="hw4-ch-num">Challenge 4.7</span>Win the cascade without <code>!important</code></h3>
+    <p><span class="hw4-label">The skill.</span> Every stylesheet that grows runs into rules that fight each other. The professional fix is to understand why the wrong rule wins and then change a selector or the order of the rules, so the stylesheet stays easy to change. Reaching for <code>!important</code> wins once and makes every later change harder, so the checks reject it, along with inline styles.</p>
+    <p><span class="hw4-label">Your task.</span> Work only in the CSS tab. Each problem is caused by the cascade; fix it so that:</p>
+    <ol class="hw4-task">
+      <li>The highlighted title (<code>class="title highlight"</code>) is orange, <code>#b3541e</code>, while the other title stays gray. Fix it with specificity or order.</li>
+      <li>Both Details buttons have white text, while the trip report link stays navy.</li>
+      <li>Both dates are brand green, while the other paragraph stays <code>#333333</code>.</li>
+      <li>The Save buttons use the card's font. Buttons do not inherit fonts on their own, so use the <code>inherit</code> keyword.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-7" data-title="Challenge 4.7: Win the cascade without !important" data-height="400" data-layout="stacked">
+      <textarea data-lang="html">
+<section id="trips"> <!-- the trips section: id trips -->
+  <article class="card"> <!-- the first trip card -->
+    <h3 class="title">Lake Loop</h3> <!-- an ordinary title: should stay gray -->
+    <p class="date">Sunday, May 4</p> <!-- a date: should be brand green -->
+    <a class="button" href="lake.html">Details</a> <!-- a button-style link: text should be white -->
+    <button type="button" class="save">Save</button> <!-- a real button: should use the card's font -->
+  </article> <!-- end of the first card -->
+  <article class="card"> <!-- the second trip card -->
+    <h3 class="title highlight">Ridge Walk</h3> <!-- the highlighted title: should be orange -->
+    <p class="date">Saturday, May 10</p> <!-- a date: should be brand green -->
+    <p>Read the <a href="report.html">trip report</a>.</p> <!-- an ordinary paragraph and link: stays #333333, link stays navy -->
+    <a class="button" href="ridge.html">Details</a> <!-- a button-style link: text should be white -->
+    <button type="button" class="save">Save</button> <!-- a real button: should use the card's font -->
+  </article> <!-- end of the second card -->
+</section> <!-- end of the trips section --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page */
+  font-family: system-ui, sans-serif; /* the page font */
+  margin: 16px; /* space around the page */
+} /* end of the body rule */
+.card { /* each trip card (0-1-0) */
+  font-family: Georgia, "Times New Roman", serif; /* the cards use a serif font */
+  color: #333333; /* dark gray text */
+  border: 1px solid #c8d3cc; /* a light outline */
+  padding: 12px; /* room inside the card */
+  margin-bottom: 12px; /* space between the cards */
+} /* end of the .card rule */
+.card .title { /* titles inside cards (0-2-0) */
+  color: #6b7280; /* gray */
+  margin-top: 0; /* no gap above the title */
+} /* end of the .card .title rule */
+.highlight { /* the highlighted title (0-1-0): meant to be orange, but it loses */
+  color: #b3541e; /* orange */
+} /* end of the .highlight rule */
+#trips a { /* every link in the trips section (1-0-1) */
+  color: navy; /* navy links */
+} /* end of the #trips a rule */
+.button { /* the Details links (0-1-0) */
+  display: inline-block; /* a box that sits in the line */
+  background-color: #2f6f4e; /* brand green */
+  color: white; /* meant to be white, but it loses */
+  padding: 0.4em 0.9em; /* room around the word */
+  text-decoration: none; /* no underline */
+} /* end of the .button rule */
+p.date { /* the dates (0-1-1): meant to be brand green, but they lose */
+  color: #2f6f4e; /* brand green */
+} /* end of the p.date rule */
+.card p { /* every paragraph in a card (0-1-1) */
+  color: #333333; /* dark gray */
+} /* end of the .card p rule */
+.save { /* the Save buttons */
+  margin-left: 8px; /* a gap after the Details link */
+  /* TODO 4: make the buttons use the card's font with the inherit keyword */
+} /* end of the .save rule */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "The highlighted title is orange (`#b3541e`), the other title stays gray (`#6b7280`), with no `!important`",
+    "test": "var clean=!/!\\s*important/i.test(code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'')) && !$('[style]'); var hi=$('.title.highlight'), lo=$('.title:not(.highlight)'); return clean && !!hi && !!lo && style(hi,'color')==='rgb(179, 84, 30)' && style(lo,'color')==='rgb(107, 114, 128)';"
+  },
+  {
+    "label": "Both Details buttons have white text, and the trip report link stays navy, with no `!important`",
+    "test": "var clean=!/!\\s*important/i.test(code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'')) && !$('[style]'); var b=$$('.button'), a=$('p a'); return clean && b.length===2 && !!a && b.every(function(x){ return style(x,'color')==='rgb(255, 255, 255)'; }) && style(a,'color')==='rgb(0, 0, 128)';"
+  },
+  {
+    "label": "Both dates are brand green, and the other paragraph stays `#333333`, with no `!important`",
+    "test": "var clean=!/!\\s*important/i.test(code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'')) && !$('[style]'); var d=$$('p.date'), o=$$('.card p:not(.date)'); return clean && d.length===2 && o.length===1 && d.every(function(x){ return style(x,'color')==='rgb(47, 111, 78)'; }) && style(o[0],'color')==='rgb(51, 51, 51)';"
+  },
+  {
+    "label": "Both Save buttons use the card's font, through the `inherit` keyword",
+    "test": "var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); var s=$$('.save'), c=$('.card'); return s.length===2 && !!c && /inherit/i.test(css) && s.every(function(x){ return style(x,'font-family')===style(c,'font-family'); });"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.7</summary>
+      <p>Write down the score of both selectors in each fight, as the comments do. To win you can make your selector at least as specific and put it later, or, when the scores already tie, simply move the rule that should win below the other one. Watch out for "fixes" that change the losing rule so much that elements you were not meant to touch change too: the checks look at those as well.</p>
+    </details>
+
+    <div class="quiz" data-id="hw4-quiz-cascade" data-hw4-quiz data-title="Quiz: the cascade">
+      <script type="application/json">
+[
+  {
+    "q": "What is the specificity of `#trips .card a`? Answer as A-B-C.",
+    "answer": [
+      "1-1-1"
+    ],
+    "pattern": "^\\(?\\s*1\\s*[-,\\s]\\s*1\\s*[-,\\s]\\s*1\\s*\\)?$",
+    "explain": "One id (`#trips`), one class (`.card`), one element (`a`): 1-1-1."
+  },
+  {
+    "q": "What is the specificity of `nav ul li a:hover`? Answer as A-B-C.",
+    "answer": [
+      "0-1-4"
+    ],
+    "pattern": "^\\(?\\s*0\\s*[-,\\s]\\s*1\\s*[-,\\s]\\s*4\\s*\\)?$",
+    "explain": "No ids, one pseudo-class (`:hover`), four elements: 0-1-4."
+  },
+  {
+    "q": "Which rule wins for `<p class=\"note\">` inside `<article class=\"card\">`?",
+    "code": ".card p { color: gray; }\np.note { color: black; }",
+    "lang": "css",
+    "choices": [
+      "`gray`, because it comes first",
+      "`black`, because both are 0-1-1 and it comes later",
+      "`gray`, because `.card` is a class",
+      "Neither: the color is inherited"
+    ],
+    "answer": 1,
+    "explain": "Both selectors score 0-1-1, so order decides and the later rule wins."
+  },
+  {
+    "q": "True or false: eleven class selectors (0-11-0) beat one id selector (1-0-0).",
+    "answer": false,
+    "explain": "Columns are compared from the left and never carry over. Any id beats any number of classes."
+  },
+  {
+    "q": "Why is adding `!important` a poor way to win a cascade conflict?",
+    "choices": [
+      "It slows the page down",
+      "Only another `!important` can override it, so the next change needs one too",
+      "Browsers ignore it",
+      "It only works in external stylesheets"
+    ],
+    "answer": 1,
+    "explain": "It starts an arms race. Fix the selector or the order instead."
+  },
+  {
+    "q": "A link sits inside `<div style=\"color: green\">`, and no rule sets the link's color. What color is the link?",
+    "choices": [
+      "Green, inherited from the div",
+      "The browser's link blue",
+      "Black",
+      "Transparent"
+    ],
+    "answer": 1,
+    "explain": "Inherited values are the weakest of all: the browser's own rule for links targets the link itself, so it beats the inherited green. `color: inherit` on the link would fix that."
+  },
+  {
+    "q": "Which property is **not** inherited?",
+    "choices": [
+      "`color`",
+      "`font-family`",
+      "`padding`",
+      "`line-height`"
+    ],
+    "answer": 2,
+    "explain": "Box properties such as padding, border, margin, background and width are not inherited."
+  }
+]
+      </script>
+    </div>
+
+    <div class="widget hw4-written" data-kind="Explain it" data-title="Why does your rule win?">
+      <label for="hw4-w-cascade">Pick two of the conflicts you fixed in Challenge 4.7. For each, give the specificity of the two competing selectors as A-B-C and explain why your fix wins. Then explain why adding <code>!important</code> would have been a worse fix.</label>
+      <textarea class="input" id="hw4-w-cascade" data-hw4-written="hw4-written-cascade" rows="5" aria-describedby="hw4-w-cascade-st"></textarea>
+      <p class="small muted hw4-saved" id="hw4-w-cascade-st">Saved in this browser as you type.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-6">
+    <p class="hw4-part">Part 6 · 4.6</p>
+    <h2>The box model</h2>
+    <p>Every element is drawn as a box with four layers: content, padding, border and margin, from the inside out. By default, <code>width</code> sets only the content, so padding and border are added on top; <code>box-sizing: border-box</code> makes <code>width</code> mean the whole box. Margins are transparent space outside the border, and <code>margin: 0 auto</code> centers a block that has a width. Every element also has a display type. Blocks start on a new line and fill the available width. Inline elements flow inside a line of text and ignore width, height and vertical margins. <code>inline-block</code> sits in the line but is a real box. And when two blocks are stacked, their vertical margins collapse into one gap, as big as the larger margin.</p>
+
+    <h3 class="hw4-ch" id="c4-8"><span class="hw4-ch-num">Challenge 4.8</span>A card that is exactly the right size</h3>
+    <p><span class="hw4-label">The skill.</span> Designs give sizes for the whole box you see. Unless you know how padding and border add up, every box comes out a little too wide. This challenge is about sizing to the exact pixel, centering with auto margins, giving a box its own background and rounded corners, and stopping content that is too wide from spilling out of it.</p>
+    <p><span class="hw4-label">Your task.</span> Work in the CSS tab:</p>
+    <ol class="hw4-task">
+      <li>Give <code>.page</code> a <code>max-width</code> of <code>40rem</code> and center it with <code>margin: 0 auto</code>.</li>
+      <li>Make the card exactly <code>320px</code> wide on screen, padding and border included. Keep <code>width: 320px</code> and use <code>box-sizing</code>.</li>
+      <li>Give the card <code>24px</code> of padding and a <code>4px</code> solid border on every side.</li>
+      <li>Center the card inside <code>.page</code>.</li>
+      <li>Give the card a white background and round its corners by at least <code>8px</code>.</li>
+      <li>Make the long line of coordinates scroll sideways inside the card instead of spilling out of it.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-8" data-title="Challenge 4.8: A card that is exactly the right size" data-height="380" data-layout="stacked">
+      <textarea data-lang="html">
+<main class="page"> <!-- the page column -->
+  <article class="card"> <!-- one trip card -->
+    <h2>Ridge Walk</h2> <!-- the card's heading -->
+    <p>Saturday, 6 miles. The views from the summit are worth every step.</p> <!-- the card's text -->
+    <pre class="coords">Trailhead GPS: 34.2853, -82.4012 · Summit GPS: 34.3011, -82.3867 · Parking: north lot</pre> <!-- one long line that must stay inside the card -->
+  </article> <!-- end of the card -->
+</main> <!-- end of the page column --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page */
+  font-family: system-ui, sans-serif; /* a clean sans-serif font stack */
+  margin: 16px; /* space around the page */
+  background-color: #f7f5ef; /* a warm off-white page */
+} /* end of the body rule */
+.page { /* the page column */
+  /* TODO 1: max-width 40rem, centered with margin: 0 auto */
+} /* end of the .page rule */
+.card { /* the trip card */
+  width: 320px; /* the width the design asks for, on screen */
+  padding: 16px; /* TODO 3: 24px on every side */
+  border: 2px solid #2f6f4e; /* TODO 3: 4px thick */
+  /* TODO 2: box-sizing, so the card is exactly 320px wide on screen */
+  /* TODO 4: center the card inside .page */
+  /* TODO 5: a white background and corners rounded by at least 8px */
+} /* end of the .card rule */
+.card h2 { /* the card heading */
+  margin-top: 0; /* no gap above the heading */
+} /* end of the .card h2 rule */
+.coords { /* the long line of coordinates */
+  font-size: 0.875rem; /* small text */
+  /* TODO 6: scroll sideways inside the card instead of spilling out (overflow-x) */
+} /* end of the .coords rule */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "`.page` has `max-width: 40rem` (640px) and is centered with `auto` margins",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var wide=function(fn){ return withCss('html{width:1000px !important;min-width:1000px !important}', fn); }; var p=$('.page'); if(!p) return false; return style(p,'max-width')==='640px' && wide(function(){ var s=win.getComputedStyle(p), l=parseFloat(s.marginLeft), r=parseFloat(s.marginRight); return l>40 && Math.abs(l-r)<1; });"
+  },
+  {
+    "label": "The card is exactly `320px` wide on screen, padding and border included",
+    "test": "var c=$('.card'); return !!c && c.offsetWidth===320;"
+  },
+  {
+    "label": "The card has `24px` of padding and a `4px` solid border on every side",
+    "test": "var c=$('.card'); if(!c) return false; return ['top','right','bottom','left'].every(function(s){ return style(c,'padding-'+s)==='24px' && style(c,'border-'+s+'-width')==='4px' && style(c,'border-'+s+'-style')==='solid'; });"
+  },
+  {
+    "label": "The card is centered inside `.page`",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var wide=function(fn){ return withCss('html{width:1000px !important;min-width:1000px !important}', fn); }; var c=$('.card'); if(!c) return false; return wide(function(){ var s=win.getComputedStyle(c), l=parseFloat(s.marginLeft), r=parseFloat(s.marginRight); return l>20 && Math.abs(l-r)<1; });"
+  },
+  {
+    "label": "The card has a white background and corners rounded by at least `8px`",
+    "test": "var c=$('.card'); if(!c) return false; return style(c,'background-color')==='rgb(255, 255, 255)' && ['top-left','top-right','bottom-right','bottom-left'].every(function(k){ return parseFloat(style(c,'border-'+k+'-radius'))>=8; });"
+  },
+  {
+    "label": "The long line of coordinates scrolls sideways inside the card instead of spilling out",
+    "test": "var p=$('.coords'), c=$('.card'); if(!p||!c) return false; var o=style(p,'overflow-x'); return (o==='auto' || o==='scroll') && p.scrollWidth>p.clientWidth && p.getBoundingClientRect().right<=c.getBoundingClientRect().right+0.5;"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.8</summary>
+      <p>Add up the starter card: content, plus padding on both sides, plus border on both sides. That sum is why it is wider than 320px. One declaration changes what <code>width</code> means. To center the card, remember that auto margins share out the space beside a box that has a width; to check a white background, look at it against the off-white page. For the long line, the property that decides what happens to content bigger than its box comes in an <code>-x</code> version.</p>
+    </details>
+
+    <h3 class="hw4-ch" id="c4-9"><span class="hw4-ch-num">Challenge 4.9</span>Block, inline-block and collapsing margins</h3>
+    <p><span class="hw4-label">The skill.</span> Many layout surprises come from the display type. Padding on an inline link takes up no room, so the rows of a menu overlap. A width on a <code>&lt;span&gt;</code> does nothing until it becomes <code>inline-block</code>. And two stacked margins of 10px make a 10px gap, not 20px. Knowing which rule is in play saves you from guessing.</p>
+    <p><span class="hw4-label">Your task.</span> Work in the CSS tab:</p>
+    <ol class="hw4-task">
+      <li>Make each menu link a block, so it gets its own row, fills the menu's width, and its padding takes up real space.</li>
+      <li>Make the tags <code>inline-block</code>, so their <code>6rem</code> width applies while they stay on the heading's line.</li>
+      <li>Give the tags fully rounded ends.</li>
+      <li>Make the steps exactly <code>20px</code> apart. Each step now has <code>margin: 10px 0</code>, and the gap is not what you might expect.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-9" data-title="Challenge 4.9: Block, inline-block and collapsing margins" data-height="400" data-layout="stacked">
+      <textarea data-lang="html">
+<nav class="side-menu"> <!-- a narrow vertical menu -->
+  <a href="index.html">Home</a> <!-- menu link 1 -->
+  <a href="trips.html">Trips</a> <!-- menu link 2 -->
+  <a href="join.html">Join</a> <!-- menu link 3 -->
+</nav> <!-- end of the menu -->
+<h2>Ridge Walk <span class="tag">Moderate</span> <span class="tag">6 mi</span></h2> <!-- a heading with two tags in its line -->
+<p class="step">Step 1: Meet at the north trailhead.</p> <!-- step 1 -->
+<p class="step">Step 2: Climb to the ridge.</p> <!-- step 2 -->
+<p class="step">Step 3: Lunch at the summit.</p> <!-- step 3 --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page */
+  font-family: system-ui, sans-serif; /* a clean sans-serif font stack */
+  margin: 16px; /* space around the page */
+} /* end of the body rule */
+.side-menu { /* the menu */
+  width: 12rem; /* a narrow column */
+  background-color: #eaf6f0; /* pale green */
+} /* end of the .side-menu rule */
+.side-menu a { /* each menu link */
+  padding: 8px 12px; /* room around each link; on an inline element the top and bottom padding takes no space */
+  /* TODO 1: make each link a block */
+} /* end of the menu link rule */
+.tag { /* the small labels in the heading */
+  font-size: 0.875rem; /* smaller than the heading text */
+  background-color: #2f6f4e; /* brand green */
+  color: white; /* white text */
+  padding: 0.15em 0.6em; /* room around the word */
+  width: 6rem; /* the design wants each tag 6rem wide; ignored while the tag is inline */
+  text-align: center; /* center the word inside the tag */
+  /* TODO 2: inline-block, so the width applies and the tags stay in the line */
+  /* TODO 3: fully rounded ends */
+} /* end of the .tag rule */
+.step { /* each step */
+  margin: 10px 0; /* TODO 4: the steps should be exactly 20px apart */
+  padding: 8px; /* room inside each step */
+  background-color: #f3f5f8; /* a pale panel, so you can see the gaps */
+} /* end of the .step rule */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "Each menu link is a block that fills the menu's whole width",
+    "test": "var n=$('.side-menu'), a=$$('.side-menu a'); if(!n||a.length!==3) return false; var w=n.clientWidth; return a.every(function(x){ return style(x,'display')==='block' && Math.abs(x.getBoundingClientRect().width-w)<1; });"
+  },
+  {
+    "label": "The links' top and bottom padding takes up real space: each row sits fully below the one before",
+    "test": "var a=$$('.side-menu a'); if(a.length!==3) return false; for(var i=1;i<a.length;i++){ if(a[i].getBoundingClientRect().top < a[i-1].getBoundingClientRect().bottom-0.5) return false; } return parseFloat(style(a[0],'padding-top'))>=8;"
+  },
+  {
+    "label": "The tags are `inline-block`, so their `6rem` width applies, and they stay on the heading's line",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var wide=function(fn){ return withCss('html{width:1000px !important;min-width:1000px !important}', fn); }; var t=$$('.tag'), h=$('h2'); if(t.length!==2||!h) return false; return t.every(function(x){ return style(x,'display')==='inline-block' && style(x,'width')==='96px'; }) && wide(function(){ var hr=h.getBoundingClientRect(); var tops=t.map(function(x){ return x.getBoundingClientRect().top; }); return t.every(function(x){ var r=x.getBoundingClientRect(); return r.top>=hr.top-1 && r.bottom<=hr.bottom+1; }) && Math.abs(tops[0]-tops[1])<1 && hr.height<60; });"
+  },
+  {
+    "label": "The tags have fully rounded ends (a radius of at least half their height)",
+    "test": "var t=$$('.tag'); return t.length===2 && t.every(function(x){ var h=x.getBoundingClientRect().height; return h>0 && parseFloat(style(x,'border-top-left-radius'))>=h/2-0.5 && parseFloat(style(x,'border-bottom-right-radius'))>=h/2-0.5; });"
+  },
+  {
+    "label": "The steps are exactly `20px` apart",
+    "test": "var s=$$('.step'); if(s.length!==3) return false; for(var i=1;i<3;i++){ var gap=s[i].getBoundingClientRect().top-s[i-1].getBoundingClientRect().bottom; if(Math.abs(gap-20)>0.5) return false; } return true;"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.9</summary>
+      <p>Look at the preview before changing anything: the menu links sit on one line, and the tags ignore their width. Both come from the same thing, the display type. For the steps, measure the starter gap in your head: two 10px margins meet between each pair of steps, and stacked vertical margins do not add up. For fully rounded ends, any radius at least half the tag's height works.</p>
+    </details>
+
+    <div class="quiz" data-id="hw4-quiz-box" data-hw4-quiz data-title="Quiz: the box model">
+      <script type="application/json">
+[
+  {
+    "q": "A box has `width: 200px; padding: 20px; border: 5px solid;` and the default `box-sizing`. How wide is it on screen? (Type the number of pixels.)",
+    "answer": [
+      "250"
+    ],
+    "pattern": "^250\\s*(px)?$",
+    "explain": "content-box: 200 + 20 + 20 + 5 + 5 = 250px."
+  },
+  {
+    "q": "Same box with `box-sizing: border-box`. How wide is it on screen, and how wide is its content?",
+    "choices": [
+      "250px on screen, 200px content",
+      "200px on screen, 150px content",
+      "200px on screen, 200px content",
+      "150px on screen, 200px content"
+    ],
+    "answer": 1,
+    "explain": "With border-box, `width` is the whole box, so the content shrinks: 200 − 40 − 10 = 150px."
+  },
+  {
+    "q": "One paragraph has `margin-bottom: 30px` and the next has `margin-top: 20px`. How big is the gap between them?",
+    "choices": [
+      "50px",
+      "30px",
+      "20px",
+      "10px"
+    ],
+    "answer": 1,
+    "explain": "Vertical margins between stacked blocks collapse into one gap, as big as the larger margin."
+  },
+  {
+    "q": "Select everything that has **no effect** on a `display: inline` element such as `<span>`.",
+    "choices": [
+      "`width`",
+      "`height`",
+      "`margin-top` (pushing other lines away)",
+      "`padding-left`",
+      "`color`"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Inline boxes flow with the text: width and height are ignored and vertical margins do not move other lines. Make it `inline-block` to get a real box."
+  },
+  {
+    "q": "What does `margin: 0 auto;` do to a block that has a `max-width`?",
+    "choices": [
+      "Removes all margins",
+      "Centers it horizontally",
+      "Centers its text",
+      "Stretches it to full width"
+    ],
+    "answer": 1,
+    "explain": "No margin above and below, and equal automatic margins left and right. `text-align: center` would center the text inside instead."
+  },
+  {
+    "q": "Why does `border: 2px #2f6f4e;` draw nothing?",
+    "choices": [
+      "The color is invalid",
+      "It has no style, and the default style is `none`",
+      "Borders need `px` on the color",
+      "Borders only work with `box-sizing: border-box`"
+    ],
+    "answer": 1,
+    "explain": "A border needs a style such as `solid`, `dashed` or `dotted`."
+  }
+]
+      </script>
+    </div>
+
+    <div class="widget hw4-written" data-kind="Explain it" data-title="Why was the card too wide?">
+      <label for="hw4-w-box">In Challenge 4.8 the card started out wider than 320px, even though its CSS said <code>width: 320px</code>. Explain why, using the words content, padding and border, and explain what <code>box-sizing: border-box</code> changes.</label>
+      <textarea class="input" id="hw4-w-box" data-hw4-written="hw4-written-box" rows="5" aria-describedby="hw4-w-box-st"></textarea>
+      <p class="small muted hw4-saved" id="hw4-w-box-st">Saved in this browser as you type.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-7">
+    <p class="hw4-part">Part 7 · 4.7</p>
+    <h2>Text</h2>
+    <p>Most of a page is text, so typography does more for a design than almost anything else. <code>font-family</code> takes a font stack that must end with a generic family such as <code>sans-serif</code>, unquoted. Font sizes belong in <code>rem</code>, so they follow the reader's settings. <code>line-height</code> works best as a plain number around 1.5, because each element multiplies its own size by it. Letter-spacing in <code>em</code> grows with the text; <code>text-transform</code> changes capitalization without touching the HTML; and comfortable lines hold about 45 to 75 characters.</p>
+
+    <h3 class="hw4-ch" id="c4-10"><span class="hw4-ch-num">Challenge 4.10</span>Set a trip report for reading</h3>
+    <p><span class="hw4-label">The skill.</span> Good typography is invisible: when the font, size, spacing and line length are right, readers simply follow the story. Several of these choices are about behavior, not looks. A unitless line-height gives big text proportionally taller lines. Letter-spacing in <code>em</code> grows with its text. A title in <code>rem</code> grows when the reader turns up their text size. The checks test that behavior directly.</p>
+    <p><span class="hw4-label">Your task.</span> Work in the CSS tab:</p>
+    <ol class="hw4-task">
+      <li>Give <code>body</code> a font stack of two or more fonts that ends with an unquoted generic family.</li>
+      <li>Give <code>body</code> a unitless <code>line-height</code> between 1.4 and 1.6. Do not give the pull quote its own line-height: it should follow from body.</li>
+      <li>Give <code>.story</code> a readable measure of about <code>60ch</code> and center it with auto margins.</li>
+      <li>Make <code>.label</code> uppercase with <code>text-transform</code>, with letter-spacing of about <code>0.1em</code>.</li>
+      <li>Make the title <code>2.25rem</code> and center it; the paragraphs stay left-aligned.</li>
+      <li>Make the byline italic and <code>0.875rem</code>.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-10" data-title="Challenge 4.10: Set a trip report for reading" data-height="440" data-layout="stacked">
+      <textarea data-lang="html">
+<article class="story"> <!-- the trip report -->
+  <p class="label">Trip report</p> <!-- a small label above the title -->
+  <h1>Sunrise on the ridge</h1> <!-- the title -->
+  <p class="byline">By Sam Rivera · Photos by Ana Ruiz</p> <!-- who wrote it -->
+  <p>We left the trailhead in the dark, headlamps bobbing, and reached the ridge just as the sky turned orange. Below us, fog filled the valley like a slow white river.</p> <!-- paragraph 1 -->
+  <p class="pull">Nobody said much. Nobody needed to.</p> <!-- a large pull quote -->
+  <p>On the way down we counted eleven kinds of mushrooms and one very surprised deer. Next month we walk the Lake Loop, so bring a friend.</p> <!-- paragraph 2 -->
+</article> <!-- end of the trip report --></textarea>
+      <textarea data-lang="css">
+body { /* the whole page */
+  font-family: Arial; /* TODO 1: a font stack of two or more fonts, ending with an unquoted generic family */
+  line-height: 20px; /* TODO 2: a unitless line-height between 1.4 and 1.6 */
+  margin: 16px; /* space around the page */
+  color: #1f2a24; /* dark text */
+} /* end of the body rule */
+.story { /* the article */
+  /* TODO 3: a readable measure of about 60ch, centered with auto margins */
+} /* end of the .story rule */
+.label { /* the small label */
+  font-size: 0.875rem; /* 14px */
+  font-weight: bold; /* heavier, so it stands out */
+  /* TODO 4: capitals with text-transform, and letter-spacing of about 0.1em */
+} /* end of the .label rule */
+h1 { /* the title */
+  font-size: 36px; /* TODO 5: 2.25rem, so it follows the reader's text-size setting */
+  /* TODO 5: center the title */
+} /* end of the h1 rule */
+.byline { /* the author line */
+  color: #4a5262; /* a quieter gray */
+  /* TODO 6: italic, and 0.875rem */
+} /* end of the .byline rule */
+.pull { /* the pull quote */
+  font-size: 1.5rem; /* bigger text */
+  color: #2f6f4e; /* brand green */
+  /* leave line-height alone here: it should come from body */
+} /* end of the .pull rule */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "The body font stack has two or more fonts and ends with an unquoted generic family",
+    "test": "var stackOk=function(sel){ var parts=style(sel,'font-family').split(','); var last=parts[parts.length-1].trim(); return parts.length>=2 && /^(sans-serif|serif|monospace|system-ui|cursive|fantasy|ui-sans-serif|ui-serif|ui-monospace|ui-rounded)$/.test(last); }; return stackOk('body');"
+  },
+  {
+    "label": "Line height is a plain number between 1.4 and 1.6, so the bigger pull quote gets proportionally taller lines",
+    "test": "var px=function(n,p){ return parseFloat(win.getComputedStyle(n).getPropertyValue(p)); }; var p=$$('.story p').filter(function(x){ return !x.className; })[0], q=$('.pull'); if(!p||!q) return false; var a=px(p,'line-height')/px(p,'font-size'), b=px(q,'line-height')/px(q,'font-size'); return a>=1.39 && a<=1.61 && Math.abs(a-b)<0.02;"
+  },
+  {
+    "label": "The story has a readable measure (45 to 75 characters per line) and is centered",
+    "test": "var zeroW=function(el){ var s=doc.createElement('span'); s.textContent='0'; el.appendChild(s); var w=s.getBoundingClientRect().width; s.remove(); return w; }; var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var wide=function(fn){ return withCss('html{width:1000px !important;min-width:1000px !important}', fn); }; var s=$('.story'); if(!s) return false; var mw=parseFloat(style(s,'max-width')); if(!(mw>0)) return false; var r=mw/zeroW(s); return r>=45 && r<=75 && wide(function(){ var c=win.getComputedStyle(s), l=parseFloat(c.marginLeft), rr=parseFloat(c.marginRight); return l>20 && Math.abs(l-rr)<1; });"
+  },
+  {
+    "label": "The label is uppercase, with letter-spacing in `em` (0.05em to 0.15em) that grows with its text",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var px=function(n,p){ return parseFloat(win.getComputedStyle(n).getPropertyValue(p)); }; var l=$('.label'); if(!l) return false; var r1=px(l,'letter-spacing')/px(l,'font-size'); var r2=withCss('.label{font-size:40px !important}', function(){ return px(l,'letter-spacing')/40; }); return style(l,'text-transform')==='uppercase' && r1>=0.045 && r1<=0.155 && Math.abs(r1-r2)<0.01;"
+  },
+  {
+    "label": "The title is `2.25rem`: 36px now, and it grows when the reader's text size grows",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var h=$('h1'); if(!h) return false; var a=parseFloat(style(h,'font-size')); var b=withCss('html{font-size:20px !important}', function(){ return parseFloat(style(h,'font-size')); }); return Math.abs(a-36)<0.5 && Math.abs(b-45)<0.5;"
+  },
+  {
+    "label": "The title is centered, and the paragraphs stay left-aligned",
+    "test": "var ps=$$('.story p'); return style('h1','text-align')==='center' && ps.length>0 && ps.every(function(x){ var a=style(x,'text-align'); return a==='left' || a==='start'; });"
+  },
+  {
+    "label": "The byline is italic and `0.875rem` (14px)",
+    "test": "return style('.byline','font-style')==='italic' && style('.byline','font-size')==='14px';"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.10</summary>
+      <p>Quote font names that contain spaces, never the generic family. If the line-height check fails because of the pull quote, look at the unit you used on <code>body</code>: with a unit, the finished length is inherited, not the multiplier. <code>text-align</code> moves text inside its box, and <code>margin: 0 auto</code> moves the box itself.</p>
+    </details>
+
+    <div class="quiz" data-id="hw4-quiz-text" data-hw4-quiz data-title="Quiz: text styling">
+      <script type="application/json">
+[
+  {
+    "q": "Why should a font stack end with a generic family such as `sans-serif`?",
+    "choices": [
+      "It loads faster",
+      "Some font of the right kind is used even if none of the named fonts exist on the device",
+      "Browsers ignore stacks without one",
+      "It turns on bold"
+    ],
+    "answer": 1,
+    "explain": "Named fonts may be missing on a given phone or computer; the generic family always exists."
+  },
+  {
+    "q": "What is wrong with `font-family: Arial, \"sans-serif\";`?",
+    "choices": [
+      "Nothing",
+      "The quotes turn the generic family into the name of a font that does not exist",
+      "Arial needs quotes",
+      "Stacks cannot mix names and keywords"
+    ],
+    "answer": 1,
+    "explain": "Never quote a generic family. Quote font names that contain spaces, such as `\"Segoe UI\"`."
+  },
+  {
+    "q": "Which `line-height` is best for body text?",
+    "choices": [
+      "`1.5`",
+      "`24px`",
+      "`1.5em`",
+      "`0.9`"
+    ],
+    "answer": 0,
+    "explain": "A plain number is inherited as a multiplier, so a 36px heading gets 54px lines. `24px` or `1.5em` are inherited as a fixed 24px, so big text overlaps itself."
+  },
+  {
+    "q": "A comfortable line length for body text is roughly...",
+    "choices": [
+      "15 to 25 characters",
+      "45 to 75 characters",
+      "100 to 140 characters",
+      "The full screen width"
+    ],
+    "answer": 1,
+    "explain": "About 45 to 75 characters per line. `max-width` in `ch` is the simplest way to cap it."
+  },
+  {
+    "q": "Which property shows a label in capitals without changing the HTML?",
+    "answer": [
+      "text-transform"
+    ],
+    "pattern": "^text-transform(\\s*:\\s*uppercase\\s*;?)?$",
+    "explain": "`text-transform: uppercase;` changes only the look; the HTML keeps normal writing."
+  }
+]
+      </script>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-8">
+    <p class="hw4-part">Part 8 · 4.8</p>
+    <h2>Custom properties</h2>
+    <p>As a stylesheet grows, the same values repeat everywhere: the brand color thirty times, the same spacing on every card. A <strong>custom property</strong> gives a value a name. Define it with two dashes inside a rule, usually <code>:root</code> so the whole page can use it, and read it with <code>var()</code>: <code>--brand: #2f6f4e;</code> then <code>color: var(--brand);</code>. Custom properties inherit, so redefining one on an element changes it for that element and everything inside it. Frameworks such as Bootstrap and Tailwind, and preprocessors such as Sass, build on the same idea of reusable values; in plain CSS, custom properties are how you do it.</p>
+
+    <h3 class="hw4-ch" id="c4-11"><span class="hw4-ch-num">Challenge 4.11</span>Turn repeated values into tokens</h3>
+    <p><span class="hw4-label">The skill.</span> Design tokens, the named values a whole site shares, are how real teams keep a design consistent: change the brand color once and every button, border and heading follows. These checks prove it by changing your variables for a moment and watching whether the page follows.</p>
+    <p><span class="hw4-label">Your task.</span> Work in the CSS tab:</p>
+    <ol class="hw4-task">
+      <li>On <code>:root</code>, define <code>--brand: #2f6f4e</code>, <code>--ink: #1f2a24</code>, <code>--paper: #f7f5ef</code> and <code>--space: 16px</code>.</li>
+      <li>Replace every hard-coded brand green with <code>var(--brand)</code>, so <code>#2f6f4e</code> is written only once, in <code>:root</code>.</li>
+      <li>Use <code>var(--ink)</code> and <code>var(--paper)</code> for the page's text and background colors.</li>
+      <li>Use <code>var(--space)</code> for the padding of the banner and the cards.</li>
+      <li>On <code>.promo</code>, redefine <code>--brand</code> as orange, <code>#b3541e</code>, so the Lake Loop card turns orange without any new rule for its border, heading or button.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-11" data-title="Challenge 4.11: Turn repeated values into tokens" data-height="420" data-layout="stacked">
+      <textarea data-lang="html">
+<header class="banner"> <!-- the banner at the top -->
+  <p class="logo">Riverside Hiking Club</p> <!-- the club name -->
+</header> <!-- end of the banner -->
+<main> <!-- the page's content -->
+  <article class="card"> <!-- the first trip card -->
+    <h2>Ridge Walk</h2> <!-- its heading -->
+    <p>Saturday · 6 miles</p> <!-- its details -->
+    <a class="button" href="ridge.html">Sign up</a> <!-- its button -->
+  </article> <!-- end of the first card -->
+  <article class="card promo"> <!-- the second card: also class promo -->
+    <h2>Lake Loop</h2> <!-- its heading -->
+    <p>Sunday · 3 miles</p> <!-- its details -->
+    <a class="button" href="lake.html">Sign up</a> <!-- its button -->
+  </article> <!-- end of the second card -->
+</main> <!-- end of the content --></textarea>
+      <textarea data-lang="css">
+/* TODO 1: a :root rule that defines --brand, --ink, --paper and --space */
+body { /* the whole page */
+  font-family: system-ui, sans-serif; /* a clean sans-serif font stack */
+  margin: 0; /* no gap around the page */
+  color: #1f2a24; /* TODO 3: var(--ink) */
+  background-color: #f7f5ef; /* TODO 3: var(--paper) */
+} /* end of the body rule */
+.banner { /* the banner */
+  background-color: #2f6f4e; /* TODO 2: brand green, from var(--brand) */
+  color: white; /* white text on the green */
+  padding: 16px; /* TODO 4: var(--space) */
+} /* end of the .banner rule */
+.logo { /* the club name */
+  margin: 0; /* no extra space around it */
+  font-weight: bold; /* heavier text */
+} /* end of the .logo rule */
+main { /* the content area */
+  padding: 16px; /* space around the cards */
+} /* end of the main rule */
+.card { /* each trip card */
+  background-color: white; /* a white card on the off-white page */
+  border-left: 6px solid #2f6f4e; /* TODO 2: a brand-green accent bar, from var(--brand) */
+  padding: 16px; /* TODO 4: var(--space) */
+  margin-bottom: 16px; /* space between the cards */
+} /* end of the .card rule */
+.card h2 { /* the card headings */
+  color: #2f6f4e; /* TODO 2: var(--brand) */
+  margin-top: 0; /* no gap above the heading */
+} /* end of the .card h2 rule */
+.button { /* the Sign up buttons */
+  display: inline-block; /* a box that sits in the line */
+  background-color: #2f6f4e; /* TODO 2: var(--brand) */
+  color: white; /* white text */
+  padding: 0.4em 0.9em; /* room around the words */
+  border-radius: 6px; /* rounded corners */
+  text-decoration: none; /* no underline */
+} /* end of the .button rule */
+/* TODO 5: a .promo rule that redefines --brand as #b3541e */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "`:root` defines `--brand`, `--ink`, `--paper` and `--space`",
+    "test": "var r=win.getComputedStyle(doc.documentElement); return [\"--brand\", \"--ink\", \"--paper\", \"--space\"].every(function(v){ return r.getPropertyValue(v).trim()!==''; });"
+  },
+  {
+    "label": "The brand green `#2f6f4e` is written only once in the stylesheet, as the value of `--brand`",
+    "test": "var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); var n=(css.match(/#2f6f4e\\b/gi)||[]).length; var b=win.getComputedStyle(doc.documentElement).getPropertyValue('--brand').trim().toLowerCase(); return n===1 && b==='#2f6f4e';"
+  },
+  {
+    "label": "Changing `--brand` once recolors the banner, the first card's border and heading, and its button",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var c=$('.card:not(.promo)'); if(!c) return false; var h=c.querySelector('h2'), b=c.querySelector('.button'), ban=$('.banner'); if(!h||!b||!ban) return false; return withCss(':root{--brand:rgb(192, 0, 0) !important}', function(){ var red='rgb(192, 0, 0)'; return style(ban,'background-color')===red && style(c,'border-left-color')===red && style(h,'color')===red && style(b,'background-color')===red; });"
+  },
+  {
+    "label": "The page's text and background colors come from `--ink` and `--paper`",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; return withCss(':root{--ink:rgb(0, 0, 192) !important;--paper:rgb(255, 255, 192) !important}', function(){ return style('body','color')==='rgb(0, 0, 192)' && style('body','background-color')==='rgb(255, 255, 192)'; });"
+  },
+  {
+    "label": "The banner's and the cards' padding come from `--space`",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var c=$$('.card'), ban=$('.banner'); if(c.length!==2||!ban) return false; return withCss(':root{--space:30px !important}', function(){ return style(ban,'padding-top')==='30px' && c.every(function(x){ return style(x,'padding-top')==='30px' && style(x,'padding-left')==='30px'; }); });"
+  },
+  {
+    "label": "`.promo` redefines `--brand` as orange (`#b3541e`): its border, heading and button turn orange, and the first card stays green",
+    "test": "var p=$('.card.promo'), c=$('.card:not(.promo)'); if(!p||!c) return false; var o='rgb(179, 84, 30)', g='rgb(47, 111, 78)'; return style(p,'border-left-color')===o && style(p.querySelector('h2'),'color')===o && style(p.querySelector('.button'),'background-color')===o && style(c,'border-left-color')===g && style(c.querySelector('h2'),'color')===g && win.getComputedStyle(p).getPropertyValue('--brand').trim().toLowerCase()==='#b3541e';"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.11</summary>
+      <p>A custom property is declared like any other property, but its name starts with two dashes, and it does nothing until something reads it with <code>var()</code>. After you replace the colors, search the CSS for the hex code: it should appear once. For the promo card, remember that custom properties inherit: a new value on the card reaches everything inside it.</p>
+    </details>
+
+    <div class="quiz" data-id="hw4-quiz-vars" data-hw4-quiz data-title="Quiz: custom properties and frameworks">
+      <script type="application/json">
+[
+  {
+    "q": "Which line correctly **defines** a custom property?",
+    "choices": [
+      "`$brand: teal;`",
+      "`--brand: teal;` inside a rule such as `:root { }`",
+      "`var(--brand): teal;`",
+      "`@brand: teal;`"
+    ],
+    "answer": 1,
+    "explain": "Custom properties start with two dashes and live inside a rule. `$brand` is Sass; `var()` only reads a value."
+  },
+  {
+    "q": "`--accent` is not defined anywhere. What color is the text?",
+    "code": "p { color: var(--accent, darkorange); }",
+    "lang": "css",
+    "choices": [
+      "Black",
+      "darkorange",
+      "An error",
+      "Transparent"
+    ],
+    "answer": 1,
+    "explain": "The second argument of `var()` is the fallback, used when the variable is not defined."
+  },
+  {
+    "q": "True or false: if `:root` sets `--brand: green` and `.promo` sets `--brand: orange`, then `var(--brand)` is orange inside `.promo` and green everywhere else.",
+    "answer": true,
+    "explain": "Custom properties inherit like `color`, so a redefinition reaches that element and its descendants."
+  },
+  {
+    "q": "Which framework is built around small **utility classes** such as `p-4` and `font-bold`?",
+    "choices": [
+      "Bootstrap",
+      "Tailwind CSS",
+      "Sass",
+      "jQuery"
+    ],
+    "answer": 1,
+    "explain": "Tailwind is utility-first. Bootstrap mostly offers component classes, Sass is a preprocessor and jQuery is a JavaScript library."
+  },
+  {
+    "q": "What happens to Sass code before a browser uses it?",
+    "choices": [
+      "The browser runs it directly",
+      "A build tool compiles it into plain CSS",
+      "It becomes JavaScript",
+      "A CDN interprets it"
+    ],
+    "answer": 1,
+    "explain": "Browsers only understand CSS. A Sass `$brand` is replaced by its value at build time, while a CSS `--brand` still exists in the browser and can change live."
+  }
+]
+      </script>
+    </div>
+
+    <div class="widget hw4-written" data-kind="Explain it" data-title="One change, everywhere">
+      <label for="hw4-w-vars">The club decides to change its brand green. Describe what you would have had to edit in Challenge 4.11's stylesheet before you added custom properties, and what you edit now. Then explain how the <code>.promo</code> card gets its own color without separate rules for its border, heading and button.</label>
+      <textarea class="input" id="hw4-w-vars" data-hw4-written="hw4-written-vars" rows="5" aria-describedby="hw4-w-vars-st"></textarea>
+      <p class="small muted hw4-saved" id="hw4-w-vars-st">Saved in this browser as you type.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-9">
+    <p class="hw4-part">Part 9 · Chapter 4, all of it</p>
+    <h2>Final challenge: style a whole page</h2>
+    <p>Time to put the whole chapter together, starting from a blank stylesheet. The page is the Riverside Hiking Club's Autumn Ridge Walk page from section 4.1 of the chapter: good, semantic HTML with no styles at all. Every check below is something you have already done once in this homework; the challenge is building a small, organized style system that does all of it at once.</p>
+
+    <h3 class="hw4-ch" id="c4-12"><span class="hw4-ch-num">Challenge 4.12</span>The Autumn Ridge Walk page</h3>
+    <p><span class="hw4-label">The skill.</span> A real stylesheet starts with decisions, not declarations: the tokens (colors, fonts, spacing), a box-sizing reset, the base typography, then the layout of each region, the components and the interaction states. Writing it in that order keeps it short and easy to change. This is the same kind of stylesheet your project asks for.</p>
+    <p><span class="hw4-label">Your task.</span> Work in the CSS tab, following the order of the comments:</p>
+    <ol class="hw4-task">
+      <li>Define at least three custom properties on <code>:root</code>, including <code>--brand</code>, and use <code>var(--brand)</code> for the title color and the button background.</li>
+      <li>Make every element use <code>box-sizing: border-box</code>.</li>
+      <li>On <code>body</code>: a font stack ending with a generic family, a background color, a text color with at least 4.5 : 1 contrast on it, and a line-height between 1.4 and 1.7.</li>
+      <li>Give <code>main</code> a readable width between 400px and 800px (for example <code>40rem</code>) and center it.</li>
+      <li>Size the title in <code>rem</code>, larger than <code>1.5rem</code>.</li>
+      <li>Navigation: no bullets, no underlines, and the items side by side (<code>inline-block</code>).</li>
+      <li>Give links a <code>:hover</code> style and a <code>:focus-visible</code> style.</li>
+      <li>Make <code>.meta</code> smaller than the paragraph text, still with at least 4.5 : 1 contrast.</li>
+      <li>Make <code>.button</code> look like a button: <code>inline-block</code>, padding, rounded corners, a background, and text with at least 4.5 : 1 contrast on it.</li>
+      <li>Use at least five kinds of selector, and no <code>!important</code>.</li>
+    </ol>
+    <div class="playground" data-id="hw4-c4-12" data-title="Challenge 4.12: The Autumn Ridge Walk page" data-height="460" data-layout="stacked">
+      <textarea data-lang="html">
+<header> <!-- the banner at the top of the page -->
+  <p class="site-name">Riverside Hiking Club</p> <!-- the club name; a p, because the page's one h1 is the walk -->
+  <nav> <!-- the main menu -->
+    <ul> <!-- the menu is a list of links -->
+      <li><a href="index.html">Home</a></li> <!-- link to the home page -->
+      <li><a href="trips.html">Trips</a></li> <!-- link to every trip -->
+      <li><a href="join.html">Join</a></li> <!-- link to the membership page -->
+    </ul> <!-- end of the list of links -->
+  </nav> <!-- end of the menu -->
+</header> <!-- end of the banner -->
+<main> <!-- the content that belongs to this page only -->
+  <h1>Autumn Ridge Walk</h1> <!-- the page's one top-level heading -->
+  <p class="meta">Saturday · 6 miles · moderate</p> <!-- a short details line: class meta -->
+  <p>The leaves are turning and the ridge views are at their best. Bring water, warm layers and a snack for the summit.</p> <!-- the description -->
+  <ul class="facts"> <!-- two quick facts -->
+    <li>Meet at the north trailhead</li> <!-- where to meet -->
+    <li>Start at 8:30 a.m.</li> <!-- when to arrive -->
+  </ul> <!-- end of the facts list -->
+  <a class="button" href="join.html">Save my spot</a> <!-- a link that CSS will make look like a button -->
+</main> <!-- end of this page's content -->
+<footer> <!-- the bottom of the page -->
+  <p>Riverside Hiking Club · walks every weekend</p> <!-- a single line about the club -->
+</footer> <!-- end of the footer --></textarea>
+      <textarea data-lang="css">
+/* 1. Tokens: at least three custom properties on :root, including --brand */
+
+/* 2. Every element uses box-sizing: border-box */
+
+/* 3. body: font stack, background color, text color, line-height */
+
+/* 4. main: a readable width, centered */
+
+/* 5. The title: sized in rem, colored with var(--brand) */
+
+/* 6. Navigation: no bullets, no underlines, items side by side */
+
+/* 7. Links: a :hover style and a :focus-visible style */
+
+/* 8. .meta: smaller, still readable */
+
+/* 9. .button: inline-block, padding, rounded corners, var(--brand) background, readable text */</textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "Tokens: at least three custom properties defined on `:root`",
+    "test": "var rules=[]; var walk=function(list){ Array.prototype.forEach.call(list, function(r){ if(r.selectorText) rules.push(r); if(r.cssRules) walk(r.cssRules); }); }; Array.prototype.forEach.call(doc.styleSheets, function(s){ try { walk(s.cssRules); } catch(e) {} }); var n=0; rules.forEach(function(r){ if(/^\\s*(:root|html)\\s*$/.test(r.selectorText)){ for(var i=0;i<r.style.length;i++){ if(r.style[i].indexOf('--')===0) n++; } } }); return n>=3;"
+  },
+  {
+    "label": "`--brand` colors both the title and the button: change it once and both follow",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var h=$('h1'), b=$('.button'); if(!h||!b) return false; return withCss(':root{--brand:rgb(192, 0, 0) !important}', function(){ return style(h,'color')==='rgb(192, 0, 0)' && style(b,'background-color')==='rgb(192, 0, 0)'; });"
+  },
+  {
+    "label": "Every element uses `box-sizing: border-box`",
+    "test": "return ['html','body','header','nav','ul','li','a','main','h1','p','footer'].every(function(s){ return !!$(s) && style(s,'box-sizing')==='border-box'; });"
+  },
+  {
+    "label": "The body font stack has two or more fonts and ends with an unquoted generic family",
+    "test": "var stackOk=function(sel){ var parts=style(sel,'font-family').split(','); var last=parts[parts.length-1].trim(); return parts.length>=2 && /^(sans-serif|serif|monospace|system-ui|cursive|fantasy|ui-sans-serif|ui-serif|ui-monospace|ui-rounded)$/.test(last); }; return stackOk('body');"
+  },
+  {
+    "label": "Paragraphs have a line-height between 1.4 and 1.7 times their text size",
+    "test": "var px=function(n,p){ return parseFloat(win.getComputedStyle(n).getPropertyValue(p)); }; var p=$$('main p').filter(function(x){ return !x.className; })[0]; if(!p) return false; var r=px(p,'line-height')/px(p,'font-size'); return r>=1.39 && r<=1.71;"
+  },
+  {
+    "label": "`main` has a readable width (400px to 800px) and is centered with `auto` margins",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var wide=function(fn){ return withCss('html{width:1000px !important;min-width:1000px !important}', fn); }; var m=$('main'); if(!m) return false; return wide(function(){ var s=win.getComputedStyle(m), w=m.getBoundingClientRect().width, l=parseFloat(s.marginLeft), r=parseFloat(s.marginRight); return w>=400 && w<=800 && l>20 && Math.abs(l-r)<1; });"
+  },
+  {
+    "label": "An `h1` rule sizes the title in `rem`, larger than `1.5rem`, so it grows with the reader's text size",
+    "test": "var withCss=function(text, fn){ var st=doc.createElement('style'); st.textContent=text; (doc.head||doc.documentElement).appendChild(st); try { return fn(); } finally { st.remove(); } }; var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); var h=$('h1'); if(!h) return false; var a=parseFloat(style(h,'font-size')); var b=withCss('html{font-size:20px !important}', function(){ return parseFloat(style(h,'font-size')); }); return a>24 && Math.abs(b-a*1.25)<0.5 && /(^|[\\s,}])h1\\s*(,[^{]*)?\\{[^}]*font-size\\s*:\\s*[\\d.]+rem/i.test(css);"
+  },
+  {
+    "label": "Navigation: no bullets, no underlines, and the items sit side by side",
+    "test": "var li=$$('nav li'), a=$$('nav a'); return li.length===3 && style('nav ul','list-style-type')==='none' && li.every(function(x){ var d=style(x,'display'); return d==='inline' || d==='inline-block'; }) && a.every(function(x){ return style(x,'text-decoration-line')==='none'; });"
+  },
+  {
+    "label": "Links have a `:hover` style and a `:focus-visible` style",
+    "test": "var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); return /a:hover[^{]*\\{[^}]*[a-z-]+\\s*:[^}]+\\}/i.test(css) && /a:focus-visible[^{]*\\{[^}]*[a-z-]+\\s*:[^}]+\\}/i.test(css);"
+  },
+  {
+    "label": "`.meta` is smaller than the paragraph text and still has at least 4.5 : 1 contrast",
+    "test": "var nums=function(s){ var m=String(s||'rgb(255, 255, 255)').match(/[\\d.]+/g); return m ? m.map(Number) : [255,255,255]; }; var lumOf=function(c){ var f=function(v){ v/=255; return v<=0.04045 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); }; return 0.2126*f(c[0])+0.7152*f(c[1])+0.0722*f(c[2]); }; var ratio=function(a,b){ var x=lumOf(nums(a)), y=lumOf(nums(b)); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); }; var bgOf=function(n){ while(n && n.nodeType===1){ var b=win.getComputedStyle(n).backgroundColor; if(b!=='rgba(0, 0, 0, 0)' && b!=='transparent') return b; n=n.parentElement; } return ''; }; var m=$('.meta'), p=$$('main p').filter(function(x){ return !x.className; })[0]; if(!m||!p) return false; return parseFloat(style(m,'font-size'))<=0.9*parseFloat(style(p,'font-size')) && ratio(style(m,'color'), bgOf(m))>=4.5;"
+  },
+  {
+    "label": "`.button` looks like a button: `inline-block`, padding, rounded corners, a background, and text with at least 4.5 : 1 contrast on it",
+    "test": "var nums=function(s){ var m=String(s||'rgb(255, 255, 255)').match(/[\\d.]+/g); return m ? m.map(Number) : [255,255,255]; }; var lumOf=function(c){ var f=function(v){ v/=255; return v<=0.04045 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); }; return 0.2126*f(c[0])+0.7152*f(c[1])+0.0722*f(c[2]); }; var ratio=function(a,b){ var x=lumOf(nums(a)), y=lumOf(nums(b)); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); }; var b=$('.button'); if(!b) return false; var bg=style(b,'background-color'); return style(b,'display')==='inline-block' && parseFloat(style(b,'padding-top'))>=6 && parseFloat(style(b,'padding-left'))>=12 && parseFloat(style(b,'border-top-left-radius'))>=4 && bg!=='rgba(0, 0, 0, 0)' && ratio(style(b,'color'), bg)>=4.5;"
+  },
+  {
+    "label": "The page has a background color of its own, and the paragraph text has at least 4.5 : 1 contrast on it",
+    "test": "var nums=function(s){ var m=String(s||'rgb(255, 255, 255)').match(/[\\d.]+/g); return m ? m.map(Number) : [255,255,255]; }; var lumOf=function(c){ var f=function(v){ v/=255; return v<=0.04045 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); }; return 0.2126*f(c[0])+0.7152*f(c[1])+0.0722*f(c[2]); }; var ratio=function(a,b){ var x=lumOf(nums(a)), y=lumOf(nums(b)); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); }; var bgOf=function(n){ while(n && n.nodeType===1){ var b=win.getComputedStyle(n).backgroundColor; if(b!=='rgba(0, 0, 0, 0)' && b!=='transparent') return b; n=n.parentElement; } return ''; }; var p=$$('main p').filter(function(x){ return !x.className; })[0]; if(!p) return false; var page=style('body','background-color'); if(page==='rgba(0, 0, 0, 0)') page=style('html','background-color'); return page!=='rgba(0, 0, 0, 0)' && ratio(style(p,'color'), bgOf(p))>=4.5;"
+  },
+  {
+    "label": "At least five kinds of selector (element, class, id, descendant, child, sibling, attribute, pseudo-class, pseudo-element, universal), and no `!important`",
+    "test": "var rules=[]; var walk=function(list){ Array.prototype.forEach.call(list, function(r){ if(r.selectorText) rules.push(r); if(r.cssRules) walk(r.cssRules); }); }; Array.prototype.forEach.call(doc.styleSheets, function(s){ try { walk(s.cssRules); } catch(e) {} }); var t=rules.map(function(r){ return r.selectorText; }).join(' , '); var k=0; [/(^|[\\s,>+~(])[a-z][a-z0-9]*/i, /\\.[a-z_-]/i, /#[a-z_-]/i, /[a-z0-9\\])*_-]\\s+[a-z.#\\[*:]/i, />/, /[+~]/, /\\[/, /(^|[^:]):[a-z]/i, /::/, /\\*/].forEach(function(re){ if(re.test(t)) k++; }); var css=code.css.replace(/\\/\\*[\\s\\S]*?\\*\\//g,''); return k>=5 && !/!\\s*important/i.test(css) && !$('[style]');"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 4.12</summary>
+      <p>Reuse your own work: the tokens from 4.11, the reset and the centering from 4.8, the typography from 4.10, the selectors from 4.5 and 4.6. Pass the checks in the order of the comments; the last check counts kinds of selector, and you will probably have used five by the time you reach it. Test the contrast of every text color you pick against the background it sits on.</p>
+    </details>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="download">
+    <h2>Download my work</h2>
+    <p>This button builds one file with everything you did: your name and the date, every challenge with its checks re-run, your HTML and CSS, and a live preview of each challenge, plus your quiz results and your written answers. It runs entirely in your browser; nothing is uploaded.</p>
+    <div class="widget" data-kind="Your file" data-title="Download my work">
+      <p>The file is named after you, for example <code>hw4-ana-ruiz.html</code>. Open it after it downloads to check that it shows your code and your answers. You can download again at any time; hand in the newest file.</p>
+      <div class="btn-row">
+        <button type="button" class="btn primary" id="hw4-download">Download my work</button>
+      </div>
+      <p class="hw4-status" id="hw4-download-status" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="submit">
+    <h2>Submitting</h2>
+    <p>You hand in this homework by putting the downloaded file in a public GitHub repository named <code>web-homework</code>. If you already made that repository for Homework 3, use the same one and just add the new file.</p>
+    <ol class="hw4-steps">
+      <li><p><strong>Download your file.</strong> Use <a href="#download">Download my work</a> above, and open the file once to make sure it shows your work.</p></li>
+      <li><p><strong>Put the file in your <code>web-homework</code> repository</strong>, in whichever of these two ways you prefer.</p></li>
+    </ol>
+    <div class="tabs">
+      <div data-tab="On github.com">
+        <ol class="hw4-steps">
+          <li><p>Sign in at <a href="https://github.com/">github.com</a>.</p></li>
+          <li><p>If you do not have a <code>web-homework</code> repository yet, create it: open the <strong>+</strong> menu at the top right and choose <strong>New repository</strong>. Type <code>web-homework</code> as the name, choose <strong>Public</strong> so it can be opened from its link, tick <strong>Add a README file</strong>, and press <strong>Create repository</strong>. The README matters: it gives the empty repository a first commit, so the upload buttons appear. If the repository already exists from Homework 3, just open it.</p></li>
+          <li><p>On the repository's main page, choose <strong>Add file</strong> and then <strong>Upload files</strong>.</p></li>
+          <li><p>Drag your <code>hw4-</code> file onto the page, or use <strong>choose your files</strong> to find it.</p></li>
+          <li><p>Type a short message such as <code>Add Homework 4</code> and press <strong>Commit changes</strong>. The file now appears in the list on the repository's main page.</p></li>
+        </ol>
+      </div>
+      <div data-tab="With Git">
+        <p>If you prefer the terminal, use the usual Git cycle: clone, add, commit, push. Create the <code>web-homework</code> repository on github.com first, as described in the other tab, if it does not exist yet.</p>
+        <ol class="hw4-steps">
+          <li><p>The first time only, download the repository to your computer with <code>git clone https://github.com/&lt;username&gt;/web-homework.git</code>, replacing <code>&lt;username&gt;</code> with your GitHub username. If you already cloned it for Homework 3, run <code>git pull</code> inside it instead.</p></li>
+          <li><p>Copy your <code>hw4-</code> file into the <code>web-homework</code> folder, and open a terminal in that folder.</p></li>
+          <li><p>Stage the file with <code>git add .</code> and save a snapshot with <code>git commit -m "Add Homework 4"</code>.</p></li>
+          <li><p>Upload it with <code>git push</code>, then reload the repository's page on github.com to see the file there.</p></li>
+        </ol>
+      </div>
+    </div>
+    <div class="hw4-submit">
+      <p>Submit your GitHub repo link.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+  /* Runs before course.js mounts the components (it mounts on DOMContentLoaded),
+     so each playground's checks are still in the page and can be kept for the download. */
+  window.HW4 = { pgs: [] };
+  document.querySelectorAll('.playground[data-id]').forEach(function (pg) {
+    var s = pg.querySelector(':scope > script.checks');
+    var checks = [];
+    try { checks = s ? JSON.parse(s.textContent) : []; } catch (e) { checks = []; }
+    window.HW4.pgs.push({ id: pg.dataset.id, title: pg.dataset.title || pg.dataset.id, checks: checks });
+  });
+</script>
+<script>
+  WD1.ready(() => {
+    const { $, $$, esc, store } = WD1;
+    const NS = 'custom';
+    const MIN_WRITTEN = 40;
+
+    /* ---------- Name ---------- */
+    const nameInput = $('#hw4-name');
+    nameInput.value = store.get(NS, 'hw4-name') || '';
+    nameInput.addEventListener('input', () => store.set(NS, 'hw4-name', nameInput.value));
+
+    /* ---------- Written answers ---------- */
+    const written = $$('[data-hw4-written]');
+    const writtenStatus = (ta) => {
+      const st = document.getElementById(ta.getAttribute('aria-describedby'));
+      const n = ta.value.trim().length;
+      if (!st) return;
+      st.classList.toggle('done', n >= MIN_WRITTEN);
+      st.textContent = n === 0 ? 'Saved in this browser as you type.'
+        : n < MIN_WRITTEN ? 'Saved. Keep going: a sentence or two counts as complete.'
+        : 'Saved. This answer counts as complete.';
+    };
+    written.forEach((ta) => {
+      ta.value = store.get(NS, ta.dataset.hw4Written) || '';
+      writtenStatus(ta);
+      let t = null;
+      ta.addEventListener('input', () => {
+        clearTimeout(t);
+        t = setTimeout(() => { store.set(NS, ta.dataset.hw4Written, ta.value); writtenStatus(ta); render(); }, 300);
+      });
+    });
+
+    /* ---------- Challenge results (latest checks event per playground) ---------- */
+    const pgEls = $$('.playground[data-id]');
+    const checkRecords = () => store.get(NS, 'hw4-checks') || {};
+    const challengeState = (id) => {
+      const rec = checkRecords()[id];
+      if (rec) return rec.passed === rec.total && rec.total > 0 ? 'done' : rec.passed > 0 ? 'partial' : 'none';
+      return store.get('challenge', id) ? 'done' : 'none';
+    };
+    document.addEventListener('checks', (e) => {
+      const pg = e.target.closest('.playground[data-id]');
+      if (!pg || !e.detail) return;
+      const all = checkRecords();
+      all[pg.dataset.id] = { passed: e.detail.passed, total: e.detail.total, at: Date.now() };
+      store.set(NS, 'hw4-checks', all);
+      render();
+    });
+
+    /* ---------- Quiz results ---------- */
+    const quizEls = $$('[data-hw4-quiz]');
+    const quizRecords = () => store.get(NS, 'hw4-quizzes') || {};
+    document.addEventListener('quizdone', (e) => {
+      const q = e.target.closest('[data-hw4-quiz]');
+      if (!q || !e.detail) return;
+      const all = quizRecords();
+      const prev = all[q.dataset.id] || {};
+      all[q.dataset.id] = {
+        correct: e.detail.correct, total: e.detail.total,
+        best: Math.max(e.detail.correct, prev.best || 0),
+        attempts: (prev.attempts || 0) + 1, at: Date.now()
+      };
+      store.set(NS, 'hw4-quizzes', all);
+      render();
+    });
+
+    /* ---------- Progress card ---------- */
+    function meter(key, n, total) {
+      $('#hw4-count-' + key).textContent = n + ' of ' + total;
+      $('#hw4-bar-' + key).style.width = (total ? Math.round((n / total) * 100) : 0) + '%';
+    }
+    function render() {
+      let done = 0;
+      $$('.hw4-chips a[data-pg]').forEach((a) => {
+        const st = challengeState(a.dataset.pg);
+        if (st === 'done') done++;
+        a.classList.toggle('done', st === 'done');
+        a.classList.toggle('partial', st === 'partial');
+        const label = 'Challenge ' + a.textContent.replace(/[^\d.]/g, '');
+        a.setAttribute('aria-label', label + (st === 'done' ? ', complete' : st === 'partial' ? ', some checks pass' : ', no checks pass yet'));
+      });
+      meter('challenges', done, pgEls.length);
+      const qr = quizRecords();
+      meter('quizzes', quizEls.filter((q) => qr[q.dataset.id]).length, quizEls.length);
+      meter('written', written.filter((ta) => (store.get(NS, ta.dataset.hw4Written) || '').trim().length >= MIN_WRITTEN).length, written.length);
+    }
+    render();
+
+    /* ---------- Which elements match? ---------- */
+    // Each line of the sample document; element lines are the ones a selector can match.
+    const SAMPLE = [
+      '<nav>',
+      '  <a href="index.html">Home</a>',
+      '  <a href="https://www.nps.gov">Park info</a>',
+      '</nav>',
+      '<article class="trip">',
+      '  <h2>Ridge Walk</h2>',
+      '  <p class="date">Saturday</p>',
+      '  <p>6 miles, moderate.</p>',
+      '  <p class="note">Bring poles.</p>',
+      '  <a href="ridge.pdf">Trail map (PDF)</a>',
+      '</article>'
+    ];
+    const ROUNDS = [
+      { sel: 'nav a', why: 'A space is the descendant combinator: every `a` anywhere inside the `nav`. The PDF link is outside it.' },
+      { sel: '.trip > p', why: '`>` is the child combinator: paragraphs whose parent is the `.trip` article. All three qualify.' },
+      { sel: 'h2 + p', why: '`+` takes only the very next sibling: the date paragraph right after the heading.' },
+      { sel: 'h2 ~ p', why: '`~` takes every later sibling that is a `p`: all three paragraphs after the heading.' },
+      { sel: 'p:first-child', why: 'Nothing matches. `p:first-child` means a `p` that is the first child of its parent, and the first child of the article is the `h2`. `p:first-of-type` would match the date.' },
+      { sel: 'a[href^="https"]', why: '`^=` means "starts with": only the Park info link has an address that starts with https.' },
+      { sel: '.trip p:not(.note)', why: '`:not(.note)` removes the note from the set of paragraphs inside the trip, leaving the date and the details.' },
+      { sel: '.trip > :nth-child(odd)', why: 'Counting every child of the article from 1: the heading (1), the details paragraph (3) and the PDF link (5).' }
+    ];
+    const sampleDoc = new DOMParser().parseFromString('<!DOCTYPE html><body>' + SAMPLE.join('\n') + '</body>', 'text/html');
+    const sampleEls = Array.from(sampleDoc.body.querySelectorAll('*'));
+    // Map every element to its line: element lines are the ones that start with "<" plus a letter.
+    const elLines = SAMPLE.map((l, i) => (/^\s*<[a-z]/i.test(l) ? i : -1)).filter((i) => i >= 0);
+    const selEl = $('#hw4-selq');
+    const selStage = $('.hw4-sel-stage', selEl);
+    let selRound = 0, selScore = 0;
+    function showSelRound() {
+      selStage.innerHTML = '';
+      if (selRound >= ROUNDS.length) {
+        selStage.appendChild(WD1.h('p', { class: 'feedback ' + (selScore === ROUNDS.length ? 'good' : 'info'),
+          html: '<strong>Done: ' + selScore + ' of ' + ROUNDS.length + ' correct.</strong> ' +
+            (selScore === ROUNDS.length ? 'You can read selectors the way a browser does.' : 'Try again to practice the rounds you missed.') }));
+        selStage.appendChild(WD1.h('div', { class: 'btn-row', style: { marginTop: '12px' } },
+          WD1.h('button', { type: 'button', class: 'btn small', text: 'Try all eight again', onclick: () => { selRound = 0; selScore = 0; showSelRound(); } })));
+        return;
+      }
+      const r = ROUNDS[selRound];
+      const want = new Set(Array.from(sampleDoc.body.querySelectorAll(r.sel)).map((el) => elLines[sampleEls.indexOf(el)]));
+      selStage.appendChild(WD1.h('p', { class: 'hw4-sel-head', text: 'Round ' + (selRound + 1) + ' of ' + ROUNDS.length }));
+      selStage.appendChild(WD1.h('p', { class: 'hw4-sel-q', html: 'Selector: <code>' + esc(r.sel) + '</code>' }));
+      const list = WD1.h('ul', { class: 'hw4-sel-doc', 'aria-label': 'Sample document; select the lines whose element matches' });
+      const btns = [];
+      SAMPLE.forEach((line, i) => {
+        if (elLines.indexOf(i) < 0) { list.appendChild(WD1.h('li', null, WD1.h('span', { class: 'hw4-sel-plain', text: line }))); return; }
+        const b = WD1.h('button', { type: 'button', 'aria-pressed': 'false', dataset: { line: String(i) },
+          onclick: () => b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true') }, line);
+        btns.push(b);
+        list.appendChild(WD1.h('li', null, b));
+      });
+      selStage.appendChild(list);
+      const fb = WD1.h('div', { class: 'feedback', hidden: true, 'aria-live': 'polite' });
+      const next = WD1.h('button', { type: 'button', class: 'btn small primary', text: selRound === ROUNDS.length - 1 ? 'See my result' : 'Next round', hidden: true,
+        onclick: () => { selRound++; showSelRound(); const f = $('.hw4-sel-doc button', selStage) || $('button', selStage); if (f) f.focus(); } });
+      const check = WD1.h('button', { type: 'button', class: 'btn small primary', text: 'Check' });
+      check.addEventListener('click', () => {
+        let ok = true;
+        btns.forEach((b) => {
+          const line = +b.dataset.line, picked = b.getAttribute('aria-pressed') === 'true', should = want.has(line);
+          b.disabled = true;
+          let mark = '';
+          if (picked && should) { b.classList.add('right'); mark = 'matches'; }
+          else if (!picked && should) { b.classList.add('missed'); mark = 'missed: it matches'; ok = false; }
+          else if (picked && !should) { b.classList.add('wrong'); mark = 'does not match'; ok = false; }
+          if (mark) b.appendChild(WD1.h('span', { class: 'hw4-sel-mark', text: mark }));
+        });
+        check.disabled = true;
+        if (ok) selScore++;
+        fb.hidden = false;
+        fb.className = 'feedback ' + (ok ? 'good' : 'bad');
+        fb.innerHTML = '<strong>' + (ok ? 'Correct.' : 'Not quite.') + '</strong> ' + WD1.fmt(r.why);
+        next.hidden = false;
+        next.focus();
+        if (selRound === ROUNDS.length - 1) {
+          selEl.dispatchEvent(new CustomEvent('quizdone', { detail: { correct: selScore, total: ROUNDS.length }, bubbles: true }));
+        }
+      });
+      selStage.appendChild(WD1.h('div', { class: 'btn-row' }, check, next));
+      selStage.appendChild(fb);
+      selStage.appendChild(WD1.h('p', { class: 'hw4-sel-score', text: 'Score so far: ' + selScore + ' of ' + selRound }));
+    }
+    showSelRound();
+
+    /* ---------- Download my work ---------- */
+    const statusEl = $('#hw4-download-status');
+    const dlBtn = $('#hw4-download');
+
+    // Re-run one playground's checks against the given code in an offscreen preview.
+    function runChecks(code, checks) {
+      return new Promise((resolve) => {
+        if (!checks.length) { resolve({ passed: 0, total: 0, list: [] }); return; }
+        const f = document.createElement('iframe');
+        f.setAttribute('aria-hidden', 'true');
+        f.tabIndex = -1;
+        f.title = 'Checking your work';
+        f.style.cssText = 'position:absolute;left:-12000px;top:0;width:1000px;height:800px;border:0;visibility:hidden;';
+        let settled = false;
+        const finish = (val) => { if (settled) return; settled = true; f.remove(); resolve(val); };
+        f.addEventListener('load', () => setTimeout(() => {
+          try {
+            const doc = f.contentDocument, win = f.contentWindow;
+            const q = (s) => doc.querySelector(s);
+            const qa = (s) => Array.from(doc.querySelectorAll(s));
+            const style = (s, p) => { const n = typeof s === 'string' ? q(s) : s; return n ? win.getComputedStyle(n).getPropertyValue(p).trim() : ''; };
+            const list = checks.map((c) => {
+              let ok = false;
+              try { ok = !!new Function('doc', 'win', '$', '$$', 'style', 'code', c.test)(doc, win, q, qa, style, code); } catch (e) { ok = false; }
+              return { label: c.label, ok };
+            });
+            finish({ passed: list.filter((x) => x.ok).length, total: list.length, list });
+          } catch (e) { finish(null); }
+        }, 80));
+        setTimeout(() => finish(null), 5000);
+        f.srcdoc = WD1.buildPreviewDoc(code, 'hw4-download');
+        document.body.appendChild(f);
+      });
+    }
+
+    // The student's code as a standalone page, for the preview frame in the file (no scripts added).
+    function previewDoc(code) {
+      const html = code.html || '', css = code.css || '';
+      const style = css ? '<style>\n' + css + '\n</style>' : '';
+      if (/<html[\s>]|<!doctype/i.test(html)) {
+        return /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, (m) => m + style) : style + html;
+      }
+      return '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Preview</title>' + style + '</head><body>\n' + html + '\n</body></html>';
+    }
+
+    const slug = (s) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'student';
+
+    function reportHTML(name, when, challenges, quizzes, answers) {
+      const css = [
+        'body{margin:0;padding:24px 16px;background:#fff;color:#1d2330;font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}',
+        'header,main{max-width:980px;margin:0 auto}',
+        'h1{font-size:1.9rem;line-height:1.2;margin:0 0 .3em}',
+        'h2{font-size:1.4rem;margin:2.2em 0 .7em;padding-bottom:.3em;border-bottom:2px solid #d5dae3}',
+        'h3{font-size:1.15rem;margin:0 0 .3em}',
+        'h4{font-size:.95rem;margin:1.2em 0 .4em;color:#4a5262}',
+        '.meta{margin:0;color:#4a5262}',
+        '.card{border:1px solid #d5dae3;border-radius:10px;padding:16px 18px;margin:0 0 22px}',
+        '.st{font-weight:700;margin:0 0 8px}.st.ok{color:#1b7a3a}.st.no{color:#b3261e}',
+        'ul.checks{list-style:none;padding:0;margin:0}ul.checks li{padding:3px 0}',
+        '.mk{display:inline-block;min-width:6.5em;font-weight:700}.ok .mk{color:#1b7a3a}.no .mk{color:#b3261e}',
+        'pre{margin:0;background:#f4f6f9;border:1px solid #d5dae3;border-radius:8px;padding:12px;overflow:auto;max-height:440px;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre}',
+        'code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em}',
+        'iframe{display:block;width:100%;height:420px;border:1px solid #c3c9d4;border-radius:8px;background:#fff}',
+        'table{border-collapse:collapse;width:100%}caption{text-align:left;font-weight:700;padding-bottom:6px}',
+        'th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #d5dae3;vertical-align:top}thead th{background:#eef1f6}',
+        '.q{font-weight:700;margin:0 0 6px}',
+        '.answer{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f6f9;border-left:4px solid #237089;padding:10px 14px;border-radius:6px;margin:0}',
+        '.empty{color:#8a5a00;font-style:italic}',
+        '.sum li{margin:2px 0}'
+      ].join('\n');
+      const done = challenges.filter((c) => c.res.total && c.res.passed === c.res.total).length;
+      const quizDone = quizzes.filter((q) => q.rec).length;
+      const ansDone = answers.filter((a) => a.text.trim().length >= MIN_WRITTEN).length;
+      const chHTML = challenges.map((c, i) => {
+        const all = c.res.total && c.res.passed === c.res.total;
+        const list = c.res.list
+          ? '<ul class="checks">' + c.res.list.map((x) => '<li class="' + (x.ok ? 'ok' : 'no') + '"><span class="mk">' + (x.ok ? '&#10003; Pass' : '&#10007; Not yet') + '</span> ' + WD1.fmt(x.label) + '</li>').join('') + '</ul>'
+          : '<p class="empty">These checks could not be re-run while the file was made; the count above is the latest result saved in the browser.</p>';
+        return '<section class="card" id="challenge-' + (i + 1) + '">\n<h3>' + esc(c.title) + '</h3>\n' +
+          '<p class="st ' + (all ? 'ok' : 'no') + '">' + c.res.passed + ' of ' + c.res.total + ' checks pass</p>\n' + list + '\n' +
+          '<h4>HTML</h4>\n<pre><code>' + esc(c.code.html || '') + '</code></pre>\n' +
+          (c.code.css != null ? '<h4>CSS</h4>\n<pre><code>' + esc(c.code.css) + '</code></pre>\n' : '') +
+          '<h4>Preview</h4>\n<iframe title="Preview of ' + esc(c.title) + '" sandbox="" srcdoc="' + esc(previewDoc(c.code)) + '"></iframe>\n</section>';
+      }).join('\n');
+      const qRows = quizzes.map((q) => '<tr><th scope="row">' + esc(q.title) + '</th>' + (q.rec
+        ? '<td>' + q.rec.correct + ' of ' + q.rec.total + '</td><td>' + q.rec.best + ' of ' + q.rec.total + '</td><td>' + q.rec.attempts + '</td>'
+        : '<td colspan="3" class="empty">Not finished</td>') + '</tr>').join('\n');
+      const aHTML = answers.map((a) => '<div class="card">\n<p class="q">' + esc(a.question) + '</p>\n' +
+        (a.text.trim() ? '<p class="answer">' + esc(a.text.trim()) + '</p>' : '<p class="empty">No answer written.</p>') + '\n</div>').join('\n');
+      return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+        '<title>Homework 4 · ' + esc(name) + '</title>\n<style>\n' + css + '\n</style>\n</head>\n<body>\n' +
+        '<header>\n<h1>Homework 4: Module 4</h1>\n<p class="meta">Name: <strong>' + esc(name) + '</strong></p>\n<p class="meta">Downloaded: ' + esc(when) + '</p>\n</header>\n<main>\n' +
+        '<h2>Summary</h2>\n<ul class="sum">\n<li>Challenges complete: ' + done + ' of ' + challenges.length + '</li>\n<li>Quizzes finished: ' + quizDone + ' of ' + quizzes.length + '</li>\n<li>Written answers: ' + ansDone + ' of ' + answers.length + '</li>\n</ul>\n' +
+        '<h2>Challenges</h2>\n' + chHTML + '\n' +
+        '<h2>Quizzes</h2>\n<table>\n<caption>Quiz results recorded in the browser</caption>\n<thead><tr><th scope="col">Quiz</th><th scope="col">Latest</th><th scope="col">Best</th><th scope="col">Attempts</th></tr></thead>\n<tbody>\n' + qRows + '\n</tbody>\n</table>\n' +
+        '<h2>Written answers</h2>\n' + aHTML + '\n</main>\n</body>\n</html>\n';
+    }
+
+    dlBtn.addEventListener('click', async () => {
+      const name = nameInput.value.trim();
+      if (!name) {
+        statusEl.className = 'hw4-status feedback warn';
+        statusEl.textContent = 'Type your name in the box at the top of the page first, so the file says whose work it is.';
+        nameInput.scrollIntoView({ block: 'center' });
+        nameInput.focus();
+        return;
+      }
+      dlBtn.disabled = true;
+      statusEl.className = 'hw4-status feedback info';
+      statusEl.textContent = 'Re-running every check and building your file...';
+      try {
+        const recs = checkRecords();
+        const challenges = [];
+        for (const p of window.HW4.pgs) {
+          const el = document.querySelector('.playground[data-id="' + p.id + '"]');
+          const code = el && el.wd1 ? el.wd1.get() : Object.assign({ html: '', css: '' }, store.get('pg', p.id) || {});
+          let res = await runChecks(code, p.checks);
+          if (!res) { const r = recs[p.id]; res = { passed: r ? r.passed : 0, total: p.checks.length, list: null }; }
+          challenges.push({ title: p.title, code, res });
+        }
+        const qr = quizRecords();
+        const quizzes = quizEls.map((q) => ({ title: q.dataset.title || q.dataset.id, rec: qr[q.dataset.id] || null }));
+        const answers = written.map((ta) => {
+          const lab = document.querySelector('label[for="' + ta.id + '"]');
+          return { question: lab ? lab.textContent.replace(/\s+/g, ' ').trim() : ta.id, text: ta.value };
+        });
+        const when = new Date().toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' });
+        const file = 'hw4-' + slug(name) + '.html';
+        const blob = new Blob([reportHTML(name, when, challenges, quizzes, answers)], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = file;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+        const done = challenges.filter((c) => c.res.total && c.res.passed === c.res.total).length;
+        statusEl.className = 'hw4-status feedback good';
+        statusEl.textContent = 'Downloaded ' + file + ' with ' + done + ' of ' + challenges.length + ' challenges complete. Open it to check it, then follow the steps in Submitting.';
+      } catch (err) {
+        statusEl.className = 'hw4-status feedback bad';
+        statusEl.textContent = 'Something went wrong while building the file. Reload the page and try again; your work is still saved.';
+        console.error('[hw4] download', err);
+      } finally {
+        dlBtn.disabled = false;
+      }
+    });
+  });
+</script>
+</body>
+</html>

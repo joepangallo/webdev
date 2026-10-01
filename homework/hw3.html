@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Homework 3: Module 3 · Web Dev I</title>
+  <meta name="description" content="Interactive practice for Chapter 3, HTML 1: fix syntax, choose elements by meaning, build a complete document, write links, inline text, images, entities and lists, and structure a page with semantic elements, with live checks and one downloadable file of your work.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/css/course.css">
+  <script src="../assets/js/course.js"></script>
+  <style>
+    /* ---------- Homework 3 page (hw3-) ---------- */
+    body[data-page="homework"] { --mod: var(--ch3); }
+    html { scroll-padding-top: calc(var(--topbar-h) + 20px); }
+
+    /* Small uppercase labels */
+    .hw3-kicker {
+      display: block; margin-bottom: 4px;
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3);
+    }
+
+    /* Name and progress card */
+    .lesson > .hw3-card { max-width: none; }
+    .hw3-card {
+      margin: 0 0 1.6em; padding: 18px 20px;
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-1);
+    }
+    .hw3-card > h3 { margin: 0 0 12px; }
+    .hw3-name { max-width: 26rem; margin-bottom: 4px; }
+    .hw3-name input { font-size: 1.05rem; }
+    .hw3-stats { margin: 14px 0 6px; }
+    .hw3-stat {
+      display: inline-block; vertical-align: top; width: 13.5rem; max-width: calc(50% - 12px);
+      margin: 0 8px 10px 0; padding: 10px 12px;
+      background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
+    }
+    .hw3-stat .hw3-kicker { letter-spacing: .03em; line-height: 1.35; min-height: 2.7em; }
+    .hw3-stat b { display: block; font-family: var(--font-display); font-size: 1.45rem; line-height: 1.2; color: var(--ink); }
+    .hw3-bar { display: block; height: 6px; margin-top: 8px; border-radius: 99px; background: var(--surface-3); overflow: hidden; }
+    .hw3-bar > span { display: block; width: 0; height: 100%; border-radius: 99px; background: var(--visited); transition: width .4s ease; }
+    .hw3-jump { list-style: none; padding: 0; margin: 4px 0 0; font-size: .9rem; }
+    .hw3-jump li { display: inline-block; margin: 0 6px 8px 0; }
+    .hw3-jump li + li { margin-top: 0; }
+    .hw3-jump a {
+      display: inline-block; padding: 5px 12px; border: 1px solid var(--line); border-radius: 99px;
+      background: var(--surface); color: var(--ink-2); text-decoration: none;
+    }
+    .hw3-jump a:hover, .hw3-jump a:focus-visible { border-color: var(--accent); color: var(--ink); }
+
+    /* Challenge headings, status pills and task boxes */
+    h3.hw3-ch { margin-top: 2.2em; }
+    h3.hw3-ch .pill { margin-left: 8px; vertical-align: middle; font-family: var(--font-body); font-weight: 700; }
+    .hw3-task {
+      margin: 0 0 1.2em; padding: 12px 16px;
+      background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--mod); border-radius: var(--radius);
+    }
+    .hw3-task > strong:first-child { display: block; margin-bottom: 4px; font-family: var(--font-display); }
+    .hw3-task > :last-child { margin-bottom: 0; }
+    .hw3-why { color: var(--ink-2); }
+
+    /* Explain it */
+    .hw3-explain {
+      margin: 0 0 1.6em; padding: 14px 16px;
+      background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--visited); border-radius: var(--radius);
+    }
+    .hw3-explain label { display: block; margin-bottom: 10px; font-weight: 400; color: var(--ink); }
+    .hw3-explain .hw3-kicker { color: var(--visited); font-weight: 700; }
+    .hw3-explain textarea { min-height: 8.5rem; resize: vertical; line-height: 1.5; }
+    .hw3-wc { margin: 6px 0 0; }
+
+    /* Repair viewer */
+    .hw3-chips button { margin: 0 6px 6px 0; }
+    .hw3-fix-ed { margin: 8px 0 12px; border: 1px solid var(--code-line); border-radius: 8px; overflow: hidden; }
+    .hw3-issues { margin: 0 0 12px; padding-left: 1.2em; font-size: .92rem; }
+    .hw3-issues li { color: var(--ink-2); }
+    .hw3-issues .ok { color: var(--good); list-style: none; margin-left: -1.2em; font-weight: 700; }
+
+    /* DOM family tree */
+    .hw3-tree, .hw3-tree ul { list-style: none; margin: 0; padding-left: 1.3em; border-left: 1px dashed var(--line-2); }
+    .hw3-tree { padding-left: .4em; border-left: 0; }
+    .hw3-tree li { margin: 3px 0; }
+    .hw3-tree li + li { margin-top: 3px; }
+    .hw3-tree code { display: inline-block; padding: 1px 6px; border-radius: 5px; }
+    .hw3-tree code.hw3-a { outline: 2px solid var(--accent); background: var(--accent-soft); }
+    .hw3-tree code.hw3-b { outline: 2px dashed var(--visited); background: var(--visited-soft); }
+    .hw3-treebox { margin: 0 0 12px; padding: 12px 14px; overflow-x: auto; background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; }
+    .hw3-q { font-size: 1.05rem; }
+    .hw3-src { margin: 0 0 12px; padding: 10px 0; overflow-x: auto; background: var(--code-bg); border: 1px solid var(--code-line); border-radius: 8px; font-size: .85rem; line-height: 1.6; color: var(--code-ink); }
+    .hw3-row { display: block; padding: 0 14px 0 0; white-space: pre; }
+    .hw3-row.hw3-a { background: var(--accent-soft); box-shadow: inset 4px 0 0 var(--accent); }
+    .hw3-row.hw3-b { background: var(--visited-soft); box-shadow: inset 4px 0 0 var(--visited); }
+    .hw3-ln { display: inline-block; width: 3em; padding-right: .9em; text-align: right; color: var(--ink-3); user-select: none; }
+    .hw3-q code { font-weight: 700; }
+
+    /* Download and submit */
+    .hw3-dl { margin: 0 0 1.4em; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-1); }
+    .hw3-steps > li { margin-bottom: .5em; }
+    .hw3-submit {
+      margin: 0; padding: 18px 20px; font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; color: var(--ink);
+      background: var(--accent-soft); border: 1px solid var(--line); border-left: 5px solid var(--accent); border-radius: var(--radius);
+    }
+  </style>
+</head>
+<body data-page="homework">
+<main id="main">
+  <header class="module-hero" id="top">
+    <p class="eyebrow"><span class="tag">Homework 3</span><span>Chapter 3 · HTML 1: Introduction</span></p>
+    <h1>Homework 3: Module 3</h1>
+    <p class="lede">Practice everything in Chapter 3 by writing real HTML: fix broken syntax, choose elements by what they mean, build a complete document from nothing, link a small site together, mark up text, images and lists, and give a page its structure. Live checks tell you when each piece works, and at the end you download one file that holds all of your work.</p>
+  </header>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="start">
+    <p class="section-eyebrow"><span class="s-num">Start here</span><span>Your name, your progress, and how this works</span></p>
+    <h2>Before you begin</h2>
+
+    <div class="hw3-card" id="progress">
+      <h3>Your name and progress</h3>
+      <div class="field hw3-name">
+        <label for="hw3-name">Your name</label>
+        <input type="text" id="hw3-name" autocomplete="name" maxlength="80" spellcheck="false" placeholder="First and last name">
+      </div>
+      <p class="small muted">Saved in this browser only. It labels the file you download at the end.</p>
+      <div class="hw3-stats">
+        <div class="hw3-stat">
+          <span class="hw3-kicker">Challenges complete</span>
+          <b><span id="hw3-n-ch">0</span> of <span id="hw3-t-ch">12</span></b>
+          <span class="hw3-bar"><span id="hw3-bar-ch"></span></span>
+        </div>
+        <div class="hw3-stat">
+          <span class="hw3-kicker">Quizzes finished</span>
+          <b><span id="hw3-n-qz">0</span> of <span id="hw3-t-qz">6</span></b>
+          <span class="hw3-bar"><span id="hw3-bar-qz"></span></span>
+        </div>
+        <div class="hw3-stat">
+          <span class="hw3-kicker">Written answers</span>
+          <b><span id="hw3-n-ex">0</span> of <span id="hw3-t-ex">6</span></b>
+          <span class="hw3-bar"><span id="hw3-bar-ex"></span></span>
+        </div>
+        <div class="hw3-stat">
+          <span class="hw3-kicker">Practice activities</span>
+          <b><span id="hw3-n-ac">0</span> of <span id="hw3-t-ac">9</span></b>
+          <span class="hw3-bar"><span id="hw3-bar-ac"></span></span>
+        </div>
+      </div>
+      <nav aria-label="On this page">
+        <span class="hw3-kicker">On this page</span>
+        <ol class="hw3-jump">
+          <li><a href="#part1">1. What HTML is</a></li>
+          <li><a href="#part2">2. Syntax</a></li>
+          <li><a href="#part3">3. Semantic markup</a></li>
+          <li><a href="#part4">4. Document structure</a></li>
+          <li><a href="#part5">5. Elements tour</a></li>
+          <li><a href="#part6">6. Structure elements</a></li>
+          <li><a href="#part7">7. Capstone</a></li>
+          <li><a href="#download">Download my work</a></li>
+          <li><a href="#submit">Submit</a></li>
+        </ol>
+      </nav>
+    </div>
+
+    <h3>How this homework works</h3>
+    <p>Everything happens right here on the page: there is nothing to install and no files to create until the very end. Each part matches a section of <a href="../ch3/index.html">Chapter 3</a>, and the link at the top of each part takes you back to the lesson if something feels unfamiliar.</p>
+    <div class="cards">
+      <div class="card">
+        <h4>Challenges</h4>
+        <p>A live editor with an HTML tab, a preview, and a list of checks underneath. Edit the code until every check turns green. The checks look at the page the browser actually built from your code, so any correct answer passes, not just one exact spelling.</p>
+      </div>
+      <div class="card">
+        <h4>Quizzes and practice</h4>
+        <p>Short quizzes plus sorting, matching, ordering and fill-in activities. They explain every answer, so a wrong answer still teaches you something, and you can retry them as often as you like.</p>
+      </div>
+      <div class="card">
+        <h4>Explain it</h4>
+        <p>Six questions you answer in your own words, in two to four sentences. Explaining an idea is the fastest way to find out whether you really understand it.</p>
+      </div>
+    </div>
+    <p>Every line of starter code comes with a comment that says what it is, and every <code>TODO</code> comment marks a place where you work. Read the comments before you type. Each challenge also has a hint that nudges you in the right direction without giving the answer away.</p>
+    <aside class="callout tip">
+      <strong>Inspect the preview</strong>
+      Right-click anything inside a preview and choose <strong>Inspect</strong>. The Elements panel in DevTools shows the tree the browser built from your HTML, including anything it repaired or added for you. It is the best way to find out why a check is not passing.
+    </aside>
+    <aside class="callout warn">
+      <strong>Your work lives in this browser</strong>
+      Everything you type is saved automatically in this browser on this computer, and nothing is sent anywhere. If you switch computers or clear your browsing data, it is gone. The <strong>Reset</strong> button on a challenge also erases your changes to it. When you finish, use <a href="#download">Download my work</a> at the end of the page and upload the file to GitHub.
+    </aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part1">
+    <p class="section-eyebrow"><span class="s-num">Part 1</span><span>3.1 What Is HTML and Where Did It Come From?</span></p>
+    <h2>Part 1: What HTML is</h2>
+    <p>HTML (HyperText Markup Language) labels content so browsers, screen readers and search engines know what each piece is: this is a heading, this is a list, this is a link. It is not a programming language; it describes content. A web page has three layers: HTML for structure and meaning, CSS for presentation, and JavaScript for behavior. And browsers are forgiving: when your HTML has a mistake, the browser repairs it following exact rules in the standard instead of showing an error. Review <a href="../ch3/index.html#s3-1">3.1 What Is HTML</a> if any of that is new.</p>
+
+    <div class="buckets" data-id="hw3-act-layers" data-hw3-act="buckets" data-title="Which layer does the job?">
+      <script type="application/json">
+      {"buckets": ["HTML: structure and meaning", "CSS: presentation", "JavaScript: behavior"], "items": [
+        ["This text is the page's main heading", "HTML: structure and meaning"],
+        ["These five links are the site's main menu", "HTML: structure and meaning"],
+        ["A photo's alternative text", "HTML: structure and meaning"],
+        ["The main heading is dark blue", "CSS: presentation"],
+        ["The menu links sit side by side in one row", "CSS: presentation"],
+        ["The photo has rounded corners", "CSS: presentation"],
+        ["Selecting \"Show more\" reveals the rest of the event list", "JavaScript: behavior"],
+        ["A counter of seats left updates every minute without a reload", "JavaScript: behavior"]
+       ],
+       "explain": "Ask what each job is about: **what the content is** (HTML), **how it looks** (CSS) or **what it does when the visitor acts** (JavaScript)."}
+      </script>
+    </div>
+
+    <div class="quiz" data-id="hw3-quiz-1" data-title="Quiz: what HTML is">
+      <script type="application/json">
+      [
+        {"q": "What does the **markup** in HyperText Markup Language refer to?", "choices": ["Tags placed around content to say what each part is", "The CSS that decides how text looks", "The price of hosting a page", "Hidden notes that only search engines read"], "answer": 0, "shuffle": true, "explain": "Like an editor's notes on a printed draft, tags label content: this is a heading, this is a list item, this is a link."},
+        {"q": "True or false: HTML is a programming language with variables and loops.", "answer": false, "explain": "HTML describes content. It has no variables, loops or logic; behavior is JavaScript's job."},
+        {"q": "You forget a closing `</em>` tag. What does a modern browser do?", "choices": ["Shows an error message instead of the page", "Repairs the markup using the rules in the HTML standard, and shows the page", "Refuses to load the rest of the file", "Asks the visitor what you meant"], "answer": 1, "explain": "HTML parsers are forgiving: the standard spells out exactly how to recover from every kind of error, so every browser builds the same page. The repair is a guess, though, and may not be what you meant."},
+        {"q": "Browsers hide most markup mistakes. Which tool shows them to you?", "choices": ["The W3C Nu Html Checker (a validator)", "The browser's zoom setting", "A CSS file", "The address bar"], "answer": 0, "shuffle": true, "explain": "A validator checks your page against the HTML standard and lists every error. Fix them from the top down: one early mistake often causes several messages further down."},
+        {"q": "Around 2000, a page served as true XHTML that broke a single rule showed…", "choices": ["an error message instead of the page", "the page with the mistake highlighted", "the page, repaired, exactly like HTML", "a blank page with no message"], "answer": 0, "explain": "XHTML used the strict rules of XML. Browser makers pushed back, and HTML5 chose forgiving parsing instead."},
+        {"q": "Who publishes the official HTML specification today, the HTML Living Standard?", "choices": ["The WHATWG", "Each browser maker separately", "Nobody: HTML stopped changing in 1999", "The company that hosts your site"], "answer": 0, "shuffle": true, "explain": "Since 2019 the WHATWG's HTML Living Standard is the one official HTML specification. It is updated continuously, so there is no HTML6 coming."}
+      ]
+      </script>
+    </div>
+
+    <div class="hw3-explain">
+      <label for="hw3-explain-1"><span class="hw3-kicker">Explain it 1</span>Browsers quietly repair broken HTML instead of showing an error. Explain why the HTML standard chose to be forgiving, why that is still a problem for you as the author, and which tool shows you the mistakes the browser hides.</label>
+      <textarea id="hw3-explain-1" class="input" rows="5"></textarea>
+      <p class="small muted hw3-wc">0 words</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part2">
+    <p class="section-eyebrow"><span class="s-num">Part 2</span><span>3.2 HTML Syntax</span></p>
+    <h2>Part 2: Syntax</h2>
+    <p>An element is an opening tag, some content and a closing tag; attributes go inside the opening tag as <code>name="value"</code> pairs. Void elements such as <code>&lt;img&gt;</code> and <code>&lt;br&gt;</code> have no content and no closing tag. Elements close in the reverse order they were opened. Boolean attributes such as <code>checked</code> and <code>hidden</code> are "on" just by being there. Runs of spaces and line breaks in your text collapse into one space, and <code>&lt;!-- comments --&gt;</code> never appear on the page. Review <a href="../ch3/index.html#s3-2">3.2 HTML Syntax</a> for every rule.</p>
+
+    <div class="widget" data-kind="Tool" data-title="What did the browser build?" id="hw3-fix">
+      <p>Type or paste some HTML. Below the editor you see the mistakes in it, then the tree the browser actually built after repairing them quietly. Notice that the browser also adds <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code> if you leave them out, and that it picks standards or quirks mode depending on the first line. Try the examples.</p>
+      <div class="hw3-chips" id="hw3-fix-chips"></div>
+      <div class="hw3-fix-ed" id="hw3-fix-ed"></div>
+      <span class="hw3-kicker">Mistakes in your HTML</span>
+      <ul class="hw3-issues" id="hw3-fix-issues" aria-live="polite"></ul>
+      <p class="small" id="hw3-fix-mode"></p>
+      <div id="hw3-fix-out"></div>
+    </div>
+
+    <div class="buckets" data-id="hw3-act-void" data-hw3-act="buckets" data-title="Void, or needs a closing tag?">
+      <script type="application/json">
+      {"buckets": ["Void: never closed", "Needs a closing tag"], "code": true, "items": [
+        ["<img>", "Void: never closed"],
+        ["<br>", "Void: never closed"],
+        ["<hr>", "Void: never closed"],
+        ["<meta>", "Void: never closed"],
+        ["<link>", "Void: never closed"],
+        ["<input>", "Void: never closed"],
+        ["<p>", "Needs a closing tag"],
+        ["<a>", "Needs a closing tag"],
+        ["<title>", "Needs a closing tag"],
+        ["<script>", "Needs a closing tag"],
+        ["<li>", "Needs a closing tag"],
+        ["<span>", "Needs a closing tag"]
+       ],
+       "explain": "Void elements are completely described by their attributes, so there is nothing to close. `<script>` and `<span>` catch people out: they always need a closing tag, even when they are empty."}
+      </script>
+    </div>
+
+    <h3 class="hw3-ch" id="c3-1">Challenge 3.1: Fix the syntax <span class="pill" data-hw3-pill="hw3-c3-1">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> Because browsers repair mistakes silently, a page with broken syntax often looks fine on your screen and then behaves strangely: text ends up inside the wrong element, an alt text is cut off after one word, or a box you meant to switch off is still on. Reading markup closely enough to spot these mistakes is a basic skill you will use on every page you write.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <p>The notice in the HTML tab has eight mistakes, and each <code>TODO</code> comment marks one. Fix them so that:</p>
+      <ol>
+        <li>All element names are lowercase.</li>
+        <li>No elements overlap: the element opened last is closed first.</li>
+        <li>Every non-void element you open is closed.</li>
+        <li>Void elements have no closing tag, and no non-void element is "closed" with a slash (<code>&lt;div /&gt;</code>).</li>
+        <li>Every attribute value is in double quotes, so the photo's whole <code>alt</code> text survives.</li>
+        <li>The "open to everyone" paragraph is visible, and the reminder checkbox starts unticked.</li>
+      </ol>
+      <p>Use the "What did the browser build?" tool above if you want to see how the browser reads your version.</p>
+    </div>
+    <div class="playground" data-id="hw3-c3-1" data-title="Challenge 3.1: Fix the syntax" data-layout="stacked" data-height="340" data-challenge="Checks for Challenge 3.1">
+      <textarea data-lang="html"><!-- A Story Time notice with eight mistakes. Each TODO comment names one. -->
+<H2>Story Time</H2>                                      <!-- TODO: house style writes element names in lowercase -->
+<p>Read <strong>this <em>first</strong></em>.</p>        <!-- TODO: these two elements overlap -->
+<p>Stories, songs and a craft for ages 3 to 6.           <!-- TODO: this paragraph is never closed -->
+<p>Bring a grown-up.<br></br>Seats are first come.</p>   <!-- TODO: a void element never gets a closing tag -->
+<!-- The next line is a photo. Its src holds a placeholder picture as text, so no image file is needed. -->
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 2'%3E%3Crect width='4' height='2' fill='%23b9cde6'/%3E%3C/svg%3E" width="240" height="120" alt=Children listening to a story>
+<!-- TODO (for the img above): an attribute value with spaces must be in double quotes, or the browser cuts it short -->
+<div class="note" />Ask at the front desk if you need help.</div>  <!-- TODO: a slash does not close a div -->
+<p hidden="false">Today's session is open to everyone.</p>         <!-- TODO: this paragraph should be visible -->
+<p><input type="checkbox" checked="false"> Email me a reminder</p>  <!-- TODO: the box should start unticked --></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "All element and attribute names are lowercase", "test": "return hw3.upper(code.html).length === 0"},
+        {"label": "No overlapping tags: the element opened last is closed first", "test": "return !hw3.nest(code.html).some(function (x) { return x.type === 'overlap' || x.type === 'stray'; })"},
+        {"label": "Every non-void element you open is closed", "test": "return !hw3.nest(code.html).some(function (x) { return x.type === 'unclosed'; })"},
+        {"label": "Void elements have no closing tag (no `</br>`)", "test": "return !hw3.nest(code.html).some(function (x) { return x.type === 'void-close'; })"},
+        {"label": "No slash pretending to close a non-void element (no `<div />`)", "test": "return !hw3.nest(code.html).some(function (x) { return x.type === 'self-close'; })"},
+        {"label": "Every attribute value is in double quotes, and the photo's whole `alt` text survives", "test": "var i = $('img'); return hw3.unquoted(code.html).length === 0 && !!i && /^children listening to a story$/i.test((i.getAttribute('alt') || '').trim())"},
+        {"label": "The \"open to everyone\" paragraph is visible (no `hidden` attribute at all)", "test": "var p = $$('p').filter(function (x) { return /open to everyone/i.test(x.textContent); })[0]; return !!p && !p.hasAttribute('hidden')"},
+        {"label": "The reminder checkbox starts unticked (no `checked` attribute at all)", "test": "var c = $('input[type=\"checkbox\"]'); return !!c && !c.hasAttribute('checked') && !c.checked"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.1</summary>
+      <p>Go one <code>TODO</code> at a time and watch the checks. For the overlap, ask which of the two elements was opened last; that one has to close first. A void element is complete on its own, so its closing tag simply goes away. For the two boolean attributes, think about what the browser actually asks: not "what is the value?" but "is the attribute there at all?"</p>
+    </details>
+
+    <h3 class="hw3-ch" id="c3-2">Challenge 3.2: Whitespace and comments <span class="pill" data-hw3-pill="hw3-c3-2">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> Pressing Enter in your editor does not start a new line on the page: browsers collapse every run of spaces and line breaks into a single space. Knowing that, you can indent your code freely, and you reach for the right tool when a line break really matters: <code>&lt;br&gt;</code> inside an address, a new <code>&lt;p&gt;</code> for a new idea, and <code>&lt;pre&gt;</code> for text whose spacing is part of the content. Comments let you leave notes in the code that visitors never see.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <ol>
+        <li>Keep the address on three lines, using <code>&lt;br&gt;</code>.</li>
+        <li>Split the closure and the book sale into two separate paragraphs, with no stacked <code>&lt;br&gt;&lt;br&gt;</code>.</li>
+        <li>Turn the draft note into an HTML comment: it stays in your code, but disappears from the page.</li>
+        <li>Make the reading-room sign keep its spacing, with the element that preserves whitespace.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-2" data-title="Challenge 3.2: Whitespace and comments" data-layout="stacked" data-height="340" data-challenge="Checks for Challenge 3.2">
+      <textarea data-lang="html"><h2>Visit us</h2>                                         <!-- a section heading -->
+<!-- TODO: the address below is three lines here, but the browser joins them into one line. Keep them on three. -->
+<p class="address">
+  Harbor Street Library
+  12 Harbor Street
+  Riverside
+</p>
+<!-- TODO: the next paragraph holds two separate announcements. Make them two paragraphs instead. -->
+<p>The library is closed on Monday, November 9.<br><br>The book sale starts on Saturday, November 14.</p>
+<p>DRAFT: ask Sam whether the sale opens at 9 or 10.</p>   <!-- TODO: a note for the team, not for visitors -->
+<!-- TODO: the sign below is lined up with spaces, but the spaces collapse. Use the element that keeps them. -->
+<p class="sign">
++-------------------+
+|   QUIET  PLEASE   |
+|  READING ROOM  2  |
++-------------------+
+</p></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "The address shows on three lines, with two `<br>`s", "test": "var a = $('.address') || $('address'); return !!a && a.querySelectorAll('br').length === 2"},
+        {"label": "The closure and the sale are two separate paragraphs, with no stacked `<br><br>`", "test": "var ps = $$('p'), c = ps.filter(function (p) { return /closed on monday/i.test(p.textContent); })[0], s = ps.filter(function (p) { return /book sale/i.test(p.textContent); })[0]; return !!c && !!s && c !== s && !/<br\\s*\\/?>\\s*<br/i.test(hw3.html(code))"},
+        {"label": "The draft note is a comment: it is in your code but not on the page", "test": "return !/draft/i.test(doc.body.textContent) && (code.html.match(/<!--[\\s\\S]*?-->/g) || []).some(function (c) { return /draft/i.test(c); })"},
+        {"label": "The reading-room sign keeps its spacing (`<pre>`)", "test": "var p = $('pre'); return !!p && /QUIET  PLEASE/.test(p.textContent) && /READING ROOM  2/.test(p.textContent)"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.2</summary>
+      <p>A line break that belongs to the content, like the lines of an address, is a void element you put at the end of a line. Two ideas are two paragraphs, so the line breaks between them go and a closing and an opening tag take their place. A comment starts with <code>&lt;!--</code> and ends with <code>--&gt;</code>. Only one element displays whitespace exactly as you typed it; its name is short for "preformatted".</p>
+    </details>
+
+    <div class="quiz" data-id="hw3-quiz-2" data-title="Quiz: syntax">
+      <script type="application/json">
+      [
+        {"q": "In this element, which part is the attribute **name**?", "code": "<a href=\"events.html\">Upcoming events</a>", "lang": "html", "choices": ["`a`", "`href`", "`events.html`", "`Upcoming events`"], "answer": 1, "explain": "`a` is the element name, `href` the attribute name, `events.html` its value, and `Upcoming events` the content."},
+        {"q": "Which line is correctly nested?", "choices": ["`<p><strong><em>Hi</em></strong></p>`", "`<p><strong><em>Hi</strong></em></p>`", "`<p><strong><em>Hi</em></p></strong>`", "`<strong><p><em>Hi</em></strong></p>`"], "answer": 0, "explain": "Close in the reverse order you opened: `em` was opened last, so it closes first, then `strong`, then `p`."},
+        {"q": "True or false: `<input type=\"checkbox\" checked=\"false\">` shows an unticked box.", "answer": false, "explain": "`checked` is a boolean attribute: its presence alone ticks the box, whatever its value. Remove the attribute to untick it."},
+        {"q": "How does the browser display this paragraph?", "code": "<p>Harbor     Street\n\n   Library</p>", "lang": "html", "choices": ["`Harbor Street Library` on one line, with single spaces", "Exactly as typed, on three lines", "`HarborStreetLibrary` with no spaces", "Nothing: the extra spaces are an error"], "answer": 0, "explain": "Every run of spaces, tabs and line breaks collapses into one space. Only `<pre>` keeps whitespace as typed."},
+        {"q": "Which of these are void elements?", "choices": ["`<img>`", "`<br>`", "`<meta>`", "`<script>`", "`<p>`"], "answer": [0, 1, 2], "explain": "`<script>` and `<p>` need closing tags. `<img>`, `<br>` and `<meta>` never get one."},
+        {"q": "What does `<div />` mean in HTML?", "choices": ["An opening `<div>` that still needs a `</div>`", "An empty, already closed `<div>`", "An error the browser refuses to display", "A comment"], "answer": 0, "explain": "HTML ignores the slash. It only means something on void elements, where it does nothing anyway."},
+        {"q": "Who can read the comments in your HTML?", "choices": ["Anyone, with View Source", "Only you", "Only search engines", "Nobody: the server removes them"], "answer": 0, "explain": "Comments are not shown on the page, but they are sent with it. Never put passwords or private notes in them."}
+      ]
+      </script>
+    </div>
+
+    <div class="hw3-explain">
+      <label for="hw3-explain-2"><span class="hw3-kicker">Explain it 2</span>In your own words, explain why <code>checked="false"</code> still ticks a checkbox, and the only way to write "off" for a boolean attribute such as <code>checked</code>, <code>hidden</code> or <code>disabled</code>.</label>
+      <textarea id="hw3-explain-2" class="input" rows="5"></textarea>
+      <p class="small muted hw3-wc">0 words</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part3">
+    <p class="section-eyebrow"><span class="s-num">Part 3</span><span>3.3 Semantic Markup</span></p>
+    <h2>Part 3: Semantic markup</h2>
+    <p>Semantic markup chooses each element for what the content <em>is</em>, not for how it should look. A heading is an <code>&lt;h2&gt;</code> because it is a heading, not because you want big bold text; how it looks is CSS's job. The difference is invisible to a sighted mouse user and huge for everyone else: screen readers jump between headings and landmarks, search engines read your outline, and the next developer can read your intent. Review <a href="../ch3/index.html#s3-3">3.3 Semantic Markup</a> before you start.</p>
+
+    <div class="match" data-id="hw3-act-meaning" data-hw3-act="match" data-title="Choose by meaning, not by looks">
+      <script type="application/json">
+      {"leftTitle": "Element", "rightTitle": "Use it for", "pairs": [
+        ["<strong>", "Importance, seriousness or urgency, like a safety warning"],
+        ["<em>", "Stress that changes what a sentence means"],
+        ["<b>", "Drawing attention without extra importance: a keyword, a product name"],
+        ["<i>", "A different voice: a technical term, a foreign phrase, a ship's name"],
+        ["<mark>", "Text highlighted because it matches what the reader searched for"],
+        ["<small>", "Side comments and fine print, like a copyright line"]
+      ]}
+      </script>
+    </div>
+
+    <h3 class="hw3-ch" id="c3-3">Challenge 3.3: Choose elements by meaning <span class="pill" data-hw3-pill="hw3-c3-3">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> <code>&lt;strong&gt;</code> and <code>&lt;b&gt;</code> are both bold, and <code>&lt;em&gt;</code> and <code>&lt;i&gt;</code> are both italic, but a screen reader, a search engine and the next developer all treat them differently. Old tags like <code>&lt;font&gt;</code> and <code>&lt;center&gt;</code> only described looks, which is why they were removed from HTML. Picking the element that matches the meaning is the core habit of this chapter.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <ol>
+        <li>Remove the obsolete <code>&lt;font&gt;</code> and <code>&lt;center&gt;</code> tags.</li>
+        <li>Make "Holiday Hours" a real level-2 heading.</li>
+        <li>Mark the urgent word "Warning:" with the element for importance.</li>
+        <li>Stress the word "do" with the element for stress emphasis.</li>
+        <li>Mark the foreign phrase "carpe librum" with the element for a different voice, instead of stress.</li>
+        <li>Mark the product name "Harbor Pass" with the element that draws attention without adding importance.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-3" data-title="Challenge 3.3: Choose elements by meaning" data-layout="stacked" data-height="260" data-challenge="Checks for Challenge 3.3">
+      <textarea data-lang="html"><!-- A holiday notice, marked up for looks instead of meaning. Choose each element by what the words ARE. -->
+<center><b>Holiday Hours</b></center>                         <!-- TODO: center is obsolete, and this is really a heading -->
+<p><font color="red">Warning:</font> the book drop is closed on holidays.</p>  <!-- TODO: font is obsolete; the word is urgent -->
+<p>Yes, we do open on Veterans Day, from noon to 5 PM.</p>    <!-- TODO: someone doubted it, so stress the word "do" -->
+<p>Our motto is <em>carpe librum</em>: seize the book.</p>    <!-- TODO: not stress, but a phrase in another language -->
+<p>Ask about the new <strong>Harbor Pass</strong> card.</p>    <!-- TODO: a product name: set apart, not more important --></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "No obsolete `<font>` or `<center>` tags are left", "test": "return !$('font, center') && !/<\\/?(font|center)[\\s>]/.test(hw3.html(code))"},
+        {"label": "\"Holiday Hours\" is an `<h2>`", "test": "return $$('h2').some(function (h) { return /^holiday hours$/i.test(hw3.text(h)); })"},
+        {"label": "\"Warning:\" is marked as important (`<strong>`)", "test": "return $$('strong').some(function (s) { return /^warning:?$/i.test(hw3.text(s)); })"},
+        {"label": "The stressed word \"do\" is `<em>`", "test": "return $$('em').some(function (e) { return /^do$/i.test(hw3.text(e)); })"},
+        {"label": "\"carpe librum\" is `<i>` (a different voice), and no longer `<em>`", "test": "return $$('i').some(function (e) { return /carpe librum/i.test(e.textContent); }) && !$$('em').some(function (e) { return /carpe librum/i.test(e.textContent); })"},
+        {"label": "\"Harbor Pass\" is `<b>` (attention, not importance), and no longer `<strong>`", "test": "return $$('b').some(function (e) { return /harbor pass/i.test(e.textContent); }) && !$$('strong').some(function (e) { return /harbor pass/i.test(e.textContent); })"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.3</summary>
+      <p>For each phrase, ask the question from 3.3: is it more important? Would you lean on it when reading aloud? Is it just set apart, like a name? Or is it a different kind of text, such as another language? The heading needs no <code>&lt;b&gt;</code> inside it: headings already say "this is a heading", and how bold it looks is up to CSS.</p>
+    </details>
+
+    <h3 class="hw3-ch" id="c3-4">Challenge 3.4: From div soup to semantic HTML <span class="pill" data-hw3-pill="hw3-c3-4">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> CSS can make a page of plain <code>&lt;div&gt;</code>s look like anything, but it cannot make them <em>mean</em> anything. A page built from <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> and <code>&lt;footer&gt;</code> lets a screen reader user jump to the menu or the main content in one keystroke, and it tells search engines and other developers what each part is.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <p>The Harbor Street Library home page below is "div soup": every box is a <code>&lt;div&gt;</code>. Rewrite it so that:</p>
+      <ol>
+        <li>The top of the page is a <code>&lt;header&gt;</code> that holds the site name as the page's only <code>&lt;h1&gt;</code>, and a <code>&lt;nav&gt;</code>.</li>
+        <li>Inside the <code>&lt;nav&gt;</code>, the three menu links are in a <code>&lt;ul&gt;</code>, one link per <code>&lt;li&gt;</code>.</li>
+        <li>The content is in one <code>&lt;main&gt;</code>, where "Opening hours" and "Story time" are <code>&lt;h2&gt;</code> headings.</li>
+        <li>The three opening-hours lines are a <code>&lt;ul&gt;</code> with three <code>&lt;li&gt;</code>s.</li>
+        <li>The photo has <code>alt</code> text that describes it (it shows a librarian reading to children).</li>
+        <li>The story time sentence is a <code>&lt;p&gt;</code>, and the copyright line is in a <code>&lt;footer&gt;</code>.</li>
+        <li>The very first element on the page is a "Skip to main content" link. People who use the keyboard instead of a mouse press Tab to move from link to link, so without it they must tab through every menu link on every page before reaching the content. The skip link is an ordinary fragment link (3.5): give the <code>&lt;main&gt;</code> an <code>id</code>, such as <code>id="main"</code>, and point the link's <code>href</code> at that id with a <code>#</code> in front.</li>
+      </ol>
+      <p>When you finish, no <code>&lt;div&gt;</code> should be left pretending to be a header, menu, main area or footer.</p>
+    </div>
+    <div class="playground" data-id="hw3-c3-4" data-title="Challenge 3.4: From div soup to semantic HTML" data-layout="stacked" data-height="360" data-challenge="Checks for Challenge 3.4">
+      <textarea data-lang="html"><!-- Harbor Street Library home page. Every box is a div, so nothing says what it is. -->
+<!-- TODO: add a "Skip to main content" link here, as the first element, that jumps to the main content's id -->
+<div class="header">                                 <!-- TODO: the top of the page; there is an element for this -->
+  <div class="title">Harbor Street Library</div>     <!-- TODO: the site name is the page's one main heading -->
+  <div class="nav">                                  <!-- TODO: the main menu; there is an element for menus -->
+    <a href="index.html">Home</a>                    <!-- TODO: menu links belong in a list (ul, li) -->
+    <a href="events.html">Events</a>                 <!-- a link to the events page -->
+    <a href="report.html">Web Report</a>             <!-- a link to the report page -->
+  </div>                                             <!-- end of the menu -->
+</div>                                               <!-- end of the top of the page -->
+<div class="main">                                   <!-- TODO: the page's main content has its own element -->
+  <div class="heading">Opening hours</div>           <!-- TODO: a section heading, one level below the h1 -->
+  <div>Monday to Thursday: 9 AM to 8 PM</div>        <!-- TODO: these three lines are a list with no set order -->
+  <div>Friday and Saturday: 9 AM to 5 PM</div>       <!-- second line of the opening hours -->
+  <div>Sunday: closed</div>                          <!-- third line of the opening hours -->
+  <div class="heading">Story time</div>              <!-- TODO: another section heading at the same level -->
+  <!-- The next line is a placeholder photo. Its src holds the picture itself as text, so no image file is needed. -->
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 2'%3E%3Crect width='4' height='2' fill='%23b9cde6'/%3E%3C/svg%3E" width="240" height="120">
+  <!-- TODO (for the img above): it shows a librarian reading to children. Describe that with an alt attribute. -->
+  <div>Every Saturday at 10 AM in the children's room.</div>   <!-- TODO: a sentence of text is a paragraph -->
+</div>                                               <!-- end of the main content -->
+<div class="footer">© 2026 Harbor Street Library</div>  <!-- TODO: the bottom of the page, with the copyright line --></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "A `<header>` holds the `<nav>`", "test": "return !!$('header nav')"},
+        {"label": "Inside `<nav>`, a `<ul>` holds three `<li>`s, each with one link", "test": "return $$('nav ul > li').length === 3 && $$('nav ul > li > a[href]').length === 3"},
+        {"label": "Exactly one `<h1>`, and it is the library's name", "test": "var h = $$('h1'); return h.length === 1 && /harbor street library/i.test(h[0].textContent)"},
+        {"label": "Exactly one `<main>`, with both section headings as `<h2>`s inside it", "test": "return $$('main').length === 1 && $$('main h2').length === 2"},
+        {"label": "The opening hours are a `<ul>` with three `<li>`s inside `<main>`", "test": "return $$('main ul > li').length === 3"},
+        {"label": "The photo has `alt` text of at least three words that describes it (not a file name)", "test": "var i = $('img'); if (!i) return false; var a = (i.getAttribute('alt') || '').trim(); return a.split(/\\s+/).length >= 3 && !/\\.(jpe?g|png|gif|svg|webp)\\b/i.test(a)"},
+        {"label": "The story time sentence is a `<p>` inside `<main>`", "test": "return $$('main p').some(function (p) { return /saturday at 10/i.test(p.textContent); })"},
+        {"label": "The copyright line is in a `<footer>`, and no `<div>` is left playing header, nav, main or footer", "test": "var f = $('footer'); return !!f && /\\u00a9/.test(f.textContent) && !$$('div').some(function (d) { return /\\b(header|nav|main|footer|title|heading)\\b/i.test(d.className); })"},
+        {"label": "The first element is a \"Skip to main content\" link that jumps to the `<main>` element's `id`", "test": "var a = doc.body.firstElementChild, m = $('main'); return !!a && a.tagName === 'A' && /skip to main content/i.test(hw3.text(a)) && !!m && !!m.id && hw3.href(a) === '#' + m.id"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.4</summary>
+      <p>Work from the outside in. Change each <code>&lt;div class="..."&gt;</code> and its matching <code>&lt;/div&gt;</code> together, so the nesting never breaks; the class name tells you which element it should become. For the menu, each link needs its own list item, and all three list items sit inside one list. If a heading check fails, count your <code>&lt;h1&gt;</code>s: the site name is the only one. The skip link is an ordinary <code>&lt;a&gt;</code> whose <code>href</code> is <code>#</code> followed by the id you put on <code>&lt;main&gt;</code>.</p>
+    </details>
+
+    <div class="quiz" data-id="hw3-quiz-3" data-title="Quiz: semantic markup">
+      <script type="application/json">
+      [
+        {"q": "You want a sentence to look large and bold, but it is not a heading. What is the best markup?", "choices": ["A `<p>` with a class, styled with CSS", "An `<h2>`, because it looks right by default", "`<font size=\"6\">`", "`<strong>` around the whole sentence"], "answer": 0, "shuffle": true, "explain": "Choose elements by meaning, then style them with CSS. A heading or `<strong>` would claim a meaning the text does not have, and `<font>` is obsolete."},
+        {"q": "\"I **never** said that.\" Reading aloud, you stress \"never\", and the stress changes the meaning. Which element fits?", "choices": ["`<em>`", "`<b>`", "`<i>`", "`<mark>`"], "answer": 0, "shuffle": true, "explain": "`<em>` is stress emphasis: move the stress to another word and the sentence means something else."},
+        {"q": "Which element fits a ship's name, such as the Mayflower?", "choices": ["`<i>`", "`<em>`", "`<strong>`", "`<cite>`"], "answer": 0, "shuffle": true, "explain": "A ship's name is a different kind of text, which is exactly what `<i>` is for. `<cite>` is for the title of a creative work."},
+        {"q": "Which feature of semantic markup lets a screen reader user skip straight to the main content?", "choices": ["Landmark elements such as `<main>` and `<nav>`", "Smaller file sizes", "Class names such as `class=\"main\"`", "Bold text"], "answer": 0, "shuffle": true, "explain": "Landmarks are built into the elements. A class name means nothing to assistive technology."},
+        {"q": "Which of these are obsolete tags that only described looks?", "choices": ["`<font>`", "`<center>`", "`<strong>`", "`<em>`"], "answer": [0, 1], "explain": "`<font>` and `<center>` were removed from HTML: presentation belongs in CSS. `<strong>` and `<em>` carry meaning."}
+      ]
+      </script>
+    </div>
+
+    <div class="hw3-explain">
+      <label for="hw3-explain-3"><span class="hw3-kicker">Explain it 3</span>The div version and your semantic version of the home page can look exactly the same in a browser. Explain why the semantic version is still better, and name at least two people or programs that benefit from it.</label>
+      <textarea id="hw3-explain-3" class="input" rows="5"></textarea>
+      <p class="small muted hw3-wc">0 words</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part4">
+    <p class="section-eyebrow"><span class="s-num">Part 4</span><span>3.4 Structure of HTML Documents</span></p>
+    <h2>Part 4: Document structure</h2>
+    <p>Every page shares one skeleton. <code>&lt;!DOCTYPE html&gt;</code> comes first and switches the browser into standards mode (without it you get quirks mode, which imitates old browser bugs). <code>&lt;html lang="en"&gt;</code> wraps everything. The <code>&lt;head&gt;</code> holds information about the page, starting with <code>&lt;meta charset="utf-8"&gt;</code>, then the viewport, the <code>&lt;title&gt;</code> and a description. The <code>&lt;body&gt;</code> holds everything visitors see. From that markup the browser builds the DOM, a family tree of elements. Review <a href="../ch3/index.html#s3-4">3.4 Structure of HTML Documents</a> first.</p>
+
+    <div class="order" data-id="hw3-act-skeleton" data-hw3-act="order" data-title="Put the skeleton in order">
+      <script type="application/json">
+      {"prompt": "Top of the file first.", "code": true, "items": [
+        "<!DOCTYPE html>",
+        "<html lang=\"en\">",
+        "<head>",
+        "<meta charset=\"utf-8\">",
+        "<title>Events · Harbor Street Library</title>",
+        "</head>",
+        "<body>",
+        "<h1>Events</h1>",
+        "</body>",
+        "</html>"
+       ],
+       "explain": "The DOCTYPE comes before everything, `<html>` wraps the rest, the charset is the first thing in the `<head>`, and elements close in the reverse order they were opened."}
+      </script>
+    </div>
+
+    <h3 class="hw3-ch" id="c3-5">Challenge 3.5: Build a complete document <span class="pill" data-hw3-pill="hw3-c3-5">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> Every page you ever write starts with the same dozen lines, so you should be able to type them from memory. Each one has a job you would notice if it went missing: without the DOCTYPE the page drops into quirks mode, without the charset accented letters turn into gibberish, without the viewport phones show a tiny desktop page, and without a title the browser tab shows a file name.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <p>The HTML tab holds only the visible content. Build the complete document around it:</p>
+      <ol>
+        <li>The first line is <code>&lt;!DOCTYPE html&gt;</code>.</li>
+        <li>The <code>&lt;html&gt;</code> element declares English with <code>lang="en"</code>.</li>
+        <li>The <code>&lt;head&gt;</code> starts with <code>&lt;meta charset="utf-8"&gt;</code>, then holds the viewport <code>&lt;meta&gt;</code> (<code>width=device-width, initial-scale=1</code>).</li>
+        <li>The <code>&lt;title&gt;</code> names this page, for example <code>Events · Harbor Street Library</code>.</li>
+        <li>A <code>&lt;meta name="description"&gt;</code> summarizes the page in 50 to 160 characters.</li>
+        <li>You write out <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code> and their closing tags, and the heading and paragraph sit inside the <code>&lt;body&gt;</code>.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-5" data-title="Challenge 3.5: Build a complete document" data-layout="stacked" data-height="320" data-challenge="Checks for Challenge 3.5">
+      <textarea data-lang="html"><!-- TODO: this is only the visible content. Build the complete document around it: -->
+<!-- the DOCTYPE, <html lang="en">, a <head> (charset first, then the viewport, a title and a description), -->
+<!-- and a <body> that holds the two lines below. -->
+<h1>Events at Harbor Street Library</h1>                       <!-- the page's main heading -->
+<p>Story time, author talks and a coding club, all free.</p>   <!-- the opening paragraph --></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "The first line is `<!DOCTYPE html>`, so the page is in standards mode", "test": "return /^\\s*<!doctype html\\s*>/i.test(hw3.raw(code)) && doc.compatMode === 'CSS1Compat'"},
+        {"label": "`<html>` declares English with `lang=\"en\"`", "test": "return /<html[^>]*\\slang\\s*=\\s*\"en/i.test(hw3.raw(code)) && /^en\\b/i.test(doc.documentElement.getAttribute('lang') || '')"},
+        {"label": "`<meta charset=\"utf-8\">` is the first thing in the `<head>`", "test": "return /<head[^>]*>\\s*<meta\\s+charset\\s*=\\s*\"?utf-8\"?\\s*\\/?>/i.test(hw3.raw(code))"},
+        {"label": "The viewport `<meta>` is in the head, with `width=device-width, initial-scale=1`", "test": "var m = doc.head.querySelector('meta[name=\"viewport\"]'), c = m ? m.getAttribute('content') || '' : ''; return /width\\s*=\\s*device-width/.test(c) && /initial-scale\\s*=\\s*1/.test(c) && !/user-scalable\\s*=\\s*no/.test(c)"},
+        {"label": "The `<title>` names this page (it mentions Events)", "test": "return !!doc.head.querySelector('title') && /events/i.test(doc.title) && doc.title.trim().split(/\\s+/).length >= 2"},
+        {"label": "A `<meta name=\"description\">` of 50 to 160 characters", "test": "var m = doc.head.querySelector('meta[name=\"description\"]'), n = m ? (m.getAttribute('content') || '').trim().length : 0; return n >= 50 && n <= 160"},
+        {"label": "`<head>` and `<body>` are written out and closed, and the heading and paragraph are inside the `<body>`", "test": "var r = hw3.raw(code); return /<head[\\s>]/i.test(r) && /<\\/head>/i.test(r) && /<body[\\s>]/i.test(r) && /<\\/body>/i.test(r) && /<\\/html>/i.test(r) && !!$('body h1') && !!$('body p') && !doc.head.querySelector('h1, p')"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.5</summary>
+      <p>Type the skeleton from the order activity above, then add to the <code>&lt;head&gt;</code>. Nothing may come between <code>&lt;head&gt;</code> and the charset <code>&lt;meta&gt;</code>. A <code>&lt;meta&gt;</code> is void, so a description goes in its <code>content</code> attribute, not between tags. If the standards-mode check fails, look at the very first characters of your code.</p>
+    </details>
+
+    <h3>The DOM: your document as a tree</h3>
+    <p>When the browser reads your HTML, it builds the Document Object Model: a tree with one object for every element. Family words describe how elements relate. An element directly inside another is its <strong>child</strong>, and the outer one is its <strong>parent</strong>. Elements with the same parent are <strong>siblings</strong>. Anything further up the tree is an <strong>ancestor</strong>, and anything further down is a <strong>descendant</strong>. CSS selectors and JavaScript both use these relationships, so it is worth getting them automatic.</p>
+
+    <div class="widget" data-kind="Practice" data-title="Predict the family tree" id="hw3-dom" data-id="hw3-act-dom">
+      <p>Read the HTML below, then predict how two of its elements are related in the tree the browser builds from it. After you answer, the tree appears so you can check your prediction. Get five right to complete this activity.</p>
+      <pre class="hw3-src" id="hw3-dom-src"></pre>
+      <p class="hw3-q" id="hw3-dom-q" aria-live="polite"></p>
+      <div class="hw3-chips" id="hw3-dom-choices"></div>
+      <div class="feedback" id="hw3-dom-fb" hidden aria-live="polite"></div>
+      <div class="hw3-treebox" id="hw3-dom-tree" hidden></div>
+      <p class="small muted" id="hw3-dom-score">Correct answers: 0 of 5</p>
+      <div class="btn-row">
+        <button type="button" class="btn small primary" id="hw3-dom-next">Next question</button>
+        <button type="button" class="btn small ghost" id="hw3-dom-show" aria-pressed="false">Show the tree</button>
+      </div>
+    </div>
+
+    <div class="quiz" data-id="hw3-quiz-4" data-title="Quiz: document structure">
+      <script type="application/json">
+      [
+        {"q": "What happens if a page leaves out `<!DOCTYPE html>`?", "choices": ["The browser renders it in quirks mode", "The page will not load", "The browser treats it as XHTML", "Nothing at all"], "answer": 0, "shuffle": true, "explain": "Without a DOCTYPE the browser falls back to quirks mode, which imitates old browser bugs. `document.compatMode` reports `BackCompat` instead of `CSS1Compat`."},
+        {"q": "Why does `<meta charset=\"utf-8\">` come first in the `<head>`?", "choices": ["The browser needs to know the encoding before it reads any text, including the title", "It makes the page download faster", "Search engines only read the first line", "It must come before the DOCTYPE"], "answer": 0, "shuffle": true, "explain": "The encoding says how to turn the file's bytes into characters. A wrong guess turns \"Café\" into \"CafÃ©\"."},
+        {"q": "Where does the text of the `<title>` appear?", "choices": ["In the browser tab, bookmarks and search results, but not on the page", "As the big heading at the top of the page", "Nowhere; it is only for the validator", "In the page footer"], "answer": 0, "explain": "The title lives in the head and never appears in the page area. The visible heading is the `<h1>`, and a page needs both."},
+        {"q": "In this markup, what is the parent of `<em>`?", "code": "<main>\n  <h1>Events</h1>\n  <p>Story time is <em>free</em>.</p>\n</main>", "lang": "html", "choices": ["`<p>`", "`<main>`", "`<h1>`", "`<body>`"], "answer": 0, "explain": "`<em>` sits directly inside `<p>`, so `<p>` is its parent. `<main>` is an ancestor further up."},
+        {"q": "In the same markup, which two elements are siblings?", "code": "<main>\n  <h1>Events</h1>\n  <p>Story time is <em>free</em>.</p>\n</main>", "lang": "html", "choices": ["`<h1>` and `<p>`", "`<p>` and `<em>`", "`<main>` and `<h1>`", "`<h1>` and `<em>`"], "answer": 0, "explain": "`<h1>` and `<p>` share the same parent, `<main>`."},
+        {"q": "You leave out the `<html>`, `<head>` and `<body>` tags. What does the parser do?", "choices": ["Adds the elements anyway", "Shows an error", "Puts everything in the head", "Refuses to build a DOM"], "answer": 0, "explain": "The parser creates them for you, which is why a fragment still works. Write them anyway: the validator expects a complete document, and you need the head for the title and charset."},
+        {"q": "Why should the viewport `<meta>` never include `user-scalable=no`?", "choices": ["It stops visitors from zooming in, which locks out people who need larger text", "It makes the page load slowly", "Phones ignore the whole tag", "It turns on quirks mode"], "answer": 0, "shuffle": true, "explain": "Copy the viewport line exactly as taught: `width=device-width, initial-scale=1`."}
+      ]
+      </script>
+    </div>
+
+    <div class="hw3-explain">
+      <label for="hw3-explain-4"><span class="hw3-kicker">Explain it 4</span>Explain the difference between <code>&lt;head&gt;</code> and <code>&lt;header&gt;</code>, and between <code>&lt;title&gt;</code> and <code>&lt;h1&gt;</code>. Where does each one appear, and who or what reads it?</label>
+      <textarea id="hw3-explain-4" class="input" rows="5"></textarea>
+      <p class="small muted hw3-wc">0 words</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part5">
+    <p class="section-eyebrow"><span class="s-num">Part 5</span><span>3.5 Quick Tour of HTML Elements</span></p>
+    <h2>Part 5: The elements tour</h2>
+    <p>A couple of dozen elements do most of the work on every page: headings that form an outline, links that connect pages, inline elements that give single words meaning, images with good alternative text, character entities for characters HTML treats as special, and three kinds of list. Review <a href="../ch3/index.html#s3-5">3.5 Quick Tour of HTML Elements</a> as you go; each challenge below matches one of its topics.</p>
+
+    <h3 class="hw3-ch" id="c3-6">Challenge 3.6: Fix the heading outline <span class="pill" data-hw3-pill="hw3-c3-6">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> Headings are the page's table of contents. Screen reader users jump from heading to heading to find what they need, and search engines read the outline to learn what the page covers. That only works when there is one <code>&lt;h1&gt;</code>, levels are never skipped on the way down, and a level is chosen for its place in the outline, never for its size.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <p>Change only the heading elements so the page has this outline:</p>
+      <ol>
+        <li>One <code>&lt;h1&gt;</code>: Harbor Street Library.</li>
+        <li>Two <code>&lt;h2&gt;</code> sections: Visit us, and Events.</li>
+        <li>Under Visit us, two <code>&lt;h3&gt;</code>s: Opening hours, and Parking (which is a bold paragraph right now, not a heading at all).</li>
+        <li>Under Events, two <code>&lt;h3&gt;</code>s: Story time, and Author talks.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-6" data-title="Challenge 3.6: Fix the heading outline" data-layout="stacked" data-height="300" data-challenge="Checks for Challenge 3.6">
+      <textarea data-lang="html"><h1>Harbor Street Library</h1>                <!-- the page title: the one main heading -->
+<h1>Visit us</h1>                             <!-- TODO: a main section of the page, not a second page title -->
+<h4>Opening hours</h4>                        <!-- TODO: a subsection of "Visit us", chosen because it looked small -->
+<p>Monday to Saturday, 9 AM to 8 PM.</p>      <!-- the opening hours -->
+<p><b>Parking</b></p>                         <!-- TODO: looks like a heading but is not one. Another subsection of "Visit us" -->
+<p>Free parking behind the building.</p>      <!-- the parking details -->
+<h2>Events</h2>                               <!-- a main section of the page -->
+<h5>Story time</h5>                           <!-- TODO: a subsection of "Events" -->
+<p>Saturdays at 10 AM.</p>                    <!-- the story time details -->
+<h5>Author talks</h5>                         <!-- TODO: another subsection of "Events" -->
+<p>First Tuesday of the month, 7 PM.</p>      <!-- the author talk details --></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "Exactly one `<h1>`, and it is the library's name", "test": "var h = $$('h1'); return h.length === 1 && /^harbor street library$/i.test(hw3.text(h[0]))"},
+        {"label": "\"Visit us\" and \"Events\" are `<h2>`s", "test": "return ['visit us', 'events'].every(function (t) { return hw3.heads(doc).some(function (x) { return x.level === 2 && x.text.toLowerCase() === t; }); })"},
+        {"label": "\"Opening hours\" and \"Parking\" are `<h3>`s under \"Visit us\"", "test": "var hs = hw3.heads(doc), v = hw3.find(hs, 'visit us'), e = hw3.find(hs, 'events'); return v >= 0 && e > v && ['opening hours', 'parking'].every(function (t) { var i = hw3.find(hs, t); return i > v && i < e && hs[i].level === 3; })"},
+        {"label": "\"Story time\" and \"Author talks\" are `<h3>`s under \"Events\"", "test": "var hs = hw3.heads(doc), e = hw3.find(hs, 'events'); return e >= 0 && ['story time', 'author talks'].every(function (t) { var i = hw3.find(hs, t); return i > e && hs[i].level === 3; })"},
+        {"label": "No heading level is skipped on the way down", "test": "var hs = hw3.heads(doc); return hs.length >= 2 && hs[0].level === 1 && hs.every(function (x, i) { return i === 0 || x.level <= hs[i - 1].level + 1; })"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.6</summary>
+      <p>Write the outline down like a book's table of contents before you touch the code: what is the title, what are the chapters, and what is inside each chapter? A heading's level comes from that position alone. "Parking" needs to become a heading element, and its bold tag can go: headings are already bold by default.</p>
+    </details>
+
+    <h3>Links</h3>
+    <p>Where a link goes depends on its <code>href</code>. A full address with <code>https://</code> is an <strong>absolute URL</strong>, for other websites. A <strong>relative path</strong> such as <code>about.html</code> or <code>../index.html</code> gives directions from the folder of the current page, and is right for everything inside your own site. A path starting with <code>/</code> is <strong>root-relative</strong>; it breaks when you open files from your disk and on GitHub Pages, so avoid it in this course. A <strong>fragment</strong> such as <code>#hours</code> jumps to an <code>id</code>, and <code>mailto:</code> and <code>tel:</code> start an email or a phone call.</p>
+
+    <div class="match" data-id="hw3-act-links" data-hw3-act="match" data-title="What kind of link is each href?">
+      <script type="application/json">
+      {"leftTitle": "href", "rightTitle": "What it is", "pairs": [
+        ["https://www.w3.org/", "An absolute URL: a page on another website"],
+        ["../index.html", "A relative path: up one folder, then index.html"],
+        ["/index.html", "Root-relative: from the top of the server (avoid it in this course)"],
+        ["#hours", "A fragment: the element with id=\"hours\" on this page"],
+        ["mailto:info@example.org", "Opens the visitor's email program with this address"],
+        ["tel:+15555550123", "Offers to call this number on a phone"]
+      ]}
+      </script>
+    </div>
+
+    <h3 class="hw3-ch" id="c3-7">Challenge 3.7: Link the site together <span class="pill" data-hw3-pill="hw3-c3-7">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> The same files will be opened from your laptop, from GitHub Pages and maybe one day from a domain of their own. Relative paths keep working in all three places because the files stay in the same places relative to each other. Writing the right <code>href</code> from the right folder, every time, is what keeps a site from filling up with broken links.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <p>You are editing <code>events/index.html</code> in this site:</p>
+      <script type="text/plain" class="code" data-lang="text" data-title="The site's files">
+        harbor-street-library/
+          index.html          the home page
+          about.html          has a section with id="hours"
+          events/
+            index.html        the page you are editing
+            storytime.html
+      </script>
+      <p>Replace every placeholder <code>href</code> as its <code>TODO</code> says:</p>
+      <ol>
+        <li>Home, About and Story time use relative paths from this page's folder. The About link currently uses a root-relative path; make it relative.</li>
+        <li>"opening hours" jumps straight to the <code>hours</code> section of the About page.</li>
+        <li>The email address is a <code>mailto:</code> link and the phone number is a <code>tel:</code> link in international format (<code>+1</code> and the digits only).</li>
+        <li>"Nu Html Checker" is an absolute URL to <code>https://validator.w3.org/nu/</code>.</li>
+        <li>"Back to top" jumps to the header, which has <code>id="top"</code>.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-7" data-title="Challenge 3.7: Link the site together" data-layout="stacked" data-height="360" data-challenge="Checks for Challenge 3.7">
+      <textarea data-lang="html"><!-- This is events/index.html. Replace each placeholder href as its TODO says. -->
+<header id="top">                                             <!-- the top of the page, with id="top" -->
+  <nav>                                                       <!-- the main menu -->
+    <ul>                                                      <!-- the menu links, as a list -->
+      <li><a href="#">Home</a></li>                           <!-- TODO: index.html in the site's top folder -->
+      <li><a href="/about.html">About</a></li>                <!-- TODO: root-relative breaks on GitHub Pages; make it relative -->
+      <li><a href="#">Story time</a></li>                     <!-- TODO: storytime.html, in the same folder as this page -->
+    </ul>                                                     <!-- end of the menu list -->
+  </nav>                                                      <!-- end of the menu -->
+</header>                                                     <!-- end of the top of the page -->
+<main>                                                        <!-- the main content -->
+  <h1>Events</h1>                                             <!-- the page's main heading -->
+  <p>Check our <a href="#">opening hours</a> before you come.</p>   <!-- TODO: the id="hours" section of about.html -->
+  <p>Questions? Email <a href="#">info@example.org</a>.</p>        <!-- TODO: an email link to this address -->
+  <p>Or call <a href="#">(555) 555-0123</a>.</p>                   <!-- TODO: a phone link: +1, then only the digits -->
+  <p>Check your pages with the <a href="#">Nu Html Checker</a>.</p>  <!-- TODO: https://validator.w3.org/nu/ -->
+  <p><a href="#">Back to top</a></p>                          <!-- TODO: the element with id="top" on this page -->
+</main>                                                       <!-- end of the main content --></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "Home goes up one folder: `../index.html`", "test": "return hw3.href(hw3.link(doc, /^home$/i)) === '../index.html'"},
+        {"label": "About is relative too: `../about.html`", "test": "return hw3.href(hw3.link(doc, /^about$/i)) === '../about.html'"},
+        {"label": "Story time stays in this folder: `storytime.html`", "test": "return hw3.href(hw3.link(doc, /^story time$/i)) === 'storytime.html'"},
+        {"label": "\"opening hours\" goes to the `hours` section of the About page", "test": "return hw3.href(hw3.link(doc, /^opening hours$/i)) === '../about.html#hours'"},
+        {"label": "The email address is a `mailto:` link", "test": "return /^mailto:info@example\\.org(\\?.*)?$/i.test(hw3.href(hw3.link(doc, /info@example\\.org/i)))"},
+        {"label": "The phone number is a `tel:` link in international format", "test": "return hw3.href(hw3.link(doc, /555/)) === 'tel:+15555550123'"},
+        {"label": "The checker link is an absolute URL to `https://validator.w3.org/nu/`", "test": "return /^https:\\/\\/validator\\.w3\\.org\\/nu\\/?$/.test(hw3.href(hw3.link(doc, /nu html checker/i)))"},
+        {"label": "\"Back to top\" is the fragment `#top`, and the header still has `id=\"top\"`", "test": "var t = doc.getElementById('top'); return hw3.href(hw3.link(doc, /back to top/i)) === '#top' && !!t && t.tagName === 'HEADER'"},
+        {"label": "No placeholder `#`, root-relative `/` or file-system paths are left", "test": "var a = $$('a'); return a.length === 8 && a.every(function (x) { var h = hw3.href(x); return h !== '' && h !== '#' && !/^\\/(?!\\/)/.test(h) && !/^file:|\\\\|^[a-z]:\\//i.test(h); })"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.7</summary>
+      <p>Directions always start from the folder of the page you are editing, which here is <code>events/</code>. <code>..</code> means "the parent folder". A link to a spot on another page is that page's path plus <code>#</code> and the id. The <code>tel:</code> format has no spaces, dashes or brackets. Selecting a link in the preview does not leave the page; it shows you where the link would go.</p>
+    </details>
+
+    <h3 class="hw3-ch" id="c3-8">Challenge 3.8: Give words their meaning <span class="pill" data-hw3-pill="hw3-c3-8">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> Inline elements label single words and phrases: an abbreviation and its full name, a date that a calendar can read, the title of a book, a quotation, keys to press, a file name. Each one helps a screen reader, a search engine or a translation tool understand the text, and each one is something CSS can style later without you adding a single class.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <ol>
+        <li>Wrap the second "ALA" in <code>&lt;abbr&gt;</code> with <code>title="American Library Association"</code>.</li>
+        <li>Wrap the date and time of the author talk in <code>&lt;time&gt;</code> with <code>datetime="2026-11-14T10:30"</code>.</li>
+        <li>The book title is a <code>&lt;cite&gt;</code>, and the quoted words are a <code>&lt;q&gt;</code>. The browser adds quotation marks to a <code>&lt;q&gt;</code>, so remove the typed ones.</li>
+        <li>Each key in "Ctrl + P" is its own <code>&lt;kbd&gt;</code>.</li>
+        <li>The file name <code>index.html</code> is <code>&lt;code&gt;</code>.</li>
+        <li>The "nd" in "2nd floor" is raised with <code>&lt;sup&gt;</code>, and the "2" in "CO2" is lowered with <code>&lt;sub&gt;</code>.</li>
+        <li>In the search results, each "Harbor" that matches the search word is highlighted with <code>&lt;mark&gt;</code>.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-8" data-title="Challenge 3.8: Give words their meaning" data-layout="stacked" data-height="360" data-challenge="Checks for Challenge 3.8">
+      <textarea data-lang="html"><h2>This month at the library</h2>                    <!-- a section heading -->
+<!-- TODO: wrap the second ALA in <abbr> with a title that spells it out -->
+<p>The American Library Association (ALA) named us a finalist for Library of the Year. ALA members get in free.</p>
+<!-- TODO: wrap the date and time in <time> with datetime="2026-11-14T10:30" -->
+<p>The author talk is on Saturday, November 14, 2026 at 10:30 AM.</p>
+<!-- TODO: the book title is a <cite>; the quoted words are a <q>, and the typed quotation marks go -->
+<p>Our book club is reading The Left Hand of Darkness, which one member called "the best book I read all year".</p>
+<!-- TODO: each key is its own <kbd> -->
+<p>To print your reading list, press Ctrl + P.</p>
+<!-- TODO: the file name is <code> -->
+<p>Save your page as index.html before you upload it.</p>
+<!-- TODO: raise the "nd" with <sup> -->
+<p>The computer lab is on the 2nd floor.</p>
+<!-- TODO: lower the "2" in CO2 with <sub> -->
+<p>Our new solar roof cut the building's CO2 emissions in half.</p>
+<!-- TODO: highlight each "Harbor" in the two results with <mark>; they match what the reader searched for -->
+<p>You searched for harbor. Results: Harbor Pass card, Harbor history walk.</p></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "\"ALA\" is an `<abbr>` whose `title` is \"American Library Association\"", "test": "return $$('abbr').some(function (a) { return hw3.text(a) === 'ALA' && /^american library association$/i.test((a.getAttribute('title') || '').trim()); })"},
+        {"label": "The date and time are a `<time>` with `datetime=\"2026-11-14T10:30\"`", "test": "return $$('time').some(function (t) { return /^2026-11-14[T ]10:30(:00)?$/.test((t.getAttribute('datetime') || '').trim()) && /november 14/i.test(t.textContent); })"},
+        {"label": "The book title is a `<cite>`", "test": "return $$('cite').some(function (c) { return /^the left hand of darkness$/i.test(hw3.text(c)); })"},
+        {"label": "The quoted words are a `<q>`, with no typed quotation marks left", "test": "var q = $$('q').filter(function (x) { return /best book i read all year/i.test(x.textContent); })[0]; return !!q && !/[\"\\u201c\\u201d]/.test(q.parentNode.textContent)"},
+        {"label": "\"Ctrl\" and \"P\" are each their own `<kbd>`", "test": "var k = $$('kbd').map(function (x) { return hw3.text(x).toLowerCase(); }); return k.indexOf('ctrl') >= 0 && k.indexOf('p') >= 0"},
+        {"label": "The file name is `<code>index.html</code>`", "test": "return $$('code').some(function (c) { return hw3.text(c) === 'index.html'; })"},
+        {"label": "\"2nd\" is written as 2 plus a raised `<sup>nd</sup>`", "test": "var s = $$('sup').filter(function (x) { return hw3.text(x) === 'nd'; })[0]; return !!s && /2nd floor/.test(s.parentNode.textContent)"},
+        {"label": "\"CO2\" is written as CO plus a lowered `<sub>2</sub>`", "test": "var s = $$('sub').filter(function (x) { return hw3.text(x) === '2'; })[0]; return !!s && /CO2 emissions/.test(s.parentNode.textContent)"},
+        {"label": "Both matching \"Harbor\"s in the results are `<mark>`ed", "test": "var m = $$('mark').filter(function (x) { return /^harbor$/i.test(hw3.text(x)); }); return m.length === 2 && m.every(function (x) { return /results/i.test(x.parentNode.textContent); })"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.8</summary>
+      <p>Wrap only the words each element describes, nothing more. The <code>title</code> and <code>datetime</code> values go inside the opening tag, while the visible words stay between the tags. A <code>&lt;q&gt;</code> wraps only the quoted words; delete the two typed <code>"</code> characters around them. "Ctrl + P" becomes two <code>&lt;kbd&gt;</code> elements with the plus sign between them. In the search results, mark only the two matches in the results, not the word "harbor" in the sentence before them.</p>
+    </details>
+
+    <h3>Images and character entities</h3>
+    <p>An <code>&lt;img&gt;</code> needs a <code>src</code> and an <code>alt</code>. Good <code>alt</code> text says what the image communicates, in a sentence or less; a purely decorative image keeps the attribute but leaves it empty, <code>alt=""</code>, so screen readers skip it. <code>width</code> and <code>height</code> (plain numbers, no units) let the browser reserve space before the file arrives. Some characters are special in HTML: <code>&lt;</code> starts a tag and <code>&amp;</code> starts an entity, so you write them as <code>&amp;lt;</code> and <code>&amp;amp;</code>.</p>
+
+    <div class="fill" data-id="hw3-act-entities" data-hw3-act="fill" data-mode="text" data-title="Write the character entities" data-explain="Every entity is an ampersand, a name and a semicolon. With UTF-8 you can type most symbols directly, but you always need `&amp;lt;`, `&amp;gt;` and `&amp;amp;` for the characters HTML itself uses.">
+      <script type="text/plain">
+To show the tag `<p>` as text on a page, write [[&lt;]]p[[&gt;]].
+An ampersand, as in Mac & Cheese, is written [[&amp;]].
+A double quotation mark inside a double-quoted attribute value is written [[&quot;]].
+A space that never breaks, as between 10 and AM, is written [[&nbsp;]].
+The copyright sign is written [[&copy;|&#169;|©]].
+      </script>
+    </div>
+
+    <h3 class="hw3-ch" id="c3-9">Challenge 3.9: Images and entities <span class="pill" data-hw3-pill="hw3-c3-9">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> <code>alt</code> text is read aloud by screen readers, shown when an image fails to load and used by search engines, so it has to describe what the image shows, not its file name. Decoration gets an empty <code>alt</code> so it is skipped instead of read out. And when text contains a character that HTML treats as code, an entity is the only way to show it safely.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <ol>
+        <li>Give the story time photo <code>alt</code> text that describes it (a librarian reading a picture book to children), plus <code>width="240"</code> and <code>height="120"</code>.</li>
+        <li>The wave is pure decoration: give it an empty <code>alt</code>, plus <code>width="240"</code> and <code>height="12"</code>.</li>
+        <li>Show the tag <code>&lt;nav&gt;</code> as text in the sentence, so the browser does not create a real <code>&lt;nav&gt;</code> element.</li>
+        <li>Write the ampersand in "Mac &amp; Cheese" as an entity.</li>
+        <li>Keep "10" and "AM" together with a non-breaking space.</li>
+        <li>Replace "(c)" with the real copyright sign.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-9" data-title="Challenge 3.9: Images and entities" data-layout="stacked" data-height="360" data-challenge="Checks for Challenge 3.9">
+      <textarea data-lang="html"><h2>Story time photos</h2>                                      <!-- a section heading -->
+<!-- The next img is a real photo of story time. Its src holds a placeholder picture as text. -->
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 2'%3E%3Crect width='4' height='2' fill='%23b9cde6'/%3E%3C/svg%3E" alt="IMG_2041.jpg">
+<!-- TODO (photo above): alt that says what it shows, plus width="240" and height="120" -->
+<!-- The next img is a decorative wave line. It carries no information. -->
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 1'%3E%3Crect width='20' height='1' fill='%237fa3c9'/%3E%3C/svg%3E" alt="decorative wave image">
+<!-- TODO (wave above): decoration gets an empty alt, plus width="240" and height="12" -->
+<p>Wrap your menu in the <nav> element.</p>        <!-- TODO: show <nav> as text, not as a real element -->
+<p>Tonight: Mac & Cheese Night for teens.</p>      <!-- TODO: write the ampersand as an entity -->
+<p>Doors open at 10 AM sharp.</p>                  <!-- TODO: keep "10" and "AM" together with a non-breaking space -->
+<p>(c) 2026 Harbor Street Library</p>              <!-- TODO: the real copyright sign, typed or as an entity --></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "The photo's `alt` describes what it shows: at least four words, not a file name", "test": "var i = $$('img')[0]; if (!i) return false; var a = (i.getAttribute('alt') || '').trim(); return a.split(/\\s+/).length >= 4 && !/\\.(jpe?g|png|gif|svg|webp)\\b/i.test(a) && !/^(an? )?(image|photo|picture) of\\b/i.test(a)"},
+        {"label": "The decorative wave has an empty `alt=\"\"`", "test": "var w = $$('img')[1]; return !!w && w.hasAttribute('alt') && w.getAttribute('alt') === ''"},
+        {"label": "Both images have `width` and `height` as plain numbers", "test": "var im = $$('img'); return im.length === 2 && im.every(function (i) { return /^\\d+$/.test(i.getAttribute('width') || '') && /^\\d+$/.test(i.getAttribute('height') || ''); })"},
+        {"label": "The sentence shows `<nav>` as text, and no real `<nav>` element exists", "test": "return !$('nav') && $$('p').some(function (p) { return p.textContent.indexOf('<nav>') >= 0; })"},
+        {"label": "\"Mac & Cheese\" is written with `&amp;`", "test": "return /mac &amp; cheese/.test(hw3.html(code)) && $$('p').some(function (p) { return /mac & cheese/i.test(p.textContent); })"},
+        {"label": "\"10 AM\" is joined by a non-breaking space", "test": "return $$('p').some(function (p) { return p.textContent.indexOf('10\\u00a0AM') >= 0; })"},
+        {"label": "The copyright line uses the real © sign", "test": "return $$('p').some(function (p) { return /^\\u00a9\\s*2026/.test(hw3.text(p)); }) && !/\\(c\\)/i.test(doc.body.textContent)"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.9</summary>
+      <p>Describe the photo as if you were telling someone on the phone what it shows. "Empty" means the attribute stays but its value has nothing between the quotes. For the tag in the sentence, both angle brackets need their entities. A non-breaking space is an entity too: it replaces the ordinary space between "10" and "AM".</p>
+    </details>
+
+    <h3>Lists</h3>
+    <p>Use <code>&lt;ul&gt;</code> when the order of items does not matter, <code>&lt;ol&gt;</code> when it does (the browser numbers the items for you), and <code>&lt;dl&gt;</code> for terms with descriptions (<code>&lt;dt&gt;</code> and <code>&lt;dd&gt;</code>). Only <code>&lt;li&gt;</code> elements belong directly inside <code>&lt;ul&gt;</code> and <code>&lt;ol&gt;</code>, so a nested list goes inside an <code>&lt;li&gt;</code>, never between two of them.</p>
+
+    <div class="buckets" data-id="hw3-act-lists" data-hw3-act="buckets" data-title="Which kind of list?">
+      <script type="application/json">
+      {"buckets": ["`<ul>`: order does not matter", "`<ol>`: order matters", "`<dl>`: terms and descriptions"], "items": [
+        ["Things to bring: your library card, a photo ID", "`<ul>`: order does not matter"],
+        ["The links in the site's main menu", "`<ul>`: order does not matter"],
+        ["Kinds of item you can borrow", "`<ul>`: order does not matter"],
+        ["Steps to renew a book online", "`<ol>`: order matters"],
+        ["The top five most borrowed books this month", "`<ol>`: order matters"],
+        ["Directions from the bus stop to the front door", "`<ol>`: order matters"],
+        ["A glossary of library words and what they mean", "`<dl>`: terms and descriptions"],
+        ["Book details: Format, Hardcover. Pages, 320.", "`<dl>`: terms and descriptions"]
+       ],
+       "explain": "Ask two questions: would shuffling the items change the meaning (then `<ol>`)? Is each item a name with its own description (then `<dl>`)? Otherwise, `<ul>`."}
+      </script>
+    </div>
+
+    <h3 class="hw3-ch" id="c3-10">Challenge 3.10: Three kinds of list <span class="pill" data-hw3-pill="hw3-c3-10">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> A list marked up as a list lets a screen reader announce "list, 4 items" so a listener knows how much is coming, lets the browser number steps for you, and lets CSS style every item at once. A list that is just paragraphs with typed numbers does none of that, and its numbers go wrong the moment you insert a step.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <ol>
+        <li>Fix the borrowing list so that only <code>&lt;li&gt;</code>s sit directly inside it: the nested list of E-books and Audiobooks must go inside the Digital item.</li>
+        <li>Turn the four card steps into an <code>&lt;ol&gt;</code>, and delete the typed numbers.</li>
+        <li>Turn the library words into a <code>&lt;dl&gt;</code>, with each word as a <code>&lt;dt&gt;</code> followed by its <code>&lt;dd&gt;</code>.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-10" data-title="Challenge 3.10: Three kinds of list" data-layout="stacked" data-height="400" data-challenge="Checks for Challenge 3.10">
+      <textarea data-lang="html"><h2>What you can borrow</h2>                          <!-- a section heading -->
+<ul>                                                 <!-- an unordered list: these items have no set order -->
+  <li>Books</li>                                     <!-- item 1 -->
+  <li>Films</li>                                     <!-- item 2 -->
+  <li>Digital</li>                                   <!-- item 3. TODO: the nested list below belongs INSIDE this item -->
+  <ul>                                               <!-- TODO: a list may not sit directly between two items -->
+    <li>E-books</li>                                 <!-- a kind of digital item -->
+    <li>Audiobooks</li>                              <!-- another kind of digital item -->
+  </ul>                                              <!-- end of the nested list -->
+  <li>Board games</li>                               <!-- item 4 -->
+</ul>                                                <!-- end of the list -->
+<h2>Get a library card</h2>                          <!-- a section heading -->
+<!-- TODO: these steps happen in order. Make them a list that numbers itself, and delete the typed numbers. -->
+<p>1. Bring a photo ID.</p>
+<p>2. Bring proof of your address.</p>
+<p>3. Fill in the short form at the front desk.</p>
+<p>4. Pick up your card the same day.</p>
+<h2>Library words</h2>                               <!-- a section heading -->
+<!-- TODO: each word has its own description. Make this a description list (dl, dt, dd). -->
+<p><b>Hold</b>: a request to save a book for you when it comes back.</p>
+<p><b>Renew</b>: borrow an item again for another three weeks.</p>
+<p><b>Branch</b>: one of the library's three buildings.</p></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "Only `<li>`s sit directly inside every `<ul>` and `<ol>`", "test": "return $$('ul, ol').length >= 2 && $$('ul > :not(li), ol > :not(li)').length === 0"},
+        {"label": "The borrowing list has four items, and E-books and Audiobooks are a list nested inside the Digital item", "test": "var u = $$('ul').filter(function (x) { return !x.parentElement.closest('li'); })[0]; if (!u) return false; var items = [].filter.call(u.children, function (c) { return c.tagName === 'LI'; }); var d = items.filter(function (li) { return /^digital/i.test(li.textContent.trim()); })[0]; return items.length === 4 && !!d && d.querySelectorAll('ul > li').length === 2"},
+        {"label": "The card steps are an `<ol>` with four `<li>`s", "test": "var o = $('ol'); return !!o && o.querySelectorAll('li').length === 4"},
+        {"label": "No typed numbers: the `<ol>` numbers the steps itself", "test": "var li = $$('ol li'); return li.length === 4 && li.every(function (x) { return !/^\\s*\\d+\\s*[.)]/.test(x.textContent); })"},
+        {"label": "The library words are a `<dl>`: three `<dt>`s, each followed by its `<dd>`", "test": "var d = $('dl'); if (!d) return false; var t = d.querySelectorAll('dt'); return t.length === 3 && d.querySelectorAll('dd').length === 3 && [].every.call(t, function (x) { return x.nextElementSibling && x.nextElementSibling.tagName === 'DD'; })"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.10</summary>
+      <p>For the nested list, move the Digital item's closing <code>&lt;/li&gt;</code> so that it comes after the inner list. For the steps, every <code>&lt;p&gt;</code> becomes an <code>&lt;li&gt;</code>, and one list element wraps them all. In the description list, the word goes in the term element and its description in the element right after it; the bold tags and colons are no longer needed.</p>
+    </details>
+
+    <div class="quiz" data-id="hw3-quiz-5" data-title="Quiz: the elements tour">
+      <script type="application/json">
+      [
+        {"q": "Your page is `events/storytime.html`. Which `href` reaches `index.html` in the site's top folder?", "choices": ["`../index.html`", "`index.html`", "`/index.html`", "`events/index.html`"], "answer": 0, "shuffle": true, "explain": "`..` climbs out of `events/` into the parent folder. `index.html` alone would mean `events/index.html`, and a leading `/` breaks from your disk and on GitHub Pages."},
+        {"q": "Which link text is best?", "choices": ["`See all upcoming events`", "`Click here`", "`Link`", "`https://example.org/events.html`"], "answer": 0, "shuffle": true, "explain": "Screen reader users often pull up a list of all links on a page. Each link's text has to make sense on its own."},
+        {"q": "A decorative swirl carries no information. What `alt` should it have?", "choices": ["`alt=\"\"`", "No `alt` attribute at all", "`alt=\"decorative swirl image\"`", "`alt=\"swirl.png\"`"], "answer": 0, "shuffle": true, "explain": "An empty `alt` tells screen readers to skip the image. Leaving `alt` out entirely is worse: many screen readers then read the file name."},
+        {"q": "Which `datetime` value is valid?", "choices": ["`2026-11-14T10:30`", "`11/14/2026 10:30 AM`", "`November 14`", "`14-11-2026`"], "answer": 0, "shuffle": true, "explain": "`datetime` uses year-month-day with hyphens and a 24-hour time, joined by a `T`."},
+        {"q": "To show `<p>` as text on a page (not create a paragraph), you write…", "choices": ["`&lt;p&gt;`", "`<p>`", "`\"<p>\"`", "`<code><p></code>`"], "answer": 0, "explain": "`&lt;` and `&gt;` are the entities for the angle brackets. Even inside `<code>`, a raw `<` starts a real tag."},
+        {"q": "Which list fits a glossary of terms and their meanings?", "choices": ["`<dl>`", "`<ul>`", "`<ol>`", "A series of `<br>` tags"], "answer": 0, "shuffle": true, "explain": "A description list pairs each term (`<dt>`) with its description (`<dd>`)."},
+        {"q": "Where does a nested list go?", "choices": ["Inside an `<li>` of the outer list", "Between two `<li>`s of the outer list", "After the outer list's closing tag", "Inside a `<p>`"], "answer": 0, "explain": "Only `<li>` elements belong directly inside `<ul>` and `<ol>`, so the inner list must live inside one of them."},
+        {"q": "Which shows a short inline quotation, and lets the browser add the quotation marks?", "choices": ["`<q>`", "`<cite>`", "`<blockquote>`", "`<em>`"], "answer": 0, "shuffle": true, "explain": "`<q>` is a short quotation inside a sentence. `<cite>` names the work, and `<blockquote>` is for a longer quotation that stands on its own."}
+      ]
+      </script>
+    </div>
+
+    <div class="hw3-explain">
+      <label for="hw3-explain-5"><span class="hw3-kicker">Explain it 5</span>The events page lives at <code>events/index.html</code>. Explain why <code>href="../about.html"</code> works when you open the site from your laptop and on GitHub Pages, while <code>href="/about.html"</code> breaks in both places.</label>
+      <textarea id="hw3-explain-5" class="input" rows="5"></textarea>
+      <p class="small muted hw3-wc">0 words</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part6">
+    <p class="section-eyebrow"><span class="s-num">Part 6</span><span>3.6 HTML5 Semantic Structure Elements</span></p>
+    <h2>Part 6: Structure elements</h2>
+    <p>HTML5 turned the most common <code>&lt;div&gt;</code> names into real elements. <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> and <code>&lt;footer&gt;</code> mark the big regions of a page. <code>&lt;article&gt;</code> is self-contained, <code>&lt;section&gt;</code> is a themed part of something bigger, <code>&lt;aside&gt;</code> is only loosely related, and <code>&lt;div&gt;</code> means nothing at all. <code>&lt;figure&gt;</code> and <code>&lt;figcaption&gt;</code> pair an image with its caption, <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> open and close without JavaScript, and <code>&lt;address&gt;</code> holds contact details. Review <a href="../ch3/index.html#s3-6">3.6 HTML5 Semantic Structure Elements</a> before you start.</p>
+
+    <div class="buckets" data-id="hw3-act-structure" data-hw3-act="buckets" data-title="article, section, aside or div?">
+      <script type="application/json">
+      {"buckets": ["`<article>`", "`<section>`", "`<aside>`", "`<div>`"], "items": [
+        ["A blog post on the library's news page", "`<article>`"],
+        ["One reader's comment under that blog post", "`<article>`"],
+        ["The \"Parking\" part of the Visit page, with its own heading", "`<section>`"],
+        ["Chapter 2 of a long, single-page guide to the library", "`<section>`"],
+        ["A \"You might also like\" box of links beside a post", "`<aside>`"],
+        ["A pull quote set beside the article it comes from", "`<aside>`"],
+        ["A wrapper that exists only so CSS can center the page", "`<div>`"],
+        ["A box around two paragraphs, just to give them a border", "`<div>`"]
+       ],
+       "explain": "Ask in order: would it make sense on its own, somewhere else (`<article>`)? Is it a themed part of something bigger, with a heading (`<section>`)? Is it only loosely related to what is around it (`<aside>`)? If none of those fit, and it only exists for styling, it is a `<div>`."}
+      </script>
+    </div>
+
+    <h3 class="hw3-ch" id="c3-11">Challenge 3.11: Structure a blog post <span class="pill" data-hw3-pill="hw3-c3-11">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> Structure elements describe what each block of a page is: the page's banner, its one main area, a self-contained post, the themed parts of that post, a related-links box, a captioned photo, a question that opens on demand, the owner's contact details. Choosing them well gives screen reader users landmarks to jump between, and gives you meaningful hooks for CSS instead of a pile of class names.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <p>Replace every <code>&lt;div&gt;</code> with the structure element its <code>TODO</code> describes, so that:</p>
+      <ol>
+        <li>The page has a <code>&lt;header&gt;</code> with the site name, one <code>&lt;main&gt;</code>, and a page <code>&lt;footer&gt;</code>.</li>
+        <li>The blog post is an <code>&lt;article&gt;</code> inside <code>&lt;main&gt;</code>, with its own <code>&lt;header&gt;</code> holding the title and a <code>&lt;time datetime="2026-10-03"&gt;</code>.</li>
+        <li>The post's two themed parts are <code>&lt;section&gt;</code>s, each starting with its <code>&lt;h2&gt;</code>.</li>
+        <li>The photo and its caption are a <code>&lt;figure&gt;</code> with a <code>&lt;figcaption&gt;</code>.</li>
+        <li>The question is a <code>&lt;details&gt;</code> with a <code>&lt;summary&gt;</code>, closed when the page loads.</li>
+        <li>Related posts is an <code>&lt;aside&gt;</code> beside the article, not inside it.</li>
+        <li>The library's street address and email link are in an <code>&lt;address&gt;</code> inside the page footer.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-11" data-title="Challenge 3.11: Structure a blog post" data-layout="stacked" data-height="420" data-challenge="Checks for Challenge 3.11">
+      <textarea data-lang="html"><div class="site-header">                                <!-- TODO: the page's banner at the top -->
+  <p class="logo">Harbor Street Library</p>               <!-- the site name -->
+</div>                                                    <!-- end of the banner -->
+<div class="content">                                     <!-- TODO: the page's one main area -->
+  <div class="post">                                      <!-- TODO: a self-contained blog post -->
+    <div class="post-top">                                <!-- TODO: the post's introduction: its title and date -->
+      <h1>How We Choose New Books</h1>                    <!-- the post's title -->
+      <p>Posted October 3, 2026</p>                       <!-- TODO: mark the date with datetime="2026-10-03" -->
+    </div>                                                <!-- end of the post's introduction -->
+    <div class="part">                                    <!-- TODO: a themed part of the post, with its own heading -->
+      <h2>You ask, we listen</h2>                         <!-- the part's heading -->
+      <p>Every request slip in the box by the front desk is read and counted.</p>  <!-- the part's text -->
+    </div>                                                <!-- end of the first part -->
+    <div class="part">                                    <!-- TODO: another themed part -->
+      <h2>From slip to shelf</h2>                         <!-- the part's heading -->
+      <p>Popular topics move to the top of the buying list.</p>  <!-- the part's text -->
+      <div class="photo">                                 <!-- TODO: a photo the text refers to, with its caption -->
+        <!-- The next img has a placeholder picture as its src. -->
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 2'%3E%3Crect width='4' height='2' fill='%23d9c7a7'/%3E%3C/svg%3E" width="240" height="120" alt="Two librarians unpacking a box of new books">
+        <p>New arrivals are unpacked every Tuesday.</p>  <!-- TODO: this is the photo's caption -->
+      </div>                                              <!-- end of the photo -->
+    </div>                                                <!-- end of the second part -->
+    <div class="faq">                                     <!-- TODO: a question that opens and closes without JavaScript -->
+      <p>How long until my request arrives?</p>          <!-- TODO: the clickable question -->
+      <p>Usually two to four weeks.</p>                   <!-- the answer, hidden until the question is opened -->
+    </div>                                                <!-- end of the question -->
+  </div>                                                  <!-- end of the blog post -->
+  <div class="related">                                   <!-- TODO: related links, beside the post rather than part of it -->
+    <h2>Related posts</h2>                                <!-- the box's heading -->
+    <ul>                                                  <!-- the related links, as a list -->
+      <li><a href="holds.html">How holds work</a></li>    <!-- a related post -->
+    </ul>                                                 <!-- end of the list -->
+  </div>                                                  <!-- end of the related links -->
+</div>                                                    <!-- end of the main area -->
+<div class="site-footer">                                 <!-- TODO: the page's footer -->
+  <p>Harbor Street Library, 12 Harbor Street, Riverside</p>        <!-- TODO: the contact details go in an address -->
+  <p><a href="mailto:info@example.org">info@example.org</a></p>    <!-- the email link, also part of the contact details -->
+</div>                                                    <!-- end of the footer --></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "The page has a `<header>` with the site name, and exactly one `<main>`", "test": "var h = $('body > header'); return !!h && /harbor street library/i.test(h.textContent) && $$('main').length === 1"},
+        {"label": "The blog post is an `<article>` inside `<main>`", "test": "var a = $('main article'); return !!a && /how we choose new books/i.test(a.textContent)"},
+        {"label": "The post's own `<header>` holds its `<h1>` and a `<time datetime=\"2026-10-03\">`", "test": "return !!$('article header h1') && $$('article header time').some(function (t) { return t.getAttribute('datetime') === '2026-10-03'; })"},
+        {"label": "The two themed parts are `<section>`s, each starting with its `<h2>`", "test": "var s = $$('article section'); return s.length === 2 && s.every(function (x) { return x.firstElementChild && x.firstElementChild.tagName === 'H2'; })"},
+        {"label": "The photo and its caption are a `<figure>` with a `<figcaption>`", "test": "var c = $('figure figcaption'); return !!$('figure img') && !!c && /every tuesday/i.test(c.textContent)"},
+        {"label": "The question is a `<details>` with a `<summary>`, closed when the page loads", "test": "var d = $('details'), s = $('details > summary'); return !!d && !!s && /how long/i.test(s.textContent) && !d.hasAttribute('open')"},
+        {"label": "\"Related posts\" is an `<aside>` beside the article, not inside it", "test": "var a = $$('aside').filter(function (x) { return /related posts/i.test(x.textContent); })[0]; return !!a && !a.closest('article') && !!a.querySelector('h2') && !!a.querySelector('a[href]')"},
+        {"label": "The street address and email link are in an `<address>` inside the page `<footer>`", "test": "var ad = $('body > footer address'); return !!ad && /12 harbor street/i.test(ad.textContent) && !!ad.querySelector('a[href^=\"mailto:\"]')"},
+        {"label": "No `<div>` is left", "test": "return $$('div').length === 0"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.11</summary>
+      <p>Change each <code>&lt;div&gt;</code> and its matching <code>&lt;/div&gt;</code> together; the comment on the closing tag tells you which one it is. The test for each block is the question from the sorting activity above. Inside <code>&lt;details&gt;</code>, the <code>&lt;summary&gt;</code> must be the first child; everything after it is hidden until the reader opens it. Both lines of the footer belong inside one <code>&lt;address&gt;</code>.</p>
+    </details>
+
+    <div class="quiz" data-id="hw3-quiz-6" data-title="Quiz: structure elements">
+      <script type="application/json">
+      [
+        {"q": "How many visible `<main>` elements can a page have?", "choices": ["One", "One per section", "As many as you like", "None; `<body>` already means main"], "answer": 0, "explain": "`<main>` holds the content unique to this page, so there is exactly one, and never inside `<article>`, `<aside>`, `<header>`, `<footer>`, `<nav>` or `<section>`."},
+        {"q": "What is the difference between `<header>` and `<head>`?", "choices": ["`<header>` is visible introductory content in the body; `<head>` holds information about the page that is never shown on it", "They are two spellings of the same element", "`<head>` is for the page and `<header>` for each article", "`<header>` replaced `<head>` in HTML5"], "answer": 0, "shuffle": true, "explain": "`<head>` holds the charset, title and description. `<header>` is the banner (or an article's introduction) that visitors see."},
+        {"q": "Inside `<details>`, which element is the clickable label?", "choices": ["`<summary>`", "`<label>`", "`<caption>`", "`<legend>`"], "answer": 0, "shuffle": true, "explain": "The `<summary>` stays visible; the rest of the `<details>` content opens and closes when the reader selects it."},
+        {"q": "What is `<address>` for?", "choices": ["Contact information for whoever is behind the page or article", "Every street address that appears in the text", "The page's web address", "An email form"], "answer": 0, "shuffle": true, "explain": "A sentence like \"we deliver to 40 Elm Street\" is just a sentence. `<address>` is for how to reach the page's owner or the article's author."},
+        {"q": "Where does a `<figcaption>` go?", "choices": ["As the first or last child of its `<figure>`", "Anywhere on the page", "Inside the `<img>`", "In the `<head>`"], "answer": 0, "explain": "The caption belongs to the figure, so it sits inside it, before or after the image."},
+        {"q": "True or false: a `<section>` restarts the heading levels, so every section can begin with an `<h1>`.", "answer": false, "explain": "That idea was never implemented by browsers or screen readers and was removed from the standard in 2022. Use heading levels that match the real outline."}
+      ]
+      </script>
+    </div>
+
+    <div class="hw3-explain">
+      <label for="hw3-explain-6"><span class="hw3-kicker">Explain it 6</span>Choose one example each of <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code> and <code>&lt;div&gt;</code> from a library's website, and explain the question you asked yourself to pick each one.</label>
+      <textarea id="hw3-explain-6" class="input" rows="5"></textarea>
+      <p class="small muted hw3-wc">0 words</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part7">
+    <p class="section-eyebrow"><span class="s-num">Part 7</span><span>Capstone · all of Chapter 3</span></p>
+    <h2>Part 7: Capstone</h2>
+    <p>Time to put everything together. The HTML tab below holds nothing but plain text for the Harbor Street Library events page, with a comment on every line that says what that line is. Turn it into a complete, valid page using everything from this chapter. No CSS is needed: you are only giving the content its structure and meaning.</p>
+
+    <h3 class="hw3-ch" id="c3-12">Challenge 3.12: Mark up a complete page <span class="pill" data-hw3-pill="hw3-c3-12">Not started</span></h3>
+    <p class="hw3-why"><strong>The skill.</strong> On a real project, content often arrives as plain text in an email or a document, and your job is to turn it into a page. That means deciding, line by line, what each piece is, and then writing it with clean syntax inside a complete document. Every check below is something you have already practiced in an earlier challenge.</p>
+    <div class="hw3-task">
+      <strong>Your task</strong>
+      <p>Mark up the text so all fourteen checks pass:</p>
+      <ol>
+        <li>A complete document: <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html lang="en"&gt;</code>, and a <code>&lt;head&gt;</code> with the charset first, the viewport, the title and the description given in the text.</li>
+        <li>A page <code>&lt;header&gt;</code> with the site name and a <code>&lt;nav&gt;</code> whose three links (relative paths) are in a <code>&lt;ul&gt;</code>.</li>
+        <li>One <code>&lt;main&gt;</code> with one <code>&lt;h1&gt;</code> and no skipped heading levels.</li>
+        <li>Each event is an <code>&lt;article&gt;</code> with an <code>&lt;h2&gt;</code>, and each event's date and time is a <code>&lt;time&gt;</code> with a correct <code>datetime</code>.</li>
+        <li>The novel's title is a <code>&lt;cite&gt;</code>.</li>
+        <li>The photo is a <code>&lt;figure&gt;</code> with a <code>&lt;figcaption&gt;</code>, and the image has descriptive <code>alt</code> text, a <code>width</code> and a <code>height</code>.</li>
+        <li>The sign-up steps are an <code>&lt;ol&gt;</code> without typed numbers, and the question is a <code>&lt;details&gt;</code> with a <code>&lt;summary&gt;</code>.</li>
+        <li>A page <code>&lt;footer&gt;</code> with an <code>&lt;address&gt;</code> that holds a <code>mailto:</code> link and a <code>tel:</code> link, plus the copyright line.</li>
+        <li>Clean syntax throughout: every element closed and correctly nested, and every attribute value in double quotes.</li>
+      </ol>
+    </div>
+    <div class="playground" data-id="hw3-c3-12" data-title="Challenge 3.12: Mark up a complete page" data-layout="stacked" data-height="460" data-challenge="Checks for Challenge 3.12">
+      <textarea data-lang="html"><!-- Capstone: everything below is plain text. Turn it into a complete, valid page. -->
+<!-- Each comment says what its line is. Keep the text, add the markup around it. -->
+Events · Harbor Street Library                         <!-- the text for the browser tab -->
+Free story time, author talks and a coding club at Harbor Street Library, all open to everyone.  <!-- the search description -->
+Harbor Street Library                                  <!-- the site name, at the top of every page -->
+Home                                                   <!-- menu link to index.html -->
+Events                                                 <!-- menu link to events.html -->
+About                                                  <!-- menu link to about.html -->
+Events this fall                                       <!-- the page's main heading -->
+Every event is free. No sign-up needed unless it says so.   <!-- an introduction paragraph -->
+Story time                                             <!-- the first event's heading -->
+Saturday, November 14, 2026, 10:30 AM                  <!-- the first event's date and time -->
+Stories, songs and a craft for ages 3 to 6, in the children's room.   <!-- the first event's description -->
+<!-- The photo for story time. Use this as the image's src (the picture itself, written as text): -->
+<!-- data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 2'%3E%3Crect width='4' height='2' fill='%23b9cde6'/%3E%3C/svg%3E -->
+A librarian reading a picture book to a circle of children   <!-- what the photo shows, for its alt text -->
+Story time in the children's room                      <!-- the photo's caption -->
+Author talk                                            <!-- the second event's heading -->
+Tuesday, November 17, 2026, 7:00 PM                    <!-- the second event's date and time -->
+Local writer Dana Reyes reads from her new novel, The Harbor Lights.   <!-- the description; the novel's title is a work -->
+How to sign up for the author talk                     <!-- a heading for the steps, inside this event -->
+Email the front desk.                                  <!-- step 1 -->
+Give your name and the number of seats.                <!-- step 2 -->
+Wait for a confirmation email.                         <!-- step 3 -->
+Do I need a library card?                              <!-- a question visitors can open -->
+No. Every event is open to everyone.                   <!-- the answer, hidden until the question is opened -->
+Harbor Street Library, 12 Harbor Street, Riverside     <!-- the library's contact details start here -->
+info@example.org                                       <!-- the email address, as an email link -->
+(555) 555-0123                                         <!-- the phone number, as a phone link (+15555550123) -->
+© 2026 Harbor Street Library                           <!-- the copyright line, at the very bottom --></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "Starts with `<!DOCTYPE html>` (standards mode), and `<html>` has `lang=\"en\"`", "test": "return /^\\s*<!doctype html\\s*>/i.test(hw3.raw(code)) && doc.compatMode === 'CSS1Compat' && /<html[^>]*\\slang\\s*=\\s*\"en/i.test(hw3.raw(code))"},
+        {"label": "The `<head>` starts with the charset and holds the viewport `<meta>`", "test": "var m = doc.head.querySelector('meta[name=\"viewport\"]'); return /<head[^>]*>\\s*<meta\\s+charset\\s*=\\s*\"?utf-8\"?\\s*\\/?>/i.test(hw3.raw(code)) && !!m && /width\\s*=\\s*device-width/.test(m.getAttribute('content') || '')"},
+        {"label": "The `<title>` and `<meta name=\"description\">` use the text given for them", "test": "var d = doc.head.querySelector('meta[name=\"description\"]'); return /^events \\u00b7 harbor street library$/i.test(doc.title.trim()) && !!d && /all open to everyone\\.?$/i.test((d.getAttribute('content') || '').trim())"},
+        {"label": "A page `<header>` holds the site name and a `<nav>` with a `<ul>` of three relative links", "test": "var h = $('body > header'), a = $$('body > header nav ul > li > a'); return !!h && /harbor street library/i.test(h.textContent) && a.length === 3 && ['index.html', 'events.html', 'about.html'].every(function (f, i) { return hw3.href(a[i]) === f; })"},
+        {"label": "One `<main>` with one `<h1>`, and no heading level is skipped", "test": "var hs = hw3.heads(doc); return $$('main').length === 1 && $$('h1').length === 1 && !!$('main h1') && hs[0].level === 1 && hs.every(function (x, i) { return i === 0 || x.level <= hs[i - 1].level + 1; })"},
+        {"label": "Each event is an `<article>` with its own `<h2>`", "test": "var a = $$('main article'); return a.length === 2 && a.every(function (x) { var h = x.querySelector('h2'); return !!h && /story time|author talk/i.test(h.textContent); })"},
+        {"label": "Both dates are `<time>`s with correct `datetime` values", "test": "var v = $$('time').map(function (t) { return (t.getAttribute('datetime') || '').trim(); }); return v.some(function (x) { return /^2026-11-14[T ]10:30(:00)?$/.test(x); }) && v.some(function (x) { return /^2026-11-17[T ]19:00(:00)?$/.test(x); })"},
+        {"label": "The novel's title is a `<cite>`", "test": "return $$('cite').some(function (c) { return /^the harbor lights$/i.test(hw3.text(c)); })"},
+        {"label": "The photo is a `<figure>` with a `<figcaption>`, and the `<img>` has descriptive `alt`, `width` and `height`", "test": "var i = $('figure img'), c = $('figure figcaption'); return !!i && !!c && (i.getAttribute('alt') || '').trim().split(/\\s+/).length >= 4 && /^\\d+$/.test(i.getAttribute('width') || '') && /^\\d+$/.test(i.getAttribute('height') || '')"},
+        {"label": "The sign-up steps are an `<ol>` of three `<li>`s with no typed numbers", "test": "var li = $$('ol > li'); return li.length === 3 && li.every(function (x) { return !/^\\s*\\d+\\s*[.)]/.test(x.textContent); })"},
+        {"label": "The question is a `<details>` with a `<summary>`", "test": "var s = $('details > summary'); return !!s && /library card/i.test(s.textContent) && /open to everyone/i.test($('details').textContent)"},
+        {"label": "The page `<footer>` holds an `<address>` with a `mailto:` link and a `tel:` link", "test": "var ad = $('body > footer address'); return !!ad && /12 harbor street/i.test(ad.textContent) && !!ad.querySelector('a[href=\"mailto:info@example.org\"]') && !!ad.querySelector('a[href=\"tel:+15555550123\"]')"},
+        {"label": "The copyright line is in the page `<footer>`", "test": "var f = $('body > footer'); return !!f && /\\u00a9\\s*2026 harbor street library/i.test(f.textContent)"},
+        {"label": "Clean syntax: every element closed and correctly nested, and every attribute value in double quotes", "test": "return hw3.tags(code.html).length >= 40 && hw3.nest(code.html).length === 0 && hw3.unquoted(code.html).length === 0 && hw3.upper(code.html).length === 0"}
+      ]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 3.12</summary>
+      <p>Start with the skeleton from Challenge 3.5, then move the first two lines of text into the <code>&lt;head&gt;</code>. Work down one line at a time, using its comment to decide what it is; you can delete the comments as you go. The two events are self-contained, so each gets the same structure. The "How to sign up" heading sits inside the author talk event, one level below that event's heading. Use the "What did the browser build?" tool in Part 2 if a syntax check refuses to pass.</p>
+    </details>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="download">
+    <p class="section-eyebrow"><span class="s-num">Finish</span><span>Collect your work in one file</span></p>
+    <h2>Download my work</h2>
+    <p>When you are ready to hand in, download your work as one HTML file. The button re-runs every challenge's checks first, then builds a file that contains:</p>
+    <ul>
+      <li>your name and today's date;</li>
+      <li>every challenge: how many of its checks pass, your HTML, and a live preview of it;</li>
+      <li>your quiz results and practice activities;</li>
+      <li>every "Explain it" answer.</li>
+    </ul>
+    <p>The file is named after you, such as <code>hw3-jordan-lee.html</code>, and it opens in any browser. You can download it as many times as you like; each download reflects your work at that moment.</p>
+    <div class="hw3-dl">
+      <div class="btn-row">
+        <button type="button" class="btn primary" id="hw3-download">Download my work</button>
+        <a class="btn ghost" href="#progress">Check my name and progress</a>
+      </div>
+      <div id="hw3-dl-msg" class="feedback" role="status" hidden></div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="submit">
+    <p class="section-eyebrow"><span class="s-num">Submit</span><span>Put your file on GitHub</span></p>
+    <h2>Submit</h2>
+    <p>Your homework file goes in a public GitHub repository named <code>web-homework</code>. If you already have that repository from another homework, use it again: you only need to add this file to it.</p>
+    <div class="tabs">
+      <div data-tab="On github.com">
+        <ol class="hw3-steps">
+          <li>Sign in at <a href="https://github.com">github.com</a>. If you don't have an account yet, select <strong>Sign up</strong> and create a free one.</li>
+          <li>If you do not have <code>web-homework</code> yet: select the <strong>+</strong> at the top right, then <strong>New repository</strong>. Name it exactly <code>web-homework</code>, choose <strong>Public</strong>, tick <strong>Add a README file</strong>, and select <strong>Create repository</strong>. The README matters: an empty repository has no <strong>Add file</strong> menu yet.</li>
+          <li>On the repository's page, select <strong>Add file</strong>, then <strong>Upload files</strong>.</li>
+          <li>Drag your downloaded file (for example <code>hw3-jordan-lee.html</code>) onto the page, or select <strong>choose your files</strong> and pick it.</li>
+          <li>Under <strong>Commit changes</strong>, type a short message such as <code>Add Homework 3</code>, then select <strong>Commit changes</strong>.</li>
+          <li>Check that the file now appears in the repository's file list. If you change your work later, download it again and upload the new file with the same name: GitHub replaces the old copy and keeps the history.</li>
+        </ol>
+      </div>
+      <div data-tab="With Git">
+        <ol class="hw3-steps">
+          <li>Create <code>web-homework</code> on github.com as described in the other tab (public, with <strong>Add a README file</strong> ticked), if you do not have it yet.</li>
+          <li>The first time only, copy the repository to your computer with <code>git clone https://github.com/&lt;username&gt;/web-homework.git</code>, replacing <code>&lt;username&gt;</code> with your GitHub username (if you already cloned it, run <code>git pull</code> inside it instead). Then copy your downloaded file into the <code>web-homework</code> folder.</li>
+          <li>In a terminal opened in that folder, commit and push the file:</li>
+        </ol>
+        <script type="text/plain" class="code" data-lang="text" data-title="Terminal">
+          git add hw3-jordan-lee.html
+          git commit -m "Add Homework 3"
+          git push
+        </script>
+      </div>
+    </div>
+    <p class="hw3-submit">Submit your GitHub repo link.</p>
+  </section>
+</main>
+<script>
+  /* Helpers for this page's playground checks. Checks run here in the page, with the
+     preview's document passed in as doc, so they can call hw3.* to read the student's HTML. */
+  window.hw3 = (function () {
+    'use strict';
+    var VOID = /^(area|base|br|col|embed|hr|img|input|link|meta|source|track|wbr)$/;
+    var RAWTEXT = /^(script|style|textarea|title)$/;
+
+    // The student's HTML without comments; html() also lowercases and collapses whitespace
+    function raw(code) { return String(code.html || '').replace(/<!--[\s\S]*?-->/g, ''); }
+    function html(code) { return raw(code).replace(/\s+/g, ' ').toLowerCase(); }
+
+    // Every start and end tag in the source, in order, with its attributes exactly as written.
+    // Comments and the DOCTYPE are skipped, and so is the text inside script, style, textarea and title.
+    function tags(src) {
+      var s = String(src || ''), n = s.length, i = 0, out = [];
+      var ws = function (c) { return c === ' ' || c === '\n' || c === '\t' || c === '\r' || c === '\f'; };
+      while (i < n) {
+        var lt = s.indexOf('<', i);
+        if (lt < 0) break;
+        if (s.substr(lt, 4) === '<!--') { var ce = s.indexOf('-->', lt + 4); i = ce < 0 ? n : ce + 3; continue; }
+        if (s[lt + 1] === '!' || s[lt + 1] === '?') { var de = s.indexOf('>', lt); i = de < 0 ? n : de + 1; continue; }
+        var m = /^<(\/?)([A-Za-z][A-Za-z0-9-]*)/.exec(s.substr(lt, 64));
+        if (!m) { i = lt + 1; continue; }
+        var j = lt + m[0].length, attrs = [], selfClose = false;
+        while (j < n) {
+          var c = s[j];
+          if (ws(c)) { j++; continue; }
+          if (c === '>') { j++; break; }
+          if (c === '/') { if (s[j + 1] === '>') { selfClose = true; j += 2; break; } j++; continue; }
+          var k = j;
+          while (k < n && !ws(s[k]) && s[k] !== '>' && s[k] !== '/' && s[k] !== '=') k++;
+          if (k === j) { j++; continue; }
+          var a = { name: s.slice(j, k), quote: null, value: null };
+          j = k;
+          var e = j;
+          while (e < n && ws(s[e])) e++;
+          if (s[e] === '=') {
+            e++;
+            while (e < n && ws(s[e])) e++;
+            if (s[e] === '"' || s[e] === "'") {
+              var q = s[e], end = s.indexOf(q, e + 1);
+              if (end < 0) end = n;
+              a.quote = q; a.value = s.slice(e + 1, end); j = end + 1;
+            } else {
+              var u = e;
+              while (u < n && !ws(s[u]) && s[u] !== '>') u++;
+              a.quote = ''; a.value = s.slice(e, u); j = u;
+            }
+          }
+          attrs.push(a);
+        }
+        var t = { name: m[2], close: !!m[1], selfClose: selfClose, attrs: attrs };
+        out.push(t);
+        i = j;
+        var lname = t.name.toLowerCase();
+        if (!t.close && RAWTEXT.test(lname)) {
+          var ct = s.toLowerCase().indexOf('</' + lname, i);
+          if (ct >= 0) i = ct;
+        }
+      }
+      return out;
+    }
+    // Nesting problems, found the way a parser keeps its stack of open elements
+    function nest(src) {
+      var stack = [], issues = [];
+      tags(src).forEach(function (t) {
+        var name = t.name.toLowerCase();
+        if (!t.close) {
+          if (VOID.test(name)) return;
+          if (t.selfClose) issues.push({ type: 'self-close', name: name });
+          stack.push(name);
+          return;
+        }
+        if (VOID.test(name)) { issues.push({ type: 'void-close', name: name }); return; }
+        var at = stack.lastIndexOf(name);
+        if (at < 0) { issues.push({ type: 'stray', name: name }); return; }
+        for (var k = stack.length - 1; k > at; k--) issues.push({ type: 'overlap', name: stack[k], closedBy: name });
+        stack.length = at;
+      });
+      stack.forEach(function (name) { issues.push({ type: 'unclosed', name: name }); });
+      return issues;
+    }
+    // Attribute values that are not wrapped in double quotes
+    function unquoted(src) {
+      var out = [];
+      tags(src).forEach(function (t) {
+        t.attrs.forEach(function (a) { if (a.value !== null && a.quote !== '"') out.push({ tag: t.name, attr: a.name, value: a.value, quote: a.quote }); });
+      });
+      return out;
+    }
+    // Element and attribute names with capital letters
+    function upper(src) {
+      var out = [];
+      tags(src).forEach(function (t) {
+        if (t.name !== t.name.toLowerCase()) out.push(t.name);
+        t.attrs.forEach(function (a) { if (a.name !== a.name.toLowerCase()) out.push(a.name); });
+      });
+      return out;
+    }
+    function text(el) { return el ? el.textContent.replace(/\s+/g, ' ').trim() : ''; }
+    // The heading outline: one entry per h1 to h6, in page order
+    function heads(doc) {
+      return Array.prototype.map.call(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'), function (h) {
+        return { level: +h.tagName.charAt(1), text: text(h) };
+      });
+    }
+    function find(hs, t) {
+      for (var i = 0; i < hs.length; i++) if (hs[i].text.toLowerCase() === t) return i;
+      return -1;
+    }
+    // The first link whose text matches re, and its href as written (a leading ./ is ignored)
+    function link(doc, re) {
+      return Array.prototype.filter.call(doc.querySelectorAll('a'), function (a) { return re.test(text(a)); })[0] || null;
+    }
+    function href(a) { return a ? (a.getAttribute('href') || '').trim().replace(/^\.\//, '') : ''; }
+    return { raw: raw, html: html, tags: tags, nest: nest, unquoted: unquoted, upper: upper, text: text,
+      heads: heads, find: find, link: link, href: href, VOID: VOID };
+  })();
+
+  WD1.ready(function () {
+    var $ = WD1.$, $$ = WD1.$$, S = WD1.store, esc = WD1.esc;
+    var get = function (k, d) { var v = S.get('custom', k); return v === undefined || v === null ? d : v; };
+    var put = function (k, v) { S.set('custom', k, v); };
+    var isHw = function (el) { return !!el && !!el.dataset && /^hw3-/.test(el.dataset.id || ''); };
+    var words = function (t) { return (String(t || '').trim().match(/\S+/g) || []).length; };
+    var MIN_WORDS = 10;
+
+    var pgs = $$('.playground').filter(isHw);
+    var quizzes = $$('.quiz').filter(isHw);
+    var acts = $$('[data-hw3-act]').concat([$('#hw3-dom')]);
+    var explains = $$('.hw3-explain textarea');
+
+    /* ---------- Name ---------- */
+    var nameIn = $('#hw3-name');
+    nameIn.value = get('hw3-name', '');
+    nameIn.addEventListener('input', function () { put('hw3-name', nameIn.value); });
+
+    /* ---------- Challenges: remember the latest result of every playground ---------- */
+    var results = get('hw3-checks', {});
+    function paintPill(id) {
+      var pill = $('[data-hw3-pill="' + id + '"]');
+      if (!pill) return;
+      var r = results[id];
+      if (!r) { pill.className = 'pill'; pill.textContent = S.get('challenge', id) ? 'Passed before' : 'Not started'; return; }
+      var all = r.passed === r.total;
+      pill.className = 'pill ' + (all ? 'good' : r.passed ? 'warn' : '');
+      pill.textContent = all ? 'Complete' : r.passed + ' of ' + r.total + ' checks';
+    }
+    document.addEventListener('checks', function (e) {
+      var el = e.target;
+      if (!isHw(el) || !e.detail) return;
+      results[el.dataset.id] = { passed: e.detail.passed, total: e.detail.total, at: Date.now() };
+      put('hw3-checks', results);
+      paintPill(el.dataset.id);
+      refresh();
+    });
+    // Previews load lazily by default; load them all now so every challenge reports its status
+    pgs.forEach(function (el) {
+      var f = $('iframe', el);
+      if (f) f.loading = 'eager';
+      if (el.wd1) el.wd1.run();
+    });
+
+    /* ---------- Quizzes ---------- */
+    var quizRec = get('hw3-quizzes', {});
+    document.addEventListener('quizdone', function (e) {
+      var el = e.target;
+      if (!isHw(el) || !e.detail) return;
+      var id = el.dataset.id, prev = quizRec[id];
+      quizRec[id] = { title: el.dataset.title, correct: e.detail.correct, total: e.detail.total,
+        best: Math.max(e.detail.correct, prev ? prev.best : 0), at: Date.now() };
+      put('hw3-quizzes', quizRec);
+      refresh();
+    });
+    function quizResult(el) {
+      var id = el.dataset.id, r = quizRec[id], q = S.get('quiz', id);
+      if (r) return r;
+      if (q) return { title: el.dataset.title, correct: q.last, best: q.best, total: q.total, at: q.at };
+      return null;
+    }
+
+    /* ---------- Practice activities (match, order, sort, fill, width predictor) ---------- */
+    var actRec = get('hw3-acts', {});
+    var SUCCESS = { match: /^All matched/, order: /Perfect order/, buckets: /sorted correctly/, fill: /All blanks correct/ };
+    function markAct(el, note, revealed) {
+      var id = el.dataset.id, prev = actRec[id];
+      if (prev && prev.done && !prev.revealed && revealed) return;
+      if (prev && prev.done && !prev.revealed && !revealed && prev.note === note) return;
+      actRec[id] = { title: el.dataset.title, done: true, revealed: !!revealed, note: note, at: Date.now() };
+      put('hw3-acts', actRec);
+      refresh();
+    }
+    acts.forEach(function (el) {
+      var kind = el.dataset.hw3Act;
+      if (!SUCCESS[kind]) return;
+      var revealed = false;
+      el.addEventListener('click', function (e) {
+        var b = e.target.closest('button');
+        if (!b) return;
+        if (/^Show answer/.test(b.textContent)) revealed = true;
+        else if (/^(Shuffle|Reset|Clear)$/.test(b.textContent.trim()) || b.getAttribute('aria-label') === 'Reset') revealed = false;
+      }, true);
+      new MutationObserver(function () {
+        var pill = $$('.pill', el).filter(function (p) { return SUCCESS[kind].test(p.textContent.replace(/^\W+/, '')); })[0];
+        if (pill) markAct(el, pill.textContent.replace(/^\W+/, '').trim(), revealed);
+      }).observe(el, { childList: true, subtree: true, characterData: true });
+    });
+
+    /* ---------- Explain it ---------- */
+    function paintWords(ta) {
+      var n = words(ta.value), out = $('.hw3-wc', ta.parentNode);
+      out.textContent = n + (n === 1 ? ' word' : ' words') + (n >= MIN_WORDS ? ' · counted as answered' : ' · aim for two to four sentences');
+    }
+    explains.forEach(function (ta) {
+      var key = ta.id, t = null;
+      ta.value = get(key, '');
+      paintWords(ta);
+      var save = function () { clearTimeout(t); put(key, ta.value); };
+      ta.addEventListener('input', function () { clearTimeout(t); t = setTimeout(save, 250); paintWords(ta); refresh(); });
+      ta.addEventListener('blur', save);
+    });
+
+    /* ---------- Progress card ---------- */
+    function setStat(key, n, total) {
+      $('#hw3-n-' + key).textContent = n;
+      $('#hw3-t-' + key).textContent = total;
+      $('#hw3-bar-' + key).style.width = (total ? Math.round(100 * n / total) : 0) + '%';
+    }
+    function refresh() {
+      setStat('ch', pgs.filter(function (el) { var r = results[el.dataset.id]; return r && r.passed === r.total; }).length, pgs.length);
+      setStat('qz', quizzes.filter(function (el) { return !!quizResult(el); }).length, quizzes.length);
+      setStat('ex', explains.filter(function (ta) { return words(ta.value) >= MIN_WORDS; }).length, explains.length);
+      setStat('ac', acts.filter(function (el) { return actRec[el.dataset.id] && actRec[el.dataset.id].done; }).length, acts.length);
+    }
+    pgs.forEach(function (el) { paintPill(el.dataset.id); });
+    refresh();
+
+    /* ---------- What did the browser build? (repair viewer) ---------- */
+    (function () {
+      var edBox = $('#hw3-fix-ed'), list = $('#hw3-fix-issues'), out = $('#hw3-fix-out'), chips = $('#hw3-fix-chips');
+      var EX = [
+        ['Overlapping tags', '<p>Read <strong>this <em>first</strong></em>.</p>'],
+        ['Unclosed items', '<ul>\n  <li>Books\n  <li>Films\n</ul>\n<p>Ask at the desk.'],
+        ['Closed void element', '<p>12 Harbor Street<br></br>Riverside</p>'],
+        ['Slash on a div', '<div class="note" />Ask at the front desk.</div>\n<p>Story time is on Saturday.</p>'],
+        ['Unquoted value', '<img src="photo.png" alt=Children listening to a story>'],
+        ['Just a fragment', '<h1>Events</h1>\n<p>All events are free.</p>'],
+        ['Complete page', '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="utf-8">\n  <title>Events · Harbor Street Library</title>\n</head>\n<body>\n  <h1>Events</h1>\n</body>\n</html>']
+      ];
+      var escText = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/ /g, '&nbsp;'); };
+      // Print the DOM as indented HTML, one element per line, so the repairs are easy to see
+      function pp(node, depth) {
+        var pad = new Array(depth + 1).join('  '), s = '';
+        Array.prototype.forEach.call(node.childNodes, function (n) {
+          if (n.nodeType === 3) { var t = n.textContent.replace(/\s+/g, ' ').trim(); if (t) s += pad + escText(t) + '\n'; return; }
+          if (n.nodeType === 8) { s += pad + '<!--' + n.data + '-->\n'; return; }
+          if (n.nodeType !== 1) return;
+          var tag = n.tagName.toLowerCase();
+          var attrs = Array.prototype.map.call(n.attributes, function (a) { return ' ' + a.name + (a.value === '' ? '' : '="' + a.value.replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '"'); }).join('');
+          var open = '<' + tag + attrs + '>';
+          if (hw3.VOID.test(tag)) { s += pad + open + '\n'; return; }
+          var kids = Array.prototype.filter.call(n.childNodes, function (k) { return k.nodeType !== 3 || k.textContent.trim(); });
+          if (!kids.length) { s += pad + open + '</' + tag + '>\n'; return; }
+          if (kids.length === 1 && kids[0].nodeType === 3) { s += pad + open + escText(kids[0].textContent.replace(/\s+/g, ' ').trim()) + '</' + tag + '>\n'; return; }
+          s += pad + open + '\n' + pp(n, depth + 1) + pad + '</' + tag + '>\n';
+        });
+        return s;
+      }
+      var MSG = {
+        'overlap': function (x) { return '<' + x.name + '> was still open when </' + x.closedBy + '> closed. Close the element you opened last first.'; },
+        'stray': function (x) { return '</' + x.name + '> closes nothing that is open.'; },
+        'unclosed': function (x) { return '<' + x.name + '> is never closed. The browser guesses where it ends; house style closes it yourself.'; },
+        'void-close': function (x) { return '</' + x.name + '>: <' + x.name + '> is a void element, so it never gets a closing tag.'; },
+        'self-close': function (x) { return '<' + x.name + ' />: the slash does nothing on a non-void element, so <' + x.name + '> is still open.'; }
+      };
+      function update(src) {
+        var issues = hw3.nest(src).map(function (x) { return MSG[x.type](x); })
+          .concat(hw3.unquoted(src).map(function (x) { return 'The ' + x.attr + ' value on <' + x.tag.toLowerCase() + '> is not in double quotes' + (x.quote === '' ? ', so it ends at the first space.' : '.'); }))
+          .concat(hw3.upper(src).map(function (x) { return x + ': house style writes names in lowercase.'; }));
+        list.innerHTML = '';
+        if (!issues.length) list.appendChild(WD1.h('li', { class: 'ok', text: 'No mistakes found in the tags.' }));
+        issues.forEach(function (m) { list.appendChild(WD1.h('li', { text: m })); });
+        var d = new DOMParser().parseFromString(src, 'text/html');
+        $('#hw3-fix-mode').innerHTML = d.compatMode === 'CSS1Compat'
+          ? '<span class="pill good">Standards mode</span> <code>document.compatMode</code> is <code>CSS1Compat</code>, because the HTML starts with <code>&lt;!DOCTYPE html&gt;</code>.'
+          : '<span class="pill warn">Quirks mode</span> <code>document.compatMode</code> is <code>BackCompat</code>: there is no <code>&lt;!DOCTYPE html&gt;</code> at the top, so a real page would imitate old browser bugs.';
+        out.innerHTML = '';
+        out.appendChild(WD1.codeBlock(pp(d, 0).replace(/\n$/, ''), 'html', 'What the browser built (the DOM)'));
+      }
+      var ed = WD1.editor(edBox, { value: EX[0][1], lang: 'html', height: 140, label: 'HTML to repair. Press Escape then Tab to leave.', onInput: update });
+      EX.forEach(function (x) {
+        chips.appendChild(WD1.h('button', { type: 'button', class: 'btn small', text: x[0], onclick: function () { ed.set(x[1]); } }));
+      });
+      update(ed.get());
+    })();
+
+    /* ---------- Predict the family tree ---------- */
+    (function () {
+      var el = $('#hw3-dom'), srcBox = $('#hw3-dom-src'), treeBox = $('#hw3-dom-tree'), qEl = $('#hw3-dom-q'), choices = $('#hw3-dom-choices');
+      var fb = $('#hw3-dom-fb'), scoreEl = $('#hw3-dom-score'), nextB = $('#hw3-dom-next'), showB = $('#hw3-dom-show');
+      var LINES = [
+        '<body>',
+        '  <header>',
+        '    <h1>Harbor Street Library</h1>',
+        '    <nav>',
+        '      <ul>',
+        '        <li><a href="index.html">Home</a></li>',
+        '        <li><a href="events.html">Events</a></li>',
+        '      </ul>',
+        '    </nav>',
+        '  </header>',
+        '  <main>',
+        '    <h2>Story time</h2>',
+        '    <p>Every <strong>Saturday</strong> at 10 AM.</p>',
+        '  </main>',
+        '</body>'
+      ];
+      var d = new DOMParser().parseFromString('<!DOCTYPE html><html><head><title>x</title></head>' + LINES.join('\n') + '</html>', 'text/html');
+      var nodes = [d.body].concat(Array.prototype.slice.call(d.body.querySelectorAll('*')));
+      // Find the line each element starts on, walking the source in the same order as the tree
+      var lineOf = new Map(), label = new Map(), ln = 0, col = 0;
+      nodes.forEach(function (n) {
+        var tag = n.tagName.toLowerCase(), re = new RegExp('<' + tag + '[\\s>]');
+        while (ln < LINES.length) {
+          var m = re.exec(LINES[ln].slice(col));
+          if (m) { col += m.index + 1; break; }
+          ln++; col = 0;
+        }
+        lineOf.set(n, ln + 1);
+        label.set(n, '<' + tag + '> on line ' + (ln + 1));
+      });
+      // The source, one numbered line per row
+      var rows = LINES.map(function (t, i) {
+        var row = WD1.h('span', { class: 'hw3-row' }, WD1.h('span', { class: 'hw3-ln', 'aria-hidden': 'true', text: String(i + 1) }));
+        row.insertAdjacentHTML('beforeend', WD1.highlight(t, 'html'));
+        srcBox.appendChild(row);
+        return row;
+      });
+      // The tree, drawn once and shown after each answer
+      var chip = new Map();
+      function render(n) {
+        var c = WD1.h('code', { text: '<' + n.tagName.toLowerCase() + '>  line ' + lineOf.get(n) });
+        chip.set(n, c);
+        var kids = Array.prototype.slice.call(n.children);
+        return WD1.h('li', null, c, kids.length ? WD1.h('ul', null, kids.map(render)) : null);
+      }
+      treeBox.appendChild(WD1.h('ul', { class: 'hw3-tree', 'aria-label': 'The tree the browser builds' }, render(d.body)));
+      function rel(a, b) {
+        if (b.parentElement === a) return 'parent';
+        if (a.parentElement === b) return 'child';
+        if (a.parentElement && a.parentElement === b.parentElement) return 'sibling';
+        if (a.contains(b)) return 'ancestor';
+        if (b.contains(a)) return 'descendant';
+        return null;
+      }
+      // Only pairs on different lines, so the highlighted lines always point at exactly two elements
+      var groups = {};
+      nodes.forEach(function (a) { nodes.forEach(function (b) {
+        if (a === b || lineOf.get(a) === lineOf.get(b)) return;
+        var r = rel(a, b); if (r) (groups[r] = groups[r] || []).push([a, b]);
+      }); });
+      var KINDS = ['parent', 'child', 'sibling', 'ancestor', 'descendant'];
+      var WORD = { parent: 'parent', child: 'child', sibling: 'sibling', ancestor: 'ancestor (further up than the parent)', descendant: 'descendant (further down than a child)' };
+      var pick = function (arr) { return arr[Math.floor(Math.random() * arr.length)]; };
+      var cur = null, answered = false, correct = 0;
+      function tag(n) { return '<' + n.tagName.toLowerCase() + '>'; }
+      function why(a, b, r) {
+        var A = label.get(a), B = label.get(b);
+        if (r === 'parent') return 'The ' + A + ' directly contains the ' + B + ', so it is the parent.';
+        if (r === 'child') return 'The ' + A + ' sits directly inside the ' + B + ', so it is a child.';
+        if (r === 'sibling') return 'Both share the same parent, the ' + label.get(a.parentElement) + ', so they are siblings.';
+        if (r === 'ancestor') return 'The ' + A + ' contains the ' + B + ', but not directly: the ' + B + "'s parent is the " + label.get(b.parentElement) + '. That makes it an ancestor.';
+        return 'The ' + A + ' sits inside the ' + B + ', but not directly: its parent is the ' + label.get(a.parentElement) + '. That makes it a descendant.';
+      }
+      function mark(on) {
+        rows.forEach(function (r) { r.classList.remove('hw3-a', 'hw3-b'); });
+        chip.forEach(function (c) { c.classList.remove('hw3-a', 'hw3-b'); });
+        if (!on) return;
+        rows[lineOf.get(cur.a) - 1].classList.add('hw3-a');
+        rows[lineOf.get(cur.b) - 1].classList.add('hw3-b');
+        chip.get(cur.a).classList.add('hw3-a');
+        chip.get(cur.b).classList.add('hw3-b');
+      }
+      function showTree(on) {
+        treeBox.hidden = !on;
+        showB.setAttribute('aria-pressed', String(on));
+        showB.textContent = on ? 'Hide the tree' : 'Show the tree';
+      }
+      function ask() {
+        var r = pick(KINDS), pair = pick(groups[r]);
+        cur = { a: pair[0], b: pair[1], r: r };
+        mark(true);
+        showTree(false);
+        qEl.innerHTML = 'A, the <code>' + esc(tag(cur.a)) + '</code> on line ' + lineOf.get(cur.a) + ', is the ____ of B, the <code>' +
+          esc(tag(cur.b)) + '</code> on line ' + lineOf.get(cur.b) + '.';
+        choices.innerHTML = '';
+        KINDS.forEach(function (k) { choices.appendChild(WD1.h('button', { type: 'button', class: 'btn small', text: WORD[k], onclick: function () { answer(k); } })); });
+        fb.hidden = true; answered = false;
+      }
+      function answer(k) {
+        if (answered) return;
+        answered = true;
+        var ok = k === cur.r;
+        if (ok) correct++;
+        fb.hidden = false;
+        fb.className = 'feedback ' + (ok ? 'good' : 'bad');
+        fb.innerHTML = '<strong>' + (ok ? 'Correct.' : 'Not quite: A is the ' + esc(cur.r) + ' of B.') + '</strong> ' + esc(why(cur.a, cur.b, cur.r));
+        showTree(true);
+        scoreEl.textContent = 'Correct answers: ' + Math.min(correct, 5) + ' of 5' + (correct >= 5 ? ' · activity complete' : '');
+        if (correct >= 5) markAct(el, '5 or more correct answers', false);
+      }
+      nextB.addEventListener('click', ask);
+      showB.addEventListener('click', function () { showTree(treeBox.hidden); });
+      ask();
+    })();
+
+    /* ---------- Download my work ---------- */
+    function slug(s) {
+      return s.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'student';
+    }
+    // Re-run one playground's checks and read the result from its check list
+    function rerun(el) {
+      return new Promise(function (resolve) {
+        var done = false, timer = null;
+        function finish() {
+          if (done) return;
+          done = true; clearTimeout(timer); el.removeEventListener('checks', on);
+          var items = $$('.pg-checks li', el).map(function (li) {
+            return { ok: li.classList.contains('pass'), text: li.lastElementChild ? li.lastElementChild.textContent : li.textContent };
+          });
+          var r = results[el.dataset.id];
+          resolve({ el: el, items: items, passed: items.filter(function (x) { return x.ok; }).length, total: items.length || (r ? r.total : 0) });
+        }
+        function on() { setTimeout(finish, 0); }
+        el.addEventListener('checks', on);
+        timer = setTimeout(finish, 6000);
+        if (el.wd1) el.wd1.run(); else finish();
+      });
+    }
+    // A preview document for the downloaded file: the student's HTML and CSS, nothing else
+    function previewDoc(code) {
+      var html = code.html || '', style = code.css ? '<style>\n' + String(code.css).replace(/<\/style/gi, '<\\/style') + '\n</style>\n' : '';
+      if (/<html[\s>]|<!doctype/i.test(html)) {
+        if (/<head[^>]*>/i.test(html)) return html.replace(/<head[^>]*>/i, function (m) { return m + style; });
+        if (/<html[^>]*>/i.test(html)) return html.replace(/<html[^>]*>/i, function (m) { return m + '<head>' + style + '</head>'; });
+        return html.replace(/<!doctype[^>]*>/i, function (m) { return m + style; });
+      }
+      return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<title>Preview</title>\n' + style + '</head>\n<body>\n' + html + '\n</body>\n</html>';
+    }
+    function longDate(d) { return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+    function isoDate(d) { var p = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+    function plain(md) { return String(md || '').replace(/`/g, ''); }
+
+    function buildFile(name, runs) {
+      var d = new Date(), out = [];
+      var chDone = runs.filter(function (r) { return r.total && r.passed === r.total; }).length;
+      var qDone = quizzes.filter(function (q) { return !!quizResult(q); }).length;
+      var exDone = explains.filter(function (ta) { return words(ta.value) >= MIN_WORDS; }).length;
+      var acDone = acts.filter(function (a) { return actRec[a.dataset.id] && actRec[a.dataset.id].done; }).length;
+      out.push('<!DOCTYPE html>', '<html lang="en">', '<head>', '<meta charset="utf-8">',
+        '<meta name="viewport" content="width=device-width, initial-scale=1">',
+        '<title>Homework 3: ' + esc(name) + '</title>',
+        '<style>',
+        'body { margin: 0; padding: 24px 16px 64px; font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #161a23; background: #f3f5f8; }',
+        'main, header.top { max-width: 980px; margin: 0 auto; }',
+        'h1 { font-size: 2rem; margin: 0 0 .3em; } h2 { font-size: 1.5rem; margin: 2em 0 .6em; border-bottom: 2px solid #d9dee7; padding-bottom: .3em; }',
+        'h3 { font-size: 1.2rem; margin: 0 0 .4em; } h4 { font-size: 1rem; margin: 1.2em 0 .4em; }',
+        'section.item { background: #fff; border: 1px solid #d9dee7; border-radius: 10px; padding: 16px 18px; margin: 0 0 18px; }',
+        '.meta { color: #454d5e; margin: 0 0 .3em; } .ok { color: #0f7a55; font-weight: 700; } .no { color: #b9322a; font-weight: 700; }',
+        'table { border-collapse: collapse; width: 100%; background: #fff; } th, td { text-align: left; padding: 8px 10px; border: 1px solid #d9dee7; vertical-align: top; }',
+        'th { background: #edf0f5; }',
+        'ul.checks { list-style: none; padding: 0; margin: 0; } ul.checks li { padding: 3px 0; }',
+        'pre { background: #f6f8fb; border: 1px solid #e1e6ee; border-radius: 8px; padding: 12px; overflow: auto; font: 13px/1.5 Menlo, Consolas, "Courier New", monospace; white-space: pre; max-height: 480px; }',
+        'iframe { width: 100%; height: 380px; border: 1px solid #c3cad7; border-radius: 8px; background: #fff; }',
+        '.answer { white-space: pre-wrap; background: #fff; border-left: 4px solid #6d28d9; padding: 10px 14px; margin: 0; }',
+        '.question { color: #454d5e; }',
+        '</style>', '</head>', '<body>');
+      out.push('<header class="top">', '<h1>Homework 3: Module 3</h1>',
+        '<p class="meta"><strong>Name:</strong> ' + esc(name) + '</p>',
+        '<p class="meta"><strong>Downloaded:</strong> <time datetime="' + isoDate(d) + '">' + esc(longDate(d)) + '</time></p>',
+        '<table><thead><tr><th scope="col">Work</th><th scope="col">Completed</th></tr></thead><tbody>',
+        '<tr><td>Challenges with every check passing</td><td>' + chDone + ' of ' + runs.length + '</td></tr>',
+        '<tr><td>Quizzes finished</td><td>' + qDone + ' of ' + quizzes.length + '</td></tr>',
+        '<tr><td>Written answers (' + MIN_WORDS + ' words or more)</td><td>' + exDone + ' of ' + explains.length + '</td></tr>',
+        '<tr><td>Practice activities</td><td>' + acDone + ' of ' + acts.length + '</td></tr>',
+        '</tbody></table>', '</header>', '<main>');
+
+      out.push('<h2>Challenges</h2>');
+      runs.forEach(function (r, i) {
+        var el = r.el, code = el.wd1 ? el.wd1.get() : {}, title = el.dataset.title || ('Challenge ' + (i + 1));
+        var all = r.total && r.passed === r.total;
+        out.push('<section class="item">', '<h3>' + esc(title) + '</h3>',
+          '<p class="' + (all ? 'ok' : 'no') + '">' + r.passed + ' of ' + r.total + ' checks pass</p>');
+        if (r.items.length) {
+          out.push('<ul class="checks">' + r.items.map(function (c) {
+            return '<li><span class="' + (c.ok ? 'ok' : 'no') + '">' + (c.ok ? 'Pass' : 'Not yet') + ':</span> ' + esc(c.text) + '</li>';
+          }).join('') + '</ul>');
+        }
+        if (code.html != null) out.push('<h4>HTML</h4>', '<pre>' + esc(code.html) + '</pre>');
+        if (code.css != null) out.push('<h4>CSS</h4>', '<pre>' + esc(code.css) + '</pre>');
+        out.push('<h4>Live preview</h4>',
+          '<iframe title="Preview of ' + esc(title) + '" sandbox="" srcdoc="' + esc(previewDoc(code)) + '"></iframe>', '</section>');
+      });
+
+      out.push('<h2>Quizzes</h2>', '<table><thead><tr><th scope="col">Quiz</th><th scope="col">Latest score</th><th scope="col">Best score</th></tr></thead><tbody>');
+      quizzes.forEach(function (q) {
+        var r = quizResult(q);
+        out.push('<tr><td>' + esc(plain(q.dataset.title)) + '</td>' +
+          (r ? '<td>' + r.correct + ' of ' + r.total + '</td><td>' + r.best + ' of ' + r.total + '</td>' : '<td>Not finished</td><td>Not finished</td>') + '</tr>');
+      });
+      out.push('</tbody></table>');
+
+      out.push('<h2>Practice activities</h2>', '<table><thead><tr><th scope="col">Activity</th><th scope="col">Result</th></tr></thead><tbody>');
+      acts.forEach(function (a) {
+        var r = actRec[a.dataset.id];
+        out.push('<tr><td>' + esc(plain(a.dataset.title)) + '</td><td>' +
+          (r && r.done ? 'Completed' + (r.note ? ' (' + esc(r.note) + ')' : '') + (r.revealed ? ', after showing the answers' : '') : 'Not done') + '</td></tr>');
+      });
+      out.push('</tbody></table>');
+
+      out.push('<h2>Written answers</h2>');
+      explains.forEach(function (ta, i) {
+        var label = ta.labels && ta.labels[0] ? ta.labels[0] : null;
+        var q = label ? label.textContent.replace(/^Explain it \d+/, '').trim() : '';
+        var a = ta.value.trim();
+        out.push('<section class="item">', '<h3>Explain it ' + (i + 1) + '</h3>', '<p class="question">' + esc(q) + '</p>',
+          a ? '<p class="answer">' + esc(a) + '</p>' : '<p class="no">No answer yet.</p>', '</section>');
+      });
+      out.push('</main>', '</body>', '</html>');
+      return out.join('\n');
+    }
+    function save(text, filename) {
+      var blob = new Blob([text], { type: 'text/html;charset=utf-8' });
+      var url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = filename; a.hidden = true;
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 2000);
+    }
+    var dlBtn = $('#hw3-download'), dlMsg = $('#hw3-dl-msg');
+    function say(kind, html) { dlMsg.hidden = false; dlMsg.className = 'feedback ' + kind; dlMsg.innerHTML = html; }
+    dlBtn.addEventListener('click', function () {
+      var name = nameIn.value.trim();
+      if (!name) {
+        say('bad', '<strong>Add your name first.</strong> Type it in the <a href="#progress">Your name</a> box at the top of the page, so your file is labeled with it, then select Download my work again.');
+        return;
+      }
+      dlBtn.disabled = true;
+      say('info', 'Re-running every challenge\'s checks and building your file...');
+      Promise.all(pgs.map(rerun)).then(function (runs) {
+        var file = 'hw3-' + slug(name) + '.html';
+        save(buildFile(name, runs), file);
+        var done = runs.filter(function (r) { return r.total && r.passed === r.total; }).length;
+        say('good', '<strong>Downloaded <code>' + esc(file) + '</code>.</strong> ' + done + ' of ' + runs.length +
+          ' challenges have every check passing. Open the file to check it, then follow the steps under <a href="#submit">Submit</a>.');
+      }).catch(function (err) {
+        say('bad', '<strong>Something went wrong while building the file.</strong> Reload the page and try again. (' + esc(err && err.message) + ')');
+      }).then(function () { dlBtn.disabled = false; });
+    });
+  });
+</script>
+</body>
+</html>
