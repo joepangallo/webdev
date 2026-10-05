@@ -214,7 +214,7 @@ Specs are 1-based: `"1"`, `"1,3"`, `"2-4"`, `"1,3-5"`. The stepper element fires
 ### Fill in the blanks
 
 ```html
-<div class="fill" data-title="Complete the rule" data-explain="Shown under the activity">
+<div class="fill" data-title="Complete the rule" data-explain="Shown under the activity after the first Check or Show answers">
   <script type="text/plain">
 h1 [[{]]
   [[color]]: navy[[;]]
@@ -223,7 +223,7 @@ h1 [[{]]
 </div>
 ```
 
-`[[answer|alternative]]` becomes an input. Add `data-mode="text"` for prose (mini-markdown allowed) and `data-case="sensitive"` for case-sensitive answers.
+`[[answer|alternative]]` becomes an input. `data-explain` stays hidden until the student presses **Check** or **Show answers**, because it usually names the answers. Add `data-mode="text"` for prose (mini-markdown allowed) and `data-case="sensitive"` for case-sensitive answers.
 
 ### Tabs
 

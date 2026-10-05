@@ -1066,7 +1066,15 @@
 
   // Runs INSIDE the preview iframe. Must stay ES5-safe and self-contained.
   function previewHelper(pgId) {
-    var send = function (type, args) { try { parent.postMessage({ wd1pg: pgId, type: type, args: args }, '*'); } catch (e) { /* ignore */ } };
+    var post = function (type, args) { try { parent.postMessage({ wd1pg: pgId, type: type, args: args }, '*'); } catch (e) { /* ignore */ } };
+    // Cap the output of one run, so a runaway loop full of console.log cannot flood the console panel.
+    var sent = { log: 0, error: 0 }, LIMIT = { log: 1000, error: 100 };
+    var send = function (type, args) {
+      var k = type === 'error' ? 'error' : 'log';
+      if (sent[k] > LIMIT[k]) return;
+      if (++sent[k] > LIMIT[k]) { post('warn', ['Console output stopped after ' + LIMIT[k] + ' messages. Edit the code to run it again.']); return; }
+      post(type, args);
+    };
     var fmt = function (v) {
       try {
         if (typeof v === 'string') return v;
@@ -1154,11 +1162,102 @@
     });
   }
 
+  /* ---------- Loop protection ----------
+     Playgrounds re-run the code while the student types, so a loop whose
+     counter has not been written yet (while (n > 0) { ... } with no n--)
+     would freeze the whole tab. loopProtect() puts a guard at the start of
+     every braced for / while / do body; the guard breaks out of a loop once
+     the current run has spent more than 1.5 seconds in loops and explains
+     why in the console. It skips strings, comments, template literals and
+     regex literals, and returns the code unchanged if anything goes wrong.
+     The checks still see the student's original code. */
+  const LOOP_GUARD = '(function () { var n = 0, t0 = 0, told = false;' +
+    ' window.__wd1lp = function () { if (!n++) { t0 = Date.now(); Promise.resolve().then(function () { n = 0; }); }' +
+    ' if (n % 500 === 0 && Date.now() - t0 > 1500) { if (!told) { told = true; console.error("Stopped a loop that kept running for more than 1.5 seconds. Check that its condition eventually becomes false, for example that the counter changes every time around."); } return true; }' +
+    ' return false; }; })();';
+
+  WD1.loopProtect = function (src) {
+    try {
+      const out = [];
+      const n = src.length;
+      let i = 0, last = 0, prev = '', prevWord = '';
+      const isId = (c) => /[\w$]/.test(c || '');
+      const regexAllowed = () => !prev || /[(,=:[!&|?{};+\-*%<>~^]/.test(prev) ||
+        /^(return|typeof|instanceof|in|of|new|delete|void|throw|case|do|else|yield|await)$/.test(prevWord);
+      const skipString = (q) => { i++; while (i < n && src[i] !== q) { if (src[i] === '\\') i++; else if (src[i] === '\n') break; i++; } i++; };
+      const skipTemplate = () => {
+        i++;
+        while (i < n && src[i] !== '`') {
+          if (src[i] === '\\') { i += 2; continue; }
+          if (src[i] === '$' && src[i + 1] === '{') {
+            let depth = 1; i += 2;
+            while (i < n && depth) { if (src[i] === '{') depth++; else if (src[i] === '}') depth--; else if (src[i] === '`') skipTemplate(); i++; }
+            continue;
+          }
+          i++;
+        }
+        i++;
+      };
+      const skipRegex = () => { i++; let cls = false; while (i < n) { const c = src[i]; if (c === '\\') i++; else if (c === '[') cls = true; else if (c === ']') cls = false; else if (c === '/' && !cls) break; else if (c === '\n') break; i++; } i++; while (isId(src[i])) i++; };
+      const skipSpace = (j) => { while (j < n) { if (/\s/.test(src[j])) j++; else if (src.startsWith('//', j)) { while (j < n && src[j] !== '\n') j++; } else if (src.startsWith('/*', j)) { const e = src.indexOf('*/', j + 2); j = e < 0 ? n : e + 2; } else break; } return j; };
+      const matchParen = (j) => {
+        let depth = 0;
+        while (j < n) {
+          const c = src[j];
+          if (c === '"' || c === "'") { i = j; skipString(c); j = i; continue; }
+          if (c === '`') { i = j; skipTemplate(); j = i; continue; }
+          if (src.startsWith('//', j) || src.startsWith('/*', j)) { j = skipSpace(j); continue; }
+          if (c === '(') depth++;
+          else if (c === ')' && --depth === 0) return j;
+          j++;
+        }
+        return -1;
+      };
+      const guardAt = (brace) => { out.push(src.slice(last, brace + 1), ' if (window.__wd1lp && __wd1lp()) break;'); last = brace + 1; };
+      while (i < n) {
+        const c = src[i];
+        if (c === '"' || c === "'") { skipString(c); prev = '"'; prevWord = ''; continue; }
+        if (c === '`') { skipTemplate(); prev = '`'; prevWord = ''; continue; }
+        if (c === '/' && (src[i + 1] === '/' || src[i + 1] === '*')) { i = skipSpace(i); continue; }
+        if (c === '/' && regexAllowed()) { skipRegex(); prev = '/'; prevWord = ''; continue; }
+        if (/\s/.test(c)) { i++; continue; }
+        if (isId(c)) {
+          let j = i; while (isId(src[j])) j++;
+          const word = src.slice(i, j);
+          const afterDot = prev === '.';
+          if (!afterDot && (word === 'for' || word === 'while')) {
+            const open = skipSpace(j);
+            if (src[open] === '(') {
+              const close = matchParen(open);
+              if (close < 0) return src;
+              const body = skipSpace(close + 1);
+              if (src[body] === '{') guardAt(body);
+              i = close + 1; prev = ')'; prevWord = '';
+              continue;
+            }
+          }
+          if (!afterDot && word === 'do') {
+            const body = skipSpace(j);
+            if (src[body] === '{') { guardAt(body); i = body + 1; prev = '{'; prevWord = ''; continue; }
+          }
+          i = j; prev = 'a'; prevWord = word;
+          continue;
+        }
+        prev = c; prevWord = ''; i++;
+      }
+      out.push(src.slice(last));
+      return out.join('');
+    } catch (e) {
+      return src;
+    }
+  };
+
   WD1.buildPreviewDoc = function (code, pgId) {
     const html = code.html || '', css = code.css || '', js = code.js || '';
-    const helper = '<script>(' + previewHelper.toString() + ')(' + JSON.stringify(pgId || 'x') + ');<\/script>';
+    const helper = '<script>(' + previewHelper.toString() + ')(' + JSON.stringify(pgId || 'x') + ');<\/script>' +
+      (js ? '<script>' + LOOP_GUARD + '<\/script>' : '');
     const style = css ? '<style>\n' + css + '\n</style>' : '';
-    const script = js ? '<script>\n' + js.replace(/<\/script/gi, '<\\/script') + '\n<\/script>' : '';
+    const script = js ? '<script>\n' + WD1.loopProtect(js).replace(/<\/script/gi, '<\\/script') + '\n<\/script>' : '';
     if (/<html[\s>]|<!doctype/i.test(html)) {
       let doc = html;
       const inject = helper + style;
@@ -1599,7 +1698,11 @@
     el.appendChild(isText ? box : h('div', { style: { overflowX: 'auto' } }, box));
     const norm = (s) => { s = s.trim().replace(/\s+/g, ' '); return caseSensitive ? s : s.toLowerCase(); };
     const status = h('span', { class: 'small muted' });
+    // The explanation often names the answers, so it stays hidden until the first Check or Show answers.
+    const foot = el.dataset.explain ? h('div', { class: 'widget-foot', html: WD1.fmt(el.dataset.explain), hidden: true }) : null;
+    const reveal = () => { if (foot) foot.hidden = false; };
     function check() {
+      reveal();
       let right = 0;
       blanks.forEach((b) => {
         const ok = b.answers.some((a) => norm(a) === norm(b.inp.value));
@@ -1614,13 +1717,14 @@
       h('button', { type: 'button', class: 'btn small ghost', text: 'Show answers', onclick: () => {
         blanks.forEach((b) => { b.inp.value = b.answers[0]; b.inp.classList.remove('wrong'); b.inp.classList.add('right'); });
         status.textContent = 'Answers filled in.'; status.className = 'small muted';
+        reveal();
       } }),
       h('button', { type: 'button', class: 'btn small ghost', text: 'Clear', onclick: () => {
         blanks.forEach((b) => { b.inp.value = ''; b.inp.classList.remove('right', 'wrong'); });
         status.textContent = '';
       } }),
       status));
-    if (el.dataset.explain) el.appendChild(h('div', { class: 'widget-foot', html: WD1.fmt(el.dataset.explain) }));
+    if (foot) el.appendChild(foot);
   }
 
   /* ---------- Tabs ---------- */
