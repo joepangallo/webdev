@@ -1,0 +1,53 @@
+Alex: Welcome back to Web Development I: The Audio Course. I am Alex, and here is the one idea from this chapter that changes how you see the web. The exact same photograph can weigh six megabytes or sixty kilobytes, and the difference is not magic. It is a series of small, deliberate choices about how the picture is stored. By the end of this episode you will make every one of those choices yourself.
+
+Jordan: I am Jordan. Quick look back first. Last episode we finished the course project: for four milestones your site had talked at visitors, and in milestone four it finally started listening, with a data table and a form that collects real answers. Today, chapter six: web media. Images, sound, video, and color. Alex, where does a beginner start with a picture?
+
+Alex: Inside it. Everything a computer stores is a number, and a picture is no exception. There are two very different ways to turn what you see into numbers, and every image format on the web uses one of them. A raster image, also called a bitmap, stores a grid of tiny colored squares called pixels. Photos, screenshots, and scans are raster. J P E G, P N G, G I F, Web P, and A V I F are raster formats. A vector image stores drawing instructions instead: a circle here, this big, filled with this color. Logos and icons are often vectors, and S V G is the vector format of the web.
+
+Jordan: Why does that distinction matter so much?
+
+Alex: Resizing. A raster image has a fixed number of pixels, so showing it larger forces the browser to invent pixels it never had, and the picture goes soft. A vector has no pixels at all, so a logo scales to the side of a building with every edge razor sharp. The chapter has you zoom both versions of one badge: at normal size the P N G and the S V G look identical, but magnified, one falls apart into squares and the other does not.
+
+Jordan: Let us go into the squares. What is a pixel?
+
+Alex: Short for picture element, the smallest dot of color in a raster image. A nineteen twenty by ten eighty photo holds nineteen hundred and twenty pixels per row and ten hundred and eighty rows: two million seventy three thousand six hundred pixels, dimensions always written width first. Each pixel stores exactly one color, as numbers. Look at a screen through a magnifying glass and every pixel is three tiny lights, red, green, blue. This is additive color: the lights add together, all three full makes white, all three off makes black, red plus green makes yellow, which surprises anyone who learned to mix paint.
+
+Jordan: And each light is a number?
+
+Alex: Each channel gets one byte, eight bits, holding zero, that light off, through two hundred and fifty five, full strength. The bits per pixel is the color depth. One bit means two colors, ink or no ink: a scanned signature, a Q R code. Eight-bit uses a palette, a stored list of up to two hundred and fifty six colors, with each pixel holding one byte naming its color: perfect for logos and diagrams with flat colors. Twenty-four-bit gives every pixel its own red, green, and blue values, sixteen million colors: true color, what photographs need. Thirty-two-bit adds the alpha channel, opacity per pixel, so logos and cut-out shots sit on any background with soft edges.
+
+Jordan: So the decision tree writes itself. Photo or gradients: twenty-four-bit. Flat-color logo: eight-bit palette, or better, a vector. Transparency: thirty-two-bit. Line art: one bit.
+
+Alex: And now you can weigh any image before compression. That full high-definition photo at twenty-four bits is nineteen twenty times ten eighty times twenty-four, divided by eight: about five point nine megabytes. The file you download is far smaller, because it is compressed, which is our second thread.
+
+Jordan: Lossy versus lossless. This is the heart of it.
+
+Alex: Lossless gives back every pixel exactly. It spots repetition: two hundred white pixels in a row takes far less space than writing white two hundred times. P N G, G I F, and lossless Web P work this way: excellent for flat graphics and text, poor for photos, whose grain never repeats. Lossy throws away detail your eye will not miss, then compresses what remains. You pick a quality level, and lower quality means a smaller file with more artifacts, blocky squares and halos. J P E G, lossy Web P, and A V I F work this way: excellent for photos, poor for sharp text.
+
+Jordan: Tour the formats quickly, the way the chapter does.
+
+Alex: J P E G is the photo format: lossy, always twenty-four-bit, no transparency. P N G, from nineteen ninety-six, is lossless in three flavors, eight, twenty-four, and thirty-two with alpha. The trap is saving a photo as P N G: five to ten times the size of a good J P E G. G I F, from nineteen eighty-seven, is limited to two hundred and fifty six colors but holds animation, so its modern job is tiny animations that must play everywhere, like a loading spinner in email. Never make a G I F from real video: five seconds can weigh five to ten megabytes, while the same clip as video is a few hundred kilobytes. Web P, from twenty ten, does lossy or lossless with alpha and animation, typically twenty-five to thirty-five percent smaller than J P E G. A V I F, from twenty nineteen, is usually the smallest of all, often half a J P E G. S V G is the vector outlier, a text format C S S can style, perfect for logos, useless for photos, and never trust one uploaded by a stranger without cleaning it: S V G can contain scripts.
+
+Jordan: Third thread: getting media onto a real page. Start with responsive images.
+
+Alex: Visitors carry three hundred and sixty pixel phones and twenty-five sixty pixel monitors, at densities of one, two, or three. No single file suits them all, so you hand the browser a list and let it choose: the source set attribute lists files for different densities, and the sizes attribute says how wide the image displays. Two habits belong on every image. Width and height attributes with the file's real dimensions, so the browser reserves the space and the page never jumps when the photo arrives. And honest alt text describing what the image communicates, never starting with the words image of, since screen readers already announce that.
+
+Jordan: Then audio and video, which once needed plug-ins.
+
+Alex: Until H T M L five arrived around twenty ten, media needed Flash. Today the audio and video elements play natively. Remember the lunch box: the container is the file format, a box holding streams with timing info. M P four, Web M, and Ogg are containers. A codec, short for coder-decoder, is the compression inside the box: H dot two six four, V P nine, and A V one for video; A A C, M P three, and Opus for audio. Two dot m p four files can hold different codecs, which is why a browser plays one and refuses the other. Ship Web M first to save bandwidth, with M P four and H dot two six four as the fallback every browser plays, and always include captions or a transcript.
+
+Jordan: Last section: color itself.
+
+Alex: Every C S S color notation describes the same thing: how much red, green, and blue light a pixel gives off. Hex writes each channel as two hexadecimal digits. R G B writes the same three numbers in decimal. H S L describes color the way people think: hue as an angle on the color wheel, zero red, one twenty green, two forty blue; saturation from gray to vivid; lightness from black through the pure color to white. Use hex for a brand color, H S L for a family of shades, and store each color once in a custom property. Arrange hues in a circle and you get the color wheel: complementary colors sit opposite, analogous sit side by side, and with H S L a scheme is simple arithmetic on the angle. One firm warning: the same lightness number does not look equally bright in every hue, so judge readability by the contrast ratio, never by the lightness number.
+
+Jordan: Try this before you press stop. Open the chapter's pixel explorer and magnify a photo until it falls apart into squares, switching the red, green, and blue channels off one at a time. Then save one photo three ways, as J P E G, P N G, and eight-bit G I F, and compare the file sizes. You will never guess at formats again.
+
+Alex: Landing the plane. Carry this out of chapter six: images are numbers, a grid of pixels or a set of drawing instructions. Depth sets how many colors each pixel holds, compression sets how much survives, and the format is a deal between quality and weight. On the page, serve responsive images with real dimensions and honest alt text, ship video with a fallback, caption everything, and let the color wheel do your scheming.
+
+Jordan: One sentence on last time. In the project finale the site started listening: a data table and a form, every control labeled, every answer named, validation tested with bad data on purpose.
+
+Alex: Next episode we arrange everything. Chapter seven is C S S layout: why the old tricks were painful, and how flexbox and grid finally made the page do what you picture.
+
+Alex: The full interactive chapter, with the pixel explorer, the format lab, and the color mixer, lives in the repo on GitHub, where you can click everything we described. I am Alex.
+
+Jordan: And I am Jordan. Shrink one photo three ways, and watch the megabytes melt. We will see you in the next episode.
