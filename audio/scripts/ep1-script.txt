@@ -1,0 +1,59 @@
+Alex: Type a name into your browser, press Enter, and in less than a second a page appears. It feels like magic, but it is really a chain of small, practical jobs. Today we slow that moment way down.
+Jordan: So by the end, I should be able to picture what happens between pressing Enter and seeing the page?
+Alex: Exactly. You will picture packets crossing the internet, a directory turning a name into an address, a short conversation between browser and server, and the browser turning all of that into pixels.
+Jordan: When I hear the word internet, I picture one giant network. Is that right?
+Alex: Not quite. The internet is a network of networks. Your Wi-Fi, phone carrier, school network, and a data center are separate networks run by different organizations. They trade data because every device follows the same protocols, agreed rules for formatting, addressing, and sending a message.
+Jordan: And is the web the same thing as the internet?
+Alex: That is the first beginner trap. The internet is the infrastructure that moves data. The World Wide Web is one service on top of it: pages connected by links and delivered with H T T P. Email, video calls, and games also use the internet without being the web.
+Jordan: How does my data actually get across?
+Alex: The internet uses packet switching. Your data is chopped into small packets, each stamped with its source, destination, and place in the sequence. Routers forward each packet independently.
+Jordan: So one photo might travel as many little envelopes instead of one big box.
+Alex: Yes. Packets can take different routes, arrive out of order, or get lost. The receiving side uses the sequence numbers to rebuild the message and asks for any missing piece again.
+Jordan: Who does that repair work?
+Alex: A protocol called T C P, the careful courier. It opens a connection, numbers every byte, confirms arrivals, resends losses, and delivers data in order. Its lighter partner, U D P, fires off messages with no setup or promise of arrival.
+Jordan: Where do port numbers fit in?
+Alex: An I P address gets data to the right computer, and a port number gets it to the right program on that computer. A web server listens on port four hundred forty-three for secure web traffic or port eighty for plain H T T P. Your browser borrows a temporary, high-numbered port for its end. Version four addresses provide about four point three billion possibilities, which is why version six offers a vastly larger space.
+Jordan: This sounds like layers doing separate jobs.
+Alex: Exactly. The application layer lets programs say something meaningful, like H T T P asking for a page. The transport layer delivers data to the right program, the internet layer routes packets using I P addresses, and the link layer moves bits across one physical hop, such as laptop to Wi-Fi. Each layer wraps the data it receives, like a letter in an envelope. That is encapsulation.
+Jordan: When something breaks, can I tell which layer is complaining?
+Alex: Often, yes. If every site fails, think link layer: Wi-Fi may be off. If the name cannot be found, D N S failed before a connection began. If your machine refuses a connection, nothing is listening on that port. If the page loads but says four hundred four, the network did its job, so check the file name or path.
+Jordan: Let's follow the address bar. Who turns a name into an address?
+Alex: The Domain Name System, or D N S, is the internet's directory. Read a domain from right to left. The last label is the top-level domain, like com, org, uk, or dev. To its left is the registered domain. Anything farther left, like www, shop, or api, is a subdomain created by the owner.
+Jordan: So www is just a popular choice, not a requirement?
+Alex: Exactly. example dot com and www dot example dot com are different host names. They often show the same site only because the owner set up records and a redirect for both.
+Jordan: Walk me through a lookup of www dot example dot com.
+Alex: First, the browser checks its cache. If the name is new, a recursive resolver walks down a hierarchy: a root server points toward dot com, that server points to the domain's name servers, and the authoritative server answers with the address.
+Jordan: And then it remembers that answer?
+Alex: Yes. Every answer has a T T L, or time to live, chosen by the owner. Caches may reuse it until that time expires, so later lookups take milliseconds. Caching is also why some visitors see a moved site sooner than others.
+Jordan: The thing I typed is more than a name, though.
+Alex: Right. A U R L, or Uniform Resource Locator, gives complete directions to one resource: a scheme, the host, a path such as slash products slash shoes dot html, a query beginning with a question mark, and a fragment beginning with a hash sign.
+Jordan: Take those parts one at a time.
+Alex: The scheme, H T T P S, tells the browser to use H T T P inside an encrypted connection. The host names the server, and D N S finds its address. The path names the resource. A query carries name-and-value pairs joined by ampersands, such as a search or filter. A fragment names a place inside the page and is handled by the browser, never sent to the server.
+Jordan: Inside my own site, I will write relative U R Ls, right?
+Alex: Mostly. A bare file name points within the current folder. A folder name and slash go downward, while dot dot slash climbs one folder. Beware the leading slash: it starts at the top of the host and can work at home, then break after publishing.
+Jordan: Once the browser knows where to go, what does it say?
+Alex: It holds a short H T T P conversation, short for HyperText Transfer Protocol. The browser sends one request, and the server returns exactly one response. A page may need dozens of exchanges: one for the H T M L, then one for each stylesheet, script, image, and font.
+Jordan: What does a request sound like?
+Alex: It usually begins with a method. GET asks for a copy of a resource. POST sends data for the server to act on, as with logins, sign-ups, and comments. PUT replaces a resource, PATCH changes part of one, and DELETE removes one.
+Jordan: And every response starts with a status code.
+Alex: Yes. Two hundred codes mean success. Three hundred codes send you elsewhere or tell you to use a cached copy. Four hundred codes point to a client mistake; four hundred four means not found. Five hundred codes mean the server failed. The first digit quickly tells you where to look.
+Jordan: What else travels in those messages?
+Alex: Headers carry details as name-and-value pairs. A request includes Host, which matters because one server may host many websites. A response includes Content-Type, saying whether the body is a page, stylesheet, script, or image. H T T P is stateless, so cookies provide memory: the server asks the browser to store a small pair, and the browser returns it later. That is how your cart stays full.
+Jordan: And the S in H T T P S?
+Alex: It means H T T P travels through T L S, an encrypted connection. Encryption hides the path, headers, cookies, and body from people in the middle, while a certificate helps prove the server is the site you requested.
+Jordan: The files are coming back. What does the browser do with them?
+Alex: It fetches the H T M L first and discovers the linked stylesheets, scripts, images, and fonts. Its rendering engine parses the H T M L into the D O M, or Document Object Model, a tree built from your tags. It parses C S S into a matching tree, combines the two, calculates every box's position, paints the pixels, and stacks the layers.
+Jordan: Why does C S S matter so early?
+Alex: Stylesheets are render-blocking, so the browser waits for them before drawing and avoids an unstyled flash. A script may also pause parsing while it runs because it might change the document. View Source shows the file the server sent, while the Elements panel shows the live D O M after repairs or JavaScript changes.
+Jordan: Who answers from the other end?
+Alex: A web server is both an always-on computer and software listening on ports eighty and four hundred forty-three. For a static resource, it maps the path to a file and sends the same bytes to everyone. That is fast, easy to cache, and exactly how your course projects will work.
+Jordan: What about dynamic pages, like my cart?
+Alex: The server runs a program that builds a fresh answer. It may read the query, ask a database for a product, place the result in a template, and return new H T M L. A typical stack combines Linux, server software such as nginx or Apache, a database, and a language such as P H P, Python, or JavaScript. Hosting means renting that setup.
+Jordan: My laptop can be a server too, right?
+Alex: Yes. Tools like Live Server serve your files at localhost, often using port five thousand five hundred. localhost, or one twenty-seven dot zero dot zero dot one, always means this computer, so the request never leaves your machine.
+Jordan: How can I see this happen for real?
+Alex: Open any website, open the developer tools, usually with the F twelve key, choose the Network tab, and reload. Click the first request, which is the H T M L document. Find its status code, protocol, and Content-Type. Then note how many requests the page made, how much data moved, and how long loading took. That field report shows D N S, the U R L, H T T P, the server, and rendering working together.
+Jordan: Let me say the journey back. I type a U R L. D N S finds the server's address, packets carry an H T T P request across the layers, the server answers with a status code and content, and the browser builds the D O M and paints the page.
+Alex: Beautifully said. Keep that picture in mind, because the whole course hangs on it.
+Jordan: What comes next?
+Alex: In the next episode, we build your first pages with H T M L: its syntax, document structure, and the elements you will use every day. Bring your curiosity, and maybe open your editor while you listen.
