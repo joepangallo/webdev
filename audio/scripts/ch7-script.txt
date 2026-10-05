@@ -1,0 +1,49 @@
+Alex: Welcome back to Web Development I: The Audio Course. I am Alex, and here is the one idea from this chapter that changes how you see the web. For twenty years, arranging boxes on a page was the hardest part of C S S, and developers bent tools that were never meant for layout until they broke. Then two layout modes arrived that were designed for the job from the start. By the end of this episode you will reach for the right one without thinking.
+
+Jordan: I am Jordan. Quick look back first. Last episode we went inside the image: pixels and color depth, the six megabyte versus sixty kilobyte photo, picking J P E G or P N G or S V G for every job, and shipping media that loads fast and reads aloud. Today, chapter seven: C S S layout. Alex, why was arranging boxes so hard for so long?
+
+Alex: Because C S S was designed to style documents, not to lay out applications, so developers hijacked three tools that were built for other jobs. The first was normal flow, the browser's default stacking: block boxes pile vertically, inline boxes flow like words. Four display values cover almost every normal situation, and inline block even lets small boxes sit side by side and wrap like words, tags under a blog post, a row of buttons. But the space between them in your H T M L becomes a visible gap, and none of it was built for real arrangement.
+
+Jordan: Then floats, the famous hack.
+
+Alex: Magazines wrap text around photos, and C S S copied the idea: float left pushes a box to the left edge and lets text flow around it. It was never meant for columns, but for years entire page layouts were floats with percentage widths. Every row needed a clearfix, because a container of floats collapses: its border shrinks to fit only the text while the photo hangs out of the bottom. Frameworks like Bootstrap three shipped hundreds of lines to manage the pain. Then came positioning: relative as an anchor, absolute to pin a box to a spot, fixed to glue it to the viewport. Absolutely positioned boxes ignore each other, so when text grows, a longer heading or a bigger font setting, everything overlaps. Fine for a badge on top of a photo. Hopeless for a page.
+
+Jordan: So the chapter's rule is blunt: columns, rows, whole page layouts, none of these. Use flexbox or grid.
+
+Alex: Exactly. Flexbox, the Flexible Box Layout module, arranges items in one direction: a row or a column. It decides how big each item is and where it sits along the way. Everything starts with two axes. The main axis is the direction items are placed in, left to right for a row, top to bottom for a column. The cross axis runs perpendicular. Once you can point at both axes on any layout, flexbox stops being mysterious.
+
+Jordan: Walk us through it the way the chapter does, container first.
+
+Alex: You switch it on with display flex on the parent, and most flexbox properties go on that container. Justify content spreads items along the main axis: centered, spaced evenly, pushed to the ends. Align items lines them up on the cross axis. Then the items themselves: they can grow to fill space or shrink to fit, each one can override the container's alignment, and the gap property puts space between neighbors without the old margin headaches. Two traps to know. Wrapped lines are laid out on their own, so items in a short last line can end up wider than the rest. And the order property reorders visually, which is handy inside a media query, showing the photo above the text on phones even though it comes second in the H T M L, but screen readers and keyboards still follow the source order, so never use it to fix a broken document order.
+
+Jordan: When does a beginner reach for flexbox?
+
+Alex: Rows of cards, tags, buttons, or photos that should become several rows on a narrow screen. A navigation bar. Anything in one direction with even spacing or alignment. The chapter's lab lets you click an item and give just that item its own settings, with arrows showing both axes, which is the fastest way to make the model click.
+
+Jordan: Give us the rule of thumb for choosing between them, because beginners freeze at this exact decision.
+
+Alex: Ask what you are arranging. If the items flow in one direction and you care about their relationships along that line, a nav bar, a row of tags, a card list that wraps, that is flexbox. If you are drawing the page itself, rows and columns together, a header over two columns over a footer, that is grid. And they nest beautifully: a grid page whose cards each lay out their insides with flexbox is the most common professional pattern there is.
+
+Jordan: Third thread: grid, for when one direction is not enough.
+
+Alex: Flexbox lays items out in one direction at a time. C S S grid works in two: you draw rows and columns on the container first, then put each item into cells. It comes with its own vocabulary, and every word appears in property names, so learn them now: tracks are the rows and columns, lines are the dividers between them, a cell is one intersection, an area is a named rectangle of cells.
+
+Jordan: The famous one-liner.
+
+Alex: Repeat, auto-fit, minmax, two hundred and twenty pixels, one f r. Written out, that is one line that builds a responsive card grid with no media queries at all: as many columns as fit, each at least two hundred and twenty pixels wide, sharing leftover space equally. Four cards per row on a laptop, two on a tablet, one on a phone, automatically. The f r unit, the fraction, is grid's superpower: it divides free space proportionally, something percentages never did cleanly. And named areas let a whole page layout read like a map: header across the top, sidebar and main below, footer spanning everything, and a media query can rearrange the entire page by redefining only the template.
+
+Jordan: Which brings us to responsive design, the thread that ties the chapter together.
+
+Alex: Your page will be opened on a five-inch phone, a sideways tablet, a laptop, and a thirty-two-inch monitor, often by the same person on the same day. Three ingredients. Fluid layouts: widths in percentages, f r units, and max-width instead of fixed pixels, so the layout stretches and squeezes. Flexible media, which you met in chapter six: images that never overflow their containers. And media queries: rules that apply only when the viewport meets a condition, so the layout itself can change at chosen breakpoints. Design mobile first, the narrow layout as the default, then add complexity as the screen grows, and let the content choose the breakpoints instead of chasing specific devices.
+
+Jordan: Try this before you press stop. Open the chapter's final build, the responsive makerspace page, and rebuild its card grid twice: once with flexbox and wrapping, once with grid and the one-line auto-fit trick. Shrink the browser from wide to phone narrow and watch each version behave. Then convert one fixed-pixel width to a fluid one and feel the difference.
+
+Alex: Landing the plane. Carry this out of chapter seven: floats and absolute positioning were never layout tools, and the clearfix era is over. Flexbox arranges in one direction along two axes. Grid draws rows and columns first and places items into them. Responsive design is fluid widths plus flexible media plus media queries, mobile first, breakpoints chosen by the content.
+
+Jordan: One sentence on last time. In chapter six we weighed the photograph: pixels and color depth, lossy versus lossless, the right format for every job, and media that loads fast and stays accessible.
+
+Alex: Next episode we give the page a brain. Chapter eight is JavaScript, the language fundamentals: variables, decisions, loops, and the moment a page starts to think.
+
+Jordan: The full interactive chapter, with the flexbox lab, the grid playground, and the makerspace build, lives in the repo on GitHub, where you can click everything we described. I am Alex.
+
+Jordan: And I am Jordan. Build one row with flexbox and one grid with the one-liner, and never float a layout again. We will see you in the next episode.
