@@ -44,6 +44,10 @@
   --ch3: #8F6A00;
   --ch4: #52731A;
   --ch5: #237089;
+  --ch6: #B3384A;
+  --ch7: #1D7A55;
+  --ch8: #2C5FA8;
+  --ch9: #7444B8;
   --chl: #A92F68;
   --mod: var(--accent);
 
@@ -113,6 +117,10 @@
     --ch3: #E3C04F;
     --ch4: #A7C76A;
     --ch5: #6EC5DE;
+    --ch6: #F58C9C;
+    --ch7: #6FD6A8;
+    --ch8: #8DB4F2;
+    --ch9: #C4A3F7;
     --chl: #F27DB3;
     --code-bg: #10151E;
     --code-ink: #DDE2EB;
@@ -167,6 +175,10 @@
   --ch3: #E3C04F;
   --ch4: #A7C76A;
   --ch5: #6EC5DE;
+  --ch6: #F58C9C;
+  --ch7: #6FD6A8;
+  --ch8: #8DB4F2;
+  --ch9: #C4A3F7;
   --chl: #F27DB3;
   --code-bg: #10151E;
   --code-ink: #DDE2EB;
@@ -193,6 +205,10 @@ body[data-module="ch2"] { --mod: var(--ch2); }
 body[data-module="ch3"] { --mod: var(--ch3); }
 body[data-module="ch4"] { --mod: var(--ch4); }
 body[data-module="ch5"] { --mod: var(--ch5); }
+body[data-module="ch6"] { --mod: var(--ch6); }
+body[data-module="ch7"] { --mod: var(--ch7); }
+body[data-module="ch8"] { --mod: var(--ch8); }
+body[data-module="ch9"] { --mod: var(--ch9); }
 body[data-module="levelup"] { --mod: var(--chl); }
 
 /* ---------- Base ---------- */

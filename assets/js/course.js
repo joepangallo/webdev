@@ -89,8 +89,62 @@
       ]
     },
     {
+      id: 'ch6', num: '6', label: 'Chapter 6', title: 'Web Media', href: 'ch6/index.html', page: 240,
+      blurb: 'Pixels, resolution, compression, image formats, audio, video and color: putting pictures and sound on a page the right way.',
+      sections: [
+        { id: 's6-1', num: '6.1', title: 'Representing Digital Images', page: 241, obj: [6] },
+        { id: 's6-2', num: '6.2', title: 'Image Concepts', page: 250, obj: [5, 6] },
+        { id: 's6-3', num: '6.3', title: 'File Formats', page: 258, obj: [1, 6] },
+        { id: 's6-4', num: '6.4', title: 'Audio and Video', page: 268, obj: [2, 6] },
+        { id: 's6-5', num: '6.5', title: 'Working with Color', page: 273, obj: [3, 6] },
+        { id: 's6-review', num: 'R', title: 'Chapter 6 Review', obj: [6] }
+      ]
+    },
+    {
+      id: 'ch7', num: '7', label: 'Chapter 7', title: 'CSS 2: Layout', href: 'ch7/index.html', page: 282,
+      blurb: 'Floats, positioning, Flexbox, Grid, media queries, effects and preprocessors: arranging boxes into real page layouts.',
+      sections: [
+        { id: 's7-1', num: '7.1', title: 'Older Approaches to CSS Layout', page: 283, obj: [3, 4] },
+        { id: 's7-2', num: '7.2', title: 'Flexbox Layout', page: 292, obj: [3, 5, 6] },
+        { id: 's7-3', num: '7.3', title: 'Grid Layout', page: 298, obj: [3, 5, 6] },
+        { id: 's7-4', num: '7.4', title: 'Responsive Design', page: 310, obj: [5, 6] },
+        { id: 's7-5', num: '7.5', title: 'CSS Effects', page: 321, obj: [3] },
+        { id: 's7-6', num: '7.6', title: 'CSS Preprocessors', page: 332, obj: [3, 8] },
+        { id: 's7-review', num: 'R', title: 'Chapter 7 Review', obj: [3, 5, 6] }
+      ]
+    },
+    {
+      id: 'ch8', num: '8', label: 'Chapter 8', title: 'JavaScript 1: Language Fundamentals', href: 'ch8/index.html', page: 348,
+      blurb: 'Variables, types, conditionals, loops, arrays, objects, functions and scope: the language that makes pages interactive.',
+      sections: [
+        { id: 's8-1', num: '8.1', title: 'What Is JavaScript and What Can It Do?', page: 349, obj: [1, 7] },
+        { id: 's8-2', num: '8.2', title: 'Where Does JavaScript Go?', page: 356, obj: [7] },
+        { id: 's8-3', num: '8.3', title: 'Variables and Data Types', page: 359, obj: [7] },
+        { id: 's8-4', num: '8.4', title: 'Conditionals', page: 369, obj: [7] },
+        { id: 's8-5', num: '8.5', title: 'Loops', page: 372, obj: [7] },
+        { id: 's8-6', num: '8.6', title: 'Arrays', page: 375, obj: [7] },
+        { id: 's8-7', num: '8.7', title: 'Objects', page: 380, obj: [7] },
+        { id: 's8-8', num: '8.8', title: 'Functions', page: 388, obj: [7] },
+        { id: 's8-9', num: '8.9', title: 'Scope and Closures in JavaScript', page: 403, obj: [7] },
+        { id: 's8-review', num: 'R', title: 'Chapter 8 Review', obj: [7] }
+      ]
+    },
+    {
+      id: 'ch9', num: '9', label: 'Chapter 9', title: 'JavaScript 2: Using JavaScript', href: 'ch9/index.html', page: 418,
+      blurb: 'The DOM, events, forms and regular expressions: using JavaScript to read, change and react to a real page.',
+      sections: [
+        { id: 's9-1', num: '9.1', title: 'The Document Object Model (DOM)', page: 419, obj: [4, 7] },
+        { id: 's9-2', num: '9.2', title: 'Modifying the DOM', page: 427, obj: [4, 7] },
+        { id: 's9-3', num: '9.3', title: 'Events', page: 436, obj: [7] },
+        { id: 's9-4', num: '9.4', title: 'Event Types', page: 448, obj: [7] },
+        { id: 's9-5', num: '9.5', title: 'Forms in JavaScript', page: 456, obj: [6, 7] },
+        { id: 's9-6', num: '9.6', title: 'Regular Expressions', page: 463, obj: [7] },
+        { id: 's9-review', num: 'R', title: 'Chapter 9 Review', obj: [4, 7] }
+      ]
+    },
+    {
       id: 'levelup', num: 'L', label: 'Level Up', title: 'Responsive Layout & JavaScript', href: 'levelup/index.html', page: null,
-      blurb: 'Flexbox, Grid, media queries, JavaScript, the DOM and the tooling ecosystem: the objectives that go past Chapter 5.',
+      blurb: 'An optional extra module: a faster second pass through Flexbox, Grid, media queries, JavaScript, the DOM and the tooling ecosystem.',
       sections: [
         { id: 'sl-1', num: 'L.1', title: 'Flexbox Layout', obj: [3, 5, 6] },
         { id: 'sl-2', num: 'L.2', title: 'CSS Grid', obj: [3, 5, 6] },
@@ -509,7 +563,7 @@
       const h1 = $('h1', hero);
       const eyebrow = h('p', { class: 'eyebrow' },
         h('span', { class: 'tag', text: mod.label }),
-        mod.page ? h('span', { text: 'Textbook starts p. ' + mod.page }) : h('span', { text: 'Beyond the Chapter 2–5 readings' }),
+        mod.page ? h('span', { text: 'Textbook starts p. ' + mod.page }) : h('span', { text: 'Optional module beyond the readings' }),
         h('span', { text: mod.sections.length + ' sections' }));
       if (h1) hero.insertBefore(eyebrow, h1);
       else { hero.prepend(h('h1', { text: mod.title })); hero.prepend(eyebrow); }

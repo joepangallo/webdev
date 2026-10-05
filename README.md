@@ -1,6 +1,6 @@
 # Web Development I: interactive course companion
 
-An interactive, self-paced companion for an introductory web development course (HTML, CSS and JavaScript). Section numbers and page references follow *Fundamentals of Web Development*, 3rd ed. (Connolly & Hoar), Chapters 2–5. A **Level Up** module covers the course objectives that go past those chapters: responsive layout, JavaScript, the DOM, and frameworks and tools.
+An interactive, self-paced companion for an introductory web development course (HTML, CSS and JavaScript). Section numbers and page references follow *Fundamentals of Web Development*, 3rd ed. (Connolly & Hoar), Chapters 2–9. An optional **Level Up** module gives a faster second pass through responsive layout, JavaScript, the DOM, and frameworks and tools.
 
 Every section pairs a short explanation with something to do: live code playgrounds with automatic checks, simulators (packet switching, DNS lookups, HTTP requests, the box model, specificity, form validation…), drag-and-drop sorting, matching, walkthroughs, flashcards and quizzes. Progress saves in the browser.
 
@@ -15,10 +15,14 @@ Every section pairs a short explanation with something to do: live code playgrou
 | [`ch3/`](ch3/index.html) | Chapter 3 · HTML 1: Introduction (syntax, semantics, document structure, elements, HTML5 structure) |
 | [`ch4/`](ch4/index.html) | Chapter 4 · CSS 1: Selectors and Basic Styling (syntax, selectors, cascade, box model, text, variables and frameworks) |
 | [`ch5/`](ch5/index.html) | Chapter 5 · HTML 2: Tables and Forms (tables, forms, controls, accessibility, styling, validation) |
-| [`levelup/`](levelup/index.html) | Level Up · Responsive Layout & JavaScript (flexbox, grid, responsive design, JS, DOM and events, tools) |
+| [`ch6/`](ch6/index.html) | Chapter 6 · Web Media (pixels and color depth, resolution and responsive images, file formats and compression, audio and video, color) |
+| [`ch7/`](ch7/index.html) | Chapter 7 · CSS 2: Layout (normal flow, floats and positioning, Flexbox, Grid, responsive design, effects, preprocessors) |
+| [`ch8/`](ch8/index.html) | Chapter 8 · JavaScript 1: Language Fundamentals (variables and types, conditionals, loops, arrays, objects, functions, scope and closures) |
+| [`ch9/`](ch9/index.html) | Chapter 9 · JavaScript 2: Using JavaScript (the DOM, modifying the DOM, events and event types, forms, regular expressions) |
+| [`levelup/`](levelup/index.html) | Level Up · Responsive Layout & JavaScript, an optional review module (flexbox, grid, responsive design, JS, DOM and events, tools) |
 | [`project/`](project/index.html) | The incremental course project: one milestone per chapter covered so far (Chapters 2–5), ten theme ideas, rubrics, starter files and an HTML checker |
 | [`tools/playground.html`](tools/playground.html) | Full-page HTML/CSS/JS playground with templates, console, device widths and download |
-| [`glossary.html`](glossary.html) | 200+ searchable terms linked to the section that teaches each one, with a flashcard mode |
+| [`glossary.html`](glossary.html) | 350 searchable terms linked to the section that teaches each one, with a flashcard mode |
 | [`docs/`](docs/AUTHORING.md) | Authoring guide and a live component gallery for adding or editing lessons |
 | `assets/` | The shared stylesheet and JavaScript runtime every page uses |
 
@@ -26,14 +30,14 @@ Every section pairs a short explanation with something to do: live code playgrou
 
 | # | Objective | Where it is practiced |
 |---|-----------|------------------------|
-| 1 | Identify the technologies and protocols used in hosting and developing applications on the web | Ch 2 (all), 5.3, L.6 |
-| 2 | Build appropriately structured and valid web pages using HTML | Ch 3, Ch 5 |
-| 3 | Implement CSS syntax to layout and format HTML elements and style web pages | Ch 4, 5.2, 5.6, L.1, L.2 |
-| 4 | Examine the box and document object models used to structure and layout web page elements | 2.5, 3.4, 4.6, L.5 |
-| 5 | Discuss responsive web design principles and how they are used to build cross-platform applications | L.1, L.2, L.3 |
-| 6 | Design responsive web pages that incorporate images, tables, forms, and navigation menus | 3.5, 3.6, Ch 5, L.1–L.3, the project |
-| 7 | Code interactive web pages that respond to user input and events using JavaScript | 5.7, L.4, L.5 |
-| 8 | Distinguish between various frameworks and third-party tools used to enhance the web development process | 4.8, L.6 |
+| 1 | Identify the technologies and protocols used in hosting and developing applications on the web | Ch 2 (all), 5.3, 6.3, 8.1, L.6 |
+| 2 | Build appropriately structured and valid web pages using HTML | Ch 3, Ch 5, 6.4 |
+| 3 | Implement CSS syntax to layout and format HTML elements and style web pages | Ch 4, 5.2, 5.6, 6.5, 7.1–7.3, 7.5, 7.6, L.1, L.2 |
+| 4 | Examine the box and document object models used to structure and layout web page elements | 2.5, 3.4, 4.6, 7.1, 9.1, 9.2, L.5 |
+| 5 | Discuss responsive web design principles and how they are used to build cross-platform applications | 6.2, 7.2–7.4, L.1, L.2, L.3 |
+| 6 | Design responsive web pages that incorporate images, tables, forms, and navigation menus | 3.5, 3.6, Ch 5, Ch 6, 7.2–7.4, 9.5, L.1–L.3, the project |
+| 7 | Code interactive web pages that respond to user input and events using JavaScript | 5.7, Ch 8, Ch 9, L.4, L.5 |
+| 8 | Distinguish between various frameworks and third-party tools used to enhance the web development process | 4.8, 7.6, L.6 |
 
 The dashboard shows the same map interactively, with each student's progress per objective.
 

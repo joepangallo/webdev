@@ -64,7 +64,7 @@ What `course.js` adds automatically, so **do not** write these yourself:
 - the "Mark section complete" button and "Next" link at the end of each section
 - previous/next module links at the bottom
 
-`<body data-module>` must be one of `ch2`, `ch3`, `ch4`, `ch5`, `levelup`. Each section `id` must match the manifest in `course.js` (`s2-1` … `s2-6`, `s2-review`; `s3-1` … and so on; Level Up uses `sl-1` … `sl-6`, `sl-review`). Adding a section means adding it to `WD1.MODULES` too.
+`<body data-module>` must be one of `ch2` … `ch9` or `levelup`. Each section `id` must match the manifest in `course.js` (`s2-1` … `s2-6`, `s2-review`; `s3-1` … and so on; Level Up uses `sl-1` … `sl-6`, `sl-review`). Adding a section means adding it to `WD1.MODULES` too.
 
 ---
 
