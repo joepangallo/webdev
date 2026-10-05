@@ -14,3 +14,11 @@ teaching conversation (Alex and Jordan).
 Each episode adapts its chapter's concepts conversationally rather than reading
 the course material verbatim. Narration scripts are in `scripts/`.
 Voices: Alex (avocado_v2:MAI_01), Jordan (avocado_v2:MAI_03).
+| 6 | Milestone 1 — Plan and Publish | 8:17 |
+| 7 | Milestone 2 — Semantic Structure | 9:59 |
+| 8 | Milestone 3 — Style System | 10:45 |
+| 9 | Milestone 4 — Tables and Forms | 9:22 |
+
+Episodes 6–9 walk through the course project milestones: one website, built
+chapter by chapter — planning and publishing with GitHub Pages, semantic HTML
+structure, a one-stylesheet design system, and accessible tables and forms.
