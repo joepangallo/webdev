@@ -599,6 +599,17 @@
             border-bottom: 1px solid #d9dee7;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <nav class="side-menu">
+            <a href="#">Textbooks</a>
+            <a href="#">Hoodies and caps</a>
+            <a href="#">School supplies</a>
+            <a href="#">Gift cards</a>
+          </nav>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .side-menu { max-width: 240px; border: 1px solid #d9dee7; border-radius: 8px; background: #f6f8fb; }
+        </script>
       </div>
       <div data-tab="inline">
         <p><strong>What it is.</strong> A box that flows inside a line of text, like a word. It is exactly as wide as its content. <code>width</code> and <code>height</code> are ignored, and so are top and bottom margins. Top and bottom padding paints a background, but it does not push the lines above and below out of the way, so it can overlap them.</p>
@@ -615,6 +626,9 @@
             background: #fff4cc;
             /* width: 200px; would be ignored here, so leave it out */
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>Back-to-school deal: hoodies are now <span class="price">$36</span>, down from $48, until Friday.</p>
         </script>
       </div>
       <div data-tab="inline-block">
@@ -636,6 +650,19 @@
             text-align: center;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="tags">Filed under:
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">Accessibility</span>
+            <span class="tag">Layout</span>
+            <span class="tag">Flexbox</span>
+          </p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .tags { max-width: 300px; }
+          .tag { border: 1px solid #b9d8c4; border-radius: 99px; background: #e3efe7; }
+        </script>
       </div>
       <div data-tab="none">
         <p><strong>What it is.</strong> The element is not drawn at all, and the browser lays out the page as if it did not exist: the content after it moves up to fill the gap. Screen readers skip it too.</p>
@@ -652,6 +679,25 @@
             /* Back in normal flow as a block, pushing the content below it down */
             display: block;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <button class="menu-button" type="button">☰ Menu</button>
+          <nav class="mobile-menu">
+            <ul>
+              <li><a href="#">Textbooks</a></li>
+              <li><a href="#">Hoodies</a></li>
+              <li><a href="#">Gift cards</a></li>
+            </ul>
+          </nav>
+          <p>Press ☰ Menu: JavaScript adds the class open to the menu, and pressing it again takes the class away.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .mobile-menu { margin-top: 8px; border: 1px solid #d9dee7; border-radius: 8px; background: #f6f8fb; }
+        </script>
+        <script type="text/plain" class="demo" data-lang="js">
+          document.querySelector('.menu-button').addEventListener('click', () => {
+            document.querySelector('.mobile-menu').classList.toggle('open');
+          });
         </script>
       </div>
     </div>
@@ -744,6 +790,18 @@
         clear: both;
       }
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <div class="article-intro">
+        <img src="union.jpg" alt="Student union" width="120" height="90">
+        <p>The student union reopens on Monday.</p>
+      </div>
+      <p>The next paragraph comes after the container in the HTML.</p>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .article-intro { padding: 8px; border: 2px solid #5b8def; }
+      .article-intro img { float: left; margin-right: 12px; }
+      .article-intro p { margin: 0; }
+    </script>
     <aside class="callout warn"><strong>Floats turn boxes into blocks</strong> A floated <code>&lt;span&gt;</code> or <code>&lt;img&gt;</code> becomes a block box, so width and height start working, and it is pulled out of its line of text. A float with no width shrinks to fit its content. Give floated photos a <code>width</code> and a <code>margin</code> on the side that faces the text, or the words will touch the image.</aside>
 
     <h3>Positioning</h3>
@@ -784,6 +842,34 @@
             }
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <header class="site-header">Riverbend News</header>
+          <main>
+            <h2>Campus edition</h2>
+            <p class="hint">Scroll down inside this frame.</p>
+            <p>The student union reopens on Monday after a summer of renovation, with a bigger food court and twice as many study rooms.</p>
+            <p>Parking permits for the fall term go on sale Tuesday at the campus police office.</p>
+            <p>The library extends its hours during exam week, staying open until 2 a.m.</p>
+            <p>The film club screens a different classic every Thursday in Room 114. Admission is free with a student ID.</p>
+            <p>Intramural soccer signups close Friday. Teams need at least seven players, and every skill level is welcome.</p>
+            <p>The career fair returns in October with over sixty employers. Bring printed résumés.</p>
+            <p>The bookstore's textbook sale runs until Friday. Bring your student ID for 10% off.</p>
+            <p>The campus café now serves breakfast from 7 a.m., with free coffee for anyone who has an exam that day.</p>
+            <p>The climbing wall in the gym is open to beginners on Tuesday evenings.</p>
+            <p>Lost and found moves to the front desk of the student union.</p>
+            <p>The campus shuttle adds a late-night run on Fridays and Saturdays.</p>
+            <p>Volunteers are needed for the river cleanup on Sunday morning.</p>
+            <p>The art building's spring show opens on Wednesday with work from every year group.</p>
+            <p>Flu shots are free at the health center all month. No appointment needed.</p>
+          </main>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          body { margin: 0; }
+          .site-header { width: 100%; box-sizing: border-box; padding: 10px 16px; background: #1d3b2a; color: white; font-weight: bold; }
+          main { padding: 44px 16px 16px; }
+          main h2 { margin-top: 0; }
+          .hint { color: #5a6475; font-style: italic; }
+        </script>
       </div>
       <div data-tab="relative">
         <p><strong>What it is.</strong> The box is laid out in normal flow first, then drawn shifted by the offsets, measured from that normal spot. The space it originally took stays reserved, so nothing around it moves; it can end up overlapping its neighbors.</p>
@@ -803,6 +889,20 @@
             /* 2px lower; the text beside it doesn't move */
             top: 2px;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <article class="card">
+            <span class="badge">Sale</span>
+            <h3>Campus hoodie</h3>
+            <p>Heavyweight cotton, in four colors. Was $48, now $36.</p>
+            <p><span class="icon">★</span> Best seller</p>
+          </article>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .card { max-width: 260px; margin-top: 16px; padding: 12px; border: 1px solid #c3cad7; border-radius: 10px; }
+          .card h3 { margin: 0 0 8px; }
+          .card p { margin: 0 0 6px; }
+          .badge { position: absolute; top: 8px; right: 8px; padding: 2px 10px; border-radius: 99px; background: #b9322a; color: white; font-weight: bold; }
         </script>
       </div>
       <div data-tab="absolute">
@@ -832,6 +932,17 @@
             color: white;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <figure class="photo">
+            <img src="union.jpg" alt="The student union at sunset" width="240" height="150">
+            <figcaption>The student union reopens on Monday.</figcaption>
+          </figure>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .photo { width: 240px; margin: 0; }
+          .photo img { display: block; }
+          .photo figcaption { padding: 6px 10px; }
+        </script>
       </div>
       <div data-tab="fixed">
         <p><strong>What it is.</strong> Like <code>absolute</code>, but the containing block is the <strong>viewport</strong>, the visible part of the browser window. The box stays in the same spot on screen while the page scrolls underneath it.</p>
@@ -852,6 +963,31 @@
             /* As tall as the header, so the first heading isn't hidden */
             padding-top: 64px;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <header class="site-header">Riverbend News</header>
+          <h2>Campus edition</h2>
+          <p class="hint">Scroll down inside this frame.</p>
+          <p>The student union reopens on Monday after a summer of renovation, with a bigger food court and twice as many study rooms.</p>
+          <p>Parking permits for the fall term go on sale Tuesday at the campus police office.</p>
+          <p>The library extends its hours during exam week, staying open until 2 a.m.</p>
+          <p>The film club screens a different classic every Thursday in Room 114. Admission is free with a student ID.</p>
+          <p>Intramural soccer signups close Friday. Teams need at least seven players, and every skill level is welcome.</p>
+          <p>The career fair returns in October with over sixty employers. Bring printed résumés.</p>
+          <p>The bookstore's textbook sale runs until Friday. Bring your student ID for 10% off.</p>
+          <p>The campus café now serves breakfast from 7 a.m., with free coffee for anyone who has an exam that day.</p>
+          <p>The climbing wall in the gym is open to beginners on Tuesday evenings.</p>
+          <p>Lost and found moves to the front desk of the student union.</p>
+          <p>The campus shuttle adds a late-night run on Fridays and Saturdays.</p>
+          <p>Volunteers are needed for the river cleanup on Sunday morning.</p>
+          <p>The art building's spring show opens on Wednesday with work from every year group.</p>
+          <p>Flu shots are free at the health center all month. No appointment needed.</p>
+          <button class="help-button" type="button">Need help?</button>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .site-header { position: fixed; top: 0; left: 0; right: 0; height: 64px; padding: 0 16px; line-height: 64px; background: #1d3b2a; color: white; font-weight: bold; }
+          .help-button { padding: 10px 16px; border: 0; border-radius: 99px; background: #1f4fd1; color: white; font: inherit; }
+          .hint { color: #5a6475; font-style: italic; }
         </script>
       </div>
       <div data-tab="sticky">
@@ -874,6 +1010,20 @@
             /* A background, or the names scroll visibly underneath the heading */
             background: white;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>Scroll inside the contact list.</p>
+          <div class="contacts">
+            <section><h2>A</h2><p>Abebe</p><p>Ada</p><p>Alejandro</p><p>Amara</p></section>
+            <section><h2>B</h2><p>Bao</p><p>Beatriz</p><p>Ben</p><p>Brianna</p></section>
+            <section><h2>C</h2><p>Camila</p><p>Chen</p><p>Chidi</p><p>Clara</p></section>
+            <section><h2>D</h2><p>Dalia</p><p>Darnell</p><p>Deepa</p><p>Dmitri</p></section>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .contacts { max-width: 260px; height: 200px; overflow-y: auto; border: 1px solid #c3cad7; border-radius: 8px; }
+          .contacts h2 { margin: 0; padding: 4px 12px; font-size: 1rem; color: #1d7a55; border-bottom: 1px solid #d9dee7; }
+          .contacts p { margin: 0; padding: 4px 12px; }
         </script>
       </div>
     </div>
@@ -996,6 +1146,18 @@
             display: block;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <form>
+            <p><label>Email <input type="email" value="sam@"></label></p>
+            <p class="error show">Enter a full email address, such as sam@example.com.</p>
+            <p><label>Student ID <input value="R1234567"></label></p>
+            <p class="error">Enter the 7 digits of your student ID.</p>
+            <button type="button">Send</button>
+          </form>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .error { margin-top: -8px; color: #b9322a; font-weight: bold; }
+        </script>
       </div>
       <div data-tab="visibility: hidden">
         <p><strong>What it is.</strong> The element is not drawn, but it keeps its space in the layout, so nothing moves. It cannot be clicked, and screen readers skip it.</p>
@@ -1011,6 +1173,14 @@
             /* Drawn again, in exactly the same spot */
             visibility: visible;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p><button type="button">Save</button> <span class="saved-note">Saved!</span> <button type="button">Next step</button> <span class="caption">before you save</span></p>
+          <p><button type="button">Save</button> <span class="saved-note show">Saved!</span> <button type="button">Next step</button> <span class="caption">after you save</span></p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .saved-note { color: #1d7a55; font-weight: bold; }
+          .caption { color: #5a6475; font-size: .9em; }
         </script>
       </div>
       <div data-tab="opacity: 0">
@@ -1032,6 +1202,15 @@
             opacity: 1;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="hint">Point at the dashed words with the mouse.</p>
+          <p><span class="has-tooltip">Office hours<span class="tooltip">Mon–Thu, 2–4 p.m., Room 114</span></span> are open to every student this week.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .hint { margin-bottom: 40px; }
+          .has-tooltip { position: relative; border-bottom: 1px dashed; cursor: help; }
+          .tooltip { position: absolute; left: 0; bottom: 100%; margin-bottom: 6px; padding: 2px 8px; border-radius: 6px; background: #1f2330; color: white; font-size: .85em; white-space: nowrap; }
+        </script>
       </div>
       <div data-tab="overflow: hidden">
         <p><strong>What it is.</strong> Content that sticks out past the box's edges is cut off at the padding edge. The <code>overflow</code> property has five values: <code>visible</code> (the default: content spills out over whatever comes next), <code>hidden</code> (cut off), <code>clip</code> (cut off, and scrolling is impossible even from code), <code>scroll</code> (always shows scrollbars) and <code>auto</code> (scrollbars only when needed).</p>
@@ -1045,6 +1224,17 @@
             /* Cut off the square corners of the photo inside so they follow the curve */
             overflow: hidden;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <article class="card">
+            <img src="hoodie.jpg" alt="Campus hoodie" width="240" height="140">
+            <p>Campus hoodie, now $36.</p>
+          </article>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .card { width: 240px; border: 1px solid #c3cad7; }
+          .card img { display: block; }
+          .card p { margin: 10px 12px; }
         </script>
       </div>
       <div data-tab="overflow: auto">
@@ -1064,6 +1254,36 @@
             /* Older messages scroll inside the box */
             overflow-y: auto;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="table-wrapper">
+            <table>
+              <tr><th>Course</th><th>Textbook</th><th>New</th><th>Used</th><th>Rental</th></tr>
+              <tr><td>WEB 101</td><td>Learning Web Design</td><td>$64</td><td>$41</td><td>$22</td></tr>
+              <tr><td>ENG 110</td><td>The Writer's Handbook</td><td>$58</td><td>$35</td><td>$19</td></tr>
+            </table>
+          </div>
+          <div class="chat-log">
+            <p><b>Help desk:</b> Hi! How can we help?</p>
+            <p><b>You:</b> Has my textbook order shipped?</p>
+            <p><b>Help desk:</b> Let me check. What is your order number?</p>
+            <p><b>You:</b> 48213.</p>
+            <p><b>Help desk:</b> Thanks. It shipped this morning.</p>
+            <p><b>You:</b> Great! When will it arrive?</p>
+            <p><b>Help desk:</b> Thursday, at the campus mail room.</p>
+            <p><b>You:</b> Do I need my student ID to pick it up?</p>
+            <p><b>Help desk:</b> Yes, please bring it.</p>
+            <p><b>You:</b> And can I return a book if I drop the class?</p>
+            <p><b>Help desk:</b> Yes, within two weeks, with the receipt.</p>
+            <p><b>You:</b> Perfect, thank you!</p>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .table-wrapper { max-width: 240px; border: 1px solid #c3cad7; }
+          table { border-collapse: collapse; white-space: nowrap; }
+          th, td { padding: 4px 10px; border: 1px solid #d9dee7; text-align: left; }
+          .chat-log { max-width: 240px; margin-top: 16px; padding: 0 10px; border: 1px solid #c3cad7; }
+          .chat-log p { margin: 8px 0; }
         </script>
       </div>
     </div>
@@ -1328,6 +1548,27 @@
             margin-top: auto;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="cards">
+            <article class="card">
+              <h3>Sourdough</h3>
+              <p>Baked at 5 a.m.</p>
+              <a class="button" href="#">Order</a>
+            </article>
+            <article class="card">
+              <h3>Blueberry muffin</h3>
+              <p>Wild blueberries, a crunchy sugar top and a soft middle. Best while still warm.</p>
+              <a class="button" href="#">Order</a>
+            </article>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .cards { display: flex; gap: 12px; max-width: 460px; }
+          .card { flex: 1; padding: 12px; border: 1px solid #c3cad7; border-radius: 10px; }
+          .card h3 { margin: 0 0 6px; }
+          .card p { margin: 0 0 12px; }
+          .card .button { padding: 6px 12px; border-radius: 6px; background: #1d7a55; color: white; text-align: center; text-decoration: none; }
+        </script>
       </div>
       <div data-tab="flex-wrap">
         <p><strong>What it is.</strong> By default (<code>nowrap</code>) every item is squeezed onto one line, shrinking as needed and overflowing if it cannot shrink enough. <code>wrap</code> lets items move onto new lines when they run out of room, like words in a paragraph.</p>
@@ -1343,6 +1584,21 @@
             /* 8px between tags, and between wrapped lines */
             gap: 8px;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <ul class="tags">
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Accessibility</li>
+            <li>Flexbox</li>
+            <li>Grid</li>
+            <li>Responsive design</li>
+            <li>Performance</li>
+          </ul>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .tags { max-width: 300px; padding: 0; list-style: none; }
+          .tags li { padding: 4px 12px; border-radius: 99px; background: #e3efe7; }
         </script>
       </div>
       <div data-tab="justify-content">
@@ -1360,6 +1616,19 @@
             gap: 12px;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="dialog">
+            <p>Save the changes to your order?</p>
+            <div class="dialog-buttons">
+              <button type="button">Cancel</button>
+              <button type="button">Save</button>
+            </div>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .dialog { max-width: 320px; padding: 16px; border: 1px solid #c3cad7; border-radius: 10px; }
+          .dialog p { margin-top: 0; }
+        </script>
       </div>
       <div data-tab="align-items">
         <p><strong>What it is.</strong> Lines the items up along the cross axis. <code>stretch</code> (the default) makes every item as tall as the line, which is why cards in a flex row all have the same height. <code>flex-start</code>, <code>center</code> and <code>flex-end</code> keep their natural height and line them up at the top, middle or bottom. <code>baseline</code> lines up the first line of text in each item.</p>
@@ -1375,6 +1644,17 @@
             /* Room between the logo and the links */
             gap: 24px;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <header class="site-header">
+            <img src="logo.png" alt="Logo" width="48" height="48">
+            <a href="#">Menu</a>
+            <a href="#">Hours</a>
+            <a href="#">Visit</a>
+          </header>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .site-header { padding: 8px 12px; border: 1px solid #d9dee7; border-radius: 8px; background: #f6f8fb; }
         </script>
       </div>
       <div data-tab="align-content">
@@ -1393,6 +1673,21 @@
             align-content: flex-start;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="thumbnails">
+            <img src="latte.jpg" alt="Latte" width="96" height="72">
+            <img src="scone.jpg" alt="Scone" width="96" height="72">
+            <img src="bagel.jpg" alt="Bagel" width="96" height="72">
+            <img src="muffin.jpg" alt="Muffin" width="96" height="72">
+            <img src="tea.jpg" alt="Tea" width="96" height="72">
+            <img src="pie.jpg" alt="Pie" width="96" height="72">
+            <img src="cookie.jpg" alt="Cookie" width="96" height="72">
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .thumbnails { max-width: 340px; border: 1px solid #c3cad7; border-radius: 8px; }
+          .thumbnails img { margin: 4px; }
+        </script>
       </div>
       <div data-tab="gap">
         <p><strong>What it is.</strong> The space between neighboring items, and between wrapped lines, but never at the outer edges. One value sets both directions; two values set the row gap, then the column gap. It works the same in Grid.</p>
@@ -1407,6 +1702,19 @@
             /* 24px between rows, 16px between cards in a row */
             gap: 24px 16px;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="products">
+            <article>Sourdough loaf<br>$7</article>
+            <article>Blueberry muffin<br>$3.50</article>
+            <article>Cinnamon roll<br>$4</article>
+            <article>Almond croissant<br>$4.25</article>
+            <article>Oat-milk latte<br>$5</article>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .products { max-width: 520px; }
+          .products article { width: 140px; padding: 10px; border: 1px solid #c3cad7; border-radius: 8px; background: #f6f8fb; }
         </script>
       </div>
     </div>
@@ -1488,6 +1796,27 @@
             min-width: 0;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="layout">
+            <nav class="sidebar">
+              <a href="#">Menu</a>
+              <a href="#">Hours</a>
+              <a href="#">Catering</a>
+            </nav>
+            <div class="card">
+              <h3>Share this drink</h3>
+              <p>riverbendcafe.example.com/share/7f3a9c2e5b8d41f6a0c3e9b72d4f8a61c5e0b3d9f7a2c8e4b6d1f0a9c3e5b7d2a4c6e8f0b2d4f6a8c0e2a4b6c8d0e2f4a6b8c0d2e4f6a8b0c2d4e6f8a0b2c4d6</p>
+            </div>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .layout { display: flex; gap: 12px; }
+          .sidebar, .card { padding: 10px; border: 1px solid #c3cad7; border-radius: 8px; background: #f6f8fb; }
+          .sidebar a { display: block; }
+          .card { flex: 1 1 200px; overflow-wrap: break-word; }
+          .card h3 { margin: 0 0 6px; }
+          .card p { margin: 0; }
+        </script>
       </div>
       <div data-tab="flex-grow">
         <p><strong>What it is.</strong> How much of the leftover space an item takes, compared with its siblings. The space is split by the total: with grow values of 1 and 2, the first gets one third of the leftover space and the second two thirds. 0 means "never grow past my basis".</p>
@@ -1500,6 +1829,17 @@
             flex-grow: 1;
           }
           /* The logo and the button keep their natural size (flex-grow: 0, the default) */
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <form class="search-bar">
+            <strong>Riverbend</strong>
+            <input class="search-input" type="search" placeholder="Search the menu" aria-label="Search the menu">
+            <button type="button">Search</button>
+          </form>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .search-bar { display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid #d9dee7; border-radius: 8px; }
+          .search-input { min-width: 0; }
         </script>
       </div>
       <div data-tab="flex-shrink">
@@ -1514,6 +1854,17 @@
             /* Never squash the picture, even on a narrow phone */
             flex-shrink: 0;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="comment">
+            <div class="avatar">AK</div>
+            <p>The sourdough here is the best in town. I walk twenty minutes every Saturday morning to get a loaf before they sell out, and the staff always remember my order.</p>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .comment { display: flex; align-items: flex-start; gap: 12px; max-width: 520px; }
+          .comment p { margin: 0; }
+          .avatar { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: #5b8def; color: white; font-weight: bold; }
         </script>
       </div>
       <div data-tab="flex">
@@ -1531,6 +1882,25 @@
             /* grow 1, shrink 1, start 220px wide */
             flex: 1 1 220px;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="columns">
+            <div class="column">Coffee</div>
+            <div class="column">Tea, hot chocolate and seasonal drinks</div>
+            <div class="column">Juice</div>
+          </div>
+          <div class="cards">
+            <div class="card">Sourdough loaf</div>
+            <div class="card">Blueberry muffin</div>
+            <div class="card">Cinnamon roll</div>
+            <div class="card">Almond croissant</div>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .columns, .cards { display: flex; gap: 12px; }
+          .cards { flex-wrap: wrap; margin-top: 16px; }
+          .column, .card { padding: 8px; border-radius: 6px; background: #e3efe7; }
+          .card { background: #fff4cc; }
         </script>
       </div>
       <div data-tab="order">
@@ -1562,6 +1932,19 @@
             /* An automatic left margin takes up all the free space before it */
             margin-left: auto;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <nav class="toolbar">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' preserveAspectRatio='none'%3E%3Crect width='40' height='40' rx='6' fill='%235b8def'/%3E%3Ccircle cx='20' cy='15' r='8' fill='white'/%3E%3Cellipse cx='20' cy='38' rx='14' ry='12' fill='white'/%3E%3C/svg%3E" alt="Your profile picture" width="40" height="40">
+            <a href="#">Orders</a>
+            <a href="#">Rewards</a>
+            <a class="logout" href="#">Log out</a>
+          </nav>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .toolbar { display: flex; gap: 12px; padding: 8px 12px; border: 1px solid #d9dee7; border-radius: 8px; background: #f6f8fb; }
+          .toolbar img { height: auto; }
+          .toolbar a { padding: 20px 0; }
         </script>
       </div>
     </div>
@@ -1621,6 +2004,22 @@
             padding: 0;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <header class="site-header">
+            <a class="logo" href="#">Riverbend Café</a>
+            <nav>
+              <ul>
+                <li><a href="#">Menu</a></li>
+                <li><a href="#">Hours</a></li>
+                <li><a href="#">Visit</a></li>
+              </ul>
+            </nav>
+          </header>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .site-header { padding: 4px 16px; border: 1px solid #d9dee7; border-radius: 8px; background: #f6f8fb; }
+          .logo { color: #1d3b2a; font-weight: bold; text-decoration: none; }
+        </script>
       </div>
       <div data-tab="Centering">
         <div class="c7-pat c7-pat-center" aria-hidden="true"><span class="c7-box c7-k4">Centered</span></div>
@@ -1637,6 +2036,22 @@
             /* At least as tall as the window, so there is room to center in */
             min-height: 100vh;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="login-page">
+            <form class="login-card">
+              <h3>Sign in</h3>
+              <p>Order ahead and skip the line.</p>
+              <button type="button">Sign in with email</button>
+            </form>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          body { margin: 0; }
+          .login-page { height: 260px; background: #e3efe7; }
+          .login-card { width: 220px; padding: 16px; border-radius: 10px; background: white; }
+          .login-card h3 { margin: 0 0 6px; }
+          .login-card p { margin: 0 0 12px; }
         </script>
       </div>
       <div data-tab="Card row">
@@ -1657,6 +2072,19 @@
             flex: 1 1 180px;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="cards">
+            <article class="card"><h3>Sourdough</h3><p>Baked at 5 a.m.</p></article>
+            <article class="card"><h3>Muffin</h3><p>Wild blueberries, a crunchy sugar top and a soft middle, best while still warm.</p></article>
+            <article class="card"><h3>Bagel</h3><p>Sesame or plain.</p></article>
+            <article class="card"><h3>Scone</h3><p>Cheddar and chive.</p></article>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .card { padding: 10px; border: 1px solid #c3cad7; border-radius: 8px; background: #f6f8fb; }
+          .card h3 { margin: 0 0 4px; }
+          .card p { margin: 0; }
+        </script>
       </div>
       <div data-tab="Sticky footer">
         <div class="c7-pat c7-pat-page" aria-hidden="true"><span class="c7-pat-bar">header</span><span class="c7-pat-main">main: only a little content</span><span class="c7-pat-bar">footer stays at the bottom</span></div>
@@ -1676,6 +2104,16 @@
             /* main takes all the spare height, pushing the footer down */
             flex: 1;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <header>Riverbend Café</header>
+          <main>Only a little content on this page.</main>
+          <footer>12 River Street · Open 7 a.m. to 3 p.m.</footer>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          html { min-height: 280px; }
+          header, footer { padding: 10px 16px; background: #1d3b2a; color: white; }
+          main { padding: 16px; }
         </script>
       </div>
     </div>
@@ -1857,6 +2295,15 @@ main {
         gap: 16px;
       }
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <div class="gallery">
+        <div>1</div><div>2</div><div>3</div>
+        <div>4</div><div>5</div><div>6</div>
+      </div>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .gallery > div { padding: 8px; border: 1px solid #b9d8c4; border-radius: 6px; background: #e3efe7; }
+    </script>
 
     <h3>Defining the tracks</h3>
     <p>You size tracks with a list of values, one per track: <code>grid-template-columns: 200px 1fr 1fr</code> makes three columns. Besides the usual lengths, Grid adds a unit and two functions of its own. The <strong><code>fr</code></strong> unit means "one share of the free space", <strong><code>repeat()</code></strong> saves you from typing the same track again and again, and <strong><code>minmax()</code></strong> gives a track a smallest and a largest size. Type your own track lists into the editor, or start from the examples, and watch the line numbers follow.</p>
@@ -1914,6 +2361,17 @@ main {
             grid-template-rows: auto 400px;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="page">
+            <div class="logo">Riverbend Library</div>
+            <header>Welcome back</header>
+            <nav>Catalog<br>Events<br>Study rooms</nav>
+            <main>Open until midnight all week.</main>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .page > * { padding: 8px; border: 1px solid #c3cad7; background: #f6f8fb; }
+        </script>
       </div>
       <div data-tab="fr">
         <p><strong>What it is.</strong> A fraction of the <em>free</em> space: whatever is left after fixed tracks and gaps are taken out. The free space is divided by the total number of fr: in <code>1fr 2fr 1fr</code>, there are 4 shares, so the middle column gets half.</p>
@@ -1927,6 +2385,17 @@ main {
             /* Two gaps of 20px between the three columns */
             gap: 20px;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="layout">
+            <nav>Events (1fr)</nav>
+            <main>Main story (2fr)</main>
+            <aside>Weather (1fr)</aside>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .layout > * { padding: 8px; border-radius: 6px; background: #e3efe7; }
+          .layout main { background: #fff4cc; }
         </script>
       </div>
       <div data-tab="repeat()">
@@ -1942,6 +2411,16 @@ main {
             grid-auto-rows: 90px;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="calendar">
+            <div>1</div><div>2</div><div>3<br>Quiz</div><div>4</div><div>5</div><div>6</div><div>7</div>
+            <div>8</div><div>9</div><div>10<br>Club</div><div>11</div><div>12</div><div>13<br>Exam</div><div>14</div>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .calendar { gap: 4px; }
+          .calendar > div { padding: 4px; border: 1px solid #d9dee7; background: #f6f8fb; font-size: 14px; }
+        </script>
       </div>
       <div data-tab="minmax()">
         <p><strong>What it is.</strong> A size range for a track: <code>minmax(min, max)</code>. The track is never smaller than the first value and never larger than the second.</p>
@@ -1955,6 +2434,18 @@ main {
             /* Rows are at least 100px tall, taller if their content needs it */
             grid-auto-rows: minmax(100px, auto);
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="two-col">
+            <nav>Catalog<br>Events<br>Study rooms<br>Printing<br>Help desk</nav>
+            <main>Book a study room up to a week ahead. Each room has a board, a big screen and six seats. Check in at the front desk with your student ID.</main>
+            <aside>Quiet floor</aside>
+            <footer>Open until midnight</footer>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .two-col { gap: 8px; }
+          .two-col > * { padding: 8px; border-radius: 6px; background: #e3efe7; }
         </script>
       </div>
       <div data-tab="auto-fill">
@@ -1970,6 +2461,17 @@ main {
             gap: 8px;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="photos">
+            <div>Lake</div>
+            <div>Pier</div>
+            <div>Trail</div>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .photos { padding: 4px; border: 1px dashed #9aa5b5; }
+          .photos > div { padding: 28px 8px; border-radius: 6px; background: #90c3a8; text-align: center; }
+        </script>
       </div>
       <div data-tab="auto-fit">
         <p><strong>What it is.</strong> Like <code>auto-fill</code>, except that after the tracks are created, the empty ones <strong>collapse</strong> to zero width. The 1fr tracks that do hold items then share all the space, so the items stretch to fill the row.</p>
@@ -1983,6 +2485,16 @@ main {
             /* 16px between cards */
             gap: 16px;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="cards">
+            <article>Sourdough: baked at 5 a.m. every day.</article>
+            <article>Blueberry muffin: best while still warm.</article>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .cards { padding: 4px; border: 1px dashed #9aa5b5; }
+          .cards > article { padding: 12px; border-radius: 6px; background: #fff4cc; }
         </script>
       </div>
     </div>
@@ -2103,6 +2615,22 @@ main {
             grid-row: 1 / 3;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="grid">
+            <header class="site-header">Riverbend Photo Club</header>
+            <div>Lake</div><div>Pier</div><div>Trail</div>
+          </div>
+          <div class="grid">
+            <div class="featured">Featured photo</div>
+            <div>Dock</div><div>Ridge</div><div>Canoe</div><div>Dunes</div>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+          .grid > * { padding: 8px; border-radius: 6px; background: #e3efe7; }
+          .grid .site-header { background: #1d3b2a; color: white; }
+          .grid .featured { background: #fff4cc; }
+        </script>
       </div>
       <div data-tab="span">
         <p><strong>What it is.</strong> A size instead of a line: <code>span 2</code> means "cover two tracks". On its own (<code>grid-column: span 2</code>) it lets auto-placement choose where the item starts; after a start line (<code>3 / span 2</code>) it says how far to go.</p>
@@ -2121,6 +2649,23 @@ main {
             /* Let later small photos fill any holes the big ones leave */
             grid-auto-flow: dense;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="photos">
+            <div class="photo">Lake</div>
+            <div class="photo">Pier</div>
+            <div class="photo">Dock</div>
+            <div class="photo wide">Sunset (wide)</div>
+            <div class="photo">Trail</div>
+            <div class="photo tall">Ridge (tall)</div>
+            <div class="photo">Canoe</div>
+            <div class="photo">Dunes</div>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .photos { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 64px; gap: 8px; }
+          .photo { padding: 6px 8px; border-radius: 6px; background: #e3efe7; font-size: 14px; }
+          .photo.wide, .photo.tall { background: #fff4cc; }
         </script>
       </div>
       <div data-tab="grid-template-areas">
@@ -2143,6 +2688,22 @@ main {
           nav    { grid-area: nav; }
           main   { grid-area: main; }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="page">
+            <header>Riverbend Library</header>
+            <nav>Catalog<br>Events</nav>
+            <main>Open until midnight all week.</main>
+            <aside>Poetry night on Thursday</aside>
+            <footer>© 2026 Riverbend Library</footer>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .page { gap: 8px; }
+          .page > * { padding: 8px; border: 1px solid #d9dee7; border-radius: 6px; background: #f6f8fb; }
+          .page > header { background: #1d3b2a; color: white; }
+          aside { grid-area: aside; }
+          footer { grid-area: footer; }
+        </script>
       </div>
       <div data-tab="justify- / align-items">
         <p><strong>What they are.</strong> Alignment for every item inside its own cell. <code>justify-items</code> works along the row (left to right) and <code>align-items</code> along the column (top to bottom). The values are <code>stretch</code> (the default: fill the cell), <code>start</code>, <code>center</code> and <code>end</code>.</p>
@@ -2159,6 +2720,14 @@ main {
             align-items: center;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="icon-grid">
+            <span>☕</span><span>🥐</span><span>🍰</span><span>🥪</span><span>🍵</span><span>🧃</span>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .icon-grid { grid-auto-rows: 64px; width: max-content; border: 1px solid #c3cad7; background: repeating-linear-gradient(90deg, #f6f8fb 0 63px, #c3cad7 63px 64px); font-size: 24px; }
+        </script>
       </div>
       <div data-tab="place-items">
         <p><strong>What it is.</strong> A shorthand for <code>align-items</code> then <code>justify-items</code>. One value sets both: <code>place-items: center</code>.</p>
@@ -2174,6 +2743,20 @@ main {
             min-height: 100vh;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="splash">
+            <div>
+              <h2>Riverbend Library</h2>
+              <p>Opening at 8 a.m.</p>
+            </div>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          body { margin: 0; }
+          .splash { height: 220px; background: #1d3b2a; color: white; }
+          .splash h2 { margin: 0 0 4px; }
+          .splash p { margin: 0; }
+        </script>
       </div>
       <div data-tab="justify- / align-self">
         <p><strong>What they are.</strong> The per-item versions: they override <code>justify-items</code> and <code>align-items</code> for one item. Unlike Flexbox, Grid does support <code>justify-self</code>, because every item has a cell to move around in.</p>
@@ -2186,6 +2769,25 @@ main {
             /* ...and down to the bottom of it */
             align-self: end;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="card-grid">
+            <article class="card">
+              <h3>Poetry night</h3>
+              <p>Thursday at 7 p.m. in the reading room.</p>
+              <a class="more-link" href="#">Read more</a>
+            </article>
+            <article class="card">
+              <h3>Coding club</h3>
+              <p>Friday at 4 p.m. Bring a laptop. Beginners are welcome, and the snacks are free.</p>
+              <a class="more-link" href="#">Read more</a>
+            </article>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 480px; }
+          .card { display: grid; grid-template-rows: auto auto 1fr; padding: 12px; border: 1px solid #c3cad7; border-radius: 8px; }
+          .card h3, .card p { margin: 0 0 8px; }
         </script>
       </div>
     </div>
@@ -2376,6 +2978,16 @@ footer { background: #d9dee7; }
         height: auto;
       }
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <div class="page">
+        <h2>Riverbend Trail Club</h2>
+        <img src="trail-map.jpg" alt="Trail map, 1200 pixels wide" width="1200" height="400">
+        <p>Weekend hikes for every level.</p>
+      </div>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .page { border: 1px dashed #9aa5b5; }
+    </script>
     <aside class="callout warn"><strong>max-width, not width</strong> <code>img { width: 100%; }</code> also fits a phone, but it stretches small images (a 120px logo becomes a blurry 900px banner). <code>max-width: 100%</code> only ever shrinks.</aside>
 
     <h3>Media queries</h3>
@@ -2402,6 +3014,19 @@ footer { background: #d9dee7; }
           grid-template-columns: repeat(3, 1fr);
         }
       }
+    </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <div class="cards">
+        <article class="card"><h3>Saturday</h3><p>River loop, 4 miles, easy.</p></article>
+        <article class="card"><h3>Sunday</h3><p>Ridge climb, 7 miles, hard.</p></article>
+        <article class="card"><h3>Wednesday</h3><p>Sunset walk, 2 miles, easy.</p></article>
+        <article class="card"><h3>Friday</h3><p>Night hike, 3 miles, medium.</p></article>
+      </div>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .card { padding: 10px; border: 1px solid #c3cad7; border-radius: 8px; }
+      .card h3 { margin: 0 0 4px; }
+      .card p { margin: 0; }
     </script>
     <p>The widths where your layout changes are called <strong>breakpoints</strong>. Don't chase device sizes (there are thousands of devices); instead, slowly widen the window and add a breakpoint wherever the <em>content</em> starts to look wrong: lines too long, cards too stretched, a menu that no longer fits. Common starting points are around 600px, 900px and 1200px. Media queries can test far more than width:</p>
     <div class="table-wrap">
@@ -2435,6 +3060,18 @@ footer { background: #d9dee7; }
             }
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <ul class="menu">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Hikes</a></li>
+            <li><a href="#">Gear</a></li>
+            <li><a href="#">Join</a></li>
+          </ul>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .menu { padding: 0; list-style: none; }
+          .menu a { display: block; padding: 8px 12px; border-radius: 6px; background: #e3efe7; text-decoration: none; }
+        </script>
       </div>
       <div data-tab="max-width">
         <p><strong>What it is.</strong> True when the viewport is at most the given width. <code>(max-width: 599px)</code> matches from 0 up to and including 599px.</p>
@@ -2466,6 +3103,14 @@ footer { background: #d9dee7; }
               object-fit: cover;
             }
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h2>Riverbend Trail Club</h2>
+          <img class="hero" src="hike.jpg" alt="Hikers on the ridge trail" width="800" height="400">
+          <p>Weekend hikes for every level.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .hero { display: block; width: 100%; height: auto; }
         </script>
       </div>
       <div data-tab="prefers-color-scheme">
@@ -2525,6 +3170,11 @@ footer { background: #d9dee7; }
               min-height: 44px;
             }
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>With a mouse, point at the photo.</p>
+          <img class="photo" src="sunset.jpg" alt="Sunset over the river" width="240" height="140">
+          <p><button class="button" type="button">Book a table</button></p>
         </script>
       </div>
     </div>
@@ -2635,6 +3285,28 @@ footer { background: #d9dee7; }
           grid-template-columns: 110px 1fr;
         }
       }
+    </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <p class="label">In a 200px sidebar:</p>
+      <div class="sidebar">
+        <div class="card">
+          <img src="sourdough.jpg" alt="Sourdough" width="110" height="80">
+          <p><strong>Sourdough</strong><br>Baked at 5 a.m. every day.</p>
+        </div>
+      </div>
+      <p class="label">In the main column:</p>
+      <div class="main">
+        <div class="card">
+          <img src="sourdough.jpg" alt="Sourdough" width="110" height="80">
+          <p><strong>Sourdough</strong><br>Baked at 5 a.m. every day.</p>
+        </div>
+      </div>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .label { margin: 0 0 8px; color: #5a6475; font-size: .9em; }
+      .sidebar { width: 200px; margin-bottom: 20px; }
+      .sidebar, .main { outline: 1px dashed #9aa5b5; outline-offset: 4px; }
+      .card p { margin: 0; }
     </script>
 
     <h3>Testing with DevTools device mode</h3>
@@ -2756,6 +3428,18 @@ footer { background: #d9dee7; }
             box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.15);
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="card">
+            <h3>Riverbend Café</h3>
+            <p>Fresh bread every morning, baked at 5 a.m.</p>
+            <input class="search-field" type="search" placeholder="Search the menu" aria-label="Search the menu">
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .card { max-width: 260px; margin: 4px 0 28px; padding: 16px; border-radius: 10px; }
+          .card h3 { margin-top: 0; }
+          .search-field { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #c3cad7; border-radius: 6px; }
+        </script>
       </div>
       <div data-tab="text-shadow">
         <p><strong>What it is.</strong> A shadow behind the letters themselves: <code>text-shadow: x y blur color</code> (there is no spread or inset).</p>
@@ -2768,6 +3452,15 @@ footer { background: #d9dee7; }
             /* 1px down, 3px blur, dark and 60% opaque: readable on light and dark areas */
             text-shadow: 0 1px 3px rgb(0 0 0 / 0.6);
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="hero">
+            <h1>Riverbend Café</h1>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .hero { padding: 36px 20px; border-radius: 10px; background: linear-gradient(120deg, #f6e7c1, #9fd3c7 45%, #3f6f8f); }
+          .hero h1 { margin: 0; }
         </script>
       </div>
       <div data-tab="border-radius">
@@ -2789,6 +3482,14 @@ footer { background: #d9dee7; }
             border-radius: 999px;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <img class="avatar" src="ana.jpg" alt="Ana" width="160" height="110">
+          <button class="pill-button" type="button">Follow</button>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .avatar, .pill-button { vertical-align: middle; }
+          .pill-button { margin-left: 12px; padding: 8px 20px; border: 0; background: #1d7a55; color: white; font: inherit; }
+        </script>
       </div>
       <div data-tab="gradients">
         <p><strong>What they are.</strong> Generated images of blending colors, used wherever an image is allowed, usually <code>background-image</code>. <code>linear-gradient()</code> blends along a line at an angle; <code>radial-gradient()</code> spreads out from a point; <code>conic-gradient()</code> sweeps around a center like a clock hand. Each color stop can say where it sits: <code>red 0%, blue 100%</code>.</p>
@@ -2806,6 +3507,19 @@ footer { background: #d9dee7; }
             background: linear-gradient(transparent, rgb(0 0 0 / 0.7));
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="banner">Riverbend Café · Open 7 a.m. to 3 p.m.</div>
+          <figure class="photo">
+            <img src="latte.jpg" alt="Latte art" width="240" height="150">
+            <figcaption class="photo-caption">Our new oat-milk latte</figcaption>
+          </figure>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .banner { padding: 20px 16px; border-radius: 10px; background-color: #59636f; color: white; font-weight: bold; }
+          .photo { position: relative; width: 240px; margin: 16px 0 0; }
+          .photo img { display: block; }
+          .photo-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 36px 12px 10px; color: white; }
+        </script>
       </div>
       <div data-tab="transform">
         <p><strong>What it is.</strong> Draws the element moved (<code>translate()</code>), turned (<code>rotate()</code>), resized (<code>scale()</code>) or slanted (<code>skew()</code>). The functions combine in one list and are applied in order. <code>transform-origin</code> sets the pivot point, by default the center.</p>
@@ -2820,6 +3534,20 @@ footer { background: #d9dee7; }
             /* Turn the arrow icon upside down when its menu is open */
             transform: rotate(180deg);
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>With a mouse, point at a card.</p>
+          <div class="cards">
+            <div class="card">Sourdough</div>
+            <div class="card">Croissant</div>
+            <div class="card">Bagel</div>
+          </div>
+          <p><button type="button">Menu <span class="arrow">▼</span></button> <button type="button">Hours <span class="arrow open">▼</span></button></p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .cards { display: flex; flex-wrap: wrap; gap: 12px; }
+          .card { padding: 16px; border: 1px solid #c3cad7; border-radius: 8px; background: white; }
+          .arrow { display: inline-block; }
         </script>
       </div>
       <div data-tab="transition">
@@ -2839,6 +3567,13 @@ footer { background: #d9dee7; }
             transform: translateY(-2px);
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>With a mouse, point at the button.</p>
+          <button class="button" type="button">Order ahead</button>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .button { padding: 10px 18px; border: 0; border-radius: 8px; background-color: #59636f; color: white; font: inherit; }
+        </script>
       </div>
       <div data-tab="animation">
         <p><strong>What it is.</strong> A named animation defined with <code>@keyframes</code>, where you set the styles at points along a timeline (<code>0%</code> to <code>100%</code>, or <code>from</code> and <code>to</code>). The <code>animation</code> property plays it: name, duration, timing function, delay, how many times, which direction, and whether it keeps the final styles afterwards (<code>animation-fill-mode</code>).</p>
@@ -2854,6 +3589,13 @@ footer { background: #d9dee7; }
             /* Play "spin": 1 second per turn, steady speed, forever */
             animation: spin 1s linear infinite;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="loader"></div>
+          <p>Loading your order…</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .loader { width: 36px; height: 36px; border: 4px solid #d9dee7; border-top-color: #1d7a55; border-radius: 50%; }
         </script>
       </div>
       <div data-tab="filter">
@@ -2871,6 +3613,10 @@ footer { background: #d9dee7; }
             /* Full color */
             filter: grayscale(0%);
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>With a mouse, point at the photo.</p>
+          <img class="team-photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='150'%3E%3Crect width='240' height='150' fill='%238ecae6'/%3E%3Ccircle cx='205' cy='30' r='16' fill='%23f2b457'/%3E%3Crect y='112' width='240' height='38' fill='%2390c3a8'/%3E%3Ccircle cx='70' cy='60' r='16' fill='%23f2d0a4'/%3E%3Crect x='50' y='80' width='40' height='52' rx='12' fill='%23b9322a'/%3E%3Ccircle cx='120' cy='54' r='16' fill='%23c98b4f'/%3E%3Crect x='100' y='74' width='40' height='58' rx='12' fill='%231f4fd1'/%3E%3Ccircle cx='170' cy='60' r='16' fill='%23e8b98a'/%3E%3Crect x='150' y='80' width='40' height='52' rx='12' fill='%237444b8'/%3E%3C/svg%3E" alt="The café team: three people in red, blue and purple aprons" width="240" height="150">
         </script>
       </div>
       <div data-tab="opacity">
@@ -2890,6 +3636,19 @@ footer { background: #d9dee7; }
             opacity: 1;
             transform: none;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>Press the button: JavaScript adds the class show to the notice, and pressing it again takes the class away.</p>
+          <button class="add" type="button">Add to order</button>
+          <p class="notice">Added: one sourdough loaf.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .notice { max-width: 260px; padding: 8px 12px; border-radius: 8px; background: #e3efe7; color: #1d3b2a; }
+        </script>
+        <script type="text/plain" class="demo" data-lang="js">
+          document.querySelector('.add').addEventListener('click', () => {
+            document.querySelector('.notice').classList.toggle('show');
+          });
         </script>
       </div>
     </div>
@@ -3105,6 +3864,19 @@ footer { background: #d9dee7; }
           transform: translateY(-4px);
         }
       }
+    </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <p>With a mouse, point at the card.</p>
+      <div class="card">
+        <h3>Sourdough</h3>
+        <p>Baked at 5 a.m. every day.</p>
+      </div>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .card { max-width: 240px; padding: 12px 16px; border: 1px solid #c3cad7; border-radius: 10px; background-color: white; }
+      .card:hover { background-color: #e3efe7; }
+      .card h3 { margin: 0 0 4px; }
+      .card p { margin: 0; }
     </script>
     <div class="fill" data-title="Complete the effects CSS" data-explain="A transition names the property, the duration and the timing function; `prefers-reduced-motion: reduce` matches people who asked for less movement; `@keyframes` defines an animation's steps; `infinite` repeats it forever.">
       <script type="text/plain">
@@ -3389,6 +4161,20 @@ footer { background: #d9dee7; }
           }
         }
       }
+    </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <p>With a mouse, point at the Order button.</p>
+      <article class="card">
+        <h3>Sourdough</h3>
+        <p>Baked at 5 a.m. every day.</p>
+        <a class="button" href="#">Order</a>
+      </article>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .card { max-width: 240px; border: 1px solid #c3cad7; border-radius: 10px; }
+      .card h3 { margin: 0 0 4px; }
+      .card p { margin: 0 0 12px; }
+      .button { display: inline-block; padding: 6px 14px; border-radius: 6px; background: #59636f; color: white; text-decoration: none; }
     </script>
     <div class="buckets" data-title="Sass, native CSS, or both?">
       <script type="application/json">
@@ -3684,6 +4470,31 @@ body {
             grid-template-columns: repeat(2, 1fr);  /* two equal columns */
           }
         }
+      </script>
+      <script type="text/plain" class="demo" data-lang="html">
+        <header class="site-header">
+          <a class="logo" href="#">Riverbend Makers</a>
+          <nav><a href="#">Classes</a> <a href="#">Tools</a> <a href="#">Join</a></nav>
+        </header>
+        <main class="page">
+          <section class="gallery">
+            <article class="card"><h2>Woodshop basics</h2><p>Saturday, 10 a.m.</p></article>
+            <article class="card"><h2>Pottery wheel</h2><p>Saturday, 2 p.m.</p></article>
+            <article class="card"><h2>Sewing machine</h2><p>Sunday, 11 a.m.</p></article>
+            <article class="card"><h2>Soldering 101</h2><p>Sunday, 3 p.m.</p></article>
+          </section>
+        </main>
+      </script>
+      <script type="text/plain" class="demo" data-lang="css">
+        body { margin: 0; }
+        .site-header { padding: 12px 20px; background: #1d3b2a; }
+        .site-header a { color: #d6f5e3; text-decoration: none; }
+        .site-header .logo { color: white; font-weight: bold; }
+        .site-header nav a { margin-left: 12px; }
+        .page { padding: 16px 20px; }
+        .card { padding: 10px; border: 1px solid #c3cad7; border-radius: 10px; }
+        .card h2 { margin: 0 0 4px; font-size: 1.1rem; }
+        .card p { margin: 0; }
       </script>
     </details>
   </section>

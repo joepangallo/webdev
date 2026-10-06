@@ -412,6 +412,15 @@
         backdrop-filter: blur(6px);         /* the standard property, last */
       }
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <div class="trail-photo">
+        <p class="glass">Ridge Walk · Saturday · 6 miles</p>
+      </div>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .trail-photo { padding: 24px; background: repeating-linear-gradient(45deg, #2f6f4e 0 10px, #e9f1ec 10px 20px); }
+      .glass { margin: 0; padding: 16px; background-color: rgb(255 255 255 / 45%); font-weight: bold; }
+    </script>
     <p>Today browsers test new features behind settings flags instead, so new prefixes are rare. To ask the browser directly whether it understands something, use a <strong>feature query</strong>. Rules inside <code>@supports</code> only apply when the test passes:</p>
 
     <div class="widget" data-kind="Tool" data-title="Does this browser support it?">
@@ -547,6 +556,12 @@
             border: 2px solid currentColor;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="notice">Ridge Walk is closed until June 1: a storm brought down trees across the trail.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .notice { color: #7a4100; padding: 8px 12px; }
+        </script>
       </div>
       <div data-tab="Hex">
         <p><strong>What it is.</strong> A <code>#</code> followed by three pairs of <strong>hexadecimal</strong> (base 16) digits: one pair each for red, green and blue. Hex digits run from 0 to 9 and then a to f (which stand for 10 to 15), so a pair can go from <code>00</code> (none of that light) to <code>ff</code> (the full amount, 255). To turn a pair into a normal number, multiply the first digit by 16 and add the second.</p>
@@ -565,6 +580,13 @@
             color: #fff;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h1>Riverside Hiking Club</h1>
+          <p class="banner">Spring trips are open for sign-up.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .banner { background-color: #2f6f4e; padding: 12px 16px; }
+        </script>
       </div>
       <div data-tab="rgb()">
         <p><strong>What it is.</strong> The same three amounts of red, green and blue as hex, written as ordinary numbers from 0 to 255. <code>rgb(0 0 0)</code> is black (no light at all), <code>rgb(255 255 255)</code> is white (every light at full), and any three equal numbers make a gray.</p>
@@ -578,6 +600,12 @@
             /* All three at full strength is white: about 6 : 1 contrast on this green */
             color: rgb(255 255 255);
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>Ridge Walk, Saturday at 8: <a class="button" href="signup.html">Sign up</a></p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .button { display: inline-block; padding: 6px 14px; }
         </script>
       </div>
       <div data-tab="hsl()">
@@ -603,6 +631,17 @@
             background-color: hsl(150 40% 94%);
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="signup">
+            <p>Join the Ridge Walk on Saturday.</p>
+            <a class="button" href="signup.html">Sign up</a>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .signup { padding: 16px; }
+          .signup p { margin: 0 0 12px; }
+          .button { display: inline-block; padding: 6px 14px; }
+        </script>
       </div>
       <div data-tab="Alpha">
         <p><strong>What it is.</strong> A fourth value that sets how <strong>opaque</strong> (solid) the color is: <code>1</code> or <code>100%</code> is solid, <code>0</code> is invisible, and anything in between lets the background show through. The modern syntax puts it after a slash: <code>rgb(0 0 0 / 60%)</code> or <code>hsl(150 40% 30% / 0.5)</code>. Hex adds a fourth pair: <code>#2f6f4e80</code>.</p>
@@ -622,6 +661,21 @@
             /* The brand green at 1a alpha (about 10%): a faint tint, the text stays solid */
             background-color: #2f6f4e1a;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="trail-photo">
+            <p class="photo-caption">Sunrise from the top of Ridge Walk</p>
+          </div>
+          <table>
+            <tr><th>Trip</th><th>Miles</th></tr>
+            <tr><td>Lake Loop</td><td>3</td></tr>
+            <tr><td>Ridge Walk</td><td>6</td></tr>
+          </table>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .trail-photo { max-width: 320px; padding-top: 120px; background: linear-gradient(#f2b45a, #e07a3f 35%, #5f8a6c 62%, #c9d8cf); }
+          .photo-caption { margin: 0; padding: 8px 12px; }
+          th, td { padding: 4px 12px; text-align: left; }
         </script>
       </div>
     </div>
@@ -701,6 +755,15 @@
             box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="card">
+            <h3>Ridge Walk</h3>
+            <p>Saturday · 6 miles</p>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .card { max-width: 260px; padding: 0 16px; }
+        </script>
       </div>
       <div data-tab="em">
         <p><strong>What it measures.</strong> A multiple of the element's own font size. If a button's text is 20px, then <code>1em</code> is 20px and <code>0.5em</code> is 10px. On the <code>font-size</code> property itself, <code>em</code> uses the parent's font size, because the element's own size is the thing being set.</p>
@@ -719,6 +782,13 @@
             /* 1.5rem = 24px, so the padding above becomes 12px and 24px on its own */
             font-size: 1.5rem;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <a class="button" href="signup.html">Sign up</a>
+          <a class="button big" href="signup.html">Sign up</a>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .button { display: inline-block; vertical-align: middle; margin-right: 8px; background-color: #2f6f4e; color: white; text-decoration: none; }
         </script>
       </div>
       <div data-tab="rem">
@@ -742,6 +812,12 @@
             margin-bottom: 1.5rem;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h1>Riverside Hiking Club</h1>
+          <h2>Upcoming trips</h2>
+          <p>Ridge Walk: Saturday, 6 miles.</p>
+          <p>Lake Loop: Sunday, 3 miles.</p>
+        </script>
       </div>
       <div data-tab="%">
         <p><strong>What it measures.</strong> A percentage of something that belongs to the parent. For <code>width</code>, it is the parent's content width: <code>width: 50%</code> inside a 600px-wide parent is 300px, and the same rule gives 180px inside a 360px phone column. Other properties measure against other things: <code>font-size: 150%</code> is 1.5 × the parent's font size, and <code>padding</code> and <code>margin</code> in % are based on the parent's width, even for top and bottom.</p>
@@ -759,6 +835,18 @@
           input[type="text"] {
             width: 100%;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="column">
+            <img src="ridge.jpg" alt="The view from Ridge Walk" width="480" height="270">
+            <form>
+              <label for="trip-name">Your name</label>
+              <input id="trip-name" type="text">
+            </form>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .column { max-width: 260px; padding: 8px; border: 2px dashed #c8d3cc; }
         </script>
       </div>
       <div data-tab="vw / vh">
@@ -796,6 +884,17 @@
             /* Room for about 7 characters: the 5 digits plus a little breathing space */
             width: 7ch;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <main>
+            <h2>Ridge Walk</h2>
+            <p>Ridge Walk climbs 1,200 feet through pine forest to the old fire tower. The path is rocky near the top, so wear boots with good grip and bring at least two liters of water. We stop at the tower for lunch before heading down the east side.</p>
+            <label for="zip">ZIP code</label>
+            <input class="zip" id="zip" type="text" value="34285">
+          </main>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          main { background-color: #eaf6f0; padding: 4px 16px 16px; }
         </script>
       </div>
     </div>
@@ -1024,6 +1123,9 @@
             box-sizing: border-box;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          body { line-height: normal; }
+        </script>
       </div>
       <div data-tab="Class">
         <p><strong>What it matches.</strong> A dot and a name, such as <code>.featured</code>, matches every element whose <code>class</code> attribute contains that name, whatever its tag. An element can carry several classes separated by spaces (<code>class="trip featured"</code>) and matches a selector for any one of them. Join selectors with <em>no space</em> to require both: <code>p.note</code> is a <code>&lt;p&gt;</code> that has the class <code>note</code>, and <code>.trip.featured</code> is an element with both classes.</p>
@@ -1110,6 +1212,17 @@
             color: #2f6f4e;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h1>Riverside Hiking Club</h1>
+          <h2>Upcoming trips</h2>
+          <h3>Ridge Walk</h3>
+          <button type="button">Sign up</button>
+          <a class="button" href="signup.html">Sign up</a>
+          <h4>What to bring</h4>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          button, .button { display: inline-block; padding: 6px 14px; border: 0; font: inherit; text-decoration: none; }
+        </script>
       </div>
       <div data-tab="Descendant and child">
         <p><strong>What they match.</strong> A space between two selectors (<code>nav a</code>) is the <strong>descendant combinator</strong>: it matches an <code>a</code> anywhere inside a <code>nav</code>, at any depth, whether child, grandchild or deeper. A <code>&gt;</code> (<code>.menu &gt; li</code>) is the <strong>child combinator</strong>: the second element must be a <em>direct</em> child of the first, exactly one level down.</p>
@@ -1143,6 +1256,9 @@
             /* Top-level items in bold; the sub-menu stays normal weight */
             font-weight: bold;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          nav { background-color: #1f3b2d; color: #c8d3cc; padding: 4px 12px; }
         </script>
       </div>
       <div data-tab="Siblings">
@@ -1329,6 +1445,9 @@
             color: #1f4a34;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>This month: <a href="ridge.html">Ridge Walk</a>, <a href="lake.html">Lake Loop</a> and <a href="summit.html">Summit Push</a>.</p>
+        </script>
       </div>
       <div data-tab=":focus-visible">
         <p><strong>What it matches.</strong> An element has <strong>focus</strong> when it will receive the keyboard: the text box you are typing in, or the link or button you reached by pressing Tab. <code>:focus</code> matches whenever an element has focus, however it got it. <code>:focus-visible</code> matches only when the browser decides a visible marker is needed: always for text fields, and for links and buttons when the visitor is using the keyboard, but not after a mouse click.</p>
@@ -1347,6 +1466,14 @@
             /* Its border turns brand green while it has focus */
             border-color: #2f6f4e;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p><a href="ridge.html">Ridge Walk details</a></p>
+          <p>
+            <label for="f-name">Your name</label>
+            <input id="f-name" type="text">
+            <button type="button">Sign up</button>
+          </p>
         </script>
       </div>
       <div data-tab=":first-child and :nth-child()">
@@ -1400,6 +1527,21 @@
             width: 100%;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <ul class="gear">
+            <li>Boots</li>
+            <li>Water</li>
+            <li>Map</li>
+          </ul>
+          <form>
+            <label for="g-name">Name</label>
+            <input id="g-name" type="text">
+            <label><input type="checkbox"> I am bringing a friend</label>
+          </form>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .gear, form { max-width: 280px; }
+        </script>
       </div>
       <div data-tab="::before and ::after">
         <p><strong>What they are.</strong> Two extra boxes the browser can generate inside an element: <code>::before</code> becomes its first child and <code>::after</code> its last. They only appear when you give them a <code>content</code> property, even an empty one (<code>content: "";</code>), and you style them like any other element.</p>
@@ -1427,6 +1569,11 @@
             margin-right: 0.4em;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h2>Upcoming trips</h2>
+          <p>Ridge Walk climbs to the old fire tower. <a class="more" href="ridge.html">Read more</a></p>
+          <h2>Trail rules</h2>
+        </script>
       </div>
       <div data-tab="::first-letter and ::first-line">
         <p><strong>What they are.</strong> <code>::first-letter</code> is the first letter of a block of text, and <code>::first-line</code> is its first line <em>as drawn on screen</em>. Neither exists in the HTML: the browser works them out as it lays out the page.</p>
@@ -1447,6 +1594,13 @@
             /* Small capital letters lead the reader in */
             font-variant: small-caps;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <article class="report">
+            <h3>Ridge Walk, May 10</h3>
+            <p>Twelve of us met at the trailhead just after seven. The fog lifted as we climbed, and by the time we reached the fire tower the whole valley was in sunshine. We ate lunch on the rocks and watched two hawks circle below us.</p>
+            <p>Next month we try the longer loop along the east ridge.</p>
+          </article>
         </script>
       </div>
       <div data-tab="::placeholder">
@@ -1589,6 +1743,13 @@
     <script type="text/plain" class="code" data-lang="css">
       p { color: navy !important; }  /* beats #intro { color: teal; } and style="color: red" */
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <p id="intro" style="color: red">Welcome to the Riverside Hiking Club.</p>
+      <p>Trips leave from the visitor center at 8.</p>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      #intro { color: teal; }
+    </script>
     <aside class="callout warn"><strong>Avoid <code>!important</code></strong> The only way to override an <code>!important</code> declaration is another <code>!important</code> one, so using it starts an arms race that makes a stylesheet hard to maintain. Fix the selector or the order instead. Reasonable uses are rare: a utility class that must always apply, or overriding third-party CSS you cannot edit.</aside>
     <aside class="callout"><strong>Going further: cascade layers</strong> Modern CSS lets you group rules into named layers with <code>@layer reset, base, components;</code>. Layer order is checked before specificity, so a later layer wins even with weaker selectors. You will not need layers for this course, but you will see them in modern frameworks.</aside>
 
@@ -1672,6 +1833,14 @@
         box-sizing: border-box;
       }
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <div class="ruler">width: 200px</div>
+      <div class="card">Ridge Walk: Saturday, 6 miles</div>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .ruler { width: 200px; margin-bottom: 8px; background-color: #f0c36b; font-size: 12px; text-align: center; }
+      .card { width: 200px; padding: 20px; border: 5px solid #2f6f4e; }
+    </script>
 
     <div class="playground" data-title="Challenge: a card that is exactly 300px wide" data-height="230" data-challenge="Make the card exactly 300px wide on screen, keep its padding and border, and center it">
       <textarea data-lang="html"><div class="card">
@@ -1747,6 +1916,17 @@
             margin: 0 auto;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <nav class="side-menu">
+            <a href="trips.html">Trips</a>
+            <a href="gear.html">Gear list</a>
+            <a href="join.html">Join the club</a>
+          </nav>
+          <p>Trail map: <img class="map" src="ridge-map.png" alt="Ridge Walk trail map" width="200" height="120"> Print it before you go.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .side-menu { width: 200px; background-color: #eaf6f0; }
+        </script>
       </div>
       <div data-tab="inline">
         <p><strong>What it does.</strong> The element flows inside a line of text like a word. <code>width</code> and <code>height</code> are ignored, and top and bottom margins do not push the lines above and below away.</p>
@@ -1763,6 +1943,13 @@
             /* Decoration only: the list already separates the items for screen readers */
             content: " / ";
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <ol class="breadcrumb">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="trips.html">Trips</a></li>
+            <li>Ridge Walk</li>
+          </ol>
         </script>
       </div>
       <div data-tab="inline-block">
@@ -1784,6 +1971,10 @@
             border-radius: 999px;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p><strong>Ridge Walk</strong> <span class="tag">Hard</span></p>
+          <p><strong>Lake Loop</strong> <span class="tag">Easy</span></p>
+        </script>
       </div>
       <div data-tab="none">
         <p><strong>What it does.</strong> <code>display: none</code> removes the element from the page completely: it is not drawn, it takes up no space, and screen readers skip it too.</p>
@@ -1800,6 +1991,12 @@
             /* A blank gap exactly the size of the element */
             visibility: hidden;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>Sign up for Ridge Walk below.</p>
+          <p class="thanks">Thanks, you are signed up!</p>
+          <p class="spacer">Spots left: 4</p>
+          <p>Questions? Ask a trip leader.</p>
         </script>
       </div>
     </div>
@@ -1874,6 +2071,10 @@
             padding: 1rem;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="notice">Ridge Walk is closed until June 1 after storm damage.</p>
+          <p>Every other trail is open as usual.</p>
+        </script>
       </div>
       <div data-tab="background-image">
         <p><strong>What it does.</strong> Paints an image behind the element's content, on top of its background color. Three helper properties control it: <code>background-size</code> (<code>cover</code> fills the whole box and crops what does not fit; <code>contain</code> shows the whole image and leaves empty space), <code>background-position</code> (which part stays in view) and <code>background-repeat</code> (whether it tiles). Gradients such as <code>linear-gradient()</code> are images too, so they go in the same property.</p>
@@ -1901,6 +2102,22 @@
             background-image: linear-gradient(to right, #2f6f4e, #6fa287);
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <header class="banner">
+            <h1>Spring trips</h1>
+          </header>
+          <article class="trip-card">
+            <div class="card-header"></div>
+            <h3>Ridge Walk</h3>
+            <p>Saturday · 6 miles</p>
+          </article>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .banner h1 { margin: 0; padding: 16px; }
+          .trip-card { max-width: 260px; margin-top: 16px; border: 1px solid #c8d3cc; }
+          .card-header { height: 12px; }
+          .trip-card h3, .trip-card p { margin: 10px 14px; }
+        </script>
       </div>
       <div data-tab="border">
         <p><strong>What it does.</strong> Draws a line around the padding. The shorthand takes a width, a style and a color in any order: <code>border: 2px dashed #2f6f4e;</code>. To draw only one side, use <code>border-top</code>, <code>border-right</code>, <code>border-bottom</code> or <code>border-left</code>. The styles are <code>solid</code>, <code>dashed</code>, <code>dotted</code>, <code>double</code>, <code>groove</code>, <code>ridge</code>, <code>inset</code>, <code>outset</code> and <code>none</code>; you will use the first three almost every time.</p>
@@ -1924,6 +2141,18 @@
             /* 4px of solid green on the left side only */
             border-left: 4px solid #2f6f4e;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h2>Upcoming trips</h2>
+          <article class="trip-card">
+            <h3>Ridge Walk</h3>
+            <p>Saturday · 6 miles</p>
+          </article>
+          <p class="tip">Tip: start early to beat the afternoon heat.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .trip-card { max-width: 260px; padding: 0 14px; }
+          .tip { padding-left: 10px; }
         </script>
       </div>
       <div data-tab="border-radius">
@@ -1951,6 +2180,17 @@
             border-radius: 50%;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p><a class="button" href="signup.html">Sign up</a> <span class="tag">Easy</span></p>
+          <div class="leader">
+            <img src="maria.jpg" alt="Maria" width="160" height="160">
+            <p>Maria leads the Lake Loop.</p>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .button { display: inline-block; padding: 8px 16px; background-color: #2f6f4e; color: white; text-decoration: none; }
+          .tag { padding: 2px 10px; background-color: #eaf6f0; }
+        </script>
       </div>
       <div data-tab="overflow">
         <p><strong>What it does.</strong> Decides what happens when content is bigger than its box. That only happens when the box has a fixed size (a <code>width</code>, <code>height</code> or <code>max-height</code>) or holds something wide such as a table or a long line of code. <code>visible</code> (the default) lets the content spill out over whatever comes next; <code>hidden</code> clips it; <code>auto</code> adds a scrollbar only when needed; <code>scroll</code> always shows scrollbars. <code>overflow-x</code> and <code>overflow-y</code> set one direction only.</p>
@@ -1969,6 +2209,26 @@
             /* Clip the photo's square corners to the card's rounded ones */
             overflow: hidden;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="table-scroll">
+            <table>
+              <tr><th>Trip</th><th>Date</th><th>Miles</th><th>Climb</th><th>Meeting point</th></tr>
+              <tr><td>Ridge Walk</td><td>May 10</td><td>6</td><td>1,200 ft</td><td>Fire road gate</td></tr>
+              <tr><td>Lake Loop</td><td>May 11</td><td>3</td><td>150 ft</td><td>Boat ramp</td></tr>
+            </table>
+          </div>
+          <article class="trip-card">
+            <img src="lake.jpg" alt="Lake Loop" width="260" height="110">
+            <h3>Lake Loop</h3>
+          </article>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .table-scroll { max-width: 260px; margin-bottom: 16px; border: 1px solid #c8d3cc; }
+          th, td { padding: 4px 10px; white-space: nowrap; text-align: left; }
+          .trip-card { width: 260px; border: 1px solid #c8d3cc; }
+          .trip-card img { display: block; }
+          .trip-card h3 { margin: 10px 14px; }
         </script>
       </div>
     </div>
@@ -2029,6 +2289,12 @@
       body { font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
       code { font-family: Consolas, Menlo, "Courier New", monospace; }
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <p>Meet at the trailhead at 8. Your booking code is <code>RW-0510</code>.</p>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      body { font-family: serif; }
+    </script>
     <p>Three rules apply to every stack you write:</p>
     <ul>
       <li><strong>Quote font names that contain spaces:</strong> <code>"Segoe UI"</code>, <code>"Times New Roman"</code>. Single-word names such as <code>Georgia</code> need no quotes.</li>
@@ -2063,6 +2329,13 @@
             font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h2>Ridge Walk</h2>
+          <p>Saturday, 6 miles. Meet at the fire road gate at 8.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          body { font-family: serif; }
+        </script>
       </div>
       <div data-tab="serif">
         <p><strong>What it is.</strong> Letters with small finishing strokes, the <strong>serifs</strong>, at the ends of their lines, as in most printed books and newspapers. Georgia and Times New Roman are serif fonts.</p>
@@ -2074,6 +2347,11 @@
             /* Georgia is on nearly every Windows and Apple computer; Times New Roman is the backup; serif catches the rest */
             font-family: Georgia, "Times New Roman", serif;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h1>Riverside Hiking Club</h1>
+          <h2>Upcoming trips</h2>
+          <p>Ridge Walk: Saturday, 6 miles. Lake Loop: Sunday, 3 miles.</p>
         </script>
       </div>
       <div data-tab="monospace">
@@ -2089,6 +2367,9 @@
             font-size: 0.9375rem;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>To print the trail map, press <kbd>Ctrl</kbd> + <kbd>P</kbd>. The file is called <code>ridge-map.pdf</code>.</p>
+        </script>
       </div>
       <div data-tab="system-ui">
         <p><strong>What it is.</strong> Whatever font the visitor's operating system uses for its own menus and buttons: Segoe UI on Windows, San Francisco on iPhones and Macs, Roboto on Android.</p>
@@ -2101,6 +2382,17 @@
             font-family: system-ui, sans-serif;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h3>Ridge Walk sign-up</h3>
+          <form>
+            <label for="s-name">Your name</label>
+            <input id="s-name" type="text" value="Sam Rivera">
+            <button type="button">Sign up</button>
+          </form>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          body { font-family: serif; }
+        </script>
       </div>
       <div data-tab="cursive and fantasy">
         <p><strong>What they are.</strong> <code>cursive</code> asks for some handwriting or script font; <code>fantasy</code> asks for some decorative display font. The device chooses which one. <code>cursive</code> often turns out to be Comic Sans MS on Windows and Apple Chancery on a Mac, and <code>fantasy</code> can be anything from Impact to Papyrus.</p>
@@ -2112,6 +2404,15 @@
             /* A web font named Caveat, loaded with @font-face; cursive only if it fails */
             font-family: "Caveat", cursive;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <footer>
+            <p class="signature">Happy trails!</p>
+            <p>The Riverside Hiking Club team</p>
+          </footer>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .signature { font-size: 1.5rem; }
         </script>
       </div>
     </div>
@@ -2180,6 +2481,11 @@
             font-size: 0.875rem;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h1>Riverside Hiking Club</h1>
+          <p>Spring trips start in April.</p>
+          <p class="credit">Photo: Sam Rivera</p>
+        </script>
       </div>
       <div data-tab="font-weight and font-style">
         <p><strong>What they do.</strong> <code>font-weight</code> sets how thick the strokes are, from 100 (thin) to 900 (black); <code>normal</code> is 400 and <code>bold</code> is 700. <code>font-style</code> switches between <code>normal</code> (upright) and <code>italic</code>.</p>
@@ -2204,6 +2510,11 @@
             font-weight: 600;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h2>Ridge Walk</h2>
+          <p>Bring your copy of <cite>Trails of the Blue Ridge</cite>.</p>
+          <p class="credit">Photo: Sam Rivera</p>
+        </script>
       </div>
       <div data-tab="line-height">
         <p><strong>What it does.</strong> Sets the distance from one line of text to the next. The extra space is shared equally above and below the letters.</p>
@@ -2224,6 +2535,14 @@
             line-height: 24px;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h1>Spring and summer trips with the Riverside Hiking Club</h1>
+          <p>Every trip is free for members. We meet at the visitor center, share rides to the trailhead, and walk at the pace of the slowest hiker, so nobody is left behind. Bring water, a snack, warm layers and a friend.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          body { line-height: normal; }
+          h1 { font-size: 2.25rem; }
+        </script>
       </div>
       <div data-tab="text-align and text-indent">
         <p><strong>What they do.</strong> <code>text-align</code> places each line of text inside its box: <code>left</code>, <code>right</code>, <code>center</code>, or <code>justify</code> (stretched so both edges are straight). <code>text-indent</code> moves only the first line of a block in from the left.</p>
@@ -2240,6 +2559,22 @@
             /* 3, 12 and 125 all end at the same right edge, so the digits line up */
             text-align: right;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <header class="banner">
+            <h1>Riverside Hiking Club</h1>
+          </header>
+          <table>
+            <tr><th>Trip</th><th>Miles</th></tr>
+            <tr><td>Lake Loop</td><td class="miles">3</td></tr>
+            <tr><td>Ridge Walk</td><td class="miles">12</td></tr>
+            <tr><td>Long Trail section</td><td class="miles">125</td></tr>
+          </table>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .banner { background-color: #2f6f4e; color: white; padding: 4px 16px; }
+          th, td { padding: 4px 16px; }
+          th + th { width: 5em; }
         </script>
       </div>
       <div data-tab="text-decoration">
@@ -2264,6 +2599,16 @@
             text-decoration: line-through;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <nav>
+            <a href="index.html">Home</a>
+            <a href="trips.html">Trips</a>
+            <a href="join.html">Join</a>
+          </nav>
+          <main>
+            <p>Read the <a href="rules.html">trail rules</a> before you go. Ridge Walk costs <span class="old-price">$20</span> $15 for members.</p>
+          </main>
+        </script>
       </div>
       <div data-tab="text-transform">
         <p><strong>What it does.</strong> Changes the capitalization you see without changing the HTML: <code>uppercase</code>, <code>lowercase</code>, <code>capitalize</code> (the first letter of every word), or <code>none</code>.</p>
@@ -2279,6 +2624,15 @@
             /* Small text: 0.875 × 16px = 14px */
             font-size: 0.875rem;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <article class="trip-card">
+            <p class="label">Difficulty</p>
+            <p>Hard: 6 miles with 1,200 feet of climbing</p>
+          </article>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .trip-card { max-width: 300px; padding: 0 14px; border: 1px solid #c8d3cc; }
         </script>
       </div>
       <div data-tab="letter-spacing and word-spacing">
@@ -2299,6 +2653,13 @@
             letter-spacing: 0.05em;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <h1>Riverside Hiking Club</h1>
+          <a class="button" href="signup.html">Sign up</a>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .button { display: inline-block; padding: 8px 16px; background-color: #2f6f4e; color: white; text-decoration: none; }
+        </script>
       </div>
       <div data-tab="text-shadow">
         <p><strong>What it does.</strong> Draws a shadow behind the letters. The value is sideways offset, downward offset, blur, and color: <code>1px 2px 4px rgb(0 0 0 / 50%)</code> is 1px right, 2px down, softened over 4px, in black at 50%.</p>
@@ -2312,6 +2673,15 @@
             /* 1px right, 2px down, 4px blur, black at 50%: a soft edge that separates the letters from the photo */
             text-shadow: 1px 2px 4px rgb(0 0 0 / 50%);
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <header class="banner">
+            <h1>Spring trips</h1>
+          </header>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .banner { padding: 32px 16px; background: linear-gradient(#8fb6cf, #6f9a7d 60%, #3d5f45); }
+          .banner h1 { margin: 0; }
         </script>
       </div>
     </div>
@@ -2453,6 +2823,15 @@ h1 {
         color: var(--link, var(--brand));  /* fallback if --link is not defined */
       }
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <p><a class="button" href="signup.html">Sign up</a> <a href="trips.html">All trips</a></p>
+      <div class="promo">
+        <p><a class="button" href="lake.html">Lake Loop: half price</a> <a href="lake.html">Details</a></p>
+      </div>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .button { --link: white; display: inline-block; }
+    </script>
     <ul>
       <li><strong>Change once, update everywhere.</strong> Edit <code>--brand</code> and every rule that uses it follows.</li>
       <li><strong>They inherit and cascade.</strong> Redefine a variable on an element and it changes for that element and its descendants only.</li>
@@ -2509,6 +2888,9 @@ h1 {
           .trip-card__title { margin-top: 0; }
           .button { background: var(--brand); color: white; padding: .5rem 1rem; border-radius: 6px; }
         </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          :root { --brand: #2f6f4e; }
+        </script>
         <p class="small muted">You write every rule yourself. Total control, and the HTML stays clean.</p>
       </div>
       <div data-tab="Bootstrap (components)">
@@ -2521,6 +2903,14 @@ h1 {
             </div>
           </div>
         </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .card { border: 1px solid rgb(0 0 0 / 18%); border-radius: 6px; }
+          .card-body { padding: 16px; }
+          .card-title { margin: 0 0 8px; font-size: 1.5rem; font-weight: 500; line-height: 1.2; }
+          .card-text { margin: 0 0 16px; }
+          .btn { display: inline-block; padding: 6px 12px; border: 1px solid transparent; border-radius: 6px; text-decoration: none; }
+          .btn-primary { color: #fff; background-color: #0d6efd; border-color: #0d6efd; }
+        </script>
         <p class="small muted">The framework's CSS already defines <code>.card</code>, <code>.card-body</code>, <code>.btn</code> and <code>.btn-primary</code>. You learn its class names and customize its variables.</p>
       </div>
       <div data-tab="Tailwind (utilities)">
@@ -2530,6 +2920,26 @@ h1 {
             <p class="text-gray-600">Saturday · 6 miles</p>
             <a class="inline-block mt-3 px-4 py-2 rounded bg-green-700 text-white" href="/signup">Sign up</a>
           </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          h3, p { margin: 0; }
+          a { color: inherit; text-decoration: inherit; }
+          .p-4 { padding: 1rem; }
+          .border { border-width: 1px; border-style: solid; }
+          .border-gray-200 { border-color: #e5e7eb; }
+          .rounded-lg { border-radius: 0.5rem; }
+          .shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+          .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+          .font-bold { font-weight: 700; }
+          .mb-1 { margin-bottom: 0.25rem; }
+          .text-gray-600 { color: #4b5563; }
+          .inline-block { display: inline-block; }
+          .mt-3 { margin-top: 0.75rem; }
+          .px-4 { padding-left: 1rem; padding-right: 1rem; }
+          .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+          .rounded { border-radius: 0.25rem; }
+          .bg-green-700 { background-color: #15803d; }
+          .text-white { color: #fff; }
         </script>
         <p class="small muted">Each class does one small job. You design directly in the HTML; a build tool generates the matching CSS.</p>
       </div>

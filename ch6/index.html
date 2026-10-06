@@ -350,6 +350,13 @@
         border-color: rgb(0, 0, 0);     /* all three lights off: black */
       }
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <p class="warning">Strong winds: the afternoon kayak tour is cancelled.</p>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      body { background: #e6ebf1; }
+      .warning { border: 3px solid; padding: 8px 12px; }
+    </script>
 
     <div class="match" data-title="Mix the light: what color does each value make?">
       <script type="application/json">
@@ -722,7 +729,7 @@
         <p><strong>What it is.</strong> The image's text alternative, which you met in 3.5. Screen readers read it aloud, browsers show it when the file fails to load, and search engines use it to understand the picture.</p>
         <p><strong>When to use it.</strong> On every <code>&lt;img&gt;</code>. Describe what the image communicates <em>in this context</em>, in a sentence or less. For a purely decorative image, keep the attribute but leave it empty, <code>alt=""</code>, and screen readers skip it.</p>
         <p><strong>Watch out.</strong> Don't start with "Image of": screen readers already announce it as an image. Don't stuff it with keywords, and don't repeat a caption word for word. For an image that is a link, describe where the link goes ("Home"), not the picture. Leaving <code>alt</code> out entirely is worse than empty: many screen readers then read out the file name.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- Informative: says what matters about this photo on this page -->
           <img src="images/trail-gate.jpg" alt="Trail gate locked, with a sign: closed for repairs until May 1" width="800" height="533">
           <!-- Decorative: the wave divider adds no information, so alt is empty and screen readers skip it -->
@@ -737,6 +744,13 @@
           <!-- The logo always displays at 200 × 60 CSS pixels, so only the screen density changes -->
           <!-- src: the 1x file and the fallback; srcset: 1x screens take logo-200.png, 2x and up take logo-400.png -->
           <img src="logo-200.png" srcset="logo-200.png 1x, logo-400.png 2x" alt="Riverside Kayak Club" width="200" height="60">
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          img { max-width: 100%; height: auto; }
+          .wd1-note { font-size: 13px; color: #4a5568; margin: 8px 0 0; }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="wd1-note">The box shows the file your browser picked for this screen: logo-200.png on a standard screen, logo-400.png on a high-density (2x) screen.</p>
         </script>
       </div>
       <div data-tab="srcset with w + sizes">
@@ -753,6 +767,13 @@
                sizes="(min-width: 900px) 50vw, 100vw"
                alt="Fruit stalls at the Saturday farmers market" width="1200" height="750">
         </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          img { max-width: 100%; height: auto; }
+          .wd1-note { font-size: 13px; color: #4a5568; margin: 8px 0 0; }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="wd1-note">The box shows the file your browser picked for this frame width and your screen density. Zoom the page in or out and reload to watch the choice change.</p>
+        </script>
       </div>
       <div data-tab="picture + media">
         <p><strong>What it is.</strong> A <code>&lt;picture&gt;</code> element wraps one <code>&lt;img&gt;</code> and any number of <code>&lt;source&gt;</code> elements. The browser uses the first <code>&lt;source&gt;</code> whose <code>media</code> query matches the window and falls back to the <code>&lt;img&gt;</code>. The <code>&lt;img&gt;</code> is always required: it is the element actually displayed, and it carries the <code>alt</code>, <code>width</code> and <code>height</code>.</p>
@@ -763,6 +784,13 @@
             <source media="(min-width: 800px)" srcset="harbor-wide.jpg">       <!-- windows 800px and wider: the panorama -->
             <img src="harbor-square.jpg" alt="Kayaks lined up on the harbor beach at sunrise" width="800" height="800"> <!-- everyone else: the close-up -->
           </picture>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          img { max-width: 100%; height: auto; }
+          .wd1-note { font-size: 13px; color: #4a5568; margin: 8px 0 0; }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="wd1-note">The box shows the file your browser picked: harbor-wide.jpg when this frame is 800px or wider, harbor-square.jpg when it is narrower (on a phone).</p>
         </script>
       </div>
       <div data-tab="picture + type">
@@ -776,12 +804,19 @@
             <img src="beach.jpg" alt="Waves breaking on an empty beach at sunset" width="1200" height="800"> <!-- fallback: JPEG works everywhere -->
           </picture>
         </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          img { max-width: 100%; height: auto; }
+          .wd1-note { font-size: 13px; color: #4a5568; margin: 8px 0 0; }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="wd1-note">The box shows the first format your browser supports from the list. Most current browsers pick beach.avif; older ones fall back to WebP or the JPEG.</p>
+        </script>
       </div>
       <div data-tab="loading=&quot;lazy&quot;">
         <p><strong>What it is.</strong> An attribute that tells the browser not to download the image until the visitor scrolls close to it.</p>
         <p><strong>When to use it.</strong> For images below the first screenful: photos further down a long article, a gallery, a grid of products, avatars in a comment thread. Visitors who never scroll that far never download them.</p>
         <p><strong>Watch out.</strong> Never lazy-load the main image at the top of the page; that only delays the thing everyone sees first. For that one, <code>fetchpriority="high"</code> asks the browser to fetch it early. Lazy images still need <code>width</code> and <code>height</code>, or the page jumps when they finally arrive.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- Visible as soon as the page opens: load it now, and early -->
           <img src="tour-1.jpg" alt="Guide handing out paddles on the dock" width="800" height="500" fetchpriority="high">
           <!-- Further down the page: download only when the visitor scrolls near it -->
@@ -1038,7 +1073,7 @@ figcaption {
         <p><strong>What it is.</strong> The Joint Photographic Experts Group format, from 1992, and still the most common photo format on the web. It cuts the image into 8 × 8 pixel blocks, keeps the broad color changes in each block and discards fine detail according to the quality setting. Always 24-bit, never transparent.</p>
         <p><strong>When to use it.</strong> For photographs and realistic images with smooth gradients: product photos, portraits, scenery, big banner photos. Quality 70 to 85 is the usual sweet spot, where the file is small and the artifacts are hard to see.</p>
         <p><strong>Watch out.</strong> Text, line art, logos and screenshots get fuzzy halos and blocky squares around every sharp edge (try the flat graphic at low quality in the lab). There is no transparency: transparent areas become white or black. And every re-save loses a little more.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- A photo: as a quality-80 JPEG it is about 250 KB instead of 4.9 MB of raw pixels -->
           <img src="images/beach-1600.jpg" alt="Waves rolling onto an empty beach at sunset" width="1600" height="1067">
         </script>
@@ -1047,7 +1082,7 @@ figcaption {
         <p><strong>What it is.</strong> Portable Network Graphics, from 1996, created as a patent-free replacement for GIF. Lossless. It comes in three flavors: <strong>PNG-8</strong> (a palette of up to 256 colors), <strong>PNG-24</strong> (true color) and <strong>PNG-32</strong> (true color plus an alpha channel, so edges and shadows can be partly transparent).</p>
         <p><strong>When to use it.</strong> For screenshots, diagrams, charts and logos, and anything with text or hard edges that must stay crisp. Also for any image that needs soft transparency, such as a cut-out product photo with a shadow.</p>
         <p><strong>Watch out.</strong> A photo saved as PNG is huge, often five to ten times the size of a good JPEG, because photo grain never repeats exactly. Use PNG-8 when the image has few colors, and run every PNG through an optimizer before publishing; it can often shrink the file by a third with no visible change.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- A screenshot full of small text: PNG keeps every letter crisp, pixel for pixel -->
           <img src="images/settings-screen.png" alt="The Settings screen, with Dark mode switched on" width="1280" height="800">
         </script>
@@ -1056,7 +1091,7 @@ figcaption {
         <p><strong>What it is.</strong> The Graphics Interchange Format, from 1987. Lossless compression, but limited to a palette of 256 colors per frame, and only one palette color can be transparent, and only fully. Its claim to fame is <strong>animation</strong>: a GIF can hold a series of frames that play in a loop.</p>
         <p><strong>When to use it.</strong> For small, simple animations that must play everywhere, such as a loading spinner in an email newsletter (many email programs animate GIFs but not video).</p>
         <p><strong>Watch out.</strong> An animated GIF made from real video is enormous: a five-second clip can weigh 5 to 10 MB, while the same clip as an MP4 or WebM video (6.4) is a few hundred kilobytes. On web pages, use a muted, looping video instead. GIF's all-or-nothing transparency also leaves jagged, light-colored fringes on dark backgrounds.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- A small spinner: 8 frames and 16 colors, about 4 KB as a GIF -->
           <img src="images/spinner.gif" alt="Loading" width="64" height="64">
           <!-- A 5-second clip: about 6 MB as a GIF, about 300 KB as a muted, looping video -->
@@ -1080,7 +1115,7 @@ figcaption {
         <p><strong>What it is.</strong> A format from Google, from 2010, that can be lossy <em>or</em> lossless and supports alpha transparency and animation. A lossy WebP is typically 25 to 35% smaller than a JPEG of similar quality, and a lossless WebP is usually smaller than the same PNG.</p>
         <p><strong>When to use it.</strong> As an everyday format for photos and graphics on modern sites, as a smaller replacement for transparent PNG-32s, and for short animations instead of GIF. Every current major browser displays it.</p>
         <p><strong>Watch out.</strong> Very old browsers cannot show it, so if you must support them, use <code>&lt;picture&gt;</code> with a JPEG or PNG fallback. Some desktop programs and email clients still can't open a <code>.webp</code> file that a visitor downloads.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <picture>                                                <!-- the browser takes the first source it understands -->
             <source type="image/webp" srcset="images/beach.webp">  <!-- about 175 KB -->
             <img src="images/beach.jpg" alt="Waves rolling onto an empty beach at sunset" width="1600" height="1067"> <!-- JPEG fallback, about 250 KB -->
@@ -1091,7 +1126,7 @@ figcaption {
         <p><strong>What it is.</strong> The AV1 Image File Format, from 2019, built on the AV1 video codec. Lossy or lossless, with alpha, animation, and wide color and HDR (up to 12 bits per channel). It usually makes the smallest files of all, often around half the size of a comparable JPEG.</p>
         <p><strong>When to use it.</strong> For photos on pages where speed matters most, listed first in a <code>&lt;picture&gt;</code> element so other browsers fall back gracefully.</p>
         <p><strong>Watch out.</strong> Encoding is slow, and not every tool can create AVIF yet; your browser may be able to <em>display</em> AVIF while JavaScript cannot <em>create</em> it (the lab tells you). Always provide a fallback. At very low quality it smears fine texture, so skin and fabric can look plastic.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <picture>                                                <!-- tried from the top down -->
             <source type="image/avif" srcset="images/beach.avif">  <!-- about 125 KB, if AVIF is supported -->
             <source type="image/webp" srcset="images/beach.webp">  <!-- about 175 KB, if WebP is supported -->
@@ -1199,7 +1234,7 @@ figcaption {
         <p><strong>What it is.</strong> MP4 (MPEG-4 Part 14) is the most widely supported media container. The video inside is almost always <strong>H.264</strong> (also called AVC) and the audio <strong>AAC</strong>. Phones and cameras record this combination by default.</p>
         <p><strong>When to use it.</strong> As your safe default for video: every browser and device plays H.264 in MP4. List it last among the sources as the fallback, or use it alone if you only make one file.</p>
         <p><strong>Watch out.</strong> H.264 is an older codec, so its files are bigger than VP9 or AV1 at the same quality. "MP4" only names the box: an MP4 holding HEVC (H.265) video, which some phones record, won't play in many browsers. Export with the "web optimized" (fast start) option so playback can begin before the whole file has arrived.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <video controls width="640" height="360">                                   <!-- the browser's own player, in a 16 : 9 box -->
             <source src="welcome.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'> <!-- H.264 video and AAC audio in an MP4 box -->
           </video>
@@ -1209,7 +1244,7 @@ figcaption {
         <p><strong>What it is.</strong> An open, royalty-free container from Google (2010). It holds <strong>VP9</strong> or <strong>AV1</strong> video (VP8 in older files) and <strong>Opus</strong> or Vorbis audio.</p>
         <p><strong>When to use it.</strong> As the first source, to save bandwidth: VP9 and especially AV1 deliver the same quality as H.264 in noticeably fewer bytes. Large video sites stream VP9 and AV1 to every browser that can play them.</p>
         <p><strong>Watch out.</strong> Older Apple devices have patchy support, so always follow it with an MP4 fallback. AV1 is slow to encode and needs a fairly recent device to decode smoothly.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <video controls width="640" height="360">                                          <!-- the player -->
             <source src="welcome-av1.webm" type='video/webm; codecs="av01.0.05M.08, opus"'>     <!-- smallest file: AV1 video, Opus audio -->
             <source src="welcome-vp9.webm" type='video/webm; codecs="vp9, opus"'>               <!-- next: VP9 video, Opus audio -->
@@ -1221,7 +1256,7 @@ figcaption {
         <p><strong>What it is.</strong> An older open container from the Xiph.Org Foundation. Audio files (<code>.ogg</code>, <code>.oga</code>) hold Vorbis or Opus; video files (<code>.ogv</code>) hold Theora, a video codec that is now obsolete.</p>
         <p><strong>When to use it.</strong> Mostly for audio today: an Ogg Opus or Ogg Vorbis file is an open, compact alternative to MP3, popular for game sound effects.</p>
         <p><strong>Watch out.</strong> Don't use Theora video at all; use WebM instead. Some older Apple devices can't play Ogg, so give audio an MP3 fallback.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <audio controls>                                         <!-- a visible audio player -->
             <source src="chime.ogg" type='audio/ogg; codecs="opus"'> <!-- an open format, and a small file -->
             <source src="chime.mp3" type="audio/mpeg">             <!-- fallback for browsers without Ogg -->
@@ -1232,7 +1267,7 @@ figcaption {
         <p><strong>What it is.</strong> MPEG-1 Audio Layer III, from 1993: the format that made digital music portable. It is both a codec and a file format (<code>.mp3</code>). It is lossy: it drops sounds that are masked by louder ones or are hard to hear. Quality is set by the <strong>bitrate</strong> in kilobits per second: 128 kbps is good, 192 to 320 kbps very good.</p>
         <p><strong>When to use it.</strong> For music, podcasts and any sound you want to play absolutely everywhere, including after a visitor downloads it and opens it in some other app.</p>
         <p><strong>Watch out.</strong> It is older and less efficient than AAC or Opus, and below about 96 kbps it starts to sound swishy and metallic. Its MIME type is <code>audio/mpeg</code>, not <code>audio/mp3</code>.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <audio controls preload="none">                   <!-- a player that downloads nothing until Play is pressed -->
             <source src="episode-12.mp3" type="audio/mpeg">  <!-- note the type: audio/mpeg, not audio/mp3 -->
           </audio>
@@ -1242,7 +1277,7 @@ figcaption {
         <p><strong>What it is.</strong> Advanced Audio Coding, the successor to MP3 (1997). At the same bitrate it sounds better than MP3. It is normally stored in an MP4 container, as the soundtrack of a video or as an audio-only <code>.m4a</code> file.</p>
         <p><strong>When to use it.</strong> As the audio track of MP4 videos, and for audio-only files such as interviews and podcast episodes.</p>
         <p><strong>Watch out.</strong> Because it lives in an MP4 box, its type is <code>audio/mp4</code>. The codec string <code>mp4a.40.2</code> means AAC-LC, the common everyday profile.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <audio controls>                                                   <!-- a visible audio player -->
             <source src="interview.m4a" type='audio/mp4; codecs="mp4a.40.2"'> <!-- AAC audio in an MP4 (.m4a) box -->
           </audio>
@@ -1252,7 +1287,7 @@ figcaption {
         <p><strong>What it is.</strong> A modern, open, royalty-free audio codec (2012) that handles speech and music equally well with very little delay. It is the codec behind voice and video calls in the browser. It is stored in WebM or Ogg.</p>
         <p><strong>When to use it.</strong> For speech, podcasts, voice messages and game sounds, and as the soundtrack of WebM videos. 32 to 64 kbps is plenty for speech.</p>
         <p><strong>Watch out.</strong> Give it an MP3 or AAC fallback for very old Apple devices.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <audio controls>                                                  <!-- a visible audio player -->
             <source src="voice-note.webm" type='audio/webm; codecs="opus"'> <!-- Opus at 32 kbps: about 235 KB per minute -->
             <source src="voice-note.mp3" type="audio/mpeg">                 <!-- fallback: about 0.9 MB per minute -->
@@ -1357,12 +1392,15 @@ figcaption {
         <script type="text/plain" class="code" data-lang="html">
           <video src="welcome.mp4" controls width="640" height="360"></video> <!-- one boolean attribute: a complete, accessible player -->
         </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          video { max-width: 100%; height: auto; }
+        </script>
       </div>
       <div data-tab="autoplay + muted">
         <p><strong>What they are.</strong> <code>autoplay</code> starts playback as soon as enough of the file has arrived; <code>muted</code> starts with the sound off. Browsers block autoplay with sound until the visitor has interacted with the site, but muted autoplay is allowed everywhere. On iPhones, an inline autoplaying video also needs <code>playsinline</code>.</p>
         <p><strong>When to use them.</strong> Together, for short silent clips that act as moving pictures: a hero background, a product spinning, a replacement for an animated GIF.</p>
         <p><strong>Watch out.</strong> Never autoplay anything with sound. Anything that moves for more than five seconds needs a way to pause it (an accessibility requirement), so keep <code>controls</code> or add a pause button, and consider people who have asked their system for reduced motion.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- A silent background loop: muted makes autoplay allowed; playsinline keeps it in the page on iPhones -->
           <video src="waves.mp4" autoplay muted loop playsinline width="1280" height="720" poster="waves.jpg"></video>
         </script>
@@ -1371,7 +1409,7 @@ figcaption {
         <p><strong>What it is.</strong> A boolean attribute: when playback reaches the end, it jumps back to the start and keeps going.</p>
         <p><strong>When to use it.</strong> For short ambient clips and GIF replacements, where a seamless repeat is the point.</p>
         <p><strong>Watch out.</strong> A looping video never ends, so it never stops moving or downloading on its own. Keep looping clips short and small, and give visitors a way to pause them.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <video src="spinner-demo.webm" autoplay muted loop playsinline width="480" height="270"></video> <!-- a 4-second clip that repeats forever -->
         </script>
       </div>
@@ -1382,6 +1420,13 @@ figcaption {
         <script type="text/plain" class="code" data-lang="html">
           <video src="welcome.mp4" controls preload="none" poster="images/welcome-poster.jpg" width="640" height="360"></video> <!-- shows the still until Play -->
         </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          video { max-width: 100%; height: auto; }
+          .wd1-note { font-size: 13px; color: #4a5568; margin: 8px 0 0; }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="wd1-note">Until someone presses Play, the player shows the poster image instead of a black box.</p>
+        </script>
       </div>
       <div data-tab="preload">
         <p><strong>What it is.</strong> A hint about how much to download before the visitor presses Play: <code>none</code> (nothing), <code>metadata</code> (just the duration, dimensions and first frame, usually a few kilobytes) or <code>auto</code> (the browser may download the whole file).</p>
@@ -1391,6 +1436,13 @@ figcaption {
           <video controls preload="none" poster="lecture-3.jpg" width="640" height="360"> <!-- a 50-minute lecture: download nothing until asked -->
             <source src="lecture-3.mp4" type="video/mp4">                                <!-- the file itself -->
           </video>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          video { max-width: 100%; height: auto; }
+          .wd1-note { font-size: 13px; color: #4a5568; margin: 8px 0 0; }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="wd1-note">With preload="none", nothing is downloaded yet, so the player shows only the poster.</p>
         </script>
       </div>
       <div data-tab="source + type">
@@ -1403,6 +1455,13 @@ figcaption {
             <source src="welcome.mp4" type="video/mp4">        <!-- fallback: plays everywhere -->
           </video>
         </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          video { max-width: 100%; height: auto; }
+          .wd1-note { font-size: 13px; color: #4a5568; margin: 8px 0 0; }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="wd1-note">The player uses the first source whose type the browser supports, here welcome.webm.</p>
+        </script>
       </div>
       <div data-tab="fallback content">
         <p><strong>What it is.</strong> Anything inside <code>&lt;video&gt;</code> or <code>&lt;audio&gt;</code> that is not a <code>&lt;source&gt;</code> or <code>&lt;track&gt;</code>: usually a sentence and a link.</p>
@@ -1413,6 +1472,9 @@ figcaption {
             <source src="welcome.mp4" type="video/mp4">               <!-- the file -->
             <p>Your browser can't play this video. <a href="welcome.mp4">Download the welcome video (MP4, 24 MB)</a> or <a href="welcome-transcript.html">read the transcript</a>.</p> <!-- fallback -->
           </video>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          video { max-width: 100%; height: auto; }
         </script>
       </div>
     </div>
@@ -1491,7 +1553,7 @@ NOTE Sounds go in [square brackets]
 00:01.500 --&gt; 00:03.000
 [boing] It springs back up!</pre>
     <p>You connect the file with a <code>&lt;track&gt;</code> element inside the <code>&lt;video&gt;</code>. Its <code>kind</code> says what the text is, <code>srclang</code> its language, <code>label</code> the name shown in the player's captions menu, and <code>default</code> turns it on from the start.</p>
-    <script type="text/plain" class="code" data-lang="html">
+    <script type="text/plain" class="code" data-lang="html" data-result="off">
       <video controls width="640" height="360" poster="welcome-poster.jpg">               <!-- the player -->
         <source src="welcome.webm" type="video/webm">                                     <!-- first choice -->
         <source src="welcome.mp4" type="video/mp4">                                       <!-- fallback -->
@@ -1616,6 +1678,12 @@ video {
             border-color: #1a4066;  /* a darker blue for the edge */
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <button class="button" type="button">Book a tour</button>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .button { border: 3px solid; padding: 8px 16px; font-size: 1rem; }
+        </script>
       </div>
       <div data-tab="rgb()">
         <p><strong>What it is.</strong> The same three channel values in decimal, from 0 to 255. The modern syntax separates them with spaces, <code>rgb(46 115 184)</code>; the older comma syntax, <code>rgb(46, 115, 184)</code>, still works everywhere.</p>
@@ -1629,6 +1697,12 @@ video {
             border: 1px solid rgb(255 214 102);  /* in between the two: the border */
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p class="alert">Thunderstorms this afternoon: the 2 pm tour is cancelled.</p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .alert { padding: 10px 14px; }
+        </script>
       </div>
       <div data-tab="hsl()">
         <p><strong>What it is.</strong> Hue, saturation and lightness. The hue is an angle on the color wheel: 0 red, 60 yellow, 120 green, 180 cyan, 240 blue, 300 magenta, and back to red at 360. Saturation runs from 0% (gray) to 100% (vivid). Lightness runs from 0% (black) through 50% (the pure color) to 100% (white).</p>
@@ -1641,6 +1715,21 @@ video {
             --brand-dark: hsl(210 60% 25%);  /* same hue and saturation, darker: for hover states and text */
             --brand-tint: hsl(210 60% 85%);  /* same again, much lighter: for backgrounds */
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="swatches">
+            <p><span class="chip chip-a"></span>--brand</p>
+            <p><span class="chip chip-b"></span>--brand-dark</p>
+            <p><span class="chip chip-c"></span>--brand-tint</p>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .swatches { display: flex; flex-wrap: wrap; gap: 12px; }
+          .swatches p { margin: 0; font: 13px ui-monospace, Menlo, monospace; }
+          .chip { display: block; width: 110px; height: 56px; margin-bottom: 4px; border: 1px solid #c3cbd6; border-radius: 6px; }
+          .chip-a { background: var(--brand); }
+          .chip-b { background: var(--brand-dark); }
+          .chip-c { background: var(--brand-tint); }
         </script>
       </div>
       <div data-tab="Alpha">
@@ -1658,6 +1747,17 @@ video {
             box-shadow: 0 4px 12px #0000002e;  /* black at 2e = 46 of 255, about 18%: a soft shadow */
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="photo">
+            <p class="hero-caption">Sunrise tour: the kayaks leave the harbor at 6:30</p>
+          </div>
+          <div class="card">Point at this card to see its shadow.</div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .photo { position: relative; height: 150px; background: linear-gradient(120deg, #f6bd60, #84a59d 55%, #1d3557); }
+          .hero-caption { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 8px 12px; }
+          .card { margin-top: 16px; max-width: 300px; padding: 12px 16px; border: 1px solid #d5dbe3; border-radius: 8px; }
+        </script>
       </div>
       <div data-tab="Named colors">
         <p><strong>What they are.</strong> 148 keywords such as <code>red</code>, <code>tomato</code>, <code>navy</code> and <code>rebeccapurple</code>, plus two special ones: <code>transparent</code>, and <code>currentColor</code>, which means "this element's own text color".</p>
@@ -1670,6 +1770,12 @@ video {
             border: 2px solid currentColor;  /* currentColor: the text color, so the border always matches */
             background: transparent;         /* fully see-through */
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>Lake race in August <span class="tag">New this year</span></p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .tag { padding: 2px 8px; border-radius: 4px; font-size: 0.875rem; }
         </script>
       </div>
     </div>
@@ -1758,6 +1864,23 @@ rgb(255, 255, 255) = #[[ffffff|fff]]
             --blue-100: hsl(210 60% 85%);  /* #c2d9f0: backgrounds and highlights */
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="swatches">
+            <p><span class="chip chip-a"></span>--blue-900</p>
+            <p><span class="chip chip-b"></span>--blue-500</p>
+            <p><span class="chip chip-c"></span>--blue-300</p>
+            <p><span class="chip chip-d"></span>--blue-100</p>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .swatches { display: flex; flex-wrap: wrap; gap: 12px; }
+          .swatches p { margin: 0; font: 13px ui-monospace, Menlo, monospace; }
+          .chip { display: block; width: 110px; height: 56px; margin-bottom: 4px; border: 1px solid #c3cbd6; border-radius: 6px; }
+          .chip-a { background: var(--blue-900); }
+          .chip-b { background: var(--blue-500); }
+          .chip-c { background: var(--blue-300); }
+          .chip-d { background: var(--blue-100); }
+        </script>
       </div>
       <div data-tab="Analogous">
         <p><strong>What it is.</strong> Neighbors on the wheel, usually 30 degrees apart: blue-green, blue and blue-violet; or red, orange and yellow.</p>
@@ -1774,6 +1897,23 @@ rgb(255, 255, 255) = #[[ffffff|fff]]
           .banner {
             background: linear-gradient(90deg, var(--teal), var(--blue), var(--indigo)); /* neighbors blend smoothly */
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="swatches">
+            <p><span class="chip chip-a"></span>--teal</p>
+            <p><span class="chip chip-b"></span>--blue</p>
+            <p><span class="chip chip-c"></span>--indigo</p>
+          </div>
+          <div class="banner"></div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .swatches { display: flex; flex-wrap: wrap; gap: 12px; }
+          .swatches p { margin: 0; font: 13px ui-monospace, Menlo, monospace; }
+          .chip { display: block; width: 110px; height: 56px; margin-bottom: 4px; border: 1px solid #c3cbd6; border-radius: 6px; }
+          .chip-a { background: var(--teal); }
+          .chip-b { background: var(--blue); }
+          .chip-c { background: var(--indigo); }
+          .banner { height: 56px; margin-top: 16px; border: 1px solid #c3cbd6; border-radius: 6px; }
         </script>
       </div>
       <div data-tab="Complementary">
@@ -1793,6 +1933,17 @@ rgb(255, 255, 255) = #[[ffffff|fff]]
             font: bold 1.5rem sans-serif; /* so the button text is large and bold */
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="page">
+            <p>Harbor kayak tours, every Saturday from June to August.</p>
+            <span class="book-button">Book now</span>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .page { background: #2e73b8; color: #fff; padding: 16px 20px; }
+          .page p { margin: 0 0 12px; }
+          .book-button { display: inline-block; padding: 8px 20px; border-radius: 6px; }
+        </script>
       </div>
       <div data-tab="Split-complementary">
         <p><strong>What it is.</strong> The base hue plus the two hues on either side of its complement, 150 and 210 degrees away.</p>
@@ -1806,6 +1957,21 @@ rgb(255, 255, 255) = #[[ffffff|fff]]
             --accent-2: hsl(60 60% 45%);  /* #b8b82e: 210 degrees around from the base */
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="swatches">
+            <p><span class="chip chip-a"></span>--base</p>
+            <p><span class="chip chip-b"></span>--accent-1</p>
+            <p><span class="chip chip-c"></span>--accent-2</p>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .swatches { display: flex; flex-wrap: wrap; gap: 12px; }
+          .swatches p { margin: 0; font: 13px ui-monospace, Menlo, monospace; }
+          .chip { display: block; width: 110px; height: 56px; margin-bottom: 4px; border: 1px solid #c3cbd6; border-radius: 6px; }
+          .chip-a { background: var(--base); }
+          .chip-b { background: var(--accent-1); }
+          .chip-c { background: var(--accent-2); }
+        </script>
       </div>
       <div data-tab="Triadic">
         <p><strong>What it is.</strong> Three hues evenly spaced around the wheel, 120 degrees apart.</p>
@@ -1818,6 +1984,21 @@ rgb(255, 255, 255) = #[[ffffff|fff]]
             --two: hsl(330 60% 45%);    /* #b82e73: 120 degrees around */
             --three: hsl(90 60% 45%);   /* #73b82e: 240 degrees around */
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <div class="swatches">
+            <p><span class="chip chip-a"></span>--one</p>
+            <p><span class="chip chip-b"></span>--two</p>
+            <p><span class="chip chip-c"></span>--three</p>
+          </div>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .swatches { display: flex; flex-wrap: wrap; gap: 12px; }
+          .swatches p { margin: 0; font: 13px ui-monospace, Menlo, monospace; }
+          .chip { display: block; width: 110px; height: 56px; margin-bottom: 4px; border: 1px solid #c3cbd6; border-radius: 6px; }
+          .chip-a { background: var(--one); }
+          .chip-b { background: var(--two); }
+          .chip-c { background: var(--three); }
         </script>
       </div>
     </div>
@@ -2173,6 +2354,9 @@ figcaption {
           <source src="episode-12.mp3" type="audio/mpeg">     <!-- fallback: MP3 plays everywhere -->
           <a href="episode-12.mp3">Download episode 12 (MP3)</a> <!-- only for browsers without audio support -->
         </audio>
+      </script>
+      <script type="text/plain" class="demo" data-lang="css">
+        audio { max-width: 100%; }
       </script>
     </details>
 

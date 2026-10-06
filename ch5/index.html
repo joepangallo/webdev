@@ -575,6 +575,10 @@
             </tr>
           </table>
         </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          table { border-collapse: collapse; }
+          th, td { border: 1px solid #b8c2cc; padding: 4px 10px; }
+        </script>
       </div>
       <div data-tab="colgroup and col">
         <p><strong>What they are.</strong> The only way to talk about a whole column at once. A <code>&lt;colgroup&gt;</code> goes right after the caption, and each <code>&lt;col&gt;</code> inside it stands for one column (or several, with <code>span</code>). They hold no content; they exist so CSS can reach the column.</p>
@@ -799,6 +803,39 @@ th, td {
         top: 0;              /* stick to the top of .table-scroll */
         background: white;   /* sticky cells need a background or rows show through */
       }
+    </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <p>Scroll the table. With the CSS, the header row stays in view.</p>
+      <div class="table-scroll">
+        <table>
+          <caption>Campus shuttle, weekday departures</caption>
+          <thead>
+            <tr><th scope="col">Departs</th><th scope="col">From</th><th scope="col">To</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>7:00</td><td>Main Gate</td><td>Library</td></tr>
+            <tr><td>7:30</td><td>Library</td><td>Science Hall</td></tr>
+            <tr><td>8:00</td><td>Science Hall</td><td>Stadium Lot</td></tr>
+            <tr><td>8:30</td><td>Stadium Lot</td><td>Main Gate</td></tr>
+            <tr><td>9:00</td><td>Main Gate</td><td>Library</td></tr>
+            <tr><td>9:30</td><td>Library</td><td>Science Hall</td></tr>
+            <tr><td>10:00</td><td>Science Hall</td><td>Stadium Lot</td></tr>
+            <tr><td>10:30</td><td>Stadium Lot</td><td>Main Gate</td></tr>
+            <tr><td>11:00</td><td>Main Gate</td><td>Library</td></tr>
+            <tr><td>11:30</td><td>Library</td><td>Science Hall</td></tr>
+            <tr><td>12:00</td><td>Science Hall</td><td>Stadium Lot</td></tr>
+            <tr><td>12:30</td><td>Stadium Lot</td><td>Main Gate</td></tr>
+            <tr><td>13:00</td><td>Main Gate</td><td>Library</td></tr>
+            <tr><td>13:30</td><td>Library</td><td>Science Hall</td></tr>
+            <tr><td>14:00</td><td>Science Hall</td><td>Stadium Lot</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      .table-scroll { max-width: 420px; border: 1px solid #b8c2cc; }
+      table { border-collapse: collapse; }
+      th, td { padding: 3px 10px; border-bottom: 1px solid #d5dbe3; text-align: left; }
     </script>
     <aside class="callout warn"><strong>Why won't my header stick?</strong> A sticky element sticks inside its nearest <em>scrolling</em> ancestor. Wrapping a table in <code>overflow: auto</code> makes that wrapper the scroller, so the header only sticks if the wrapper itself scrolls vertically. Give it a <code>max-height</code>, as above.</aside>
 
@@ -2081,6 +2118,10 @@ label {
         </tr>
       </table>
     </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      table { border-collapse: collapse; }
+      th, td { border: 1px solid #b8c2cc; padding: 4px; }
+    </script>
 
     <div class="quiz" data-title="Check your understanding: accessibility">
       <script type="application/json">
@@ -2134,6 +2175,24 @@ label {
         border-color: #c62828;     /* only after the user has interacted */
       }
     </script>
+    <script type="text/plain" class="demo" data-lang="html">
+      <form action="/join" method="post">
+        <label for="j-name">Full name</label>
+        <input type="text" id="j-name" name="name" autocomplete="name">
+        <label for="j-email">Email</label>
+        <input type="email" id="j-email" name="email" autocomplete="email" required>
+        <label for="j-major">Major</label>
+        <select id="j-major" name="major">
+          <option value="cs">Computer Science</option>
+          <option value="it">Information Technology</option>
+        </select>
+        <p><label><input type="checkbox" name="news" value="yes" checked> Email me about club events</label></p>
+        <button type="submit">Join the club</button>
+      </form>
+    </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      form { max-width: 360px; }
+    </script>
     <p>A few pseudo-classes target control states: <code>:focus-visible</code> (focused, and the browser decided the focus should show, as it always does for keyboard users), <code>:checked</code>, <code>:disabled</code>, <code>:required</code> and <code>:optional</code>, <code>:invalid</code> and <code>:user-invalid</code>, plus the <code>::placeholder</code> pseudo-element.</p>
     <p>Each one matches a control only while it is in a certain <em>state</em>, so your styles switch on and off by themselves as the user works through the form. No JavaScript is needed.</p>
     <div class="table-wrap">
@@ -2165,6 +2224,12 @@ label {
             outline-offset: 2px;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p>Click in the email box, or press Tab to move into it, to see the focus ring.</p>
+          <label for="fv-email">Email</label>
+          <input type="email" id="fv-email" name="email" autocomplete="email">
+          <button type="button">Subscribe</button>
+        </script>
       </div>
       <div data-tab=":checked">
         <p><strong>What it matches.</strong> A checkbox or radio button that is currently checked (and a selected <code>&lt;option&gt;</code>). It updates instantly as the user clicks.</p>
@@ -2185,6 +2250,9 @@ label {
           <!-- Same structure for every option in the group -->
           <label><input type="radio" name="plan" value="pro"> <span>Pro</span></label>
         </script>
+        <script type="text/plain" class="demo" data-lang="js">
+          document.querySelector('input[value="pro"]').checked = true;
+        </script>
       </div>
       <div data-tab=":disabled">
         <p><strong>What it matches.</strong> Controls with the <code>disabled</code> attribute. A disabled control cannot be focused, clicked or changed, and its value is not sent with the form.</p>
@@ -2198,6 +2266,14 @@ label {
             /* The "not allowed" pointer when a mouse hovers over it */
             cursor: not-allowed;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <p><label for="acct-name">Your name</label> <input type="text" id="acct-name" name="name" value="Ana Ruiz"></p>
+          <p><label><input type="checkbox" name="business" value="yes"> This is a business account</label></p>
+          <p><label for="acct-company">Company name</label> <input type="text" id="acct-company" name="company" placeholder="Business accounts only" disabled></p>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          input[type="text"] { border: 1px solid #6b7280; border-radius: 4px; padding: 6px 8px; font: inherit; }
         </script>
       </div>
       <div data-tab=":required and :optional">
@@ -2215,6 +2291,15 @@ label {
             /* Only the background changes, so the border keeps its full contrast */
             background: #f6f7f9;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <label for="ro-email">Email</label>
+          <input type="email" id="ro-email" name="email" required>
+          <label for="ro-phone">Phone (optional)</label>
+          <input type="tel" id="ro-phone" name="phone">
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          input { border: 1px solid #6b7280; border-radius: 4px; padding: 6px 8px; }
         </script>
       </div>
       <div data-tab=":invalid and :user-invalid">
@@ -2235,6 +2320,15 @@ label {
             border-color: #c62828;
           }
         </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <label for="ui-email">Email</label>
+          <input type="email" id="ui-email" name="email" required>
+          <label for="ui-phone">Phone (optional)</label>
+          <input type="tel" id="ui-phone" name="phone">
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          input { border: 1px solid #6b7280; border-radius: 4px; padding: 6px 8px; }
+        </script>
       </div>
       <div data-tab="::placeholder">
         <p><strong>What it matches.</strong> The placeholder text shown inside an empty field. It has two colons because it is a <em>pseudo-element</em>, a part of the field, not a state.</p>
@@ -2248,6 +2342,15 @@ label {
             /* Italic is one more hint that this is an example, not an answer */
             font-style: italic;
           }
+        </script>
+        <script type="text/plain" class="demo" data-lang="html">
+          <label for="ph-zip">ZIP code</label>
+          <input type="text" id="ph-zip" name="zip" inputmode="numeric" placeholder="e.g. 33101">
+          <label for="ph-course">Course code</label>
+          <input type="text" id="ph-course" name="course" placeholder="e.g. COP 1000">
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          input { font: inherit; padding: 6px 8px; }
         </script>
       </div>
     </div>

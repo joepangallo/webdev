@@ -530,7 +530,7 @@
     <h3>Nesting</h3>
     <p>Elements can contain other elements, which is called <strong>nesting</strong>. The rule is simple: close elements in the reverse order you opened them, like nested boxes. The last box you opened is the first one you close. When one element sits inside another, the outer one is its <strong>parent</strong> and the inner one is its <strong>child</strong>. That family tree is exactly what the browser builds when it reads your page (you'll explore it in 3.4).</p>
     <div class="grid-2">
-      <script type="text/plain" class="code" data-lang="html" data-title="Correct: closed in reverse order">
+      <script type="text/plain" class="code" data-lang="html" data-title="Correct: closed in reverse order" data-result="off">
         <p>Read <em>this <strong>now</strong></em>.</p>
       </script>
       <script type="text/plain" class="code" data-lang="html" data-title="Wrong: the tags overlap">
@@ -652,6 +652,11 @@ Open   late!</textarea>
         <h1>Tonight's Specials</h1>
         <p><strong>Hot:</strong> Careful, the plate is hot.</p>
         <a href="menu.html">Menu</a>
+      </script>
+      <script type="text/plain" class="demo" data-lang="css">
+        .big-bold { font-size: 2em; font-weight: bold; margin: 0.67em 0; }
+        .link { color: #0000ee; text-decoration: underline; cursor: pointer; }
+        strong { color: red; }
       </script>
     </div>
     <p>Here's the catch: with CSS, both versions can look identical. The difference is invisible to a sighted user with a mouse, and huge for everyone and everything else that reads your page. A screen reader, for example, lets a blind user jump straight from heading to heading or from landmark to landmark, but only if the markup has headings and landmarks. Compare two versions of the same page:</p>
@@ -1421,6 +1426,9 @@ Open   late!</textarea>
       <img src="images/margherita.jpg" alt="Margherita pizza with melted mozzarella and fresh basil"
            width="800" height="600" loading="lazy">
     </script>
+    <script type="text/plain" class="demo" data-lang="css">
+      img { max-width: 100%; height: auto; }
+    </script>
     <ul>
       <li><strong><code>alt</code></strong> is read aloud by screen readers, shown when the image fails to load, and used by search engines. Describe what the image <em>communicates</em> in its context, in a sentence or less.</li>
       <li>If an image is purely decorative, keep the attribute but leave it empty: <code>alt=""</code>. Screen readers then skip it. Leaving <code>alt</code> out entirely is different, and worse: many screen readers read the file name instead.</li>
@@ -1476,7 +1484,7 @@ Open   late!</textarea>
         <p><strong>When to use it.</strong> Photos: food, people, places, products.</p>
         <p><strong>When not to.</strong> Logos, screenshots, text and line drawings. The compression smears sharp edges into fuzzy blotches, which is most visible around lettering. JPEG also has no transparency, so a JPEG logo always sits on a solid rectangle. And every edit-and-save throws away a little more detail, so keep your original file and save a fresh copy for the web.</p>
         <p><strong>Watch out.</strong> Photos straight from a phone are often 4000 pixels wide and several megabytes. Resize them to the largest size they'll be displayed (1200 to 2000 pixels wide is plenty for a full-width photo) before adding them to your site. iPhones save photos as <strong>HEIC</strong>, which only Safari can display, so export or convert those to JPEG first.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- A photo: JPEG keeps the file small, and width and height reserve its space while it loads -->
           <img src="images/margherita.jpg" alt="Margherita pizza with melted mozzarella and fresh basil" width="1200" height="800">
         </script>
@@ -1485,7 +1493,7 @@ Open   late!</textarea>
         <p><strong>What it is.</strong> A <strong>lossless</strong> format: every pixel is saved exactly as it was, so text and edges stay crisp no matter how many times you save. It supports transparency, including soft, partly see-through edges such as a drop shadow.</p>
         <p><strong>When to use it.</strong> Screenshots, diagrams, graphics that contain text, the favicon, and logos when you don't have an SVG version.</p>
         <p><strong>When not to.</strong> Photos. Because it keeps every detail, the same photo saved as PNG is often several times larger than a JPEG that looks identical.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- A screenshot with small text: PNG keeps every letter sharp -->
           <img src="images/order-screen.png" alt="The online order form, with the large size and thin crust selected" width="900" height="600">
         </script>
@@ -1495,7 +1503,7 @@ Open   late!</textarea>
         <p><strong>When to use it.</strong> Logos, icons, simple illustrations, charts and diagrams: anything made of shapes and flat colors.</p>
         <p><strong>When not to.</strong> Photos. A photograph can't be described as a handful of shapes.</p>
         <p><strong>Watch out.</strong> An SVG has no fixed pixel size of its own, so give the <code>&lt;img&gt;</code> a <code>width</code> and <code>height</code> to show it at the size you want.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- A logo: SVG stays sharp on a small phone and on a huge monitor alike -->
           <img src="images/logo.svg" alt="Slice of Life" width="180" height="60">
         </script>
@@ -1505,7 +1513,7 @@ Open   late!</textarea>
         <p><strong>When to use it.</strong> Rarely, today: a short, simple animation that you already have as a GIF.</p>
         <p><strong>When not to.</strong> Photos, which look blotchy in 256 colors, and long animations, which make huge files. An animated WebP, or a short video file, is usually far smaller.</p>
         <p><strong>Watch out.</strong> Visitors can't pause a GIF, and movement that goes on and on makes it hard to concentrate on the rest of the page. Keep animations short, and never use anything that flashes more than three times a second, which can trigger seizures.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- An animated GIF still needs alt text: describe what the animation shows -->
           <img src="images/dough-toss.gif" alt="Animation: a cook tossing and spinning pizza dough in the air" width="480" height="270">
         </script>
@@ -1514,7 +1522,7 @@ Open   late!</textarea>
         <p><strong>What they are.</strong> Modern formats (WebP from 2010, AVIF from 2019) that do everything the older ones do: lossy or lossless compression, transparency and animation. At the same visual quality, their files are usually a quarter to a half smaller than JPEG or PNG, so pages load faster. All current browsers display both.</p>
         <p><strong>When to use them.</strong> For any photo or graphic on your site, if your image editor or converter can save them. Many free tools can.</p>
         <p><strong>Watch out.</strong> Some older software, such as image viewers, email programs and upload forms, can't open them, so keep your originals. And renaming a file doesn't convert it: a JPEG renamed <code>photo.webp</code> is still a JPEG inside, and just as large. Use an image editor or converter to save a real WebP.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <!-- The same photo as WebP: it looks the same as the JPEG but downloads faster -->
           <img src="images/margherita.webp" alt="Margherita pizza with melted mozzarella and fresh basil" width="1200" height="800">
         </script>
@@ -1985,7 +1993,7 @@ Open   late!</textarea>
       <div data-tab="figure + figcaption">
         <p><code>&lt;figure&gt;</code> wraps self-contained content that the main text refers to: an image, a diagram, a chart, a code listing or a quotation. <code>&lt;figcaption&gt;</code>, as its first or last child, gives it a caption. A good test: if you moved the figure to an appendix, the text would still make sense.</p>
         <div class="grid-2">
-          <script type="text/plain" class="code" data-lang="html">
+          <script type="text/plain" class="code" data-lang="html" data-result="off">
             <figure>
               <img src="charts/pizzas-per-night.svg"
                    alt="Bar chart: pizzas sold per night rise from 40 on Monday to 95 on Saturday">

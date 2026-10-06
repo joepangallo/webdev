@@ -501,7 +501,7 @@
         </div>
         <div>
           <div class="c8-ly-code" data-layer="html">
-            <script type="text/plain" class="code" data-lang="html" data-title="HTML: the content">
+            <script type="text/plain" class="code" data-lang="html" data-title="HTML: the content" data-result="off">
               <!-- A heading, the servings count, two buttons and a list -->
               <h3>Banana pancakes</h3>
               <!-- JavaScript will change the number in the span -->
@@ -709,7 +709,7 @@
         <p><strong>What it is.</strong> A <code>&lt;script&gt;</code> with no loading attribute. The parser stops at it, downloads it, runs it, and only then continues reading the page.</p>
         <p><strong>When to use it.</strong> At the very end of <code>&lt;body&gt;</code>, where there is almost nothing left to block and everything above it already exists. This works everywhere and is still common.</p>
         <p><strong>When not to.</strong> In the <code>&lt;head&gt;</code>, unless the script truly must run before anything is shown (rare). There it delays the whole page and cannot see the body.</p>
-        <script type="text/plain" class="code" data-lang="html">
+        <script type="text/plain" class="code" data-lang="html" data-result="off">
           <body>
             <button id="buy">Buy now</button>   <!-- the content is parsed first -->
             <script src="app.js"><\/script>      <!-- plain script, last: #buy already exists when it runs -->
@@ -891,7 +891,7 @@ console.warn('Warnings stand out in yellow'); // a warning
     </div>
 
     <p>Now put the timing rules together. All five scripts in this page print one message. Both external files are already in the browser's cache, so they arrive instantly.</p>
-    <script type="text/plain" class="code" data-lang="html">
+    <script type="text/plain" class="code" data-lang="html" data-result="off">
       <head>
         <script src="later.js" defer><\/script>        <!-- later.js logs 'deferred' -->
         <script type="module" src="mod.js"><\/script>  <!-- mod.js logs 'module' -->

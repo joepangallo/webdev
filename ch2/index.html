@@ -1120,6 +1120,12 @@
         <p><strong>What it means.</strong> Each <code>../</code> climbs one folder up from the current page's folder. From <code>blog/first-post.html</code>, <code>../about.html</code> climbs from <code>blog/</code> to <code>my-site/</code>, then finds <code>about.html</code>: <code>https://www.example.com/about.html</code>. Write <code>../../</code> to climb two levels.</p>
         <p><strong>When to use it.</strong> Whenever a page in a subfolder needs something higher up: the shared stylesheet, the logo, the home page. Every page inside <code>blog/</code> links the stylesheet as <code>../css/styles.css</code>, while <code>index.html</code> in the top folder writes just <code>css/styles.css</code>. Inside a CSS file, relative URLs start from the <em>CSS file's</em> folder, so <code>css/styles.css</code> reaches the logo with <code>../images/logo.png</code>.</p>
         <p><strong>Watch out.</strong> Count folders, not files: start at the folder holding the current page and write one <code>../</code> for each level you climb. One too many is sneaky. Online, extra <code>../</code> just stop at the top of the site, so <code>../../about.html</code> from <code>blog/</code> still works there and hides the mistake; opened from your disk, the same link climbs right out of your project folder and breaks.</p>
+        <script type="text/plain" class="demo" data-lang="html">
+          <header class="site-header"></header>
+        </script>
+        <script type="text/plain" class="demo" data-lang="css">
+          .site-header { height: 90px; margin-bottom: 8px; background-color: #f1ede4; background-repeat: no-repeat; background-size: contain; }
+        </script>
         <script type="text/plain" class="code" data-lang="html" data-title="blog/first-post.html">
           <!-- Up from blog/ to my-site/, then into css/ -->
           <link rel="stylesheet" href="../css/styles.css">
