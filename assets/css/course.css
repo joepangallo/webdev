@@ -629,6 +629,27 @@ details.reveal > :last-child { margin-bottom: 14px; }
 .code-block .copy-btn { position: absolute; top: 8px; right: 8px; opacity: .0; transition: opacity .15s; }
 .code-block:hover .copy-btn, .code-block .copy-btn:focus-visible { opacity: 1; }
 @media (hover: none) { .code-block .copy-btn { opacity: 1; } }
+/* Result panel: what the browser draws for the samples just above it */
+.code-result {
+  position: relative; margin: -0.4em 0 1.4em;
+  background: var(--surface-2); border: 1px solid var(--code-line); border-radius: var(--radius);
+  padding: 16px 12px 12px;
+}
+.code-result .code-lang {
+  position: absolute; top: 0; left: 14px; transform: translateY(-50%);
+  font-family: var(--font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase;
+  background: var(--surface-2); border: 1px solid color-mix(in srgb, var(--mod) 55%, var(--code-line)); border-radius: 5px; padding: 1px 7px; color: var(--mod); font-weight: 700;
+}
+.code-result-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 10px; }
+.code-result-bar .seg button { font-size: .8rem; padding: 5px 10px; }
+.code-result-boxes { display: inline-flex; align-items: center; gap: 6px; font-size: .85rem; color: var(--ink-2); cursor: pointer; }
+.code-result-boxes input { width: 16px; height: 16px; margin: 0; accent-color: var(--mod); }
+.code-result-frame { display: block; width: 100%; height: 120px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.code-result-console { margin-top: 8px; border: 1px solid var(--code-line); border-radius: 8px; }
+.code-result-console::before {
+  content: "Console"; display: block; padding: 4px 12px; border-bottom: 1px solid var(--code-line);
+  font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3);
+}
 pre.bare { background: var(--code-bg); border: 1px solid var(--code-line); border-radius: var(--radius); padding: 14px 16px; overflow-x: auto; }
 
 .tk-com { color: var(--tk-com); font-style: italic; }

@@ -101,6 +101,23 @@ Write raw code inside a text script. It is dedented, highlighted and gets a copy
 
 `data-lang` is `html`, `css` or `js`. `data-title` overrides the label. A literal `</script>` inside the sample must be written `<\/script>`; it is displayed correctly.
 
+### Result panels (what the code draws)
+
+Samples written one right after another, with no other element between them, form a **run**. Any run that contains HTML gets a **Result** panel under its last sample. The panel shows what the browser draws, has a **With this CSS / Without it** switch when the run has CSS, and has an **Outline every box** checkbox. Images, video and audio that the sample only names are drawn as labeled placeholders ("Image: canoe.jpg", "Poster: welcome.jpg"). Every `srcset` and `<picture>` candidate gets its own placeholder, so the result shows which file the browser really picks for the frame width and screen density. Files named in `<script src>`, `<link>`, `url()` or `@import` are never fetched, links do not navigate, and `alert()` only logs.
+
+- **A CSS-only sample has nothing to draw.** Add a hidden demo right after it: `<script type="text/plain" class="demo" data-lang="html">…</script>`. Demo samples are rendered but not shown as code. A `class="demo" data-lang="css"` sample adds context styles (for example the dark bar that white link text sits on). The **Without it** switch removes only the visible CSS; demo CSS stays.
+- **Turning a panel off:** add `data-result="off"` to any sample in the run when the result would mislead or show nothing useful.
+- **Skipped automatically:** HTML that draws nothing (`<head>` content, `<meta>`, script-only snippets), sketches made only of `…`, and framework templates (`{name}`, `v-if`, `@click`).
+
+```html
+<script type="text/plain" class="code" data-lang="css">
+  .menu { display: flex; gap: 24px; }
+</script>
+<script type="text/plain" class="demo" data-lang="html">
+  <ul class="menu"><li>Home</li><li>Menu</li><li>Hours</li></ul>
+</script>
+```
+
 ---
 
 ## 4. Interactive components

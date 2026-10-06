@@ -793,9 +793,33 @@
   const unescapeScript = (t) => t.replace(/<\\\/script/gi, '</script');
 
   function mountCode(root) {
-    $$('script[type="text/plain"].code', root).forEach((s) => {
-      const code = dedent(unescapeScript(s.textContent));
-      s.replaceWith(codeBlock(code, s.dataset.lang || 'html', s.dataset.title));
+    // Group adjacent samples into runs first, so each run can get one Result panel.
+    const runs = [];
+    const seen = new Set();
+    const isSample = (n) => n && n.matches && n.matches('script[type="text/plain"].code, script[type="text/plain"].demo');
+    $$('script[type="text/plain"].code, script[type="text/plain"].demo', root).forEach((s) => {
+      if (seen.has(s)) return;
+      const run = [s];
+      seen.add(s);
+      for (let n = s.nextElementSibling; isSample(n); n = n.nextElementSibling) { run.push(n); seen.add(n); }
+      runs.push(run);
+    });
+    runs.forEach((run) => {
+      const parts = run.map((s) => ({ s, demo: s.classList.contains('demo'), lang: s.dataset.lang || 'html', code: dedent(unescapeScript(s.textContent)) }));
+      let last = null;
+      parts.forEach((p) => {
+        if (p.demo) { p.s.remove(); return; }
+        const block = codeBlock(p.code, p.lang, p.s.dataset.title);
+        p.s.replaceWith(block);
+        // The panel goes under the last web sample, not under e.g. a raw HTTP request.
+        if (/^(html|css|js)$/.test(p.lang)) last = block;
+      });
+      const res = resultFor(parts);
+      if (res && last) {
+        last.after(res);
+        // Inside a grid of columns, the panel takes a full row instead of one cell.
+        try { if (/grid/.test(getComputedStyle(res.parentElement).display)) res.style.gridColumn = '1 / -1'; } catch (e) { /* ignore */ }
+      }
     });
     $$('pre > code[class*="lang-"]', root).forEach((c) => {
       const pre = c.parentNode;
@@ -803,6 +827,214 @@
       const lang = (c.className.match(/lang-(\w+)/) || [])[1];
       pre.replaceWith(codeBlock(dedent(c.textContent), lang, pre.dataset.title));
     });
+  }
+
+  /* ---------- Code results ----------
+     Every run of adjacent samples that contains HTML gets a Result panel that
+     shows what the browser draws. Hidden <script type="text/plain" class="demo">
+     samples in the run add HTML/CSS/JS that is rendered but not shown as code,
+     which lets a CSS-only sample have something to style. data-result="off" on
+     any sample in the run turns the panel off. The "Without this CSS" switch
+     removes only the CSS the student can see; demo CSS stays. */
+  // No base font or spacing: "Without it" must show the browser's real defaults.
+  const RESULT_BASE = 'html{color-scheme:light;background:#fff}';
+  const RESULT_BOXES = 'body *{outline:1px dashed rgba(214,40,57,.75);outline-offset:-1px}';
+  // Dialogs only log, so a sample with alert() cannot block the page, and errors from
+  // snippets that are deliberately incomplete stay out of the browser console.
+  const RESULT_HELPER = '(function(){' +
+    'window.alert=function(m){console.log("[alert] "+m)};window.confirm=function(m){console.log("[confirm] "+m);return true};window.prompt=function(m,d){console.log("[prompt] "+m);return d==null?"":d};' +
+    'window.addEventListener("error",function(e){e.preventDefault()});window.addEventListener("unhandledrejection",function(e){e.preventDefault()});})();';
+
+  // A labeled gray box used in place of media files the samples only name.
+  function placeholderSVG(w, h, label) {
+    // Small boxes drop the "Image:" prefix so the file name fits.
+    const t = String(label || 'image').replace(/[<>&"]/g, '').replace(w < 160 ? /^(Image|Video|Poster): / : /$^/, '').slice(0, 60);
+    const fs = Math.round(Math.max(w < 160 ? 7 : 10, Math.min(w / 12, h / 4, (w * 1.6) / Math.max(t.length, 1))));
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '"><rect width="100%" height="100%" fill="#dfe6ee"/>' +
+      '<path d="M0 0L' + w + ' ' + h + 'M' + w + ' 0L0 ' + h + '" stroke="#c3cdd9" stroke-width="' + Math.max(1, Math.round(w / 300)) + '"/>' +
+      '<text x="50%" y="50%" font-family="system-ui,sans-serif" font-size="' + fs + '" fill="#3f4a5a" text-anchor="middle" dominant-baseline="middle">' + t + '</text></svg>';
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
+  // srcset candidates need blob: URLs: Chrome treats data: URLs as already cached and then
+  // always picks the largest candidate, which would hide the choice srcset is about.
+  const blobCache = new Map();
+  function placeholderURL(w, h, label) {
+    const key = w + 'x' + h + ':' + label;
+    if (!blobCache.has(key)) {
+      try {
+        const svg = decodeURIComponent(placeholderSVG(w, h, label).slice('data:image/svg+xml,'.length));
+        blobCache.set(key, URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' })));
+      } catch (e) { return placeholderSVG(w, h, label); }
+    }
+    return blobCache.get(key);
+  }
+  const isLocalData = (u) => /^\s*(data:|blob:|#|$)/i.test(u || '');
+  const fileName = (u) => String(u || '').split(/[?#]/)[0].split('/').pop();
+
+  // Prepare a sample's HTML for the Result frame: files the sample only names (images,
+  // video, audio, captions, scripts, stylesheets, embedded pages) are never fetched.
+  function resultHTML(html) {
+    try {
+      const full = /<html[\s>]|<!doctype/i.test(html);
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      // Each file in src/srcset becomes its own labeled placeholder, so the result shows
+      // which file the browser would pick (srcset, sizes, <picture> media and type).
+      const candidates = (srcset, w, hh) => srcset.split(/,\s+/).map((c) => {
+        const [u, d] = c.trim().split(/\s+/);
+        if (!u || isLocalData(u)) return c;
+        let cw = w, ch = hh;
+        if (/^\d+w$/.test(d || '')) { cw = parseInt(d, 10); ch = Math.round(cw * hh / w); }
+        else if (/^[\d.]+x$/.test(d || '')) { cw = Math.round(w * parseFloat(d)); ch = Math.round(hh * parseFloat(d)); }
+        return placeholderURL(cw, ch, 'Image: ' + fileName(u)) + (d ? ' ' + d : '');
+      }).join(', ');
+      doc.querySelectorAll('img').forEach((img) => {
+        const w = parseInt(img.getAttribute('width'), 10) || 240;
+        const hh = parseInt(img.getAttribute('height'), 10) || Math.round(w * 0.6);
+        if (!isLocalData(img.getAttribute('src'))) img.setAttribute('src', placeholderSVG(w, hh, 'Image: ' + (fileName(img.getAttribute('src')) || 'no file')));
+        if (img.hasAttribute('srcset')) img.setAttribute('srcset', candidates(img.getAttribute('srcset'), w, hh));
+        const pic = img.parentElement && img.parentElement.tagName === 'PICTURE' ? img.parentElement : null;
+        if (pic) pic.querySelectorAll('source').forEach((src) => {
+          const sw = parseInt(src.getAttribute('width'), 10) || w, sh = parseInt(src.getAttribute('height'), 10) || hh;
+          if (src.hasAttribute('srcset')) src.setAttribute('srcset', candidates(src.getAttribute('srcset'), sw, sh));
+        });
+      });
+      doc.querySelectorAll('video, audio').forEach((m) => {
+        const first = m.getAttribute('src') || (m.querySelector('source') || { getAttribute: () => '' }).getAttribute('src');
+        m.querySelectorAll('source, track').forEach((n) => n.remove());
+        m.removeAttribute('src');
+        m.setAttribute('preload', 'none');
+        m.removeAttribute('autoplay');
+        if (m.tagName === 'VIDEO') {
+          const w = parseInt(m.getAttribute('width'), 10) || 480;
+          const hh = parseInt(m.getAttribute('height'), 10) || Math.round(w * 9 / 16);
+          const poster = m.getAttribute('poster');
+          if (!(poster && /^\s*data:/i.test(poster))) m.setAttribute('poster', placeholderSVG(w, hh, poster && !isLocalData(poster) ? 'Poster: ' + fileName(poster) : 'Video: ' + (fileName(first) || 'no file')));
+        }
+      });
+      doc.querySelectorAll('iframe').forEach((f) => {
+        const src = f.getAttribute('src');
+        if (!src) return;
+        f.removeAttribute('src');
+        f.setAttribute('srcdoc', '<body style="margin:0;display:grid;place-items:center;height:100vh;background:#dfe6ee;font:14px system-ui,sans-serif;color:#3f4a5a">Embedded page: ' + src.replace(/[<>&"]/g, '').slice(0, 80) + '</body>');
+      });
+      doc.querySelectorAll('script[src], link[rel~="stylesheet"], link[rel~="preload"], link[rel~="icon"]').forEach((n) => n.remove());
+      doc.querySelectorAll('object[data], embed[src]').forEach((n) => { n.removeAttribute('data'); n.removeAttribute('src'); });
+      return full ? '<!DOCTYPE html>\n' + doc.documentElement.outerHTML : doc.body.innerHTML;
+    } catch (e) { return html; }
+  }
+  // Same rule for CSS: files named in url() and @import are not fetched.
+  const resultCSS = (css) => css
+    .replace(/@import[^;]+;/gi, '')
+    .replace(/url\(\s*(['"]?)(?!data:)([^'")]*)\1\s*\)/gi, (m, q, u) => 'url("' + placeholderSVG(320, 200, fileName(u) || 'image') + '")');
+
+  // True when the HTML would draw something useful on screen. Sketches made only of
+  // "…" placeholders and framework templates ({name}, v-if, @click) are skipped.
+  function drawsSomething(html) {
+    try {
+      if (/\{\{|\{[A-Za-z_$][\w$.]*\}|\sv-(if|for|bind|on|model|show)\b|\s@\w+=|\s:[\w-]+=|\$props|className=/.test(html)) return false;
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const body = doc.body;
+      if (!body) return false;
+      body.querySelectorAll('script, style, template, noscript').forEach((n) => n.remove());
+      const text = body.textContent.replace(/…|\.\.\./g, '').trim();
+      if (text) return true;
+      return !!body.querySelector('img, svg, canvas, video, audio, iframe, input, button, select, textarea, hr, progress, meter, picture, object, embed');
+    } catch (e) { return false; }
+  }
+
+  let resultSeq = 0;
+  const resultObserver = 'IntersectionObserver' in window
+    ? new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { resultObserver.unobserve(e.target); e.target.wd1Render(); } }), { rootMargin: '400px 0px' })
+    : null;
+
+  function resultFor(parts) {
+    if (parts.some((p) => p.s.dataset.result === 'off')) return null;
+    const pick = (lang, demo) => parts.filter((p) => p.lang === lang && (demo === undefined || p.demo === demo)).map((p) => p.code).join('\n');
+    const html = pick('html');
+    if (!html.trim() || !drawsSomething(html)) return null;
+    const css = pick('css', false), demoCss = pick('css', true), js = pick('js');
+    const safeHtml = resultHTML(html), safeCss = resultCSS(css), safeDemoCss = resultCSS(demoCss);
+    const id = 'res' + (++resultSeq);
+    const state = { css: true, boxes: false };
+    const frameEl = h('iframe', { title: 'Result: what the browser draws for the code above', class: 'code-result-frame' });
+    const seg = css.trim() ? h('div', { class: 'seg', role: 'group', 'aria-label': 'Show the result with or without the CSS above' },
+      h('button', { type: 'button', 'aria-pressed': 'true', text: 'With this CSS', onclick: () => setCss(true) }),
+      h('button', { type: 'button', 'aria-pressed': 'false', text: 'Without it', onclick: () => setCss(false) })) : null;
+    const boxes = h('input', { type: 'checkbox', id: id + '-boxes' });
+    boxes.addEventListener('change', () => { state.boxes = boxes.checked; render(); });
+    // Runs with JavaScript (a JS sample, a <script> or an onclick-style attribute) get a
+    // console strip that appears with the first console.log, so logging samples do not look dead.
+    const hasJs = !!js.trim() || /<script[\s>]|\son[a-z]+\s*=/i.test(html);
+    const consoleEl = hasJs ? h('div', { class: 'pg-console code-result-console', 'aria-live': 'polite', 'aria-label': 'Console output', hidden: true }) : null;
+    if (consoleEl) pgRegistry.set(id, { log: (type, args) => {
+      consoleEl.hidden = false;
+      consoleEl.appendChild(h('div', { class: 'log-line ' + (type === 'log' ? '' : type), text: (type === 'error' ? '✖ ' : type === 'warn' ? '⚠ ' : type === 'info' ? '› ' : '') + args.join(' ') }));
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    } });
+    const panel = h('div', { class: 'code-result' },
+      h('span', { class: 'code-lang', text: 'Result' }),
+      h('div', { class: 'code-result-bar' }, seg,
+        h('label', { class: 'code-result-boxes', for: id + '-boxes' }, boxes, h('span', { text: 'Outline every box' }))),
+      frameEl, consoleEl);
+    function setCss(on) {
+      state.css = on;
+      $$('button', seg).forEach((b, i) => b.setAttribute('aria-pressed', String(i === 0 ? on : !on)));
+      render();
+    }
+    function fit() {
+      try {
+        const d = frameEl.contentDocument;
+        if (!d || !d.documentElement) return;
+        // Collapse first: scrollHeight never reports less than the frame's current height.
+        frameEl.style.height = '1px';
+        let hgt = d.documentElement.scrollHeight;
+        const note = d.querySelector('wd1-preview-note');
+        const box = note && note.isConnected && (note.shadowRoot || note).querySelector('.n');
+        // The note may use at most 60% of the frame height, so the frame must be tall enough for all of it.
+        if (box) hgt = Math.max(hgt, Math.ceil(box.scrollHeight / 0.6) + 16);
+        frameEl.style.height = Math.min(Math.max(hgt, 40), 520) + 'px';
+      } catch (e) { /* ignore */ }
+    }
+    function render() {
+      if (consoleEl) { consoleEl.replaceChildren(); consoleEl.hidden = true; }
+      const style = RESULT_BASE + '\n' + safeDemoCss + '\n' + (state.css ? safeCss : '') + '\n' + (state.boxes ? RESULT_BOXES : '');
+      const doc = WD1.buildPreviewDoc({ html: safeHtml, css: style, js }, id);
+      frameEl.srcdoc = doc.replace(/<head>|<head\s[^>]*>/i, (m) => m + '<script>' + RESULT_HELPER + '<\/script>');
+    }
+    frameEl.addEventListener('load', () => {
+      fit(); setTimeout(fit, 250); setTimeout(fit, 900);
+      // The "Link clicked" / "Form submitted" note is fixed to the bottom of the frame,
+      // so the frame grows to fit it whenever it appears or changes.
+      try {
+        const w = frameEl.contentWindow, d = frameEl.contentDocument;
+        const watched = new WeakSet();
+        const RO = w.ResizeObserver;
+        const watch = () => {
+          const note = d.querySelector('wd1-preview-note');
+          if (note && RO && !watched.has(note)) { watched.add(note); new RO(() => fit()).observe(note); }
+          requestAnimationFrame(fit);
+        };
+        new w.MutationObserver(watch).observe(d.body, { childList: true });
+        // Content that grows after a click (a menu opening, items added) grows the frame too.
+        // Grow only: shrinking here could fight scripts that react to the frame's size.
+        let pending = false;
+        const grow = () => {
+          if (pending) return;
+          pending = true;
+          requestAnimationFrame(() => {
+            pending = false;
+            const sh = d.documentElement.scrollHeight;
+            if (sh > frameEl.clientHeight + 1) frameEl.style.height = Math.min(sh, 520) + 'px';
+          });
+        };
+        new w.MutationObserver(grow).observe(d.body, { childList: true, subtree: true, attributes: true, characterData: true });
+        d.addEventListener('transitionend', grow);
+        d.addEventListener('animationend', grow);
+      } catch (e) { /* ignore */ }
+    });
+    panel.wd1Render = render;
+    if (resultObserver) resultObserver.observe(panel); else render();
+    return panel;
   }
 
   /* ---------- Widget frame ---------- */
