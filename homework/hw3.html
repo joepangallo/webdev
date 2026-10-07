@@ -1292,7 +1292,14 @@ info@example.org                                       <!-- the email address, a
 
   WD1.ready(function () {
     var $ = WD1.$, $$ = WD1.$$, S = WD1.store, esc = WD1.esc;
-    var get = function (k, d) { var v = S.get('custom', k); return v === undefined || v === null ? d : v; };
+    // Saved values come from browser storage, so anything of the wrong type falls back to the default.
+    var get = function (k, d) {
+      var v = S.get('custom', k);
+      if (v === undefined || v === null) return d;
+      if (typeof d === 'string') return typeof v === 'string' ? v : d;
+      if (d && typeof d === 'object') return typeof v === 'object' && !Array.isArray(v) ? v : d;
+      return v;
+    };
     var put = function (k, v) { S.set('custom', k, v); };
     var isHw = function (el) { return !!el && !!el.dataset && /^hw3-/.test(el.dataset.id || ''); };
     var words = function (t) { return (String(t || '').trim().match(/\S+/g) || []).length; };
@@ -1341,14 +1348,16 @@ info@example.org                                       <!-- the email address, a
       if (!isHw(el) || !e.detail) return;
       var id = el.dataset.id, prev = quizRec[id];
       quizRec[id] = { title: el.dataset.title, correct: e.detail.correct, total: e.detail.total,
-        best: Math.max(e.detail.correct, prev ? prev.best : 0), at: Date.now() };
+        best: Math.max(count(e.detail.correct), prev && typeof prev === 'object' ? count(prev.best) : 0), at: Date.now() };
       put('hw3-quizzes', quizRec);
       refresh();
     });
+    // Saved counts come from browser storage, so keep only whole numbers before they reach the page or the file.
+    function count(v) { return typeof v === 'number' && isFinite(v) && v >= 0 ? Math.floor(v) : 0; }
     function quizResult(el) {
       var id = el.dataset.id, r = quizRec[id], q = S.get('quiz', id);
-      if (r) return r;
-      if (q) return { title: el.dataset.title, correct: q.last, best: q.best, total: q.total, at: q.at };
+      if (r && typeof r === 'object') return { title: r.title, correct: count(r.correct), best: count(r.best), total: count(r.total), at: r.at };
+      if (q && typeof q === 'object') return { title: el.dataset.title, correct: count(q.last), best: count(q.best), total: count(q.total), at: q.at };
       return null;
     }
 
@@ -1602,7 +1611,7 @@ info@example.org                                       <!-- the email address, a
             return { ok: li.classList.contains('pass'), text: li.lastElementChild ? li.lastElementChild.textContent : li.textContent };
           });
           var r = results[el.dataset.id];
-          resolve({ el: el, items: items, passed: items.filter(function (x) { return x.ok; }).length, total: items.length || (r ? r.total : 0) });
+          resolve({ el: el, items: items, passed: items.filter(function (x) { return x.ok; }).length, total: items.length || (r ? count(r.total) : 0) });
         }
         function on() { setTimeout(finish, 0); }
         el.addEventListener('checks', on);

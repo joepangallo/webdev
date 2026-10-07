@@ -2090,10 +2090,15 @@ main { /* the content area */
     const { $, $$, esc, store } = WD1;
     const NS = 'custom';
     const MIN_WRITTEN = 40;
+    // Saved counts come from browser storage, so keep only whole numbers before they reach the file.
+    const count = (v) => (typeof v === 'number' && isFinite(v) && v >= 0 ? Math.floor(v) : 0);
 
     /* ---------- Name ---------- */
     const nameInput = $('#hw4-name');
-    nameInput.value = store.get(NS, 'hw4-name') || '';
+    // Saved values come from browser storage, so anything of the wrong type is ignored.
+    const savedText = (v) => (typeof v === 'string' ? v : '');
+    const savedObject = (v) => (v && typeof v === 'object' && !Array.isArray(v) ? v : {});
+    nameInput.value = savedText(store.get(NS, 'hw4-name'));
     nameInput.addEventListener('input', () => store.set(NS, 'hw4-name', nameInput.value));
 
     /* ---------- Written answers ---------- */
@@ -2108,7 +2113,7 @@ main { /* the content area */
         : 'Saved. This answer counts as complete.';
     };
     written.forEach((ta) => {
-      ta.value = store.get(NS, ta.dataset.hw4Written) || '';
+      ta.value = savedText(store.get(NS, ta.dataset.hw4Written));
       writtenStatus(ta);
       let t = null;
       ta.addEventListener('input', () => {
@@ -2119,7 +2124,7 @@ main { /* the content area */
 
     /* ---------- Challenge results (latest checks event per playground) ---------- */
     const pgEls = $$('.playground[data-id]');
-    const checkRecords = () => store.get(NS, 'hw4-checks') || {};
+    const checkRecords = () => savedObject(store.get(NS, 'hw4-checks'));
     const challengeState = (id) => {
       const rec = checkRecords()[id];
       if (rec) return rec.passed === rec.total && rec.total > 0 ? 'done' : rec.passed > 0 ? 'partial' : 'none';
@@ -2136,16 +2141,16 @@ main { /* the content area */
 
     /* ---------- Quiz results ---------- */
     const quizEls = $$('[data-hw4-quiz]');
-    const quizRecords = () => store.get(NS, 'hw4-quizzes') || {};
+    const quizRecords = () => savedObject(store.get(NS, 'hw4-quizzes'));
     document.addEventListener('quizdone', (e) => {
       const q = e.target.closest('[data-hw4-quiz]');
       if (!q || !e.detail) return;
       const all = quizRecords();
-      const prev = all[q.dataset.id] || {};
+      const prev = savedObject(all[q.dataset.id]);
       all[q.dataset.id] = {
-        correct: e.detail.correct, total: e.detail.total,
-        best: Math.max(e.detail.correct, prev.best || 0),
-        attempts: (prev.attempts || 0) + 1, at: Date.now()
+        correct: count(e.detail.correct), total: count(e.detail.total),
+        best: Math.max(count(e.detail.correct), count(prev.best)),
+        attempts: count(prev.attempts) + 1, at: Date.now()
       };
       store.set(NS, 'hw4-quizzes', all);
       render();
@@ -2169,7 +2174,7 @@ main { /* the content area */
       meter('challenges', done, pgEls.length);
       const qr = quizRecords();
       meter('quizzes', quizEls.filter((q) => qr[q.dataset.id]).length, quizEls.length);
-      meter('written', written.filter((ta) => (store.get(NS, ta.dataset.hw4Written) || '').trim().length >= MIN_WRITTEN).length, written.length);
+      meter('written', written.filter((ta) => ta.value.trim().length >= MIN_WRITTEN).length, written.length);
     }
     render();
 
@@ -2246,6 +2251,8 @@ main { /* the content area */
         });
         check.disabled = true;
         if (ok) selScore++;
+        const scoreEl = $('.hw4-sel-score', selStage); // show this round's result right away
+        if (scoreEl) scoreEl.textContent = 'Score so far: ' + selScore + ' of ' + (selRound + 1);
         fb.hidden = false;
         fb.className = 'feedback ' + (ok ? 'good' : 'bad');
         fb.innerHTML = '<strong>' + (ok ? 'Correct.' : 'Not quite.') + '</strong> ' + WD1.fmt(r.why);
@@ -2347,7 +2354,7 @@ main { /* the content area */
           '<h4>Preview</h4>\n<iframe title="Preview of ' + esc(c.title) + '" sandbox="" srcdoc="' + esc(previewDoc(c.code)) + '"></iframe>\n</section>';
       }).join('\n');
       const qRows = quizzes.map((q) => '<tr><th scope="row">' + esc(q.title) + '</th>' + (q.rec
-        ? '<td>' + q.rec.correct + ' of ' + q.rec.total + '</td><td>' + q.rec.best + ' of ' + q.rec.total + '</td><td>' + q.rec.attempts + '</td>'
+        ? '<td>' + count(q.rec.correct) + ' of ' + count(q.rec.total) + '</td><td>' + count(q.rec.best) + ' of ' + count(q.rec.total) + '</td><td>' + count(q.rec.attempts) + '</td>'
         : '<td colspan="3" class="empty">Not finished</td>') + '</tr>').join('\n');
       const aHTML = answers.map((a) => '<div class="card">\n<p class="q">' + esc(a.question) + '</p>\n' +
         (a.text.trim() ? '<p class="answer">' + esc(a.text.trim()) + '</p>' : '<p class="empty">No answer written.</p>') + '\n</div>').join('\n');
@@ -2379,7 +2386,7 @@ main { /* the content area */
           const el = document.querySelector('.playground[data-id="' + p.id + '"]');
           const code = el && el.wd1 ? el.wd1.get() : Object.assign({ html: '', css: '' }, store.get('pg', p.id) || {});
           let res = await runChecks(code, p.checks);
-          if (!res) { const r = recs[p.id]; res = { passed: r ? r.passed : 0, total: p.checks.length, list: null }; }
+          if (!res) { const r = recs[p.id]; res = { passed: r ? Math.min(count(r.passed), p.checks.length) : 0, total: p.checks.length, list: null }; }
           challenges.push({ title: p.title, code, res });
         }
         const qr = quizRecords();
