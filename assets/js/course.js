@@ -1351,7 +1351,9 @@
   });
 
   // Runs INSIDE the preview iframe. Must stay ES5-safe and self-contained.
-  function previewHelper(pgId) {
+  // lineMap says where the JS tab (and, for fragments, the HTML tab) start in the
+  // preview document, so error line numbers match the lines the student typed.
+  function previewHelper(pgId, lineMap) {
     var post = function (type, args) { try { parent.postMessage({ wd1pg: pgId, type: type, args: args }, '*'); } catch (e) { /* ignore */ } };
     // Cap the output of one run, so a runaway loop full of console.log cannot flood the console panel.
     var sent = { log: 0, error: 0 }, LIMIT = { log: 1000, error: 100 };
@@ -1385,7 +1387,22 @@
         if (orig) orig.apply(console, arguments);
       };
     });
-    window.addEventListener('error', function (e) { send('error', [e.message + (e.lineno ? ' (line ' + e.lineno + ')' : '')]); });
+    // The document's own line numbers count the setup code mixed in with the student's code,
+    // so translate them; an error outside the student's tabs gets no line rather than a wrong one.
+    // Each lineMap entry is [firstDocLine, lastDocLine, offset, tab]; the last match wins, because
+    // a piece that starts partway through a line is the one that continues on it.
+    // An error from a separate file (<script src>) keeps that file's own name and line.
+    window.addEventListener('error', function (e) {
+      var m = lineMap || [], n = e.lineno, where = '', file = e.filename || '';
+      if (file && file !== location.href) {
+        if (n) where = ' (' + (file.split(/[?#]/)[0].split('/').pop() || file) + ' line ' + n + ')';
+      } else {
+        for (var i = 0; n && i < m.length; i++) {
+          if (n >= m[i][0] && n <= m[i][1]) where = ' (' + m[i][3] + ' line ' + (n - m[i][2]) + ')';
+        }
+      }
+      send('error', [e.message + where]);
+    });
 
     var panel = null;
     function note(html) {
@@ -1540,22 +1557,56 @@
 
   WD1.buildPreviewDoc = function (code, pgId) {
     const html = code.html || '', css = code.css || '', js = code.js || '';
-    const helper = '<script>(' + previewHelper.toString() + ')(' + JSON.stringify(pgId || 'x') + ');<\/script>' +
+    // The HTML parser treats \r\n and a lone \r as one line break each, so count them the same way.
+    const lines = (s) => (s.match(/\r\n|\r|\n/g) || []).length;
+    const helperFor = (map) => '<script>(' + previewHelper.toString() + ')(' + JSON.stringify(pgId || 'x') + ', ' + JSON.stringify(map) + ');<\/script>' +
       (js ? '<script>' + LOOP_GUARD + '<\/script>' : '');
     const style = css ? '<style>\n' + css + '\n</style>' : '';
-    const script = js ? '<script>\n' + WD1.loopProtect(js).replace(/<\/script/gi, '<\\/script') + '\n<\/script>' : '';
+
+    // Build the document as a list of pieces: [text, tab, line in that tab where the piece starts].
+    // Setup pieces have no tab. The helper's piece is a placeholder until the line map is known.
+    const HELPER = {};
+    const parts = [];
+    const add = (text, tab, line) => { if (text) parts.push([text, tab || null, line || 0]); };
+    const addHtml = (from, to) => add(html.slice(from, to), 'HTML', lines(html.slice(0, from)) + 1);
+    const addScript = () => {
+      if (!js) return;
+      add('<script>\n');
+      add(WD1.loopProtect(js).replace(/<\/script/gi, '<\\/script'), 'JS', 1);
+      add('\n<\/script>');
+    };
+    const addSetup = (open, close) => { add(open); parts.push(HELPER); add(style); add(close); };
+
     if (/<html[\s>]|<!doctype/i.test(html)) {
-      let doc = html;
-      const inject = helper + style;
-      if (/<head[^>]*>/i.test(doc)) doc = doc.replace(/<head[^>]*>/i, (m) => m + inject);
-      else if (/<html[^>]*>/i.test(doc)) doc = doc.replace(/<html[^>]*>/i, (m) => m + '<head>' + inject + '</head>');
-      else if (/<!doctype[^>]*>/i.test(doc)) doc = doc.replace(/<!doctype[^>]*>/i, (m) => m + inject);
-      else doc = inject + doc;
-      if (script) doc = /<\/body>/i.test(doc) ? doc.replace(/<\/body>/i, () => script + '</body>') : doc + script;
-      return doc;
+      // A whole document: splice the setup in after <head> (or <html> / the doctype) and the
+      // script in before </body>, keeping the student's HTML in order around them.
+      let m, at = 0, open = '', close = '';
+      if ((m = /<head(?:\s[^>]*)?>/i.exec(html))) at = m.index + m[0].length;
+      else if ((m = /<html(?:\s[^>]*)?>/i.exec(html))) { at = m.index + m[0].length; open = '<head>'; close = '</head>'; }
+      else if ((m = /<!doctype[^>]*>/i.exec(html))) at = m.index + m[0].length;
+      const bodyEnd = html.search(/<\/body>/i);
+      const end = bodyEnd < 0 ? html.length : bodyEnd;
+      if (end < at) { addHtml(0, end); addScript(); addHtml(end, at); addSetup(open, close); addHtml(at, html.length); }
+      else { addHtml(0, at); addSetup(open, close); addHtml(at, end); addScript(); addHtml(end, html.length); }
+    } else {
+      addSetup('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">', '</head><body>\n');
+      addHtml(0, html.length);
+      add('\n');
+      addScript();
+      add('</body></html>');
     }
-    return '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
-      helper + style + '</head><body>\n' + html + '\n' + script + '</body></html>';
+
+    // The map is JSON with no line breaks, so the helper's line count does not depend on it.
+    const helperLines = lines(helperFor([]));
+    const map = [];
+    let line = 1;
+    parts.forEach((p) => {
+      if (p === HELPER) { line += helperLines; return; }
+      if (p[1]) map.push([line, line + lines(p[0]), line - p[2], p[1]]);
+      line += lines(p[0]);
+    });
+    const helper = helperFor(map);
+    return parts.map((p) => (p === HELPER ? helper : p[0])).join('');
   };
 
   const LANG_LABEL = { html: 'HTML', css: 'CSS', js: 'JS' };
