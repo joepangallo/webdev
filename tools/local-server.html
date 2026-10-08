@@ -75,20 +75,12 @@
     .ls-addr input { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: .82rem; }
     .ls-view { background: #fff; color: #1a1a1a; height: 330px; overflow: auto; padding: 14px; font: 15px/1.5 Georgia, "Times New Roman", serif; }
     .ls-view a { color: #0000ee; }
-    .ls-view.styled { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
     /* The pretend page uses plain divs, so this page keeps one <main> and one <h1> */
     .ls-view .ls-h1 { font-size: 1.7rem; font-weight: 700; margin: .5em 0 .3em; line-height: 1.2; }
-    .ls-view.styled .ls-hdr { background: #1d4e5f; color: #fff; padding: 8px 12px; border-radius: 6px; }
-    .ls-view.styled .ls-hdr a { color: #fff; }
-    .ls-view.styled .ls-h1 { color: #1d4e5f; }
-    .ls-view .ls-img { display: grid; place-items: center; height: 90px; background: #e7eef2; color: #3d5a66; border-radius: 6px; font-family: system-ui, sans-serif; font-size: .85rem; }
-    .ls-view .ls-broken { display: inline-block; border: 1px solid #999; padding: 2px 6px; font-size: .8rem; font-family: system-ui, sans-serif; }
     .ls-view .ls-chrome { font-family: system-ui, sans-serif; color: #3c4043; padding-top: 20px; }
     .ls-view .ls-chrome h2 { font-size: 1.3rem; font-weight: 500; margin: 0 0 8px; }
     .ls-view .ls-chrome code { font-size: .78rem; color: #5f6368; }
     .ls-view pre { white-space: pre-wrap; font-size: .85rem; }
-    .ls-view .ls-nav ul { padding-left: 0; list-style: none; }
-    .ls-view .ls-nav li { display: inline; margin-right: 12px; }
     .ls-status { padding: 8px 10px; border-top: 1px solid var(--line); font-size: .85rem; min-height: 2.6em; }
     .ls-status.warn { color: var(--warn); }
     .ls-tools { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; border-top: 1px solid var(--line); }
@@ -163,7 +155,7 @@
         <caption class="sr-only">Opening a page from disk, from a local server and from GitHub Pages, compared</caption>
         <thead><tr><th scope="col">&nbsp;</th><th scope="col">Double-click the file</th><th scope="col">Local server</th><th scope="col">GitHub Pages</th></tr></thead>
         <tbody>
-          <tr><td>The address bar shows</td><td><code>file:///Users/you/web-projects/harbor-street-library/index.html</code></td><td><code>http://localhost:8000/</code></td><td><code>https://you.github.io/harbor-street-library/</code></td></tr>
+          <tr><td>The address bar shows</td><td><code>file:///Users/you/my-site/index.html</code></td><td><code>http://localhost:8000/</code></td><td><code>https://you.github.io/my-site/</code></td></tr>
           <tr><td>Uses HTTP (status codes, headers, the Network tab)</td><td><span class="ls-no">No</span>: the browser just reads the file</td><td><span class="ls-yes">Yes</span></td><td><span class="ls-yes">Yes</span></td></tr>
           <tr><td>An address ending in <code>/</code> loads <code>index.html</code></td><td><span class="ls-no">No</span>: you see a list of files</td><td><span class="ls-yes">Yes</span></td><td><span class="ls-yes">Yes</span></td></tr>
           <tr><td>A path starting with <code>/</code>, such as <code>/css/styles.css</code></td><td><span class="ls-no">Breaks</span>: <code>/</code> means the top of your whole disk</td><td><span class="ls-yes">Works</span>: <code>/</code> means the folder the server started in</td><td><span class="ls-no">Breaks on project sites</span>: <code>/</code> means <code>you.github.io</code>, not your project</td></tr>
@@ -192,7 +184,7 @@
           <span class="ls-arrow" data-on="3-6">→</span>
           <span class="chip" data-on="3-6" data-active="3">python3 http.server</span>
           <span class="ls-arrow" data-on="3-6">→</span>
-          <span class="chip" data-on="3-6" data-active="3">harbor-street-library/events.html</span>
+          <span class="chip" data-on="3-6" data-active="3">my-site/index.html</span>
           <span class="ls-arrow" data-on="4-6">→</span>
           <span class="chip" data-on="4-6" data-active="4">200 OK + the file</span>
           <span class="chip" data-on="5-6" data-active="5">One line in the Terminal</span>
@@ -200,9 +192,9 @@
         </div>
       </div>
       <ol class="steps">
-        <li><p>You type <code>http://localhost:8000/events.html</code>. <code>localhost</code> is the name for "this computer" (the loopback address <code>127.0.0.1</code>), so the request never leaves your Mac. No Wi-Fi or internet connection is needed.</p></li>
+        <li><p>You type <code>http://localhost:8000/</code>. <code>localhost</code> is the name for "this computer" (the loopback address <code>127.0.0.1</code>), so the request never leaves your Mac. No Wi-Fi or internet connection is needed.</p></li>
         <li><p>The request arrives at port <code>8000</code>. Only one program can listen on a port at a time, and right now Python's server is that program.</p></li>
-        <li><p>The server takes the path <code>/events.html</code> and finds the file with that name inside its document root: the folder you were in when you started it. For <code>/</code> it looks for <code>index.html</code>.</p></li>
+        <li><p>The server takes the path from the address and finds a file with that name inside its document root: the folder you were in when you started it. The path here is just <code>/</code>, so it looks for <code>index.html</code>.</p></li>
         <li><p>It reads the file and sends it back with the status code <code>200 OK</code> and a <code>Content-Type</code> header (<code>text/html</code> for a <code>.html</code> file). If no file matches, it sends <code>404</code> instead.</p></li>
         <li><p>It prints one line in the Terminal for the request: who asked, when, for what, and the status code it sent. This log is your window into the conversation.</p></li>
         <li><p>The browser reads the HTML, finds the stylesheet and images it links to, and asks for each one. Each is a separate request with its own log line. One page usually means several requests.</p></li>
@@ -238,22 +230,27 @@
       <p>Choose <strong>Install</strong>, accept the license and wait a few minutes. When it finishes, run <code>python3 --version</code> again. These are the same tools Git uses, so if <code>git --version</code> already works on your Mac, you won't see this window.</p>
     </aside>
 
-    <h3 class="ls-step"><span class="ls-n">3</span>Go to your site's folder</h3>
-    <p>The server shares whichever folder Terminal is "in", so first move into the folder that holds your site's <code>index.html</code>. The example below uses a site folder called <code>harbor-street-library</code> inside a <code>web-projects</code> folder; use your own folder's path.</p>
+    <h3 class="ls-step"><span class="ls-n">3</span>Make a folder with one blank page</h3>
+    <p>The server shares whichever folder Terminal is "in", and that folder needs an <code>index.html</code>. Make a new folder called <code>my-site</code> with the smallest possible page in it. The page is blank on purpose: all you need right now is a file for the server to send.</p>
     <script type="text/plain" class="code" data-lang="text" data-title="Type these one at a time">
-      cd ~/web-projects/harbor-street-library
+      mkdir ~/my-site
+      cd ~/my-site
+      echo '<!DOCTYPE html><title>My Site</title>' > index.html
       ls
     </script>
-    <script type="text/plain" class="code" data-lang="text" data-title="ls should list your site's files">
-      css		events.html	images		index.html	report.html
+    <script type="text/plain" class="code" data-lang="text" data-title="ls should list one file">
+      index.html
     </script>
     <dl class="ls-parts">
-      <dt>cd ~/web-projects/harbor-street-library</dt><dd><strong>c</strong>hange <strong>d</strong>irectory: move into that folder. <code>~</code> is short for your home folder (<code>/Users/yourname</code>). The prompt changes to show the folder's name.</dd>
-      <dt>ls</dt><dd><strong>l</strong>i<strong>s</strong>t the files in the current folder. Look for <code>index.html</code>. If it isn't listed, you're in the wrong folder.</dd>
+      <dt>mkdir ~/my-site</dt><dd><strong>m</strong>a<strong>k</strong>e <strong>dir</strong>ectory: create a new folder called <code>my-site</code>. <code>~</code> is short for your home folder (<code>/Users/yourname</code>).</dd>
+      <dt>cd ~/my-site</dt><dd><strong>c</strong>hange <strong>d</strong>irectory: move into that folder. The prompt changes to show the folder's name.</dd>
+      <dt>echo '…' &gt; index.html</dt><dd><code>echo</code> prints the text between the quotes, and <code>&gt; index.html</code> saves it into a new file called <code>index.html</code> instead. Use single quotes (<code>'</code>), not double quotes.</dd>
+      <dt>&lt;!DOCTYPE html&gt;&lt;title&gt;My Site&lt;/title&gt;</dt><dd>The smallest complete HTML page. The doctype says "this is HTML", and the title names the browser tab. Browsers add the <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code> tags on their own. Nothing is in the body, so the page is blank.</dd>
+      <dt>ls</dt><dd><strong>l</strong>i<strong>s</strong>t the files in the current folder. You should see <code>index.html</code>.</dd>
     </dl>
     <aside class="callout tip">
-      <strong>Shortcut: drag the folder in</strong>
-      <p>Type <code>cd</code> and a space, then drag your site's folder from Finder into the Terminal window. Terminal types the full path for you, with any spaces handled correctly. Press Return.</p>
+      <strong>Serving a site you already have</strong>
+      <p>Skip the commands above. Type <code>cd</code> and a space, then drag your site's folder from Finder into the Terminal window and press Return. Terminal types the full path for you, with any spaces handled correctly.</p>
     </aside>
 
     <h3 class="ls-step"><span class="ls-n">4</span>Start the server</h3>
@@ -272,15 +269,13 @@
     <p>Terminal looks stuck now, with no new prompt. That's normal: the server is running and waiting for requests. Leave this window open. To type other commands meanwhile, open a second Terminal tab with <kbd>Command</kbd> + <kbd>T</kbd>.</p>
 
     <h3 class="ls-step"><span class="ls-n">5</span>Open your site</h3>
-    <p>In Chrome, Safari or Firefox, go to <strong><code>http://localhost:8000/</code></strong>. Your <code>index.html</code> appears, and new lines scroll into the Terminal, one per request:</p>
+    <p>In Chrome, Safari or Firefox, go to <strong><code>http://localhost:8000/</code></strong>. A blank white page appears with <strong>My Site</strong> on its tab, and new lines scroll into the Terminal, one per request:</p>
     <script type="text/plain" class="code" data-lang="text" data-title="Terminal, after the page loads">
       127.0.0.1 - - [30/Sep/2026 14:02:11] "GET / HTTP/1.1" 200 -
-      127.0.0.1 - - [30/Sep/2026 14:02:11] "GET /css/styles.css HTTP/1.1" 200 -
-      127.0.0.1 - - [30/Sep/2026 14:02:11] "GET /images/reading-room.jpg HTTP/1.1" 200 -
       127.0.0.1 - - [30/Sep/2026 14:02:11] code 404, message File not found
       127.0.0.1 - - [30/Sep/2026 14:02:11] "GET /favicon.ico HTTP/1.1" 404 -
     </script>
-    <p>Browsers ask for <code>/favicon.ico</code> (the little tab icon) on their own. If your site doesn't have one, that 404 is harmless. The next section explains every part of these lines. Open DevTools (<kbd>Command</kbd> + <kbd>Option</kbd> + <kbd>I</kbd>) and the <strong>Network</strong> tab, reload, and you'll see the same requests from the browser's side, with their status codes and headers.</p>
+    <p>The <code>200</code> means the server found <code>index.html</code> and sent it. Browsers ask for <code>/favicon.ico</code> (the little tab icon) on their own. Your site doesn't have one, so that 404 is harmless. The next section explains every part of these lines. Open DevTools (<kbd>Command</kbd> + <kbd>Option</kbd> + <kbd>I</kbd>) and the <strong>Network</strong> tab, reload, and you'll see the same requests from the browser's side, with their status codes and headers.</p>
     <aside class="callout warn">
       <strong>Changed a file? Reload the page yourself</strong>
       <p>Unlike Live Server, this server doesn't refresh the page when you save. Save the file, then reload the browser (<kbd>Command</kbd> + <kbd>R</kbd>). If the old version sticks, force a fresh copy with <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd>.</p>
@@ -358,11 +353,11 @@
       </div>
       <label class="ls-opt"><input type="checkbox" id="ls-blocked"> Pretend a server from earlier is still running on port 8000 in another Terminal window</label>
       <ol class="ls-missions" id="ls-missions">
-        <li data-m="start"><span class="ls-tick" aria-hidden="true"></span><span><strong>Start a server in the site folder.</strong> <code>cd</code> into <code>~/web-projects/harbor-street-library</code>, then start the server on port 8000.</span></li>
+        <li data-m="start"><span class="ls-tick" aria-hidden="true"></span><span><strong>Make the site and start a server in it.</strong> Make <code>~/my-site</code> and its blank <code>index.html</code> (step 3 above), then start the server there on port 8000.</span></li>
         <li data-m="home"><span class="ls-tick" aria-hidden="true"></span><span><strong>Load the home page</strong> at <code>http://localhost:8000/</code> and read the log lines it causes.</span></li>
         <li data-m="404"><span class="ls-tick" aria-hidden="true"></span><span><strong>Cause a 404</strong> by visiting a page that doesn't exist.</span></li>
         <li data-m="304"><span class="ls-tick" aria-hidden="true"></span><span><strong>See a 304</strong> by reloading a page you already loaded. Then save a change to index.html and reload again.</span></li>
-        <li data-m="listing"><span class="ls-tick" aria-hidden="true"></span><span><strong>See a directory listing</strong> by starting the server one folder too high (in <code>~/web-projects</code>).</span></li>
+        <li data-m="listing"><span class="ls-tick" aria-hidden="true"></span><span><strong>See a directory listing</strong> by starting the server one folder too high (in your home folder, <code>~</code>).</span></li>
         <li data-m="stop"><span class="ls-tick" aria-hidden="true"></span><span><strong>Stop the server</strong> with Control + C, then try the page again.</span></li>
         <li data-m="inuse"><span class="ls-tick" aria-hidden="true"></span><span><strong>Fix "Address already in use".</strong> Tick the checkbox above, start a server on 8000, then find the other server with <code>lsof -nP -i :8000</code> and stop it with <code>kill</code> and its PID.</span></li>
         <li data-m="phone"><span class="ls-tick" aria-hidden="true"></span><span><strong>Open the site from your phone</strong>, which needs a server started <em>without</em> <code>--bind 127.0.0.1</code> and your Mac's Wi-Fi address (<code>ipconfig getifaddr en0</code>).</span></li>
@@ -413,7 +408,7 @@
     </details>
     <details class="reveal">
       <summary>The browser shows "Directory listing for /"</summary>
-      <p>The server started in a folder that has no <code>index.html</code>, so it lists the folder's contents instead. Usually you're one folder too high (in <code>web-projects</code> instead of <code>harbor-street-library</code>). You can click through the list to your site, but it's better to stop the server, <code>cd</code> into the right folder and start it again. Also check the file's name: it must be exactly <code>index.html</code>, not <code>Index.html</code>, <code>index.htm</code> or <code>index.html.txt</code>. GitHub Pages never shows a listing; it answers 404.</p>
+      <p>The server started in a folder that has no <code>index.html</code>, so it lists the folder's contents instead. Usually you're one folder too high (in your home folder instead of <code>my-site</code>). You can click through the list to your site, but it's better to stop the server, <code>cd</code> into the right folder and start it again. Also check the file's name: it must be exactly <code>index.html</code>, not <code>Index.html</code>, <code>index.htm</code> or <code>index.html.txt</code>. GitHub Pages never shows a listing; it answers 404.</p>
     </details>
     <details class="reveal">
       <summary>"This site can't be reached. localhost refused to connect."</summary>
@@ -430,6 +425,10 @@
     <details class="reveal">
       <summary>It works on my local server but breaks on GitHub Pages</summary>
       <p>Two usual suspects. <strong>Capital letters:</strong> a Mac ignores case, so <code>Images/Logo.PNG</code> finds <code>images/logo.png</code> locally, but GitHub Pages treats them as different files. <strong>A leading slash:</strong> <code>/css/styles.css</code> means the top of <code>you.github.io</code> online, not your project folder. Use lowercase names and relative paths.</p>
+    </details>
+    <details class="reveal">
+      <summary><code>zsh: event not found: DOCTYPE</code></summary>
+      <p>You typed the <code>echo</code> command with double quotes. Inside double quotes, zsh treats <code>!</code> as a shortcut to an earlier command, so the command fails and no file is made. Type it again with single quotes: <code>echo '&lt;!DOCTYPE html&gt;&lt;title&gt;My Site&lt;/title&gt;' &gt; index.html</code>.</p>
     </details>
     <details class="reveal">
       <summary><code>zsh: command not found: python</code></summary>
@@ -482,12 +481,14 @@
       <table class="data-table ls-cheat">
         <thead><tr><th scope="col">Command or key</th><th scope="col">What it does</th></tr></thead>
         <tbody>
-          <tr><td><code>cd ~/web-projects/your-site</code></td><td>Move into your site's folder (the one with <code>index.html</code>)</td></tr>
+          <tr><td><code>mkdir ~/my-site</code></td><td>Make a new folder called <code>my-site</code> in your home folder</td></tr>
+          <tr><td><code>cd ~/my-site</code></td><td>Move into your site's folder (the one with <code>index.html</code>)</td></tr>
+          <tr><td><code>echo '&lt;!DOCTYPE html&gt;&lt;title&gt;My Site&lt;/title&gt;' &gt; index.html</code></td><td>Make a blank <code>index.html</code> in the current folder</td></tr>
           <tr><td><code>ls</code></td><td>List the files in the current folder</td></tr>
           <tr><td><code>pwd</code></td><td>Print the full path of the folder you're in</td></tr>
           <tr><td><code>python3 -m http.server 8000 --bind 127.0.0.1</code></td><td>Serve the current folder at <code>http://localhost:8000/</code>, for this Mac only</td></tr>
           <tr><td><code>python3 -m http.server 8000</code></td><td>Serve it to every device on your Wi-Fi as well (trusted networks only)</td></tr>
-          <tr><td><code>python3 -m http.server 8000 --directory ~/web-projects/your-site</code></td><td>Serve a folder without <code>cd</code>-ing into it first</td></tr>
+          <tr><td><code>python3 -m http.server 8000 --directory ~/my-site</code></td><td>Serve a folder without <code>cd</code>-ing into it first</td></tr>
           <tr><td><kbd>Control</kbd> + <kbd>C</kbd></td><td>Stop the running server</td></tr>
           <tr><td><kbd>Command</kbd> + <kbd>T</kbd></td><td>Open another Terminal tab while the server runs</td></tr>
           <tr><td><code>lsof -nP -i :8000</code></td><td>Show which program is using port 8000, and its PID</td></tr>
@@ -504,7 +505,7 @@
     <div class="quiz" data-title="Local server check">
       <script type="application/json">
       [
-        {"q": "You run `python3 -m http.server 8000 --bind 127.0.0.1` inside `~/web-projects`, one folder above your site, and open `http://localhost:8000/`. What do you see?", "choices": ["Your site's home page", "A \"Directory listing for /\" page with your site's folder in it", "A 404 error", "\"localhost refused to connect\""], "answer": 1, "explain": "The server shares the folder it started in. `web-projects` has no `index.html`, so Python lists its contents instead. Stop the server, `cd` into the site folder and start it again."},
+        {"q": "You run `python3 -m http.server 8000 --bind 127.0.0.1` in your home folder (`~`), one folder above `my-site`, and open `http://localhost:8000/`. What do you see?", "choices": ["Your site's home page", "A \"Directory listing for /\" page with `my-site/` in it", "A 404 error", "\"localhost refused to connect\""], "answer": 1, "explain": "The server shares the folder it started in. Your home folder has no `index.html`, so Python lists its contents instead. Stop the server, `cd` into the site folder and start it again."},
         {"q": "The log shows `\"GET /images/Logo.png HTTP/1.1\" 404 -`. What does that tell you?", "choices": ["The server is broken", "The browser asked for exactly `/images/Logo.png` and no file matched, so check the path in your HTML against the real folder and file name", "The image is too big", "You need to use `https://`"], "answer": 1, "explain": "The log records exactly what the browser requested. A 404 means that path doesn't match a file in the document root, so compare it with your `src` and your real file names."},
         {"q": "How do you stop the running server?", "choices": ["Command + Q in the browser", "Press Control + C in the Terminal window", "Close the browser tab", "Type `stop`"], "answer": 1, "explain": "Control + C interrupts the program running in Terminal. Closing the browser changes nothing, because the server keeps waiting for requests."},
         {"q": "Terminal prints `OSError: [Errno 48] Address already in use`. What's the best next step?", "choices": ["Restart the Mac", "Another program is using that port: start on another port, such as 8001, or find it with `lsof -nP -i :8000` and stop it", "Reinstall Python", "Add `sudo` to the command"], "answer": 1, "explain": "Only one program can listen on a port at a time. Usually it's a server you started earlier in another window."},
@@ -553,29 +554,25 @@ WD1.ready(() => {
      and a pretend browser. Messages match what a real Mac prints.
      ================================================================= */
   const HOME = '/Users/student';
-  const PROJ = HOME + '/web-projects';
-  const SITE = PROJ + '/harbor-street-library';
+  const SITE = HOME + '/my-site';
   const LAN = '192.168.1.23';
   const PHONE = '192.168.1.40';
   const OTHER_PID = 50123;
 
-  const DIRS = new Set(['/', '/Users', HOME, HOME + '/Applications', HOME + '/Desktop', HOME + '/Documents', HOME + '/Downloads', HOME + '/Library',
-    HOME + '/Movies', HOME + '/Music', HOME + '/Pictures', HOME + '/Public', PROJ, SITE, SITE + '/css', SITE + '/images']);
-  const FILES = {};
-  FILES[SITE + '/index.html'] = { type: 'text/html', page: 'home' };
-  FILES[SITE + '/events.html'] = { type: 'text/html', page: 'events' };
-  FILES[SITE + '/report.html'] = { type: 'text/html', page: 'report' };
-  FILES[SITE + '/css/styles.css'] = { type: 'text/css', text: 'body {\n  font-family: system-ui, sans-serif;\n}\nheader {\n  background: #1d4e5f;\n  color: white;\n}' };
-  FILES[SITE + '/images/reading-room.jpg'] = { type: 'image/jpeg' };
+  // The pretend disk starts with a new Mac's home folder. mkdir and echo > file add to it.
+  const START_DIRS = ['/', '/Users', HOME, HOME + '/Applications', HOME + '/Desktop', HOME + '/Documents', HOME + '/Downloads', HOME + '/Library',
+    HOME + '/Movies', HOME + '/Music', HOME + '/Pictures', HOME + '/Public'];
+  let DIRS, FILES;
 
   const out = byId('ls-out'), cmdIn = byId('ls-cmd'), prompt = byId('ls-prompt');
   const form = byId('ls-in'), busy = byId('ls-busy'), view = byId('ls-view'), status = byId('ls-status'), urlIn = byId('ls-url');
   const blockedBox = byId('ls-blocked');
 
-  let cwd, server, blocker, seen, faviconAsked, version, history, hIdx, lastUrl, done;
+  let cwd, server, blocker, seen, faviconAsked, history, hIdx, lastUrl, done;
 
   function reset() {
-    cwd = HOME; server = null; blocker = null; seen = new Map(); faviconAsked = false; version = 1;
+    DIRS = new Set(START_DIRS); FILES = {};
+    cwd = HOME; server = null; blocker = null; seen = new Map(); faviconAsked = false;
     history = []; hIdx = 0; lastUrl = null; done = new Set();
     blockedBox.checked = false;
     out.textContent = '';
@@ -585,7 +582,6 @@ WD1.ready(() => {
     urlIn.value = 'http://localhost:8000/';
     view.textContent = '';
     view.appendChild(WD1.h('p', { class: 'ls-chrome', text: 'Start a server in the Terminal, then press Go.' }));
-    view.classList.remove('styled');
     setStatus('');
     document.querySelectorAll('#ls-missions li').forEach((li) => li.classList.remove('done'));
   }
@@ -645,6 +641,9 @@ WD1.ready(() => {
     for (const f of Object.keys(FILES)) if (f.toLowerCase() === lower) return { path: f, exact: false };
     return null;
   }
+  function parentOf(p) { return p.slice(0, p.lastIndexOf('/')) || '/'; }
+  function unquote(s) { return s.replace(/^'([\s\S]*)'$|^"([\s\S]*)"$/, '$1$2'); }
+  function typeOf(p) { return /\.html?$/i.test(p) ? 'text/html' : /\.css$/i.test(p) ? 'text/css' : 'text/plain'; }
 
   /* ----- commands ----- */
   const HELP = [
@@ -652,6 +651,8 @@ WD1.ready(() => {
     '  pwd                         print the folder you are in',
     '  ls [folder]                 list files',
     '  cd <folder>                 move into a folder (cd .. goes up, cd ~ goes home)',
+    '  mkdir <folder>              make a new folder',
+    "  echo '<text>' > <file>      save text into a file",
     '  python3 --version           check Python',
     '  python3 -m http.server 8000 [--bind 127.0.0.1] [--directory <folder>]',
     '  lsof -nP -i :8000           which program is using port 8000?',
@@ -662,12 +663,25 @@ WD1.ready(() => {
   ];
 
   function tokens(line) { return (line.match(/"[^"]*"|'[^']*'|\S+/g) || []); }
+  // Split "command > file" at the last > outside quotes (the HTML being saved has > in it too).
+  function splitRedirect(line) {
+    let quote = null, at = -1;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (quote) { if (ch === quote) quote = null; }
+      else if (ch === '"' || ch === "'") quote = ch;
+      else if (ch === '>') at = i;
+    }
+    return at === -1 ? null : { cmd: line.slice(0, at), file: line.slice(at + 1).trim() };
+  }
 
   function run(line) {
     write(promptText() + ' ' + line, 'p');
-    const t = tokens(line.trim());
+    const redirect = splitRedirect(line);
+    const t = tokens((redirect ? redirect.cmd : line).trim());
     if (!t.length) return;
     const [cmd, ...args] = t;
+    if (redirect && cmd !== 'echo') { write('(This practice Terminal only saves echo\'s text into a file with >.)', 'dim'); return; }
     switch (cmd) {
       case 'help': HELP.forEach((l) => write(l, 'dim')); break;
       case 'clear': out.textContent = ''; break;
@@ -678,7 +692,7 @@ WD1.ready(() => {
         const f = findPath(p);
         if (!f) { write('ls: ' + target + ': No such file or directory', 'e'); break; }
         if (FILES[f.path]) { write(target); break; }
-        write(children(f.path).join('    '));
+        if (children(f.path).length) write(children(f.path).join('    '));
         break;
       }
       case 'cd': {
@@ -687,6 +701,37 @@ WD1.ready(() => {
         if (!f) { write('cd: no such file or directory: ' + args[0], 'e'); break; }
         if (FILES[f.path]) { write('cd: not a directory: ' + args[0], 'e'); break; }
         cwd = f.path;
+        break;
+      }
+      case 'mkdir': {
+        const names = args.filter((a) => !a.startsWith('-'));
+        if (!names.length) { write('usage: mkdir [-pv] [-m mode] directory_name ...', 'e'); break; }
+        names.forEach((name) => {
+          const p = resolve(name, cwd);
+          const shown = unquote(name).replace(/^~(?=\/|$)/, HOME);
+          const up = findPath(parentOf(p));
+          if (findPath(p)) write('mkdir: ' + shown + ': File exists', 'e');
+          else if (!up) write('mkdir: ' + shown + ': No such file or directory', 'e');
+          else if (!DIRS.has(up.path)) write('mkdir: ' + shown + ': Not a directory', 'e');
+          else DIRS.add((up.path === '/' ? '' : up.path) + p.slice(p.lastIndexOf('/')));
+        });
+        break;
+      }
+      case 'echo': {
+        // Inside double quotes, zsh reads !DOCTYPE as "repeat an earlier command", and the line fails.
+        const bang = args.find((a) => a.startsWith('"') && /![A-Za-z]/.test(a));
+        if (bang) { write('zsh: event not found: ' + bang.match(/!([A-Za-z][^\s"]*)/)[1], 'e'); break; }
+        const text = args.map(unquote).join(' ');
+        if (!redirect) { write(text); break; }
+        if (!redirect.file) { write('zsh: parse error near `\\n\'', 'e'); break; }
+        const p = resolve(redirect.file, cwd);
+        const up = findPath(parentOf(p));
+        const old = findPath(p);
+        if (!up || !DIRS.has(up.path)) { write('zsh: no such file or directory: ' + unquote(redirect.file), 'e'); break; }
+        if (old && DIRS.has(old.path)) { write('zsh: is a directory: ' + unquote(redirect.file), 'e'); break; }
+        // A Mac ignores capital letters, so saving Index.html over index.html replaces that file.
+        const path = old ? old.path : (up.path === '/' ? '' : up.path) + p.slice(p.lastIndexOf('/'));
+        FILES[path] = { type: typeOf(path), text: text + '\n', v: old ? FILES[path].v + 1 : 1 };
         break;
       }
       case 'python':
@@ -771,7 +816,7 @@ WD1.ready(() => {
     else write('Serving HTTP on :: port ' + port + ' (http://[::]:' + port + '/) ...');
     setBusy(true);
     byId('ls-term-title').textContent = 'student — python3 -m http.server ' + port;
-    if (dir === SITE && port === 8000) mission('start');
+    if (dir === SITE && port === 8000 && FILES[SITE + '/index.html']) mission('start');
     byId('ls-ctrlc').focus();
   }
 
@@ -832,17 +877,16 @@ WD1.ready(() => {
     return fileResponse(found.path, path, client, isReload, found.exact);
   }
   function fileResponse(file, path, client, isReload, exact) {
-    const key = file;
-    const v = file === SITE + '/index.html' ? version : 1;
-    const code = seen.get(key) === v ? 304 : 200;
-    seen.set(key, v);
+    // Each save bumps a file's version; asking again for an unchanged version earns a 304.
+    const v = FILES[file].v;
+    const code = seen.get(file) === v ? 304 : 200;
+    seen.set(file, v);
     logLine(client, path, code);
     return { code, kind: 'file', file, exact };
   }
 
   /* ----- the browser ----- */
   function chrome(title, detail, codeText) {
-    view.classList.remove('styled');
     view.textContent = '';
     view.appendChild(WD1.h('div', { class: 'ls-chrome' },
       WD1.h('h2', { text: title }), WD1.h('p', { text: detail }), WD1.h('code', { text: codeText })));
@@ -880,7 +924,7 @@ WD1.ready(() => {
     const port = Number(u.port || (u.protocol === 'https:' ? 443 : 80));
     const target = server && server.port === port ? server : null;
     if (!target && blocker && blocker.port === port && !opts.phone) {
-      chrome('Directory listing for /', 'This answer came from the other server, the one still running on port ' + port + ' in another Terminal window. It was started in ~/web-projects, so it lists that folder.', '');
+      chrome('Directory listing for /', 'This answer came from the other server, the one still running on port ' + port + ' in another Terminal window. It was started in your home folder, so it lists that folder.', '');
       setStatus('A different program answered: the forgotten server from earlier. Its log appears in the other window.', true);
       return;
     }
@@ -912,7 +956,6 @@ WD1.ready(() => {
       return request(r.location, client, opts);
     }
     if (r.code === 404) {
-      view.classList.remove('styled');
       view.textContent = '';
       view.appendChild(WD1.h('div', null,
         WD1.h('div', { class: 'ls-h1', text: 'Error response' }),
@@ -926,71 +969,38 @@ WD1.ready(() => {
     if (r.kind === 'listing') {
       renderListing(r.dir, r.shown);
       setStatus('No index.html in ' + tilde(r.dir) + ', so the server lists the folder. GitHub Pages would answer 404 here.', true);
-      if (r.dir === PROJ) mission('listing');
+      if (r.dir === HOME) mission('listing');
       return;
     }
     const f = FILES[r.file];
     if (r.code === 304) mission('304');
     if (f.type === 'text/html') {
-      renderPage(f.page, r.file, path, client, opts);
-      const base = r.code === 304 ? '304: unchanged since your last visit, so the browser used its saved copy.' : '200 OK, Content-Type: text/html.';
+      if (!faviconAsked) { faviconAsked = true; logLine(client, '/favicon.ico', 404); }
+      renderPage(f.text);
+      let base = r.code === 304 ? '304: unchanged since your last visit, so the browser used its saved copy.' : '200 OK, Content-Type: text/html.';
+      if (!pageText(f.text)) base += ' The page is blank because its body is empty' + (pageTitle(f.text) ? '; the tab says "' + pageTitle(f.text) + '".' : '.');
       setStatus(r.exact ? base : base + ' Found only because a Mac ignores capital letters. GitHub Pages would answer 404.', !r.exact);
       if (r.file === SITE + '/index.html' && client !== null) mission('home');
       if (opts.phone) mission('phone');
-    } else if (f.type === 'text/css') {
-      view.classList.remove('styled'); view.textContent = '';
-      view.appendChild(WD1.h('pre', { text: f.text }));
-      setStatus(r.code + (r.code === 304 ? ': unchanged.' : ' OK, Content-Type: text/css.'));
     } else {
-      view.classList.remove('styled'); view.textContent = '';
-      view.appendChild(WD1.h('div', { class: 'ls-img', text: 'reading-room.jpg (a photo)' }));
-      setStatus(r.code + (r.code === 304 ? ': unchanged.' : ' OK, Content-Type: image/jpeg.'));
+      view.textContent = '';
+      view.appendChild(WD1.h('pre', { text: f.text }));
+      setStatus(r.code + (r.code === 304 ? ': unchanged.' : ' OK, Content-Type: ' + f.type + '.'));
     }
   }
 
-  // After the HTML arrives, the browser requests what the page links to.
-  function subrequest(pagePath, rel, client) {
-    const dir = pagePath.replace(/[^/]*$/, '');
-    const path = new URL(rel, 'http://x' + dir).pathname;
-    const r = serve(path, client, false);
-    return r.code === 200 || r.code === 304;
+  // The practice browser shows a page's words without its tags. The blank starter page has none.
+  function pageTitle(html) { const m = html.match(/<title>([\s\S]*?)<\/title>/i); return m ? m[1].trim() : ''; }
+  function pageText(html) {
+    return html.replace(/<title>[\s\S]*?<\/title>/gi, '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   }
-
-  const PAGES = {
-    home: { title: 'Harbor Street Library', body: 'Free books, free Wi-Fi and a quiet reading room by the water. Open six days a week.', img: true },
-    events: { title: 'Events', body: 'Story time on Saturday mornings, a teen coding club and a monthly book swap.', img: true },
-    report: { title: 'How this page reached you', body: 'A report on the URL, the DNS lookup and the HTTP request and response for this site.', img: false }
-  };
-  function renderPage(key, file, path, client, opts) {
-    const p = PAGES[key];
-    const cssOk = subrequest(path, 'css/styles.css', client);
-    const imgOk = p.img ? subrequest(path, 'images/reading-room.jpg', client) : false;
-    if (!faviconAsked) { faviconAsked = true; logLine(client, '/favicon.ico', 404); }
+  function renderPage(html) {
     view.textContent = '';
-    view.classList.toggle('styled', cssOk);
-    const link = (href, text) => {
-      const a = WD1.h('a', { href: '#', text });
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        const next = new URL(href, lastUrl).href;
-        navigate(next, { phone: opts.phone });
-      });
-      return a;
-    };
-    view.appendChild(WD1.h('div', { class: 'ls-hdr' },
-      WD1.h('p', { text: 'Harbor Street Library' }),
-      WD1.h('div', { class: 'ls-nav' }, WD1.h('ul', null,
-        WD1.h('li', null, link('index.html', 'Home')),
-        WD1.h('li', null, link('events.html', 'Events')),
-        WD1.h('li', null, link('report.html', 'Web Report'))))));
-    const main = WD1.h('div', null, WD1.h('div', { class: 'ls-h1', text: p.title }), WD1.h('p', { text: p.body }));
-    if (p.img) main.appendChild(imgOk ? WD1.h('div', { class: 'ls-img', text: 'reading-room.jpg' }) : WD1.h('span', { class: 'ls-broken', text: 'broken image' }));
-    if (key === 'home' && version > 1) main.appendChild(WD1.h('p', { text: 'New: the library now opens at 9 a.m. on Saturdays. (your saved change)' }));
-    view.appendChild(main);
+    const text = pageText(html);
+    if (text) view.appendChild(WD1.h('p', { text }));
   }
 
   function renderListing(dir, shown) {
-    view.classList.remove('styled');
     view.textContent = '';
     const ul = WD1.h('ul');
     children(dir).forEach((name) => {
@@ -1004,17 +1014,13 @@ WD1.ready(() => {
 
   function showFromDisk(p) {
     const f = findPath(p);
-    view.classList.remove('styled');
     view.textContent = '';
     if (!f || !FILES[f.path] || FILES[f.path].type !== 'text/html') {
       chrome('Your file couldn\'t be accessed', 'It may have been moved, edited or deleted.', 'ERR_FILE_NOT_FOUND');
       setStatus('');
       return;
     }
-    const pg = PAGES[FILES[f.path].page];
-    view.classList.add('styled');
-    view.appendChild(WD1.h('div', { class: 'ls-hdr' }, WD1.h('p', { text: 'Harbor Street Library' })));
-    view.appendChild(WD1.h('div', null, WD1.h('div', { class: 'ls-h1', text: pg.title }), WD1.h('p', { text: pg.body })));
+    renderPage(FILES[f.path].text);
     setStatus('Opened straight from the disk (file://). No server was involved: nothing appears in the Terminal log, and DevTools shows no status codes.');
   }
 
@@ -1029,8 +1035,11 @@ WD1.ready(() => {
     if (status.textContent.indexOf('phone') === -1 && !status.classList.contains('warn')) setStatus('Loaded on your phone. Look at the new log lines: the client address is the phone\'s.');
   });
   byId('ls-edit').addEventListener('click', () => {
-    version += 1;
-    setStatus('Saved a change to index.html. The next request for it gets a fresh 200 instead of 304.');
+    const f = FILES[SITE + '/index.html'];
+    if (!f) { setStatus('There is no ~/my-site/index.html to change yet. Make it first (step 3 above).', true); return; }
+    f.text = f.text.replace(/\n$/, '') + '<p>Hello!</p>\n';
+    f.v += 1;
+    setStatus('Saved a change to index.html: it now ends with <p>Hello!</p>. The next request for it gets a fresh 200 instead of 304.');
   });
   byId('ls-reset').addEventListener('click', () => { reset(); cmdIn.focus(); });
   blockedBox.addEventListener('change', () => {
