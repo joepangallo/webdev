@@ -64,7 +64,7 @@ What `course.js` adds automatically, so **do not** write these yourself:
 - the "Mark section complete" button and "Next" link at the end of each section
 - previous/next module links at the bottom
 
-`<body data-module>` must be one of `ch2` … `ch9` or `levelup`. Each section `id` must match the manifest in `course.js` (`s2-1` … `s2-6`, `s2-review`; `s3-1` … and so on; Level Up uses `sl-1` … `sl-6`, `sl-review`). Adding a section means adding it to `WD1.MODULES` too.
+`<body data-module>` must be one of `ch2` … `ch13` or `levelup`. Each section `id` must match the manifest in `course.js` (`s2-1` … `s2-6`, `s2-review`; `s3-1` … and so on; Level Up uses `sl-1` … `sl-6`, `sl-review`). Adding a section means adding it to `WD1.MODULES` too.
 
 ---
 
@@ -99,7 +99,7 @@ Write raw code inside a text script. It is dedented, highlighted and gets a copy
 </script>
 ```
 
-`data-lang` is `html`, `css` or `js`. `data-title` overrides the label. A literal `</script>` inside the sample must be written `<\/script>`; it is displayed correctly.
+`data-lang` is `html`, `css` or `js` for web code. These are highlighted too: `jsx` (React), `php` (on its own or mixed into HTML), `ejs` and `hbs` (server templates), `json`, `http` (raw requests and responses) and `shell` (terminal sessions; when any line starts with `$ `, the other lines are shown as output). Anything else (`text`) is shown plain. `data-title` overrides the label. A literal `</script>` inside the sample must be written `<\/script>`; it is displayed correctly.
 
 ### Result panels (what the code draws)
 
@@ -175,6 +175,43 @@ Add `"shuffle": true` to a question to shuffle its choices. Finishing a quiz wit
 - Check tests are function bodies called with `doc`, `win`, `$` (querySelector), `$$` (querySelectorAll → array), `style(selectorOrNode, prop)` (computed value) and `code` (`{html, css, js}` strings). Computed colors come back as `rgb(r, g, b)`.
 - The preview intercepts form submits and shows exactly what the browser would send (method, URL/body, name/value table, and a warning for controls without `name`). Links do not navigate; `#id` links scroll.
 - Student edits persist in localStorage; **Reset** restores the original.
+- A check may be **async**: return a promise (for example from an `async` function) and it is awaited for up to 4 seconds before the next check runs. Two helpers are in scope: `wait(ms)` and `until(fn, ms)`, which re-tries `fn` every 25 ms until it returns something truthy (or gives up after `ms`, default 2000). Use them for anything that happens after a timer, a fetch or a re-render: `"test": "return (async () => { $('#load').click(); return until(() => $$('li').length === 3); })()"`.
+- `<script type="text/plain" class="setup">` inside the playground holds hidden JavaScript that runs in the preview **before** the student's code: a fake `fetch`, sample data, a helper the exercise needs. It is not shown and is not counted in error line numbers.
+- A textarea may set `data-label` (the tab's name, such as `server.js` or `JSX`) and `data-hl` (the highlighter, such as `jsx`).
+
+#### Runtimes (React, PHP, Node.js)
+
+Some chapters run code a browser cannot run by itself. A **runtime** teaches the playground how. A page registers it before the components mount (in a script that is *not* inside `WD1.ready`), usually by loading a file after `course.js`, and a playground opts in with `data-runtime="name"`:
+
+```js
+WD1.runtimes.name = {
+  label: 'Browser',                          // the preview's label
+  preview: function () { /* … */ },          // runs inside the preview before the student's JS; a function is
+                                             // converted to text, so it must not use outside variables
+  transform: function (js) { return js; },   // rewrites the JS tab (JSX, for example); keep line breaks in place
+  render: function (code, request) {          // a server: turns code.php (say) into the response
+    return { html: '…', status: 200, headers: [['Content-Type', 'text/html']], logs: [['info', '…']] };
+  },
+  request: { method: 'GET', url: '/index.php' } // the first request a server answers
+};
+```
+
+- Inside the preview, `window.WD1_CODE` holds every tab's code (so a runtime can read a template tab).
+- A runtime with `render` makes a **server playground**: a request bar (method, URL with query string, POST body) sits above the preview, a status line with the response headers sits below it, links and form submits in the preview become new requests, redirects (`Location`) are followed, cookies from `Set-Cookie` are kept, and a response that is not `text/html` is shown as text. `data-url`, `data-method` and `data-body` set the first request. Server messages appear in the console panel.
+- Checks in a server playground also get `server`: `server.response` is the last response, and `server.request(method, url, body)` answers a request without changing what the student sees, returning `{ status, headers, html, contentType, redirects, request }`.
+- Playgrounds that use a runtime, a setup script or a non-web tab have no **Open in playground** button, because the full-page playground only knows HTML, CSS and JavaScript.
+- Every preview gets its own corner of `localStorage` and `sessionStorage` (keys are stored with a `wd1-pg:` prefix, and `clear()`, `length` and `key()` only see that corner), so student code can never wipe the course progress saved under `wd1:v1`.
+
+The chapters ship these runtimes in `assets/js/` (each page loads only the one it needs, after `course.js`):
+
+| File | `data-runtime` | What it gives a playground |
+|------|----------------|----------------------------|
+| `fake-fetch.js` | `fetch` | An offline practice API behind `fetch()` (Chapter 10). The setup script declares routes: `mockApi.route('GET', '/api/posts/:id', (req) => ({ status, body, headers, delay, fail }))`. A non-string `body` is sent as JSON; `fail: 'network'` makes `fetch()` reject like a dropped connection. Responses behave like real ones (`ok`, `status`, `headers.get()`, one-time `json()`/`text()`), every request is logged to the console, and `mockApi.calls` records them for checks. |
+| `react-lite.js` | `react` | An offline React subset (function and class components, the common hooks, Context, keyed DOM updates, React's own warnings) as `React` and `ReactDOM`, plus a JSX compiler for the JS tab. Use `<textarea data-lang="js" data-label="JSX" data-hl="jsx">` and an HTML tab with `<div id="root"></div>`. |
+| `php-lite.js` | `php` | A PHP 8 teaching subset written in JavaScript, as a server runtime (Chapter 12): use a `<textarea data-lang="php">` tab, and optionally `data-url` / `data-method` / `data-body` for the first request. Superglobals, `header()`, redirects, cookies and sessions work, and warnings look like PHP's. `WD1.php.run(source, options)` returns `{ output, status, headers, logs }` for page widgets. |
+| `node-lite.js` | `node` | A simulated Node.js (Chapter 13): `require()` for http, express (Express 5 behavior), fs, path, ws and common npm packages, plus EJS, Handlebars and Pug views. The preview shows a pretend HTTP client aimed at the port the code listens on. Settings go in the setup script (`__nodeFiles({...})`, `NODE_START_PATH`, `NODE_AUTO`, `NODE_WS_CLIENTS`); checks use `await win.__node.request(method, path, body)` and `win.__node.routes()`. |
+
+Each runtime file starts with a longer comment describing its full API. Its unit tests live in `tests/` and use only Node's built-in test runner: `node --test tests/*.test.js` (Node 18 or later, nothing to install; pass the files, not the folder).
 
 ### Match
 
@@ -286,6 +323,9 @@ Then wire it up in the page script inside `WD1.ready(() => { … })`.
 | `WD1.progress.isDone(id)` / `.setDone(id, bool)` / `.moduleStats(modId)` / `.overall()` | Section progress |
 | `WD1.MODULES`, `WD1.OBJECTIVES`, `WD1.section(id)`, `WD1.module(id)` | Course manifest |
 | `WD1.url(path)` | Absolute URL from the site root (works from any folder) |
+| `WD1.runtimes` | Playground runtimes by name (see Runtimes above) |
+| `WD1.parsePairs(str)` | `[[name, value], …]` from a query string or form body, decoded (`+` becomes a space) |
+| `WD1.buildPreviewDoc(code, id, {runtime, setup, server})` | The optional third argument adds a runtime, a setup script, or server-mode links and forms |
 
 Events: `document` receives `wd1:progress` and `wd1:refresh`. A quiz fires `quizdone`, a playground fires `checks`, a stepper fires `stepchange`, and tabs fire `tabchange`.
 

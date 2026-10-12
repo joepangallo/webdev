@@ -48,6 +48,10 @@
   --ch7: #1D7A55;
   --ch8: #2C5FA8;
   --ch9: #7444B8;
+  --ch10: #0E7C7B;
+  --ch11: #3D4FC6;
+  --ch12: #4F5D73;
+  --ch13: #2F7D32;
   --chl: #A92F68;
   --mod: var(--accent);
 
@@ -121,6 +125,10 @@
     --ch7: #6FD6A8;
     --ch8: #8DB4F2;
     --ch9: #C4A3F7;
+    --ch10: #5CCFC8;
+    --ch11: #A3ADFF;
+    --ch12: #AEBBD1;
+    --ch13: #8DD98F;
     --chl: #F27DB3;
     --code-bg: #10151E;
     --code-ink: #DDE2EB;
@@ -179,6 +187,10 @@
   --ch7: #6FD6A8;
   --ch8: #8DB4F2;
   --ch9: #C4A3F7;
+  --ch10: #5CCFC8;
+  --ch11: #A3ADFF;
+  --ch12: #AEBBD1;
+  --ch13: #8DD98F;
   --chl: #F27DB3;
   --code-bg: #10151E;
   --code-ink: #DDE2EB;
@@ -209,6 +221,10 @@ body[data-module="ch6"] { --mod: var(--ch6); }
 body[data-module="ch7"] { --mod: var(--ch7); }
 body[data-module="ch8"] { --mod: var(--ch8); }
 body[data-module="ch9"] { --mod: var(--ch9); }
+body[data-module="ch10"] { --mod: var(--ch10); }
+body[data-module="ch11"] { --mod: var(--ch11); }
+body[data-module="ch12"] { --mod: var(--ch12); }
+body[data-module="ch13"] { --mod: var(--ch13); }
 body[data-module="levelup"] { --mod: var(--chl); }
 
 /* ---------- Base ---------- */
@@ -261,6 +277,8 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 
 /* No ligatures in code: students must see the exact characters they type (`-->`, `===`, `=>`, `!=`). */
 code, kbd, samp, pre { font-family: var(--font-mono); font-size: .88em; font-variant-ligatures: none; }
+/* The same inside activities, whose buttons, chips and outputs often show code in the mono font. */
+.widget, .output, .pg-console, .quiz, .match, .order, .buckets, .fill { font-variant-ligatures: none; }
 :not(pre) > code {
   background: var(--surface-2);
   border: 1px solid var(--line);
@@ -653,6 +671,8 @@ details.reveal > :last-child { margin-bottom: 14px; }
 pre.bare { background: var(--code-bg); border: 1px solid var(--code-line); border-radius: var(--radius); padding: 14px 16px; overflow-x: auto; }
 
 .tk-com { color: var(--tk-com); font-style: italic; }
+/* Output lines in a terminal sample: dimmed, upright */
+.tk-com.tk-out { color: var(--ink-2); font-style: normal; }
 .tk-tag { color: var(--tk-tag); }
 .tk-attr { color: var(--tk-attr); }
 .tk-str { color: var(--tk-str); }
@@ -836,6 +856,21 @@ pre.bare { background: var(--code-bg); border: 1px solid var(--code-line); borde
 .pg-checks li.pass { color: var(--ink); }
 .pg-checks li.fail { color: var(--ink-2); }
 .pg-checks .all-pass { color: var(--good); font-weight: 700; }
+.pg-checks.is-checking h4::after { content: "checking…"; margin-left: auto; font-family: var(--font-mono); font-size: .7rem; font-weight: 400; color: var(--ink-3); }
+
+/* Server playgrounds: the request bar (an address bar) and the response status */
+.pg-request { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.pg-request .input { min-height: 34px; padding: 4px 8px; font-size: .8rem; }
+.pg-request select.input { flex: none; width: auto; }
+.pg-request input.input { flex: 1 1 180px; min-width: 0; }
+.pg-response { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 6px 12px; border-top: 1px solid var(--line); background: var(--surface-2); font-size: .8rem; }
+.pg-response .pill { font-family: var(--font-mono); }
+.pg-res-url { font-family: var(--font-mono); font-size: .75rem; color: var(--ink-2); overflow-wrap: anywhere; }
+.pg-res-headers { flex: 1 1 100%; }
+.pg-res-headers summary { cursor: pointer; color: var(--ink-3); font-size: .78rem; }
+.pg-res-headers dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; margin: 6px 0 2px; font-family: var(--font-mono); font-size: .74rem; }
+.pg-res-headers dt { color: var(--tk-prop); }
+.pg-res-headers dd { margin: 0; color: var(--ink); overflow-wrap: anywhere; }
 
 /* ---------- Match ---------- */
 

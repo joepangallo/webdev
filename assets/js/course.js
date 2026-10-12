@@ -143,6 +143,60 @@
       ]
     },
     {
+      id: 'ch10', num: '10', label: 'Chapter 10', title: 'JavaScript 3: Additional Features', href: 'ch10/index.html', page: 480,
+      blurb: 'Array functions, classes and modules, promises and async/await, browser APIs and fetching data from real web services.',
+      sections: [
+        { id: 's10-1', num: '10.1', title: 'Array Functions', page: 481, obj: [7] },
+        { id: 's10-2', num: '10.2', title: 'Prototypes, Classes, and Modules', page: 485, obj: [7, 8] },
+        { id: 's10-3', num: '10.3', title: 'Asynchronous Coding with JavaScript', page: 499, obj: [1, 7] },
+        { id: 's10-4', num: '10.4', title: 'Using Browser APIs', page: 524, obj: [7] },
+        { id: 's10-5', num: '10.5', title: 'Using External APIs', page: 529, obj: [1, 7, 8] },
+        { id: 's10-review', num: 'R', title: 'Chapter 10 Review', obj: [7, 8] }
+      ]
+    },
+    {
+      id: 'ch11', num: '11', label: 'Chapter 11', title: 'JavaScript 4: React', href: 'ch11/index.html', page: 545,
+      blurb: 'Components, JSX, props, state, forms, the build toolchain and the component lifecycle: building interfaces the React way.',
+      sections: [
+        { id: 's11-1', num: '11.1', title: 'JavaScript Front-End Frameworks', page: 546, obj: [8] },
+        { id: 's11-2', num: '11.2', title: 'Introducing React', page: 551, obj: [7, 8] },
+        { id: 's11-3', num: '11.3', title: 'Props, State, Behavior, and Forms', page: 557, obj: [6, 7] },
+        { id: 's11-4', num: '11.4', title: 'React Build Approach', page: 577, obj: [8] },
+        { id: 's11-5', num: '11.5', title: 'React Lifecycle', page: 582, obj: [7] },
+        { id: 's11-6', num: '11.6', title: 'Extending React', page: 584, obj: [7, 8] },
+        { id: 's11-review', num: 'R', title: 'Chapter 11 Review', obj: [7, 8] }
+      ]
+    },
+    {
+      id: 'ch12', num: '12', label: 'Chapter 12', title: 'Server-Side Development 1: PHP', href: 'ch12/index.html', page: 603,
+      blurb: 'What runs on the server and why, then PHP itself: variables, control flow, functions, arrays, classes, form data and HTTP headers.',
+      sections: [
+        { id: 's12-1', num: '12.1', title: 'What Is Server-Side Development?', page: 604, obj: [1] },
+        { id: 's12-2', num: '12.2', title: 'PHP Language Fundamentals', page: 611, obj: [1] },
+        { id: 's12-3', num: '12.3', title: 'Program Control', page: 620, obj: [1] },
+        { id: 's12-4', num: '12.4', title: 'Functions', page: 627, obj: [1] },
+        { id: 's12-5', num: '12.5', title: 'Arrays', page: 635, obj: [1] },
+        { id: 's12-6', num: '12.6', title: 'Classes and Objects', page: 643, obj: [1] },
+        { id: 's12-7', num: '12.7', title: '$_GET and $_POST Superglobal Arrays', page: 652, obj: [1, 6] },
+        { id: 's12-8', num: '12.8', title: 'Working with the HTTP Header', page: 664, obj: [1] },
+        { id: 's12-review', num: 'R', title: 'Chapter 12 Review', obj: [1] }
+      ]
+    },
+    {
+      id: 'ch13', num: '13', label: 'Chapter 13', title: 'Server-Side Development 2: Node.js', href: 'ch13/index.html', page: 673,
+      blurb: 'JavaScript on the server: Node and npm, Express routes, JSON APIs with full CRUD, real-time web sockets, view engines and serverless functions.',
+      sections: [
+        { id: 's13-1', num: '13.1', title: 'Introducing Node.js', page: 674, obj: [1] },
+        { id: 's13-2', num: '13.2', title: 'First Steps with Node', page: 682, obj: [1, 8] },
+        { id: 's13-3', num: '13.3', title: 'Creating an API in Node', page: 687, obj: [1, 7] },
+        { id: 's13-4', num: '13.4', title: 'Creating a CRUD API', page: 692, obj: [1, 7] },
+        { id: 's13-5', num: '13.5', title: 'Working with Web Sockets', page: 696, obj: [1, 7] },
+        { id: 's13-6', num: '13.6', title: 'View Engines', page: 700, obj: [1, 8] },
+        { id: 's13-7', num: '13.7', title: 'Serverless Approaches', page: 702, obj: [1, 8] },
+        { id: 's13-review', num: 'R', title: 'Chapter 13 Review', obj: [1, 8] }
+      ]
+    },
+    {
       id: 'levelup', num: 'L', label: 'Level Up', title: 'Responsive Layout & JavaScript', href: 'levelup/index.html', page: null,
       blurb: 'An optional extra module: a faster second pass through Flexbox, Grid, media queries, JavaScript, the DOM and the tooling ecosystem.',
       sections: [
@@ -739,7 +793,7 @@
 
   const JS_KW = new Set(('const let var function return if else for while do switch case break continue new this class extends ' +
     'import export from default try catch finally throw typeof instanceof in of async await null undefined true false yield delete void super static').split(' '));
-  function hlJS(src) {
+  function hlJS(src, jsx) {
     let out = '', i = 0, prevSig = '';
     const n = src.length;
     const at = (re) => { re.lastIndex = i; const m = re.exec(src); return m ? m[0] : null; };
@@ -763,17 +817,196 @@
         out += cls ? span(cls, t) : esc(t);
         i += t.length; prevSig = JS_KW.has(t) && t !== 'this' ? '(' : 'x'; continue;
       }
+      // JSX: a < where an expression can start, followed by a tag name or > (a fragment).
+      if (jsx && src[i] === '<' && /[A-Za-z>]/.test(src[i + 1] || '') && (!prevSig || /[(,=:?[{};&|!>]/.test(prevSig))) {
+        const r = hlJSXAt(src, i);
+        out += r.html; i = r.end; prevSig = 'x'; continue;
+      }
       prevSig = src[i];
       out += span('punct', src[i]); i++;
     }
     return out;
   }
 
+  // The index of the } that closes the { at src[i], skipping strings and comments
+  // (src.length when it is never closed). Used to find JSX {expressions}.
+  function matchBrace(src, i) {
+    const n = src.length;
+    let depth = 0;
+    for (; i < n; i++) {
+      const c = src[i];
+      if (c === '"' || c === "'" || c === '`') {
+        for (i++; i < n && src[i] !== c; i++) if (src[i] === '\\') i++;
+        continue;
+      }
+      if (c === '/' && src[i + 1] === '/') { while (i < n && src[i] !== '\n') i++; continue; }
+      if (c === '/' && src[i + 1] === '*') { const e = src.indexOf('*/', i + 2); i = e < 0 ? n : e + 1; continue; }
+      if (c === '{') depth++;
+      else if (c === '}' && --depth === 0) return i;
+    }
+    return n;
+  }
+
+  // One JSX element starting at the < in src[start], with all of its children.
+  // Returns the highlighted HTML and the index just past the element.
+  function hlJSXAt(src, start) {
+    const n = src.length;
+    let i = start, out = '', depth = 0;
+    const reName = /[A-Za-z_$][\w$.:-]*/y, reWs = /\s+/y, reStr = /"[^"]*"?|'[^']*'?/y, reText = /[^<{]+/y;
+    const at = (re) => { re.lastIndex = i; const m = re.exec(src); return m ? m[0] : null; };
+    const expr = () => {
+      const end = matchBrace(src, i);
+      out += span('punct', '{') + hlJS(src.slice(i + 1, end), true) + (end < n ? span('punct', '}') : '');
+      i = Math.min(n, end + 1);
+    };
+    // One tag: +1 when it opens an element, -1 when it closes one, 0 when it is self-closing.
+    const tag = () => {
+      let closing = false, t;
+      out += span('punct', '<'); i++;
+      if (src[i] === '/') { out += span('punct', '/'); i++; closing = true; }
+      if ((t = at(reName))) { out += span(/^[A-Z]/.test(t) ? 'fn' : 'tag', t); i += t.length; }
+      while (i < n) {
+        if ((t = at(reWs))) { out += esc(t); i += t.length; continue; }
+        if (src.startsWith('/>', i)) { out += span('punct', '/>'); i += 2; return 0; }
+        if (src[i] === '>') { out += span('punct', '>'); i++; break; }
+        if (src[i] === '{') { expr(); continue; }
+        if (src[i] === '=') { out += span('punct', '='); i++; continue; }
+        if ((src[i] === '"' || src[i] === "'") && (t = at(reStr))) { out += span('str', t); i += t.length; continue; }
+        if ((t = at(reName))) { out += span('attr', t); i += t.length; continue; }
+        out += esc(src[i]); i++;
+      }
+      return closing ? -1 : 1;
+    };
+    do {
+      if (src[i] === '<') { depth += tag(); continue; }
+      if (src[i] === '{') { expr(); continue; }
+      const t = at(reText) || src[i];
+      out += esc(t); i += t.length;
+    } while (i < n && depth > 0);
+    return { html: out, end: i };
+  }
+
+  // PHP code (the part between <?php and ?>). $variables use the attribute color, and
+  // the variables inside a "double-quoted string" are picked out too, because PHP fills them in.
+  const PHP_KW = new Set(('echo print function fn return if elseif else endif foreach endforeach as for endfor while endwhile do ' +
+    'switch endswitch case default break continue class new public private protected static extends implements interface ' +
+    'abstract final const readonly enum true false null array list isset unset empty include include_once require ' +
+    'require_once namespace use try catch finally throw match global instanceof and or xor self parent declare').split(' '));
+  function hlPHP(src) {
+    let out = '', i = 0;
+    const n = src.length;
+    const at = (re) => { re.lastIndex = i; const m = re.exec(src); return m ? m[0] : null; };
+    const reCom = /\/\/[^\n]*|#(?!\[)[^\n]*|\/\*[\s\S]*?(?:\*\/|$)/y, reWs = /\s+/y;
+    const reDq = /"(?:[^"\\]|\\[\s\S])*"?/y, reSq = /'(?:[^'\\]|\\[\s\S])*'?/y;
+    const reVar = /\$\$?[A-Za-z_]\w*/y, reNum = /(?:0[xX][0-9a-fA-F]+|\d+(?:\.\d+)?(?:e[+-]?\d+)?)\b/y, reId = /[A-Za-z_\\][\w\\]*/y;
+    let prev = '';
+    while (i < n) {
+      let t;
+      if ((t = at(reWs))) { out += esc(t); i += t.length; continue; }
+      if ((t = at(reCom))) { out += span('com', t); i += t.length; continue; }
+      if ((t = at(reDq))) {
+        out += '<span class="tk-str">' + t.split(/(\{\$[^}]*\}|\$[A-Za-z_]\w*(?:->[A-Za-z_]\w*|\[[^\]\n]*\])?)/)
+          .map((p, k) => (k % 2 ? span('attr', p) : esc(p))).join('') + '</span>';
+        i += t.length; prev = 'x'; continue;
+      }
+      if ((t = at(reSq))) { out += span('str', t); i += t.length; prev = 'x'; continue; }
+      if ((t = at(reVar))) { out += span('attr', t); i += t.length; prev = 'x'; continue; }
+      if ((t = at(reNum))) { out += span('num', t); i += t.length; prev = 'x'; continue; }
+      if ((t = at(reId))) {
+        let j = i + t.length;
+        while (j < n && (src[j] === ' ' || src[j] === '\t')) j++;
+        const kw = PHP_KW.has(t.toLowerCase()) && prev !== '->' && prev !== '::';
+        out += kw ? span('kw', t) : src[j] === '(' ? span('fn', t) : esc(t);
+        i += t.length; prev = 'x'; continue;
+      }
+      if (src.startsWith('->', i) || src.startsWith('::', i)) { prev = src.slice(i, i + 2); out += span('punct', prev); i += 2; continue; }
+      prev = src[i]; out += span('punct', src[i]); i++;
+    }
+    return out;
+  }
+
+  // HTML with server code mixed in (PHP's <?php ?>, EJS's <% %>, Handlebars' {{ }}).
+  // Each code block is swapped for a placeholder, the HTML is highlighted around the
+  // placeholders (so a block inside an attribute value still works), then each
+  // placeholder is replaced by the block highlighted in its own language.
+  function hlEmbedded(src, open, close, inner) {
+    const blocks = [];
+    let html = '', i = 0;
+    while (i < src.length) {
+      open.lastIndex = i;
+      const m = open.exec(src);
+      if (!m) { html += src.slice(i); break; }
+      html += src.slice(i, m.index);
+      close.lastIndex = m.index + m[0].length;
+      const c = close.exec(src);
+      const end = c ? c.index : src.length;
+      blocks.push(span('at', m[0]) + inner(src.slice(m.index + m[0].length, end)) + (c ? span('at', c[0]) : ''));
+      html += '' + (blocks.length - 1) + '';
+      i = c ? c.index + c[0].length : src.length;
+    }
+    // A placeholder inside <script> or <style> may have been split across token spans; the
+    // spans between its two markers always pair up, so dropping them keeps the HTML balanced.
+    return hlHTML(html).replace(/(?:<\/?span[^>]*>)*(\d+)(?:<\/?span[^>]*>)*/g, (x, k) => blocks[+k]);
+  }
+
+  // Terminal sessions. When any line starts with "$ ", only those lines are commands and
+  // the rest is output (dimmed); otherwise every line is a command.
+  function hlShell(src) {
+    const lines = src.split('\n');
+    const prompted = lines.some((l) => /^\s*\$ /.test(l));
+    const cmd = (s) => {
+      let out = '', first = true, m;
+      const re = /(\s+)|("(?:[^"\\]|\\.)*"?|'[^']*'?)|(#.*$)|(&&|\|\|?|;|>>?)|(--?[A-Za-z][\w-]*)|([^\s"'#;|&>]+)/y;
+      while (re.lastIndex < s.length && (m = re.exec(s))) {
+        if (m[1]) out += esc(m[1]);
+        else if (m[2]) out += span('str', m[2]);
+        else if (m[3]) out += span('com', m[3]);
+        else if (m[4]) { out += span('punct', m[4]); first = true; }
+        else if (m[5]) out += span('attr', m[5]);
+        else { out += first ? span('fn', m[6]) : esc(m[6]); first = false; }
+      }
+      return out + esc(s.slice(re.lastIndex));
+    };
+    return lines.map((l) => {
+      if (/^\s*#/.test(l)) return span('com', l);
+      const m = l.match(/^(\s*)\$ /);
+      if (m) return esc(m[1]) + span('punct', '$ ') + cmd(l.slice(m[0].length));
+      return prompted ? span('com', l).replace('class="tk-com"', 'class="tk-com tk-out"') : cmd(l);
+    }).join('\n');
+  }
+
+  // Raw HTTP messages: the request or status line, the headers, then the body.
+  function hlHTTP(src) {
+    const lines = src.split('\n');
+    let out = [], k = 0;
+    const first = lines[0] || '';
+    let m;
+    if ((m = first.match(/^(\s*)(HTTP\/[\d.]+)(\s+)(\d{3})(.*)$/))) out.push(esc(m[1]) + span('punct', m[2]) + esc(m[3]) + span('num', m[4]) + span('kw', m[5]));
+    else if ((m = first.match(/^(\s*)([A-Z]+)(\s+)(\S+)(.*)$/))) out.push(esc(m[1]) + span('kw', m[2]) + esc(m[3]) + span('str', m[4]) + span('punct', m[5]));
+    else out.push(esc(first));
+    for (k = 1; k < lines.length && lines[k].trim(); k++) {
+      const h2 = lines[k].match(/^(\s*)([^:\s][^:]*)(:)(.*)$/);
+      out.push(h2 ? esc(h2[1]) + span('prop', h2[2]) + span('punct', h2[3]) + span('val', h2[4]) : esc(lines[k]));
+    }
+    if (k < lines.length) {
+      const body = lines.slice(k).join('\n');
+      const t = body.trim();
+      out.push(/^[{[]/.test(t) ? hlJS(body) : /^</.test(t) ? hlHTML(body) : esc(body));
+    }
+    return out.join('\n');
+  }
+
   WD1.highlight = function (code, lang) {
     lang = (lang || 'html').toLowerCase();
-    if (lang === 'css') return hlCSS(code);
-    if (lang === 'js' || lang === 'javascript' || lang === 'json') return hlJS(code);
+    if (lang === 'css' || lang === 'scss' || lang === 'less') return hlCSS(code);
+    if (lang === 'js' || lang === 'javascript' || lang === 'json' || lang === 'mjs') return hlJS(code);
+    if (lang === 'jsx') return hlJS(code, true);
     if (lang === 'html' || lang === 'xml' || lang === 'svg') return hlHTML(code);
+    if (lang === 'php') return /<\?/.test(code) ? hlEmbedded(code, /<\?(?:php\b|=)?/g, /\?>/g, hlPHP) : hlPHP(code);
+    if (lang === 'ejs') return hlEmbedded(code, /<%[=\-_#]?/g, /[-_]?%>/g, (s) => hlJS(s));
+    if (lang === 'hbs' || lang === 'handlebars') return hlEmbedded(code, /\{\{\{?[#\/!>^]?/g, /\}?\}\}/g, (s) => hlJS(s));
+    if (lang === 'shell' || lang === 'bash' || lang === 'sh' || lang === 'terminal' || lang === 'console') return hlShell(code);
+    if (lang === 'http') return hlHTTP(code);
     return esc(code);
   };
 
@@ -1347,14 +1580,66 @@
     const d = e.data;
     if (!d || typeof d !== 'object' || !d.wd1pg) return;
     const pg = pgRegistry.get(d.wd1pg);
-    if (pg) pg.log(d.type, d.args || []);
+    if (!pg) return;
+    // Only the playground's own preview may log to its console or send it to a new page.
+    if (pg.frame && e.source !== pg.frame.contentWindow) return;
+    if (d.type === 'nav') { if (pg.nav) pg.nav(d); return; }
+    pg.log(d.type, d.args || []);
   });
 
   // Runs INSIDE the preview iframe. Must stay ES5-safe and self-contained.
   // lineMap says where the JS tab (and, for fragments, the HTML tab) start in the
   // preview document, so error line numbers match the lines the student typed.
-  function previewHelper(pgId, lineMap) {
-    var post = function (type, args) { try { parent.postMessage({ wd1pg: pgId, type: type, args: args }, '*'); } catch (e) { /* ignore */ } };
+  function previewHelper(pgId, lineMap, opts) {
+    opts = opts || {};
+    // A preview shares this site's storage, so student code gets its own corner of it: keys are
+    // stored with a prefix, and clear(), length and key() only see that corner. A student's
+    // localStorage.clear() therefore never wipes the course progress saved under wd1:v1.
+    // Property access (localStorage.theme = 'dark', Object.keys(localStorage)) works too.
+    (function () {
+      var P = 'wd1-pg:';
+      ['localStorage', 'sessionStorage'].forEach(function (name) {
+        var real;
+        try { real = window[name]; if (!real) return; } catch (e) { return; }
+        var keys = function () {
+          var out = [];
+          for (var i = 0; i < real.length; i++) { var k = real.key(i); if (k && k.indexOf(P) === 0) out.push(k.slice(P.length)); }
+          return out;
+        };
+        var api = {
+          getItem: function (k) { return real.getItem(P + String(k)); },
+          setItem: function (k, v) { real.setItem(P + String(k), String(v)); },
+          removeItem: function (k) { real.removeItem(P + String(k)); },
+          clear: function () { keys().forEach(function (k) { real.removeItem(P + k); }); },
+          key: function (n) { var ks = keys(); return n >= 0 && n < ks.length ? ks[n] : null; }
+        };
+        var target = {};
+        try { if (typeof Storage !== 'undefined') Object.setPrototypeOf(target, Storage.prototype); } catch (e) { /* ignore */ }
+        var shim = typeof Proxy === 'undefined' ? api : new Proxy(target, {
+          get: function (t, p) {
+            if (p === 'length') return keys().length;
+            if (typeof p !== 'string' || Object.prototype.hasOwnProperty.call(api, p)) return api[p];
+            if (p in Object.prototype) return Object.prototype[p];
+            var v = real.getItem(P + p);
+            return v === null ? undefined : v;
+          },
+          set: function (t, p, v) { if (typeof p === 'string') real.setItem(P + p, String(v)); return true; },
+          has: function (t, p) { return typeof p === 'string' && (p in api || p === 'length' || real.getItem(P + p) !== null); },
+          deleteProperty: function (t, p) { if (typeof p === 'string') real.removeItem(P + p); return true; },
+          ownKeys: function () { return keys(); },
+          getOwnPropertyDescriptor: function (t, p) {
+            var v = typeof p === 'string' ? real.getItem(P + p) : null;
+            return v === null ? undefined : { value: v, writable: true, enumerable: true, configurable: true };
+          }
+        });
+        try { Object.defineProperty(window, name, { configurable: true, get: function () { return shim; } }); } catch (e) { /* leave it */ }
+      });
+    })();
+    var post = function (type, args, extra) {
+      var msg = { wd1pg: pgId, type: type, args: args };
+      if (extra) for (var k in extra) msg[k] = extra[k];
+      try { parent.postMessage(msg, '*'); } catch (e) { /* ignore */ }
+    };
     // Cap the output of one run, so a runaway loop full of console.log cannot flood the console panel.
     var sent = { log: 0, error: 0 }, LIMIT = { log: 1000, error: 100 };
     var send = function (type, args) {
@@ -1377,9 +1662,34 @@
         }
         if (v instanceof Error) return v.name + ': ' + v.message;
         if (typeof Event !== 'undefined' && v instanceof Event) return v.constructor.name + ' { type: "' + v.type + '" }';
-        return JSON.stringify(v, null, 1).replace(/\n\s*/g, ' ');
+        if (typeof v === 'symbol' || typeof v === 'bigint') return typeof v === 'bigint' ? v + 'n' : v.toString();
+        // A promise is still pending at the moment it is logged in nearly every real case.
+        if (typeof Promise !== 'undefined' && v instanceof Promise) return 'Promise {<pending>}';
+        if (typeof Map !== 'undefined' && v instanceof Map) {
+          var mp = []; v.forEach(function (val, key) { mp.push(fmtIn(key) + ' => ' + fmtIn(val)); });
+          return 'Map(' + v.size + ') {' + mp.join(', ') + '}';
+        }
+        if (typeof Set !== 'undefined' && v instanceof Set) {
+          var st = []; v.forEach(function (val) { st.push(fmtIn(val)); });
+          return 'Set(' + v.size + ') {' + st.join(', ') + '}';
+        }
+        if (v instanceof Date) return isNaN(v) ? 'Invalid Date' : v.toString();
+        var json = JSON.stringify(v, function (k, x) {
+          if (typeof x === 'function') return '__wd1fn__' + (x.name || 'anonymous') + '__';
+          if (x === undefined) return '__wd1undef__';
+          return x;
+        }, 1);
+        json = json === undefined ? String(v) : json.replace(/\n\s*/g, ' ').replace(/"__wd1undef__"/g, 'undefined')
+          .replace(/"__wd1fn__([\w$]*)__"/g, 'ƒ $1()');
+        // Objects made by a class (or a constructor function) show the class name first, like DevTools.
+        var proto = Object.getPrototypeOf(v);
+        var cname = proto && proto.constructor && proto.constructor.name;
+        if (cname && cname !== 'Object' && cname !== 'Array' && typeof v === 'object') return cname + ' ' + json;
+        return json;
       } catch (e) { return String(v); }
     };
+    // Strings inside a Map or Set keep their quotes, as in DevTools.
+    var fmtIn = function (v) { return typeof v === 'string' ? JSON.stringify(v) : fmt(v); };
     ['log', 'info', 'warn', 'error'].forEach(function (k) {
       var orig = console[k];
       console[k] = function () {
@@ -1402,6 +1712,11 @@
         }
       }
       send('error', [e.message + where]);
+    });
+    // A rejected promise nobody handled (for example a failed await with no try/catch).
+    window.addEventListener('unhandledrejection', function (e) {
+      var r = e.reason;
+      send('error', ['Uncaught (in promise) ' + (r instanceof Error ? r.name + ': ' + r.message : fmt(r))]);
     });
 
     var panel = null;
@@ -1435,6 +1750,11 @@
       }
       if (/^javascript:/i.test(href)) return;
       e.preventDefault();
+      // A server playground (PHP, for example) follows links to its own pages by running the server again.
+      if (opts.server && !/^[a-z][a-z0-9+.-]*:|^\/\//i.test(href) && a.target !== '_blank') {
+        post('nav', [], { method: 'GET', action: href, body: '', kind: 'link' });
+        return;
+      }
       note('<b>Link clicked:</b> <code>' + escH(href) + '</code><br>Links don\'t navigate inside this preview' +
         (a.target === '_blank' ? ' (it would open in a new tab).' : '.'));
       send('info', ['Link clicked → ' + href]);
@@ -1450,6 +1770,12 @@
       var pairs = [];
       fd.forEach(function (v, k) { pairs.push([k, typeof v === 'string' ? v : (v && v.name ? v.name : '(no file)')]); });
       var enc = pairs.map(function (p) { return encodeURIComponent(p[0]) + '=' + encodeURIComponent(p[1]).replace(/%20/g, '+'); }).join('&');
+      // A server playground receives the request and answers it, just like a real server would.
+      var rawAction = f.getAttribute('action') || '';
+      if (opts.server && !/^[a-z][a-z0-9+.-]*:|^\/\//i.test(rawAction)) {
+        post('nav', [], { method: method === 'POST' ? 'POST' : 'GET', action: rawAction, body: enc, kind: 'form' });
+        return;
+      }
       var unnamed = Array.prototype.filter.call(f.querySelectorAll('input, select, textarea'), function (c) {
         return !c.name && !/^(submit|button|reset|image)$/i.test(c.type);
       }).length;
@@ -1555,12 +1881,34 @@
     }
   };
 
-  WD1.buildPreviewDoc = function (code, pgId) {
-    const html = code.html || '', css = code.css || '', js = code.js || '';
+  // opts (all optional): runtime, a playground runtime (see WD1.runtimes) whose preview code
+  // runs before the student's JS and whose transform rewrites it; setup, extra hidden JS that
+  // runs before the student's JS; server, true when links and forms should ask the playground
+  // to run the server again instead of showing a note.
+  WD1.buildPreviewDoc = function (code, pgId, opts) {
+    opts = opts || {};
+    const rt = opts.runtime || null;
+    const html = code.html || '', css = code.css || '';
+    let js = code.js || '';
     // The HTML parser treats \r\n and a lone \r as one line break each, so count them the same way.
     const lines = (s) => (s.match(/\r\n|\r|\n/g) || []).length;
-    const helperFor = (map) => '<script>(' + previewHelper.toString() + ')(' + JSON.stringify(pgId || 'x') + ', ' + JSON.stringify(map) + ');<\/script>' +
-      (js ? '<script>' + LOOP_GUARD + '<\/script>' : '');
+    const safeScript = (s) => '<script>' + String(s).replace(/<\/script/gi, '<\\/script') + '<\/script>';
+    const rtCode = rt && rt.preview ? (typeof rt.preview === 'function' ? '(' + rt.preview.toString() + ')();' : String(rt.preview)) : '';
+    // Hidden setup: every tab's code as window.WD1_CODE (so a runtime can read, say, a template
+    // tab), then the runtime, then the playground's own setup script.
+    const codeData = rt ? safeScript('window.WD1_CODE = ' + JSON.stringify(code).replace(/</g, '\\u003c') + ';') : '';
+    const setup = codeData + (rtCode ? safeScript(rtCode) : '') + (opts.setup ? safeScript(opts.setup) : '');
+    // A transform (JSX, for example) rewrites the student's JS; it keeps line breaks where they
+    // were, so error line numbers still match. A syntax error it finds is shown in the console.
+    let transformError = '';
+    if (js && rt && typeof rt.transform === 'function') {
+      try { js = rt.transform(js); } catch (e) {
+        transformError = safeScript('console.error(' + JSON.stringify((e.name || 'SyntaxError') + ': ' + e.message + (e.line ? ' (JS line ' + e.line + ')' : '')) + ');');
+        js = '';
+      }
+    }
+    const helperFor = (map) => '<script>(' + previewHelper.toString() + ')(' + JSON.stringify(pgId || 'x') + ', ' + JSON.stringify(map) + ', ' + JSON.stringify({ server: !!opts.server }) + ');<\/script>' +
+      (js ? '<script>' + LOOP_GUARD + '<\/script>' : '') + setup + transformError;
     const style = css ? '<style>\n' + css + '\n</style>' : '';
 
     // Build the document as a list of pieces: [text, tab, line in that tab where the piece starts].
@@ -1609,23 +1957,112 @@
     return parts.map((p) => (p === HELPER ? helper : p[0])).join('');
   };
 
-  const LANG_LABEL = { html: 'HTML', css: 'CSS', js: 'JS' };
+  const LANG_LABEL = { html: 'HTML', css: 'CSS', js: 'JS', php: 'PHP', ejs: 'EJS', hbs: 'Handlebars' };
+  // Tab order: server templates first (they produce the HTML), then the usual three.
+  const LANG_ORDER = ['php', 'ejs', 'hbs', 'html', 'css', 'js'];
+
+  /* ---------- Playground runtimes ----------
+     A runtime teaches the playground something a browser cannot do on its own.
+     A page registers one BEFORE the components mount (in a script that is not
+     inside WD1.ready), and a playground opts in with data-runtime="name":
+
+       WD1.runtimes.name = {
+         label: 'Preview label, e.g. "Browser"',
+         // Runs inside the preview before the student's JS. A function is turned
+         // into text and called there, so it must not use outside variables.
+         preview: function () { ... },
+         // Rewrites the JS tab before it runs (JSX, for example). Keep every line
+         // break where it was, so error line numbers still match.
+         transform: function (js) { return js; },
+         // A server. Turns the tabs (code.php, for example) into the response the
+         // browser receives. request = { method, url, path, query, body, cookies }.
+         // Return { html, status, headers: [[name, value]], logs: [[type, text]] }.
+         render: function (code, request) { ... },
+         request: { method: 'GET', url: '/index.php' }   // the first request
+       };
+
+     A server runtime adds a request bar above the preview, follows redirects,
+     keeps cookies, and turns links and form submits in the preview into new
+     requests. Its checks receive a `server` object: server.response (the last
+     response) and server.request(method, url, body), which answers a request
+     without changing what the student sees. */
+  WD1.runtimes = WD1.runtimes || {};
+
+  const STATUS_TEXT = { 200: 'OK', 201: 'Created', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 303: 'See Other',
+    304: 'Not Modified', 307: 'Temporary Redirect', 308: 'Permanent Redirect', 400: 'Bad Request', 401: 'Unauthorized',
+    403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 422: 'Unprocessable Content',
+    500: 'Internal Server Error', 503: 'Service Unavailable' };
+
+  // Resolves a link or form action against the current path, the way a browser would.
+  function resolvePath(base, ref) {
+    base = base || '/';
+    if (!ref) return base;
+    if (ref.charAt(0) === '?') return base.split('?')[0] + ref;
+    if (ref.charAt(0) === '#') return base;
+    const [refPath, refQuery] = ref.split(/\?(.*)/s);
+    let parts;
+    if (refPath.charAt(0) === '/') parts = refPath.split('/');
+    else {
+      parts = base.split('?')[0].split('/');
+      parts.pop();
+      parts = parts.concat(refPath.split('/'));
+    }
+    const out = [];
+    parts.forEach((p, k) => {
+      if (p === '..') { if (out.length > 1) out.pop(); }
+      else if (p !== '.' && (p !== '' || k === 0 || k === parts.length - 1)) out.push(p);
+    });
+    let path = out.join('/');
+    if (path.charAt(0) !== '/') path = '/' + path;
+    return path + (refQuery !== undefined ? '?' + refQuery : '');
+  }
+
+  function makeRequest(method, url, body, cookies) {
+    url = url || '/';
+    if (url.charAt(0) !== '/') url = '/' + url;
+    const q = url.indexOf('?');
+    return {
+      method: (method || 'GET').toUpperCase(),
+      url,
+      path: q < 0 ? url : url.slice(0, q),
+      query: q < 0 ? '' : url.slice(q + 1),
+      body: body || '',
+      cookies: Object.assign({}, cookies || {})
+    };
+  }
+
+  // name=value pairs from a query string or a form body: [['name', 'Ana'], ['tags[]', 'a']]
+  WD1.parsePairs = function (str) {
+    return String(str || '').split('&').filter(Boolean).map((p) => {
+      const i = p.indexOf('=');
+      const dec = (s) => { try { return decodeURIComponent(s.replace(/\+/g, ' ')); } catch (e) { return s; } };
+      return i < 0 ? [dec(p), ''] : [dec(p.slice(0, i)), dec(p.slice(i + 1))];
+    });
+  };
 
   function mountPlayground(el) {
     const id = autoId(el, 'pg');
+    const rtName = el.dataset.runtime;
+    const rt = rtName ? WD1.runtimes[rtName] || null : null;
+    if (rtName && !rt) console.error('[WD1] Unknown playground runtime "' + rtName + '". Register it before the page loads.');
+    const setupEl = $(':scope > script.setup', el);
+    const setupCode = setupEl ? dedent(unescapeScript(setupEl.textContent)) : '';
     const areas = $$(':scope > textarea[data-lang]', el);
-    const orig = {};
-    areas.forEach((t) => { orig[t.dataset.lang] = dedent(t.value); });
+    const orig = {}, meta = {};
+    areas.forEach((t) => { orig[t.dataset.lang] = dedent(t.value); meta[t.dataset.lang] = { label: t.dataset.label, hl: t.dataset.hl }; });
     if (!areas.length) orig.html = '';
-    const langs = ['html', 'css', 'js'].filter((l) => l in orig);
+    const langs = LANG_ORDER.filter((l) => l in orig).concat(Object.keys(orig).filter((l) => !LANG_ORDER.includes(l)));
     const saved = WD1.store.get('pg', id);
     const code = Object.assign({}, orig, saved && typeof saved === 'object' ? saved : {});
     const checksEl = $(':scope > script.checks', el);
     let checks = null;
     if (checksEl) { try { checks = JSON.parse(checksEl.textContent); } catch (e) { console.error('[WD1] checks JSON', e); } }
     const height = parseInt(el.dataset.height, 10) || 300;
-    const wantConsole = el.dataset.console === 'true' || (el.dataset.console !== 'false' && langs.includes('js'));
+    const isServer = !!(rt && typeof rt.render === 'function');
+    const wantConsole = el.dataset.console === 'true' || (el.dataset.console !== 'false' && (langs.includes('js') || isServer));
     const title = el.dataset.title || 'Try it';
+    // The full-page playground knows only plain HTML, CSS and JS.
+    const portable = !rt && !setupCode && langs.every((l) => /^(html|css|js)$/.test(l));
 
     el.innerHTML = '';
     el.classList.add('widget', 'playground');
@@ -1636,25 +2073,28 @@
       Object.assign(code, orig);
       editors.forEach((ed, l) => ed.set(orig[l]));
       WD1.store.set('pg', id, undefined);
+      if (isServer) { Object.keys(cookies).forEach((k) => delete cookies[k]); setRequest(firstRequest()); }
       run();
     });
-    const openB = iconBtn('open', 'Open in playground', 'ghost', () => {
+    const openB = portable ? iconBtn('open', 'Open in playground', 'ghost', () => {
       try { localStorage.setItem('wd1:handoff', JSON.stringify({ html: code.html || '', css: code.css || '', js: code.js || '', title })); } catch (e) { /* ignore */ }
       window.open(WD1.url('tools/playground.html#handoff'), '_blank');
-    });
-    frame(el, 'Playground', title, [resetB, openB]);
+    }) : null;
+    frame(el, 'Playground', title, [resetB, openB].filter(Boolean));
 
     const tabs = h('div', { class: 'pg-tabs', role: 'tablist' });
     const edCol = h('div', { class: 'pg-editor-col' }, tabs);
     const editors = new Map();
     let active = langs[0];
     langs.forEach((l) => {
-      const tab = h('button', { type: 'button', class: 'pg-tab', role: 'tab', 'aria-selected': String(l === active), text: LANG_LABEL[l],
+      const label = (meta[l] && meta[l].label) || LANG_LABEL[l] || l.toUpperCase();
+      const tab = h('button', { type: 'button', class: 'pg-tab', role: 'tab', 'aria-selected': String(l === active), text: label,
         onclick: () => select(l) });
       tabs.appendChild(tab);
       const holder = h('div', { style: { display: 'flex', flexDirection: 'column', flex: '1' }, hidden: l !== active });
       edCol.appendChild(holder);
-      const ed = WD1.editor(holder, { value: code[l], lang: l, height, onInput: (v) => { code[l] = v; schedule(); saveSoon(); } });
+      const ed = WD1.editor(holder, { value: code[l], lang: (meta[l] && meta[l].hl) || l, height,
+        label: label + ' code editor. Press Escape then Tab to leave.', onInput: (v) => { code[l] = v; schedule(); saveSoon(); } });
       ed.holder = holder; ed.tab = tab;
       editors.set(l, ed);
     });
@@ -1666,10 +2106,35 @@
     const iframe = h('iframe', { title: title + ' preview', loading: 'lazy' });
     iframe.style.minHeight = height + 'px';
     const consoleEl = wantConsole ? h('div', { class: 'pg-console', 'aria-live': 'polite', 'aria-label': 'Console output' }) : null;
+
+    /* Server playgrounds: a request bar (the browser's address bar) and the response status. */
+    const cookies = {};
+    let request = null, response = null, reqBar = null, resBar = null, methodSel = null, urlIn = null, bodyIn = null;
+    const firstRequest = () => makeRequest(el.dataset.method || (rt.request && rt.request.method) || 'GET',
+      el.dataset.url || (rt.request && rt.request.url) || '/index.php', el.dataset.body || '', cookies);
+    function setRequest(req) {
+      request = req;
+      methodSel.value = req.method === 'POST' ? 'POST' : 'GET';
+      urlIn.value = req.url;
+      bodyIn.value = req.body;
+      bodyIn.hidden = req.method !== 'POST';
+    }
+    if (isServer) {
+      methodSel = h('select', { class: 'input mono', 'aria-label': 'HTTP method' }, h('option', { text: 'GET' }), h('option', { text: 'POST' }));
+      urlIn = h('input', { class: 'input mono', type: 'text', 'aria-label': 'Request URL (path and query string)', spellcheck: 'false', autocomplete: 'off' });
+      bodyIn = h('input', { class: 'input mono', type: 'text', 'aria-label': 'Request body (form data sent with POST)', placeholder: 'name=Ana&course=WD1', spellcheck: 'false', autocomplete: 'off' });
+      const send = () => { setRequest(makeRequest(methodSel.value, urlIn.value.trim() || '/', methodSel.value === 'POST' ? bodyIn.value.trim() : '', cookies)); run(); };
+      methodSel.addEventListener('change', () => { bodyIn.hidden = methodSel.value !== 'POST'; });
+      [urlIn, bodyIn].forEach((x) => x.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } }));
+      reqBar = h('div', { class: 'pg-request' }, methodSel, urlIn, bodyIn, h('button', { type: 'button', class: 'btn small primary', text: 'Send', onclick: send }));
+      resBar = h('div', { class: 'pg-response', 'aria-live': 'polite' });
+      setRequest(firstRequest());
+    }
+
     const prevCol = h('div', { class: 'pg-preview-col' },
-      h('div', { class: 'pg-label' }, h('span', { text: 'Preview' }), h('span', { class: 'pg-status', text: 'live' })),
-      iframe,
-      consoleEl ? h('div', { class: 'pg-label' }, h('span', { text: 'Console' }),
+      h('div', { class: 'pg-label' }, h('span', { text: (rt && rt.label) || 'Preview' }), h('span', { class: 'pg-status', text: 'live' })),
+      reqBar, iframe, resBar,
+      consoleEl ? h('div', { class: 'pg-label' }, h('span', { text: isServer ? 'Console and server log' : 'Console' }),
         h('button', { type: 'button', class: 'btn small ghost', text: 'Clear', onclick: () => clearConsole() })) : null,
       consoleEl);
     el.appendChild(h('div', { class: 'pg-panes' }, edCol, prevCol));
@@ -1685,7 +2150,7 @@
     function clearConsole() {
       if (!consoleEl) return;
       consoleEl.innerHTML = '';
-      consoleEl.appendChild(h('div', { class: 'empty', text: 'console.log() output appears here.' }));
+      consoleEl.appendChild(h('div', { class: 'empty', text: isServer ? 'Server messages and console.log() output appear here.' : 'console.log() output appears here.' }));
     }
     function log(type, args) {
       if (!consoleEl) return;
@@ -1694,30 +2159,138 @@
       consoleEl.appendChild(h('div', { class: 'log-line ' + (type === 'log' ? '' : type), text: (type === 'error' ? '✖ ' : type === 'warn' ? '⚠ ' : type === 'info' ? '› ' : '') + args.join(' ') }));
       consoleEl.scrollTop = consoleEl.scrollHeight;
     }
-    pgRegistry.set(id, { log });
+
+    const header = (res, name) => {
+      const hit = (res.headers || []).filter((x) => String(x[0]).toLowerCase() === name).pop();
+      return hit ? String(hit[1]) : '';
+    };
+    // Runs the server for one request, following redirects the way a browser does.
+    // jar is the cookie store the response's Set-Cookie headers update.
+    function serve(req, jar) {
+      const redirects = [];
+      let res;
+      for (;;) {
+        try { res = rt.render(Object.assign({}, code), req) || {}; } catch (e) {
+          res = { html: '', status: 500, logs: [['error', 'The server crashed: ' + (e && e.message ? e.message : e)]] };
+        }
+        res = Object.assign({ status: 200, headers: [], logs: [] }, res);
+        res.html = res.html == null ? '' : String(res.html);
+        res.headers.forEach((x) => {
+          if (String(x[0]).toLowerCase() !== 'set-cookie') return;
+          const m = String(x[1]).match(/^\s*([^=;\s]+)\s*=\s*([^;]*)/);
+          if (!m) return;
+          if (/max-age\s*=\s*(0|-)|expires\s*=[^;]*1970/i.test(x[1])) delete jar[m[1]];
+          else { try { jar[m[1]] = decodeURIComponent(m[2]); } catch (e) { jar[m[1]] = m[2]; } }
+        });
+        const loc = header(res, 'location');
+        if (loc && res.status >= 300 && res.status < 400 && redirects.length < 5) {
+          redirects.push({ status: res.status, from: req.url, to: loc, logs: res.logs });
+          req = makeRequest(res.status === 307 || res.status === 308 ? req.method : 'GET', resolvePath(req.path, loc),
+            res.status === 307 || res.status === 308 ? req.body : '', jar);
+          continue;
+        }
+        break;
+      }
+      res.request = req;
+      res.redirects = redirects;
+      res.contentType = header(res, 'content-type') || 'text/html';
+      return res;
+    }
+    // A response that is not HTML (JSON or plain text) is shown as text, like a browser does.
+    const bodyFor = (res) => (/^\s*text\/html|^\s*$/i.test(res.contentType) ? res.html
+      : '<pre style="margin:12px;white-space:pre-wrap;word-break:break-word;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace">' + esc(res.html) + '</pre>');
+    function showResponse(res) {
+      const s = res.status;
+      const kind = s >= 500 ? 'bad' : s >= 400 ? 'warn' : s >= 300 ? 'info' : 'good';
+      const hdrs = [['Content-Type', res.contentType]].concat(res.headers.filter((x) => String(x[0]).toLowerCase() !== 'content-type'));
+      resBar.replaceChildren(...[
+        h('span', { class: 'pill ' + kind, text: s + ' ' + (STATUS_TEXT[s] || '') }),
+        h('span', { class: 'pg-res-url', text: res.request.method + ' ' + res.request.url }),
+        res.redirects.length ? h('span', { class: 'muted small', text: 'after ' + res.redirects.length + ' redirect' + (res.redirects.length > 1 ? 's' : '') }) : null,
+        h('details', { class: 'pg-res-headers' }, h('summary', { text: 'Response headers (' + hdrs.length + ')' }),
+          h('dl', null, ...hdrs.flatMap((x) => [h('dt', { text: x[0] }), h('dd', { text: String(x[1]) })])))].filter(Boolean));
+    }
 
     let timer = null, saveTimer = null;
     function schedule() { clearTimeout(timer); timer = setTimeout(run, 350); }
-    function saveSoon() { clearTimeout(saveTimer); saveTimer = setTimeout(() => WD1.store.set('pg', id, { html: code.html, css: code.css, js: code.js }), 600); }
+    function saveSoon() { clearTimeout(saveTimer); saveTimer = setTimeout(() => WD1.store.set('pg', id, Object.assign({}, code)), 600); }
 
     function run() {
       clearConsole();
-      iframe.srcdoc = WD1.buildPreviewDoc(code, id);
+      let c = code;
+      if (isServer) {
+        response = serve(request, cookies);
+        response.redirects.forEach((r) => {
+          (r.logs || []).forEach((x) => log(x[0] || 'log', [String(x[1])]));
+          log('info', [r.status + ' redirect: ' + r.from + ' → ' + r.to]);
+        });
+        (response.logs || []).forEach((x) => log(x[0] || 'log', [String(x[1])]));
+        if (response.redirects.length) setRequest(response.request);
+        request.cookies = Object.assign({}, cookies);
+        showResponse(response);
+        c = Object.assign({}, code, { html: bodyFor(response) });
+      }
+      iframe.srcdoc = WD1.buildPreviewDoc(c, id, { runtime: rt, setup: setupCode, server: isServer });
     }
+    // A link click or form submit inside a server preview becomes a new request.
+    function nav(d) {
+      if (!isServer) return;
+      const method = d.method === 'POST' ? 'POST' : 'GET';
+      let url = resolvePath(request.path, d.action || '');
+      if (d.kind === 'form' && method === 'GET') url = url.split('?')[0] + (d.body ? '?' + d.body : '');
+      setRequest(makeRequest(method, url, method === 'POST' ? d.body : '', cookies));
+      run();
+    }
+    pgRegistry.set(id, { log, nav, frame: iframe });
     iframe.addEventListener('load', () => { if (checks) setTimeout(runChecks, 60); });
 
-    function runChecks() {
+    // Checks may be async: a test that returns a promise is awaited (up to 4 seconds), one at a
+    // time, so a test can click, wait for the page to update, then look. A newer preview load
+    // abandons an older run.
+    let checkRun = 0;
+    async function runChecks() {
+      if (!checksBox) return;
+      const token = ++checkRun;
       let doc, win;
       try { doc = iframe.contentDocument; win = iframe.contentWindow; } catch (e) { return; }
       if (!doc) return;
       const q = (s) => doc.querySelector(s);
       const qa = (s) => Array.from(doc.querySelectorAll(s));
       const style = (s, p) => { const n = typeof s === 'string' ? q(s) : s; return n ? win.getComputedStyle(n).getPropertyValue(p).trim() : ''; };
+      const wait = (ms) => new Promise((r) => setTimeout(r, ms || 0));
+      const until = async (fn, ms) => {
+        const end = Date.now() + (ms || 2000);
+        for (;;) {
+          let v = false;
+          try { v = fn(); } catch (e) { v = false; }
+          if (v) return v;
+          if (Date.now() > end) return false;
+          await wait(25);
+        }
+      };
+      const server = isServer ? {
+        response,
+        request: (method, url, body) => serve(makeRequest(method, url, body, cookies), Object.assign({}, cookies))
+      } : null;
+      const results = [];
+      for (const c of checks) {
+        let ok = false;
+        try {
+          let r = new Function('doc', 'win', '$', '$$', 'style', 'code', 'wait', 'until', 'server', c.test)(doc, win, q, qa, style, code, wait, until, server);
+          if (r && typeof r.then === 'function') {
+            checksBox.classList.add('is-checking');
+            r = await Promise.race([r, wait(4000).then(() => false)]);
+          }
+          ok = !!r;
+        } catch (e) { ok = false; }
+        if (token !== checkRun) return;
+        results.push(ok);
+      }
+      checksBox.classList.remove('is-checking');
       let passed = 0;
       checkList.innerHTML = '';
-      checks.forEach((c) => {
-        let ok = false;
-        try { ok = !!new Function('doc', 'win', '$', '$$', 'style', 'code', c.test)(doc, win, q, qa, style, code); } catch (e) { ok = false; }
+      checks.forEach((c, k) => {
+        const ok = results[k];
         if (ok) passed++;
         checkList.appendChild(h('li', { class: ok ? 'pass' : 'fail' }, h('span', { class: 'ck', text: ok ? '✓' : '' }), h('span', { html: WD1.fmt(c.label) })));
       });
@@ -1732,7 +2305,10 @@
     }
 
     run();
-    el.wd1 = { run, get: () => Object.assign({}, code), set: (l, v) => { const ed = editors.get(l); if (ed) ed.set(v); } };
+    el.wd1 = {
+      run, get: () => Object.assign({}, code), set: (l, v) => { const ed = editors.get(l); if (ed) ed.set(v); },
+      request: isServer ? (method, url, body) => { setRequest(makeRequest(method, url, body, cookies)); run(); } : undefined
+    };
   }
 
   /* ---------- Match ---------- */

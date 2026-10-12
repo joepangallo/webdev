@@ -1,6 +1,6 @@
 # Web Development I: interactive course companion
 
-An interactive, self-paced companion for an introductory web development course (HTML, CSS and JavaScript). Section numbers and page references follow *Fundamentals of Web Development*, 3rd ed. (Connolly & Hoar), Chapters 2–9. An optional **Level Up** module gives a faster second pass through responsive layout, JavaScript, the DOM, and frameworks and tools.
+An interactive, self-paced companion for an introductory web development course (HTML, CSS, JavaScript and React, plus server-side PHP and Node.js). Section numbers and page references follow *Fundamentals of Web Development*, 3rd ed. (Connolly & Hoar), Chapters 2–13. An optional **Level Up** module gives a faster second pass through responsive layout, JavaScript, the DOM, and frameworks and tools.
 
 Every section pairs a short explanation with something to do: live code playgrounds with automatic checks, simulators (packet switching, DNS lookups, HTTP requests, the box model, specificity, form validation…), drag-and-drop sorting, matching, walkthroughs, flashcards and quizzes. Progress saves in the browser.
 
@@ -19,10 +19,14 @@ Every section pairs a short explanation with something to do: live code playgrou
 | [`ch7/`](ch7/index.html) | Chapter 7 · CSS 2: Layout (normal flow, floats and positioning, Flexbox, Grid, responsive design, effects, preprocessors) |
 | [`ch8/`](ch8/index.html) | Chapter 8 · JavaScript 1: Language Fundamentals (variables and types, conditionals, loops, arrays, objects, functions, scope and closures) |
 | [`ch9/`](ch9/index.html) | Chapter 9 · JavaScript 2: Using JavaScript (the DOM, modifying the DOM, events and event types, forms, regular expressions) |
+| [`ch10/`](ch10/index.html) | Chapter 10 · JavaScript 3: Additional Features (array functions, prototypes, classes and modules, asynchronous code with promises and async/await, browser APIs, external APIs) |
+| [`ch11/`](ch11/index.html) | Chapter 11 · JavaScript 4: React (front-end frameworks, components and JSX, props, state and forms, the build toolchain, the lifecycle, extending React) |
+| [`ch12/`](ch12/index.html) | Chapter 12 · Server-Side Development 1: PHP (what runs on the server, PHP fundamentals, program control, functions, arrays, classes, `$_GET` and `$_POST`, HTTP headers) |
+| [`ch13/`](ch13/index.html) | Chapter 13 · Server-Side Development 2: Node.js (Node and npm, an Express API, a CRUD API, web sockets, view engines, serverless) |
 | [`levelup/`](levelup/index.html) | Level Up · Responsive Layout & JavaScript, an optional review module (flexbox, grid, responsive design, JS, DOM and events, tools) |
 | [`project/`](project/index.html) | The incremental course project: one milestone per chapter covered so far (Chapters 2–5), ten theme ideas, rubrics, starter files and an HTML checker |
 | [`tools/playground.html`](tools/playground.html) | Full-page HTML/CSS/JS playground with templates, console, device widths and download |
-| [`glossary.html`](glossary.html) | 350 searchable terms linked to the section that teaches each one, with a flashcard mode |
+| [`glossary.html`](glossary.html) | 520 searchable terms linked to the section that teaches each one, with a flashcard mode |
 | [`docs/`](docs/AUTHORING.md) | Authoring guide and a live component gallery for adding or editing lessons |
 | `assets/` | The shared stylesheet and JavaScript runtime every page uses |
 
@@ -30,14 +34,14 @@ Every section pairs a short explanation with something to do: live code playgrou
 
 | # | Objective | Where it is practiced |
 |---|-----------|------------------------|
-| 1 | Identify the technologies and protocols used in hosting and developing applications on the web | Ch 2 (all), 5.3, 6.3, 8.1, L.6 |
+| 1 | Identify the technologies and protocols used in hosting and developing applications on the web | Ch 2 (all), 5.3, 6.3, 8.1, 10.3, 10.5, Ch 12 (all), Ch 13 (all), L.6 |
 | 2 | Build appropriately structured and valid web pages using HTML | Ch 3, Ch 5, 6.4 |
 | 3 | Implement CSS syntax to layout and format HTML elements and style web pages | Ch 4, 5.2, 5.6, 6.5, 7.1–7.3, 7.5, 7.6, L.1, L.2 |
 | 4 | Examine the box and document object models used to structure and layout web page elements | 2.5, 3.4, 4.6, 7.1, 9.1, 9.2, L.5 |
 | 5 | Discuss responsive web design principles and how they are used to build cross-platform applications | 6.2, 7.2–7.4, L.1, L.2, L.3 |
-| 6 | Design responsive web pages that incorporate images, tables, forms, and navigation menus | 3.5, 3.6, Ch 5, Ch 6, 7.2–7.4, 9.5, L.1–L.3, the project |
-| 7 | Code interactive web pages that respond to user input and events using JavaScript | 5.7, Ch 8, Ch 9, L.4, L.5 |
-| 8 | Distinguish between various frameworks and third-party tools used to enhance the web development process | 4.8, 7.6, L.6 |
+| 6 | Design responsive web pages that incorporate images, tables, forms, and navigation menus | 3.5, 3.6, Ch 5, Ch 6, 7.2–7.4, 9.5, 11.3, 12.7, L.1–L.3, the project |
+| 7 | Code interactive web pages that respond to user input and events using JavaScript | 5.7, Ch 8, Ch 9, Ch 10, 11.2, 11.3, 11.5, 11.6, 13.3–13.5, L.4, L.5 |
+| 8 | Distinguish between various frameworks and third-party tools used to enhance the web development process | 4.8, 7.6, 10.2, 10.5, 11.1, 11.2, 11.4, 11.6, 13.2, 13.6, 13.7, L.6 |
 
 The dashboard shows the same map interactively, with each student's progress per objective.
 
@@ -66,6 +70,7 @@ The `.nojekyll` file tells GitHub Pages to serve the files as they are.
 ## How it works
 
 - **No build step and no dependencies.** Plain HTML, CSS and vanilla JavaScript. Every page works when opened straight from disk. The only network request is for web fonts; without them the pages fall back to system fonts.
+- **React, PHP and Node.js run offline, in the page.** Chapters 10–13 practice `fetch()`, React, PHP and Node.js without installing anything: small runtimes in `assets/js/` (`fake-fetch.js`, `react-lite.js`, `php-lite.js`, `node-lite.js`) imitate them inside the playgrounds, with the real error messages students will meet later. Each chapter also shows how to install and run the real tools.
 - **Progress is private to each browser.** Completed sections, quiz scores, challenge results and playground code are saved in `localStorage`. Students can export and import their progress from the dashboard.
 - **Light and dark themes** follow the system setting, with a toggle in the top bar.
 - **Accessible by design.** Real buttons and labels, keyboard support for every activity, visible focus, and reduced-motion support.
@@ -74,6 +79,7 @@ The `.nojekyll` file tells GitHub Pages to serve the files as they are.
 
 - [`docs/AUTHORING.md`](docs/AUTHORING.md) documents the page skeleton, every component's markup (quiz, flashcards, playground with checks, match, order, sort, walkthrough, fill-in, tabs) and the JavaScript API.
 - [`docs/components.html`](docs/components.html) shows every component live.
+- The playground runtimes have unit tests that need nothing installed: `node --test tests/*.test.js` (Node 18 or later).
 - The module and section list lives in one place, `WD1.MODULES` in [`assets/js/course.js`](assets/js/course.js). Adding a section there puts it in the navigation, the dashboard and the objective map.
 
 The course syllabus is deliberately kept out of this public repository (see `.gitignore`).

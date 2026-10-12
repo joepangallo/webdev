@@ -9,6 +9,21 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="../assets/css/course.css">
   <script src="../assets/js/course.js"></script>
+  <script>
+    /* A tiny demo server runtime for the gallery: it answers /hello?name=… and redirects /go.
+       Real chapters load bigger runtimes from assets/js (React, PHP, Node.js). */
+    WD1.runtimes.demoServer = {
+      label: 'Browser',
+      request: { method: 'GET', url: '/hello' },
+      render: function (code, req) {
+        if (req.path === '/go') return { status: 302, headers: [['Location', '/hello?name=Redirected']] };
+        var data = {};
+        WD1.parsePairs(req.query + '&' + req.body).forEach(function (p) { data[p[0]] = p[1]; });
+        var name = (data.name || 'stranger').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+        return { html: code.html.replace(/\{\{name\}\}/g, name), logs: [['info', req.method + ' ' + req.url]] };
+      }
+    };
+  </script>
 </head>
 <body data-page="docs">
 <main id="main">
@@ -135,6 +150,68 @@ h1 [[{]]
 
     <div class="fill" data-mode="text" data-title="Fill in the protocol names">
       <script type="text/plain">The [[Domain Name System|DNS]] turns names into addresses, and [[HTTPS]] encrypts web traffic on port [[443]].</script>
+    </div>
+
+    <h3>More code languages</h3>
+    <script type="text/plain" class="code" data-lang="php">
+      <h1>Hello, <?= htmlspecialchars($name) ?></h1>
+      <?php foreach ($books as $i => $book): ?>
+        <li><?php echo "Book $i: {$book['title']}"; ?></li>
+      <?php endforeach; ?>
+    </script>
+    <script type="text/plain" class="code" data-lang="jsx">
+      function Counter({ start }) {
+        const [count, setCount] = useState(start);
+        return <button onClick={() => setCount(count + 1)}>Clicked {count} times</button>;
+      }
+    </script>
+    <script type="text/plain" class="code" data-lang="shell">
+      $ npm install express
+      added 64 packages in 2s
+      $ node server.js
+      Listening on http://localhost:3000
+    </script>
+    <script type="text/plain" class="code" data-lang="http">
+      HTTP/1.1 201 Created
+      Content-Type: application/json
+
+      {"id": 4, "title": "Dune"}
+    </script>
+
+    <div class="playground" data-id="demo-async" data-title="Async check with a setup script" data-height="200" data-preview="false">
+      <textarea data-lang="js">// fetchScore() comes from the hidden setup script
+async function show() {
+  const score = await fetchScore();
+  console.log('Score:', score);
+}
+show();</textarea>
+      <script type="text/plain" class="setup">
+        // Hidden: a fake slow request the student awaits
+        window.fetchScore = () => new Promise((resolve) => setTimeout(() => resolve(42), 80));
+        window.logged = [];
+        const log = console.log;
+        console.log = (...a) => { window.logged.push(a.join(' ')); log(...a); };
+      </script>
+      <script type="application/json" class="checks">
+      [
+        {"label": "Logs `Score: 42` after the fake request finishes", "test": "return until(() => win.logged.includes('Score: 42'))"}
+      ]
+      </script>
+    </div>
+
+    <div class="playground" data-id="demo-server" data-runtime="demoServer" data-title="A server playground" data-height="220">
+      <textarea data-lang="html"><h1>Hello, {{name}}!</h1>
+<form method="post">
+  <input name="name" value="Ana">
+  <button>Send with POST</button>
+</form>
+<p><a href="?name=Link">GET with a query string</a> · <a href="go">A redirect</a></p></textarea>
+      <script type="application/json" class="checks">
+      [
+        {"label": "The first request greets a stranger", "test": "return /stranger/.test($('h1').textContent)"},
+        {"label": "`GET /hello?name=Ana` greets Ana", "test": "return /Hello, Ana!/.test(server.request('GET', '/hello?name=Ana').html)"}
+      ]
+      </script>
     </div>
 
     <div class="tabs">
