@@ -413,6 +413,7 @@
         <p><strong>When you meet it.</strong> Older code, many tutorials, and Node's own documentation for modules like <code>fs</code>.</p>
         <p><strong>Watch out.</strong> Always check the error first. And several slow jobs in a row lead to callbacks inside callbacks inside callbacks, a shape so common it has a name: "callback hell".</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Load Node's built-in file system module (the callback version)
           const fs = require('fs');
           // Start reading; the function runs LATER, when the file has been read
           fs.readFile('books.json', 'utf8', (err, text) => {
@@ -430,6 +431,7 @@
         <p><strong>When you meet it.</strong> Code that chains several steps with <code>.then()</code>, or runs jobs side by side with <code>Promise.all()</code>.</p>
         <p><strong>Watch out.</strong> End every chain with <code>.catch()</code>. A rejected promise nobody catches makes modern Node print an error and stop the whole process.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Load the promise version of the file system module
           const fs = require('fs/promises');
           // readFile returns a promise of the text
           fs.readFile('books.json', 'utf8')
@@ -446,18 +448,24 @@
         <p><strong>When you meet it.</strong> Almost all new Node code, including the Express handlers in this chapter: <code>app.get('/', async (req, res) =&gt; { … })</code>.</p>
         <p><strong>Watch out.</strong> <code>await</code> pauses only <em>this</em> function, never the whole server: while it waits, the event loop serves other requests. That is exactly why it is safe, and <code>readFileSync</code> is not.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Load the promise version of the file system module
           const fs = require('fs/promises');
+          // async lets this function use await inside it
           async function countBooks() {
+            // Any error in the try block jumps to catch below
             try {
               // Pause THIS function until the file is read (the thread stays free)
               const text = await fs.readFile('books.json', 'utf8');
+              // Turn the JSON text into a real array of objects
               const books = JSON.parse(text);
+              // Print to the terminal that started the program
               console.log(books.length + ' books');
-            } catch (err) {
+            } catch (err) {  // err holds what went wrong
               // A missing file or bad JSON both land here
               console.error('Failed:', err.message);
             }
           }
+          // Defining a function does nothing until it is called
           countBooks();
         </script>
       </div>
@@ -576,9 +584,13 @@ console.log('Starting the report…');</textarea>
     <h2>First Steps with Node</h2>
     <p>To use Node for real, you install it once from <a href="https://nodejs.org/">nodejs.org</a>. Pick the version labeled <strong>LTS</strong> ("long-term support"): it is the stable one that companies use. The installer adds two commands to your computer: <code>node</code>, which runs JavaScript files, and <code>npm</code>, which installs packages. You type both into a <strong>terminal</strong> (Terminal on macOS, PowerShell or Windows Terminal on Windows, or the terminal panel built into VS Code).</p>
     <script type="text/plain" class="code" data-lang="shell" data-title="Terminal: check that Node is installed">
+      # Ask Node which version is installed
       $ node --version
+      # Any version number means it worked (yours may be newer)
       v22.11.0
+      # npm was installed together with Node
       $ npm --version
+      # npm has its own version number, separate from Node's
       10.9.0
     </script>
     <p>Lines that start with <code>$ </code> are what you type (do not type the <code>$</code> itself; it stands for the prompt). The other lines are what the computer answers. If you see "command not found", the installer did not finish, or the terminal was already open before you installed: close it and open a new one.</p>
@@ -590,13 +602,21 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet it.</strong> When you want to test one idea quickly: how a string method behaves, what <code>new Date()</code> gives, whether a regex matches.</p>
         <p><strong>Watch out.</strong> Nothing typed in the REPL is saved. To leave, type <code>.exit</code> or press Ctrl+C twice.</p>
         <script type="text/plain" class="code" data-lang="shell">
+          # Type node with no file name to start the REPL
           $ node
+          # Node greets you with its version
           Welcome to Node.js v22.11.0.
+          # The REPL's own commands start with a dot, like .help
           Type ".help" for more information.
+          # The > prompt waits for one line of JavaScript
           > 2 + 3
+          # The REPL runs the line and prints the result at once
           5
+          # Any JavaScript expression works, string methods included
           > 'web dev'.toUpperCase()
+          # Strings are shown in quotes, so you can tell them from numbers
           'WEB DEV'
+          # Leave the REPL and return to the normal terminal prompt
           > .exit
         </script>
       </div>
@@ -613,8 +633,11 @@ console.log('Starting the report…');</textarea>
           console.log('You passed:', process.argv.slice(2));
         </script>
         <script type="text/plain" class="code" data-lang="shell">
+          # Run the file, with two extra words after its name
           $ node hello.js Ana 2026
+          # darwin is the name Node uses for macOS
           Hello from Node, running on darwin
+          # The extra words arrive as an array of strings
           You passed: [ 'Ana', '2026' ]
         </script>
       </div>
@@ -623,9 +646,13 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet it.</strong> For the rest of this chapter. You start it with <code>node server.js</code> (or <code>npm start</code>) and visit <code>http://localhost:3000</code> in a browser.</p>
         <p><strong>Watch out.</strong> Node does not reload your code by itself. After every change, stop the server (Ctrl+C) and start it again, or run it with <code>node --watch server.js</code>, which restarts it whenever you save. (Older tutorials use a package called <code>nodemon</code> for the same thing.)</p>
         <script type="text/plain" class="code" data-lang="shell">
+          # Start the server and keep an eye on the file
           $ node --watch server.js
+          # The server is up and waiting for requests
           Server running at http://localhost:3000
+          # You saved server.js, so Node stops it and starts it again
           Restarting 'server.js'
+          # Running again, now with your new code
           Server running at http://localhost:3000
         </script>
       </div>
@@ -654,7 +681,9 @@ console.log('Starting the report…');</textarea>
           console.log(a + ' + ' + b + ' = ' + (a + b));
         </script>
         <script type="text/plain" class="code" data-lang="shell">
+          # The two numbers are typed after the file name
           $ node add.js 5 7
+          # The program's answer, printed in the terminal
           5 + 7 = 12
         </script>
       </div>
@@ -663,7 +692,9 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet it.</strong> Anything that differs between your laptop and the live server, and anything secret. Hosts such as Render, Railway and Netlify have a settings page where you type these in.</p>
         <p><strong>Watch out.</strong> Keep secrets out of your code and out of Git. On your own computer, put them in a file called <code>.env</code>, load it with the <code>dotenv</code> package (or <code>node --env-file=.env server.js</code> in Node 20.6 and later), and add <code>.env</code> to <code>.gitignore</code>.</p>
         <script type="text/plain" class="code" data-lang="text" data-title=".env (never committed)">
+          # The port the server listens on, on your computer
           PORT=3000
+          # A secret key for the weather service (made up for this example)
           WEATHER_API_KEY=sk_live_7f3a9c
         </script>
         <script type="text/plain" class="code" data-lang="js" data-title="server.js">
@@ -671,6 +702,7 @@ console.log('Starting the report…');</textarea>
           require('dotenv').config();
           // Settings come from the environment; the code itself holds no secrets
           const PORT = process.env.PORT || 3000;
+          // undefined if nobody set it, so check it straight away
           const KEY = process.env.WEATHER_API_KEY;
           // Fail loudly at startup rather than mysteriously later
           if (!KEY) throw new Error('WEATHER_API_KEY is not set. Add it to .env');
@@ -681,13 +713,16 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet it.</strong> Scripts and tools that must report failure to whatever ran them, such as a build server or <code>npm test</code>.</p>
         <p><strong>Watch out.</strong> Never call it inside a web server's request handler: it stops the whole server for every visitor.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Load Node's built-in file system module
           const fs = require('fs');
           // A check script: is the config file there?
           if (!fs.existsSync('config.json')) {
+            // console.error prints to the terminal, marked as an error message
             console.error('config.json is missing');
             // Non-zero: tell the terminal (or the build server) that this failed
             process.exit(1);
           }
+          // Only reached when the file exists; the script then ends with code 0
           console.log('Config found');
         </script>
       </div>
@@ -736,8 +771,11 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet it.</strong> For every library your code <code>require</code>s or <code>import</code>s, and for tools the project depends on.</p>
         <p><strong>Watch out.</strong> Run npm commands from the project folder (the one with <code>package.json</code>). Run them one folder too high and npm creates a stray <code>package.json</code> and <code>node_modules</code> there.</p>
         <script type="text/plain" class="code" data-lang="shell">
+          # Move into the project folder first (the one with package.json)
           $ cd book-api
+          # Download Express into this project's node_modules
           $ npm install express
+          # Express needs other packages, so npm installs those too
           added 66 packages in 3s
         </script>
       </div>
@@ -746,10 +784,15 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet it.</strong> Project starters you use once, such as <code>npx create-vite@latest</code> (Chapter 11), and tools like <code>npx http-server</code> for a quick local web server.</p>
         <p><strong>Watch out.</strong> npx asks before downloading something new (<code>Ok to proceed? (y)</code>). Check the name for typos: a misspelled package could be someone else's code.</p>
         <script type="text/plain" class="code" data-lang="shell">
+          # Serve the public folder on port 8080 (-p means port)
           $ npx http-server public -p 8080
+          # The package is not on this computer yet, so npx asks first
           Need to install the following packages:
+          # The exact package name and version it would download
           http-server@14.1.1
+          # Type y and press Enter to agree
           Ok to proceed? (y) y
+          # The server is running; open this address in a browser
           Available on: http://127.0.0.1:8080
         </script>
       </div>
@@ -758,7 +801,9 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet it.</strong> Older tutorials (<code>npm install -g nodemon</code>) and a few tools you use everywhere.</p>
         <p><strong>Watch out.</strong> Global packages are not listed in any <code>package.json</code>, so teammates will not have them. Prefer a local dev dependency plus an npm script, or <code>npx</code>. On macOS and Linux, never fix a permissions error with <code>sudo npm</code>; reinstall Node with a version manager such as nvm instead.</p>
         <script type="text/plain" class="code" data-lang="shell">
+          # Update npm itself, for the whole computer (-g means global)
           $ npm install -g npm@latest
+          # List the global packages, without the packages they depend on
           $ npm list -g --depth=0
         </script>
       </div>
@@ -849,6 +894,7 @@ console.log('Starting the report…');</textarea>
         <script type="text/plain" class="code" data-lang="js" data-title="server.js">
           // Load our own file (note the ./) and a package from node_modules
           const { count } = require('./books');
+          // A bare name (no ./), so Node looks in node_modules for this one
           const express = require('express');
           // Use what the other file shared
           console.log(count() + ' books');
@@ -867,6 +913,7 @@ console.log('Starting the report…');</textarea>
         <script type="text/plain" class="code" data-lang="js" data-title="server.js">
           // Import our own file (with .js) and a package
           import { count } from './books.js';
+          // A bare name, so Node finds it in node_modules
           import express from 'express';
           // Use what the other file shared
           console.log(count() + ' books');
@@ -916,6 +963,7 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet it.</strong> Every time a server opens a file of its own.</p>
         <p><strong>Watch out.</strong> Do not glue paths with <code>+</code>: <code>__dirname + 'data'</code> forgets the slash and gives <code>/appdata</code>.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Node's built-in module for building and taking apart paths
           const path = require('path');
           // __dirname is the folder THIS file is in, e.g. /home/ana/book-api
           const file = path.join(__dirname, 'data', 'books.json');
@@ -928,6 +976,7 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet them.</strong> Deciding a file's type from its extension, building download names, checking an upload.</p>
         <p><strong>Watch out.</strong> Never join a path with something a visitor typed without checking it: a "file name" of <code>../../secret.txt</code> climbs out of your folder. <code>express.static</code> already guards against this for you.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Built into Node, so no npm install is needed
           const path = require('path');
           path.extname('photos/cat.jpeg');        // '.jpeg'
           path.basename('/app/views/books.ejs');  // 'books.ejs'
@@ -940,6 +989,7 @@ console.log('Starting the report…');</textarea>
         <p><strong>When you meet it.</strong> In projects whose <code>package.json</code> has <code>"type": "module"</code>.</p>
         <p><strong>Watch out.</strong> Older tutorials build it by hand with <code>fileURLToPath(import.meta.url)</code>; on a current Node version, the one-liner is enough.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // The same built-in path module, loaded with import
           import path from 'path';
           // The folder this module is in (Node 20.11 and later)
           const views = path.join(import.meta.dirname, 'views');
@@ -995,8 +1045,10 @@ server.[[listen]](3000);
     <h3>Your turn: a server with two pages</h3>
     <p>Finish the request handler so the server answers <code>/</code> with a home page, <code>/about</code> with an about page, and anything else with a proper 404. Use the pretend client to send requests to different paths: type a path and press <strong>Send</strong>.</p>
     <div class="playground" data-runtime="node" data-title="A server with the http module" data-height="420" data-challenge="Answer /, /about and a 404">
-      <textarea data-lang="js" data-label="server.js">const http = require('http');
+      <textarea data-lang="js" data-label="server.js">// Node's built-in HTTP module (no install needed)
+const http = require('http');
 
+// Node calls this function once for every request that arrives
 const server = http.createServer((req, res) => {
   // TODO 1: if req.url is '/', answer status 200, Content-Type text/html,
   //         with the body <h1>Home</h1>
@@ -1051,7 +1103,9 @@ const server = http.createServer((req, res) => {
 
       // The data. A real app would use a database (Chapter 14); an array works for now
       const books = [
+        // Each book is one object; its id is how a route finds it later
         { id: 1, title: 'Dune', author: 'Frank Herbert', year: 1965 },
+        // Every id is different, so one id always means exactly one book
         { id: 2, title: 'Kindred', author: 'Octavia E. Butler', year: 1979 }
       ];
 
@@ -1161,9 +1215,11 @@ const server = http.createServer((req, res) => {
         <p><strong>When you meet it.</strong> API keys and login tokens (<code>Authorization</code>), the preferred language (<code>Accept-Language</code>), what the client accepts (<code>Accept</code>).</p>
         <p><strong>Watch out.</strong> Headers are sent by the client, so a client can send anything. Use them as hints or as tokens you verify, never as proof on their own.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // A greeting in the language the visitor's browser prefers
           app.get('/api/hello', (req, res) => {
             // "en-US,en;q=0.9,es;q=0.8" → take the first two letters: "en"
             const lang = (req.get('Accept-Language') || 'en').slice(0, 2);
+            // Spanish gets ¡Hola!, every other language gets Hello!
             res.json({ message: lang === 'es' ? '¡Hola!' : 'Hello!' });
           });
         </script>
@@ -1175,10 +1231,13 @@ const server = http.createServer((req, res) => {
         <script type="text/plain" class="code" data-lang="js">
           // npm install cookie-parser
           const cookieParser = require('cookie-parser');
+          // Read the Cookie header of every request into req.cookies
           app.use(cookieParser());
+          // Visiting /theme/dark chooses the dark theme
           app.get('/theme/:name', (req, res) => {
             // Ask the browser to remember the choice for 30 days
             res.cookie('theme', req.params.name, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'lax' });
+            // Then send the visitor back to the home page
             res.redirect('/');
           });
           // On later requests: req.cookies.theme is 'dark' (or whatever was chosen)
@@ -1189,9 +1248,11 @@ const server = http.createServer((req, res) => {
         <p><strong>When you meet it.</strong> Logging, rate limiting ("at most 100 requests a minute from one address"), building absolute links.</p>
         <p><strong>Watch out.</strong> Behind a host's proxy, <code>req.ip</code> is the proxy's address unless you set <code>app.set('trust proxy', 1)</code>; only do that when your host tells you a proxy is in front.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // A small logger that runs for every request
           app.use((req, res, next) => {
             // e.g. "::1 GET /api/books?page=2" (::1 is "this computer" in IPv6)
             console.log(req.ip, req.method, req.originalUrl);
+            // Pass the request on to the next middleware or route
             next();
           });
         </script>
@@ -1206,6 +1267,7 @@ const server = http.createServer((req, res) => {
         <p><strong>When you use it.</strong> Every API answer: lists, single records, error messages.</p>
         <p><strong>Watch out.</strong> Values that JSON cannot hold disappear: functions, <code>undefined</code> properties, and a <code>Map</code> (which becomes <code>{}</code>). Convert them first.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // GET /api/status reports that the API is up
           app.get('/api/status', (req, res) => {
             // An object becomes {"ok":true,"books":3}
             res.json({ ok: true, books: books.length });
@@ -1217,6 +1279,7 @@ const server = http.createServer((req, res) => {
         <p><strong>When you use it.</strong> Small HTML answers and plain text; most real pages use <code>res.render()</code> (13.6) instead.</p>
         <p><strong>Watch out.</strong> Never put something a visitor typed into the string: <code>res.send('Hello ' + req.query.name)</code> is an XSS hole, because the text is treated as HTML.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // The home page: answers GET /
           app.get('/', (req, res) => {
             // A string is sent as text/html
             res.send('<h1>Book Club</h1><p>Try <a href="/api/books">/api/books</a></p>');
@@ -1228,10 +1291,13 @@ const server = http.createServer((req, res) => {
         <p><strong>When you use it.</strong> Any answer that is not a plain 200: 201, 400, 404 and so on.</p>
         <p><strong>Watch out.</strong> <code>res.status(404)</code> on its own sends nothing; the request hangs until you also send a body. And use <code>return</code> so the code below does not try to answer a second time.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // One book, chosen by the :id in the path
           app.get('/api/books/:id', (req, res) => {
+            // Number() turns the text '2' into the number 2 before comparing
             const book = books.find((b) => b.id === Number(req.params.id));
             // Set the status AND send, in one chain; "return" stops the function here
             if (!book) return res.status(404).json({ error: 'Book not found' });
+            // Only reached when the book exists (status 200)
             res.json(book);
           });
         </script>
@@ -1250,9 +1316,11 @@ const server = http.createServer((req, res) => {
         <p><strong>When you use it.</strong> Caching, download names, custom headers such as a rate-limit count.</p>
         <p><strong>Watch out.</strong> Headers must be set before the body is sent; setting one afterwards throws <code>ERR_HTTP_HEADERS_SENT</code>.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // GET /api/genres sends a short, fixed list
           app.get('/api/genres', (req, res) => {
             // This list rarely changes: let browsers reuse it for an hour
             res.set('Cache-Control', 'public, max-age=3600');
+            // The header is set, so now send the body
             res.json(['classic', 'fantasy', 'mystery', 'sci-fi']);
           });
         </script>
@@ -1262,7 +1330,9 @@ const server = http.createServer((req, res) => {
         <p><strong>When you use it.</strong> One special file (a PDF report, an export); for whole folders, use <code>express.static</code>.</p>
         <p><strong>Watch out.</strong> The path must be absolute, so build it with <code>path.join(__dirname, …)</code>, and never from a raw file name a visitor sent.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Node's built-in module for building file paths
           const path = require('path');
+          // GET /syllabus answers with a file instead of HTML or JSON
           app.get('/syllabus', (req, res) => {
             // Ask the browser to save the file as "syllabus.pdf"
             res.download(path.join(__dirname, 'files', 'syllabus.pdf'));
@@ -1286,6 +1356,7 @@ const server = http.createServer((req, res) => {
       app.use('/admin', (req, res, next) => {
         // No token? Answer right here with 401 and do NOT call next()
         if (req.get('Authorization') !== 'Bearer secret-token') {
+          // The request stops here: the /admin routes never see it
           return res.status(401).json({ error: 'Please log in' });
         }
         // Allowed: carry on to the /admin routes
@@ -1332,6 +1403,7 @@ const server = http.createServer((req, res) => {
         <p><strong>When you meet it.</strong> Every Express project bigger than a demo: <code>routes/books.js</code>, <code>routes/users.js</code>, <code>routes/orders.js</code>.</p>
         <p><strong>Watch out.</strong> The paths inside start from the mount point, so <code>router.get('/:id')</code> here answers <code>/api/books/:id</code>.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Each route file loads Express for itself
           const express = require('express');
           // A router: like a small app, holding only the book routes
           const router = express.Router();
@@ -1348,13 +1420,16 @@ const server = http.createServer((req, res) => {
         <p><strong>When you meet it.</strong> As the entry point (<code>"main"</code> in <code>package.json</code>).</p>
         <p><strong>Watch out.</strong> Mount routers after the middleware they rely on, such as <code>express.json()</code>.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Load Express and create the app
           const express = require('express');
-          const app = express();
+          const app = express();  // holds every route and setting
+          // Read JSON bodies first, so the routers below get req.body
           app.use(express.json());
           // Every route in routes/books.js now lives under /api/books
           app.use('/api/books', require('./routes/books'));
           // …and every route in routes/users.js under /api/users
           app.use('/api/users', require('./routes/users'));
+          // Start waiting for requests on port 3000
           app.listen(3000);
         </script>
       </div>
@@ -1363,9 +1438,11 @@ const server = http.createServer((req, res) => {
     <h3>When something goes wrong: error-handling middleware</h3>
     <p>If a handler throws an error (or, in Express 5, an <code>async</code> handler's promise rejects), Express skips every normal middleware and route and jumps to the first <strong>error handler</strong>: middleware with <em>four</em> parameters, <code>(err, req, res, next)</code>. Without one, Express sends its own plain 500 page. With one, you choose what the client sees, and you can log the details for yourself.</p>
     <script type="text/plain" class="code" data-lang="js">
+      // async, so the handler can wait for the database with await
       app.get('/api/books/:id', async (req, res) => {
         // If this rejects (say the database is down), Express 5 passes the error on for you
         const book = await db.findBook(req.params.id);
+        // Only reached when the database answered
         res.json(book);
       });
 
@@ -1422,10 +1499,13 @@ const server = http.createServer((req, res) => {
       <li>Any other path: a JSON 404 <code>{ "error": "No such endpoint" }</code>.</li>
     </ul>
     <div class="playground" data-runtime="node" data-title="Course catalog API" data-height="460" data-layout="stacked" data-challenge="Three working routes with correct 404s">
-      <textarea data-lang="js" data-label="server.js">const express = require('express');
-const app = express();
+      <textarea data-lang="js" data-label="server.js">// Load Express and create the app
+const express = require('express');
+const app = express();  // holds every route you add below
 
+// The data: one object per course, with level as a number (not text)
 const courses = [
+  // Each course has a code, a title and a level
   { code: 'PRG1010', title: 'Intro to Programming', level: 1000 },
   { code: 'CLD4010', title: 'Cloud Computing', level: 4000 },
   { code: 'WEB2010', title: 'Web Development I', level: 2000 },
@@ -1444,6 +1524,7 @@ const courses = [
 // TODO 3: after all the routes, add app.use((req, res) => ...) that answers
 //         404 with { error: 'No such endpoint' }
 
+// Start the server; the message appears once it is listening
 app.listen(3000, () => console.log('Catalog API on port 3000'));</textarea>
       <script type="text/plain" class="setup">NODE_START_PATH = '/api/courses';</script>
       <script type="application/json" class="checks">
@@ -1466,10 +1547,13 @@ app.listen(3000, () => console.log('Catalog API on port 3000'));</textarea>
     </ul>
     <p>To send a header with the pretend client, open <strong>Request headers</strong> under the URL and type <code>X-API-Key: letmein</code>.</p>
     <div class="playground" data-runtime="node" data-title="Logger and API key middleware" data-height="460" data-layout="stacked" data-challenge="Log every request and protect /api">
-      <textarea data-lang="js" data-label="server.js">const express = require('express');
-const app = express();
+      <textarea data-lang="js" data-label="server.js">// Load Express and create the app
+const express = require('express');
+const app = express();  // holds the middleware and routes
 
+// The data the API sends: one object per player
 const scores = [{ player: 'Ana', points: 120 }, { player: 'Ben', points: 95 }];
+// Starts empty; it is meant to hold one entry per request that arrives
 const requests = [];
 
 // TODO 1: a logger for EVERY request: app.use((req, res, next) => { ... })
@@ -1481,10 +1565,14 @@ const requests = [];
 //         otherwise call next()
 
 // The routes (already written)
+// The home page: outside /api, so it needs no key
 app.get('/', (req, res) => res.send('<h1>Scoreboard</h1>'));
+// The scores: under /api, so the key check from TODO 2 will guard them
 app.get('/api/scores', (req, res) => res.json(scores));
+// Reports how many entries the requests array holds
 app.get('/stats', (req, res) => res.json({ requests: requests.length }));
 
+// Start the server; the message appears once it is listening
 app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
       <script type="text/plain" class="setup">NODE_START_PATH = '/api/scores';</script>
       <script type="application/json" class="checks">
@@ -1596,11 +1684,13 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
     <h3>Reading the request body: <code>express.json()</code></h3>
     <p>POST, PUT and PATCH requests carry data in their <strong>body</strong>, usually as JSON with the header <code>Content-Type: application/json</code>. Express does not read bodies unless you ask: add <code>app.use(express.json())</code> once, near the top, and every route gets the parsed object in <code>req.body</code>. Forget it, and in Express 5 (the version npm installs today) <code>req.body</code> is <code>undefined</code>, so a line such as <code>const { title } = req.body;</code> crashes with <code>TypeError: Cannot destructure property 'title' of 'req.body' as it is undefined</code>.</p>
     <script type="text/plain" class="code" data-lang="js" data-title="server.js: the four CRUD routes">
+      // Load Express and create the app
       const express = require('express');
-      const app = express();
+      const app = express();  // holds every route and setting
       // Read JSON request bodies into req.body (must come BEFORE the routes)
       app.use(express.json());
 
+      // The data, kept in memory: let, because DELETE replaces the whole array
       let books = [{ id: 1, title: 'Dune', year: 1965 }];
       // The id the next new book will get
       let nextId = 2;
@@ -1611,27 +1701,33 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
         const { title, year } = req.body;
         // VALIDATE: never trust what a client sends. Bad data is a 400, with a reason
         if (typeof title !== 'string' || !title.trim()) {
+          // return stops here, so no book is created
           return res.status(400).json({ error: 'title is required' });
         }
         // Build the new record; the SERVER chooses the id, never the client
         const book = { id: nextId++, title: title.trim(), year: Number(year) || null };
-        books.push(book);
+        books.push(book);  // save it with the others
         // 201 Created, plus a Location header saying where the new book lives
         res.status(201).location(`/api/books/${book.id}`).json(book);
       });
 
       // UPDATE (part): PATCH /api/books/1 with {"year":1966}
       app.patch('/api/books/:id', (req, res) => {
+        // Find the book (the id in the path is text, so convert it)
         const book = books.find((b) => b.id === Number(req.params.id));
+        // No such book: 404, and stop
         if (!book) return res.status(404).json({ error: 'Book not found' });
         // Only change the fields that were actually sent
         if (req.body.title !== undefined) book.title = String(req.body.title);
+        // …and the same check for the year
         if (req.body.year !== undefined) book.year = Number(req.body.year);
+        // Send back the changed book (status 200)
         res.json(book);
       });
 
       // DELETE: DELETE /api/books/1
       app.delete('/api/books/:id', (req, res) => {
+        // Count the books before removing anything
         const before = books.length;
         // Keep every book EXCEPT the one with this id
         books = books.filter((b) => b.id !== Number(req.params.id));
@@ -1641,6 +1737,7 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
         res.sendStatus(204);
       });
 
+      // Start waiting for requests on port 3000
       app.listen(3000);
     </script>
 
@@ -1665,8 +1762,11 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js">
           // GET /api/books/2 → 200 and one object, or 404
           app.get('/api/books/:id', (req, res) => {
+            // Route parameters are text, so convert the id before comparing
             const book = books.find((b) => b.id === Number(req.params.id));
+            // No match: answer 404 and stop here
             if (!book) return res.status(404).json({ error: 'Book not found' });
+            // Found: send it with the default status, 200
             res.json(book);
           });
         </script>
@@ -1678,10 +1778,15 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js">
           // POST /api/books  body {"title":"Emma"} → 201 and the new book
           app.post('/api/books', (req, res) => {
+            // ?. gives undefined instead of crashing when there is no body at all
             const title = req.body?.title;
+            // Missing or blank title: 400 Bad Request, and stop
             if (typeof title !== 'string' || !title.trim()) return res.status(400).json({ error: 'title is required' });
+            // The server picks the id; trim() removes spaces at both ends
             const book = { id: nextId++, title: title.trim() };
+            // Save the new book in the array
             books.push(book);
+            // 201 Created, where the book now lives, and the book with its new id
             res.status(201).location(`/api/books/${book.id}`).json(book);
           });
         </script>
@@ -1693,11 +1798,15 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js">
           // PUT /api/books/2  body {"title":"Emma","year":1815} → 200 and the replaced book
           app.put('/api/books/:id', (req, res) => {
+            // findIndex gives the book's position in the array, or -1 if it is missing
             const i = books.findIndex((b) => b.id === Number(req.params.id));
+            // -1 means there is no such book
             if (i < 0) return res.status(404).json({ error: 'Book not found' });
+            // A replacement must include everything a book needs, so check the title
             if (typeof req.body?.title !== 'string') return res.status(400).json({ error: 'title is required' });
             // Keep the id; everything else comes from the body
             books[i] = { id: books[i].id, title: req.body.title, year: req.body.year ?? null };
+            // Send back the new version (status 200)
             res.json(books[i]);
           });
         </script>
@@ -1709,11 +1818,15 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js">
           // PATCH /api/books/2  body {"year":1816} → 200; the title stays as it was
           app.patch('/api/books/:id', (req, res) => {
+            // Find the book to change (the id arrives as text)
             const book = books.find((b) => b.id === Number(req.params.id));
+            // No such book: 404, and stop
             if (!book) return res.status(404).json({ error: 'Book not found' });
             // Only fields that were actually sent are changed
             if (req.body.title !== undefined) book.title = String(req.body.title);
+            // A year that was not sent stays as it was
             if (req.body.year !== undefined) book.year = Number(req.body.year);
+            // Send back the whole book, changed fields included
             res.json(book);
           });
         </script>
@@ -1725,10 +1838,13 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js">
           // DELETE /api/books/2 → 204, or 404
           app.delete('/api/books/:id', (req, res) => {
+            // Find the position of the book to remove (-1 if there is none)
             const i = books.findIndex((b) => b.id === Number(req.params.id));
+            // Nothing to delete: 404
             if (i < 0) return res.status(404).json({ error: 'Book not found' });
             // Remove exactly one item at position i
             books.splice(i, 1);
+            // 204 No Content: it worked, and the body stays empty
             res.sendStatus(204);
           });
         </script>
@@ -1740,27 +1856,34 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
     <script type="text/plain" class="code" data-lang="js">
       // One function that checks a book and lists everything wrong with it
       function validateBook(body) {
+        // Start with no problems; each check below may add one
         const errors = {};
         // Missing body (no express.json(), or no JSON sent)
         if (!body || typeof body !== 'object') return { body: 'Send the book as JSON' };
         // Required text with sensible limits
         if (typeof body.title !== 'string' || !body.title.trim()) errors.title = 'title is required';
+        // A title that is there but far too long is a problem too
         else if (body.title.length > 200) errors.title = 'title must be 200 characters or fewer';
         // Optional number within a range
         if (body.year !== undefined && !(Number.isInteger(body.year) && body.year > 0 && body.year <= new Date().getFullYear())) {
+          // Explain the problem in words the person sending it can act on
           errors.year = 'year must be a whole number, not in the future';
         }
+        // An empty object {} means the book passed every check
         return errors;
       }
 
+      // The create route now uses the checker
       app.post('/api/books', (req, res) => {
+        // Run every check on the data the client sent
         const errors = validateBook(req.body);
         // Any problems at all: 400, and say exactly which fields and why
         if (Object.keys(errors).length) return res.status(400).json({ errors });
         // Only build the record from the fields you expect (ignore anything extra)
         const book = { id: nextId++, title: req.body.title.trim(), year: req.body.year ?? null };
+        // Save it, then answer 201 Created with the new book
         books.push(book);
-        res.status(201).json(book);
+        res.status(201).json(book);  // includes the id the server chose
       });
     </script>
     <aside class="callout tip"><strong>Copy only the fields you expect</strong> Never save <code>req.body</code> as it is (<code>books.push(req.body)</code>). A client could add <code>"id": 1</code> to overwrite another record, or <code>"isAdmin": true</code> to a user. Build the new object from the fields you checked. Libraries such as Zod and express-validator make long lists of rules shorter, but the idea stays the same.</aside>
@@ -1816,15 +1939,19 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
     <script type="text/plain" class="code" data-lang="js">
       // GET /api/books?genre=classic&sort=year&page=2&limit=10
       app.get('/api/books', (req, res) => {
+        // Start with every book; each step below may narrow or reorder the list
         let list = books;
         // FILTER: only if the client asked
         if (req.query.genre) list = list.filter((b) => b.genre === req.query.genre);
         // SORT: copy first ([...list]) so the original array keeps its order
         if (req.query.sort === 'year') list = [...list].sort((a, b) => a.year - b.year);
+        // localeCompare puts text in alphabetical order, A to Z
         if (req.query.sort === 'title') list = [...list].sort((a, b) => a.title.localeCompare(b.title));
         // PAGE: query values are strings, so convert, with sensible defaults and limits
         const limit = Math.min(Number(req.query.limit) || 20, 100);
+        // Pages start at 1: a missing, zero or negative page becomes page 1
         const page = Math.max(Number(req.query.page) || 1, 1);
+        // Page 2 with a limit of 10 is slice(10, 20): the 11th to the 20th book
         const items = list.slice((page - 1) * limit, page * limit);
         // Tell the client how much there is, so it can draw "Page 2 of 5"
         res.json({ total: list.length, page, limit, items });
@@ -1840,11 +1967,16 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
         <p><strong>When you meet it.</strong> In API documentation everywhere, because one line of <code>curl</code> shows the method, URL, headers and body exactly.</p>
         <p><strong>Watch out.</strong> <code>-X</code> sets the method, <code>-H</code> adds a header, <code>-d</code> sends a body, and <code>-i</code> includes the response headers. In Windows PowerShell, type <code>curl.exe</code> instead of <code>curl</code>.</p>
         <script type="text/plain" class="code" data-lang="shell">
+          # POST a JSON book to the API; -i also prints the response headers
           $ curl -i -X POST http://localhost:3000/api/books -H "Content-Type: application/json" -d '{"title":"Emma","year":1815}'
+          # The status line: the book was created
           HTTP/1.1 201 Created
+          # Where the new book can be found from now on
           Location: /api/books/2
+          # The body that follows is JSON
           Content-Type: application/json; charset=utf-8
 
+          # The body: the new book, with the id the server chose
           {"id":2,"title":"Emma","year":1815}
         </script>
       </div>
@@ -1910,27 +2042,37 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
     <h3>Keeping the data between restarts</h3>
     <p>Until you learn databases, a JSON file on disk is a fine first step: read it when the server starts, and write it back after every change. Use the promise versions of <code>fs</code>, so the server keeps answering other requests while the file is written.</p>
     <script type="text/plain" class="code" data-lang="js">
+      // The promise version of fs, so the server never stops to wait for the disk
       const fs = require('fs/promises');
+      // Node's built-in helper for building file paths
       const path = require('path');
       // The data file sits next to this script, whatever folder node was started from
       const FILE = path.join(__dirname, 'books.json');
 
       // Read the file into an array (an empty list if it does not exist yet)
       async function loadBooks() {
+        // Read the text, then turn the JSON into an array
         try { return JSON.parse(await fs.readFile(FILE, 'utf8')); }
+        // ENOENT means "no such file": start empty. Any other error is passed on
         catch (err) { if (err.code === 'ENOENT') return []; throw err; }
       }
       // Write the whole array back, nicely indented so you can read the file
       async function saveBooks(books) {
+        // null, 2 means: keep every field, and indent each level by two spaces
         await fs.writeFile(FILE, JSON.stringify(books, null, 2));
       }
 
+      // Create a book: load the file, add the book, save the file, answer
       app.post('/api/books', async (req, res) => {
+        // Start from what is on disk right now
         const books = await loadBooks();
+        // Date.now() (milliseconds since 1970) works as a quick id for a small project
         const book = { id: Date.now(), title: String(req.body.title) };
+        // Add it to the array in memory
         books.push(book);
         // Wait for the file to be written before saying "created"
         await saveBooks(books);
+        // Only now is it safe to tell the client it worked
         res.status(201).json(book);
       });
     </script>
@@ -1941,31 +2083,39 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
     <script type="text/plain" class="code" data-lang="js" data-title="public/app.js (runs in the browser)">
       // Draw every task from the API into the <ul id="tasks">
       async function showTasks() {
+        // GET the list from our own API (same server, so no CORS problem)
         const res = await fetch('/api/tasks');
+        // Turn the JSON in the response into an array of task objects
         const tasks = await res.json();
+        // The list element on the page
         const list = document.querySelector('#tasks');
+        // Swap whatever the list held for one new <li> per task
         list.replaceChildren(...tasks.map((t) => {
+          // A new list item for this task
           const li = document.createElement('li');
+          // textContent, not innerHTML, so a title can never inject HTML
           li.textContent = t.title + ' ';
           // A delete button that remembers which task it belongs to
           const btn = document.createElement('button');
-          btn.textContent = 'Delete';
-          btn.dataset.id = t.id;
-          li.append(btn);
-          return li;
+          btn.textContent = 'Delete';  // the button's label
+          btn.dataset.id = t.id;       // becomes data-id="3" on the button
+          li.append(btn);              // put the button inside the list item
+          return li;                   // map collects every li into a new array
         }));
       }
 
       // One listener for every delete button (event delegation, Chapter 9)
       document.querySelector('#tasks').addEventListener('click', async (event) => {
+        // Which delete button was clicked? null for a click anywhere else in the list
         const btn = event.target.closest('button[data-id]');
-        if (!btn) return;
+        if (!btn) return;  // not a delete button: ignore the click
         // DELETE /api/tasks/3 and so on
         const res = await fetch('/api/tasks/' + btn.dataset.id, { method: 'DELETE' });
         // 204 means it worked: draw the list again from the server's data
         if (res.status === 204) showTasks();
       });
 
+      // Draw the list once, as soon as the page loads
       showTasks();
     </script>
 
@@ -1978,18 +2128,24 @@ app.listen(3000, () => console.log('Scores on port 3000'));</textarea>
       <li><code>DELETE /api/notes/:id</code> → 204 with no body, or 404.</li>
     </ul>
     <div class="playground" data-runtime="node" data-title="Notes API" data-height="500" data-layout="stacked" data-challenge="Full CRUD with validation and status codes">
-      <textarea data-lang="js" data-label="server.js">const express = require('express');
-const app = express();
+      <textarea data-lang="js" data-label="server.js">// Load Express and create the app
+const express = require('express');
+const app = express();  // holds the middleware and routes
 // TODO 1: let Express read JSON bodies into req.body
 
+// The data, kept in memory (it resets when the server restarts)
 let notes = [
+  // Each note has an id, its text, and whether it is pinned
   { id: 1, text: 'Read chapter 13', pinned: true },
+  // pinned is true or false: a boolean, not the text 'true'
   { id: 2, text: 'Start the project milestone', pinned: false }
 ];
+// The id the next new note will get
 let nextId = 3;
 
 // A helper you can use in every route that needs one note
 function findNote(id) {
+  // Ids from the URL are text, hence Number(); undefined when nothing matches
   return notes.find((n) => n.id === Number(id));
 }
 
@@ -2004,6 +2160,7 @@ app.get('/api/notes', (req, res) => res.json(notes));
 
 // TODO 5: DELETE     DELETE /api/notes/:id (204, or 404)
 
+// Start the server; the message appears once it is listening
 app.listen(3000, () => console.log('Notes API on port 3000'));</textarea>
       <script type="text/plain" class="setup">NODE_START_PATH = '/api/notes';</script>
       <script type="application/json" class="checks">
@@ -2117,6 +2274,7 @@ app.listen(3000, () => console.log('Notes API on port 3000'));</textarea>
               const text = data.toString();
               // Pass it to every connected browser that is still open
               wss.clients.forEach((client) => {
+                // Skip connections that are not open (still opening, closing or closed)
                 if (client.readyState === WebSocket.OPEN) client.send(text);
               });
             });
@@ -2137,9 +2295,11 @@ app.listen(3000, () => console.log('Notes API on port 3000'));</textarea>
           socket.addEventListener('open', () => socket.send('Hi everyone!'));
           // Runs whenever the SERVER sends something: show it on the page
           socket.addEventListener('message', (event) => {
+            // A new list item for this message
             const li = document.createElement('li');
             // event.data is the text the server sent (textContent keeps it safe)
             li.textContent = event.data;
+            // Add it to the end of the <ul id="messages"> on the page
             document.querySelector('#messages').append(li);
           });
           // The connection ended (code 1000 = normal, 1006 = lost)
@@ -2188,13 +2348,17 @@ app.listen(3000, () => console.log('Notes API on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js">
           // npm install express socket.io
           const http = require('http');
+          // Express answers the ordinary page requests
           const express = require('express');
+          // Socket.IO's server class (the braces pick one export by its name)
           const { Server } = require('socket.io');
-          const app = express();
+          const app = express();  // the Express app, as before
           // Socket.IO shares Express's HTTP server, so one port serves pages AND sockets
           const server = http.createServer(app);
+          // Attach Socket.IO to that same server
           const io = new Server(server);
 
+          // Runs once for each browser that connects
           io.on('connection', (socket) => {
             // Listen for a NAMED event called 'chat'
             socket.on('chat', (msg) => {
@@ -2202,6 +2366,7 @@ app.listen(3000, () => console.log('Notes API on port 3000'));</textarea>
               socket.broadcast.emit('chat', msg);
             });
           });
+          // Start the shared server: pages and sockets both on port 3000
           server.listen(3000);
         </script>
       </div>
@@ -2245,13 +2410,17 @@ app.listen(3000, () => console.log('Notes API on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js">
           // socket → { name }
           const people = new Map();
+          // req is the HTTP upgrade request that opened this connection
           wss.on('connection', (ws, req) => {
             // ws://localhost:8080/?name=Ana → read the name from the connection URL
             const name = new URL(req.url, 'http://localhost').searchParams.get('name') || 'Guest';
+            // Remember this socket's name for as long as it stays connected
             people.set(ws, { name });
             // Every message now carries the sender's real name
             ws.on('message', (data) => {
+              // Look up the sender's name and wrap everything in one JSON object
               const msg = JSON.stringify({ type: 'chat', from: people.get(ws).name, text: data.toString() });
+              // Send it to every connection that is open
               wss.clients.forEach((c) => { if (c.readyState === WebSocket.OPEN) c.send(msg); });
             });
             // Clean up when they leave
@@ -2268,7 +2437,9 @@ app.listen(3000, () => console.log('Notes API on port 3000'));</textarea>
           function sendPrivate(fromWs, msg) {
             // Find Ben's socket among everyone online
             const entry = [...people].find(([sock, info]) => info.name === msg.to);
+            // Not found: tell the SENDER, and stop here
             if (!entry) return fromWs.send(JSON.stringify({ type: 'error', text: msg.to + ' is not online' }));
+            // entry is a [socket, info] pair: take out the socket
             const [toWs] = entry;
             // Only Ben receives it
             toWs.send(JSON.stringify({ type: 'dm', from: people.get(fromWs).name, text: msg.text }));
@@ -2280,18 +2451,25 @@ app.listen(3000, () => console.log('Notes API on port 3000'));</textarea>
         <p><strong>When you meet it.</strong> Every real-time app: laptops sleep, phones switch from Wi-Fi to mobile data, servers restart for updates.</p>
         <p><strong>Watch out.</strong> Never reconnect instantly in a tight loop: if the server is down, thousands of browsers hammering it every millisecond keep it down. (Socket.IO does all of this for you.)</p>
         <script type="text/plain" class="code" data-lang="js">
+          // How long to wait before the next try, in milliseconds
           let delay = 500;
+          // Opens a connection, and arranges to call itself again if it is lost
           function connect() {
+            // A brand-new socket every time: a closed one cannot be reopened
             const socket = new WebSocket('wss://chat.example.com');
             // Connected again: reset the wait for next time
             socket.addEventListener('open', () => { delay = 500; });
+            // Messages arrive as JSON text: parse each one, then show it
             socket.addEventListener('message', (e) => showMessage(JSON.parse(e.data)));
             // Lost it: try again later, doubling the wait each time, up to 30 seconds
             socket.addEventListener('close', () => {
+              // Run connect() again once the wait is over
               setTimeout(connect, delay);
+              // 500, 1000, 2000 … but never more than 30000 (30 seconds)
               delay = Math.min(delay * 2, 30000);
             });
           }
+          // Make the first connection
           connect();
         </script>
       </div>
@@ -2318,13 +2496,18 @@ app.listen(3000, () => console.log('Notes API on port 3000'));</textarea>
     </ul>
     <p>Then type into the three windows to test it.</p>
     <div class="playground" data-runtime="node" data-title="A broadcast chat server" data-height="440" data-layout="stacked" data-challenge="Welcome everyone and relay messages to the others">
-      <textarea data-lang="js" data-label="server.js">const { WebSocketServer, WebSocket } = require('ws');
+      <textarea data-lang="js" data-label="server.js">// The ws package: its server class, plus WebSocket for the readyState names
+const { WebSocketServer, WebSocket } = require('ws');
+// Listen for WebSocket connections on port 8080
 const wss = new WebSocketServer({ port: 8080 });
+// Printed once, when the server starts
 console.log('Chat server on ws://localhost:8080');
 
+// Runs once for EACH browser that connects; ws is that browser's connection
 wss.on('connection', (ws) => {
   // TODO 1: send this new client the text 'Welcome!'
 
+  // Runs every time THIS browser sends a message
   ws.on('message', (data) => {
     // TODO 2: turn data into text with data.toString()
 
@@ -2366,31 +2549,38 @@ wss.on('connection', (ws) => {
     <p>The APIs in 13.3 and 13.4 send <em>data</em>, and leave building the page to JavaScript in the browser (<strong>client-side rendering</strong>, the React way from Chapter 11). There is an older, simpler and still very common way: the server builds the finished HTML page itself and sends that, just as PHP did in Chapter 12. This is <strong>server-side rendering</strong> (SSR). In Express, the tool that turns data into HTML is a <strong>view engine</strong>, also called a <strong>template engine</strong>.</p>
     <p>A <strong>template</strong> is an HTML file with holes in it. The holes are marked with special tags: "put the book's title here", "repeat this <code>&lt;li&gt;</code> for every book", "show this paragraph only if the list is empty". The engine fills the holes with your data and returns plain HTML, which Express sends to the browser. The browser never sees the template, only the result.</p>
     <script type="text/plain" class="code" data-lang="js" data-title="server.js">
+      // Load Express and create the app
       const express = require('express');
-      const app = express();
+      const app = express();  // holds every route and setting
       // Tell Express which template engine to use (npm install ejs)
       app.set('view engine', 'ejs');
       // Templates live in the "views" folder (this is already the default)
       app.set('views', 'views');
 
+      // GET /books answers with a finished HTML page, not JSON
       app.get('/books', (req, res) => {
+        // The data for this page (a database query in a real app)
         const books = [{ title: 'Dune', year: 1965 }, { title: 'Emma', year: 1815 }];
         // Fill views/books.ejs with this data, then send the finished HTML
         res.render('books', { heading: 'Our books', books });
       });
 
+      // Start waiting for requests on port 3000
       app.listen(3000);
     </script>
     <script type="text/plain" class="code" data-lang="ejs" data-title="views/books.ejs">
       <!-- An ordinary HTML page with EJS tags in it -->
       <h1><%= heading %></h1>
+      <%# The if runs on the server; the browser never sees it %>
       <% if (books.length === 0) { %>
         <!-- Only drawn when the list is empty -->
         <p>No books yet.</p>
       <% } %>
+      <%# The list itself is always drawn %>
       <ul>
+        <%# Repeat what follows once for every book in the array %>
         <% books.forEach((book) => { %>
-          <!-- One li per book; <%= %> prints a value, safely escaped -->
+          <%# One li per book; each equals-sign tag prints a value, safely escaped %>
           <li><%= book.title %> (<%= book.year %>)</li>
         <% }); %>
       </ul>
@@ -2448,9 +2638,12 @@ wss.on('connection', (ws) => {
         <p><strong>When you use it.</strong> Repeating or hiding parts of the page.</p>
         <p><strong>Watch out.</strong> A block opened in one tag must be closed in a later one: every <code>{</code> needs its <code>}</code>, often in a tag of its own like <code>&lt;% } %&gt;</code>.</p>
         <script type="text/plain" class="code" data-lang="ejs">
+          <%# Only one of the two parts is drawn, chosen on the server %>
           <% if (user) { %>
+            <%# Someone is logged in: greet them by name %>
             <p>Welcome back, <%= user.name %>!</p>
-          <% } else { %>
+          <% } else { %>  <%# nobody is logged in %>
+            <%# Show a link to the login page instead %>
             <a href="/login">Log in</a>
           <% } %>
         </script>
@@ -2469,8 +2662,11 @@ wss.on('connection', (ws) => {
         <p><strong>When you use it.</strong> When the generated HTML must be tidy (emails, plain text), or simply to keep View Source neat.</p>
         <p><strong>Watch out.</strong> It only changes whitespace, which browsers mostly ignore anyway. Do not worry about it until the output's spacing matters.</p>
         <script type="text/plain" class="code" data-lang="ejs">
+          <%# The list is printed once, around the loop %>
           <ul>
+          <%# A dash before the closing tag removes the line break after it -%>
           <% books.forEach((b) => { -%>
+            <%# One li per book, with no blank lines between them -%>
             <li><%= b.title %></li>
           <% }) -%>
           </ul>
@@ -2522,9 +2718,13 @@ wss.on('connection', (ws) => {
           app.set('view engine', 'pug');   // res.render('books') → views/books.pug
         </script>
         <script type="text/plain" class="code" data-lang="text" data-title="views/books.pug">
+          //- An h1 holding heading (the = prints it, escaped)
           h1= heading
+          //- A ul; everything indented below it goes inside it
           ul
+            //- Repeat the next line once for every book
             each book in books
+              //- #{ } prints a value in the middle of text
               li #{book.title} (#{book.year})
         </script>
       </div>
@@ -2537,9 +2737,13 @@ wss.on('connection', (ws) => {
           app.set('view engine', 'hbs');   // res.render('books') → views/books.hbs
         </script>
         <script type="text/plain" class="code" data-lang="hbs" data-title="views/books.hbs">
+          {{!-- Double braces print a value, escaped --}}
           <h1>{{heading}}</h1>
+          {{!-- The list wrapper is drawn once --}}
           <ul>
+            {{!-- Repeat the block below for every item in books --}}
             {{#each books}}
+              {{!-- Inside each, title and year belong to the current book --}}
               <li>{{title}} ({{year}})</li>
             {{/each}}
           </ul>
@@ -2565,16 +2769,20 @@ wss.on('connection', (ws) => {
     <script type="text/plain" class="code" data-lang="ejs" data-title="views/partials/header.ejs">
       <!-- Shared by every page; "title" comes from whoever includes this file -->
       <!DOCTYPE html>
+      <!-- html and body open here; the footer partial closes them -->
       <html lang="en">
+      <!-- Each page's own title, followed by the site name -->
       <head><meta charset="utf-8"><title><%= title %> · Book Club</title></head>
-      <body>
+      <body>  <!-- left open for the page's content -->
+        <!-- The same navigation bar on every page -->
         <nav><a href="/">Home</a> <a href="/books">Books</a></nav>
     </script>
     <script type="text/plain" class="code" data-lang="ejs" data-title="views/books.ejs">
       <!-- Pull in the shared header, passing it this page's title -->
       <%- include('partials/header', { title: 'Books' }) %>
-      <h1>Books</h1>
+      <h1>Books</h1>  <%# this page's own heading %>
       <!-- …this page's own content… -->
+      <%# The shared footer, which closes body and html %>
       <%- include('partials/footer') %>
     </script>
 
@@ -2585,12 +2793,14 @@ wss.on('connection', (ws) => {
     <script type="text/plain" class="code" data-lang="js">
       // Available in EVERY template, for every request
       app.locals.siteName = 'Book Club';
+      // Worked out once, when the server starts
       app.locals.year = new Date().getFullYear();
 
       // Middleware that sets something for THIS request only
       app.use((req, res, next) => {
         // A real app would look up the logged-in user here
         res.locals.user = req.get('X-Demo-User') || null;
+        // Carry on to the route, which renders the page
         next();
       });
 
@@ -2598,6 +2808,7 @@ wss.on('connection', (ws) => {
       app.get('/', (req, res) => res.render('home', { books }));
     </script>
     <script type="text/plain" class="code" data-lang="ejs" data-title="views/partials/footer.ejs">
+      <%# Included at the bottom of every page %>
       <footer>
         <!-- siteName and year come from app.locals; user comes from res.locals -->
         <p>© <%= year %> <%= siteName %><% if (user) { %> · Signed in as <%= user %><% } %></p>
@@ -2628,19 +2839,23 @@ wss.on('connection', (ws) => {
 
       // POST: the form was submitted
       app.post('/books', (req, res) => {
+        // The form field named "title", or '' if it was not sent
         const title = (req.body.title || '').trim();
         // Invalid: show the same page again, with a message and status 400
         if (!title) return res.status(400).render('books', { books, error: 'Please enter a title.' });
-        books.push({ title });
+        books.push({ title });  // save the new book
         // Valid: redirect to the list (303 See Other means "now GET this page")
         res.redirect(303, '/books');
       });
     </script>
     <script type="text/plain" class="code" data-lang="ejs" data-title="views/books.ejs (the form)">
+      <%# Only drawn after a failed submission (error is null otherwise) %>
       <% if (error) { %><p class="error"><%= error %></p><% } %>
       <!-- A plain HTML form: no JavaScript needed -->
       <form method="post" action="/books">
+        <!-- name="title" is how the server finds this field: req.body.title -->
         <label>Title <input name="title" required></label>
+        <!-- A button inside a form submits it -->
         <button>Add book</button>
       </form>
     </script>
@@ -2664,33 +2879,43 @@ wss.on('connection', (ws) => {
     <h3>Your turn: render a reading list</h3>
     <p>This playground has two tabs: the server and the template <code>views/books.ejs</code>. The route already passes the data. Finish the template so the page shows the heading, a count, one <code>&lt;li&gt;</code> per book with its title and author (escaped), and a friendly message when the list is empty (try <code>GET /?empty=1</code>).</p>
     <div class="playground" data-runtime="node" data-title="Server-side rendering with EJS" data-height="430" data-layout="stacked" data-challenge="Render the reading list with EJS">
-      <textarea data-lang="ejs" data-label="views/books.ejs"><h1><%= heading %></h1>
+      <textarea data-lang="ejs" data-label="views/books.ejs"><%# heading comes from the data the route passed to res.render() %>
+<h1><%= heading %></h1>
 
 <!-- TODO 1: a <p class="count"> that says, for example, "3 books" (use books.length) -->
 
 <!-- TODO 2: if there are no books, show <p class="empty">Nothing to read yet.</p> -->
 
+<!-- The list stays empty until TODO 3 fills it -->
 <ul class="books">
   <!-- TODO 3: loop over books and draw one <li> per book like:
        <li><strong>Dune</strong> by Frank Herbert</li>
        Use the ESCAPED tag for every value. -->
 </ul></textarea>
-      <textarea data-lang="js" data-label="server.js">const express = require('express');
-const app = express();
+      <textarea data-lang="js" data-label="server.js">// Load Express and create the app
+const express = require('express');
+const app = express();  // holds the settings and routes
+// res.render() will fill .ejs templates from the views folder
 app.set('view engine', 'ejs');
 
+// The data the page shows
 const books = [
+  // Each book has a title and an author
   { title: 'Dune', author: 'Frank Herbert' },
   { title: 'Kindred', author: 'Octavia E. Butler' },
+  // This title contains HTML special characters, on purpose
   { title: 'Pride & <Prejudice>', author: 'Jane Austen' }
 ];
 
+// The home page is built from the template
 app.get('/', (req, res) => {
   // ?empty=1 pretends the list is empty, so you can test that case
   const list = req.query.empty ? [] : books;
+  // Fill views/books.ejs with a heading and the list, then send the HTML
   res.render('books', { heading: 'Reading list', books: list });
 });
 
+// Start the server; the message appears once it is listening
 app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
       <script type="text/plain" class="setup">__nodeFiles({ 'views/books.ejs': WD1_CODE.ejs || '' });</script>
       <script type="application/json" class="checks">
@@ -2700,7 +2925,7 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
         {"label": "The title `Pride & <Prejudice>` is escaped (shown as text, not a tag)", "test": "return win.__node.request('GET', '/').then(function (r) { return /Pride &amp; &lt;Prejudice&gt;/.test(r.body) && !/<Prejudice>/.test(r.body); });"},
         {"label": "`p.count` says `3 books`", "test": "return win.__node.request('GET', '/').then(function (r) { var d = new DOMParser().parseFromString(r.body, 'text/html'); var p = d.querySelector('p.count'); return !!p && p.textContent.trim() === '3 books'; });"},
         {"label": "`GET /?empty=1` shows `p.empty` with `Nothing to read yet.` and no `<li>`", "test": "return win.__node.request('GET', '/?empty=1').then(function (r) { var d = new DOMParser().parseFromString(r.body, 'text/html'); var p = d.querySelector('p.empty'); return !!p && /Nothing to read yet\\./.test(p.textContent) && d.querySelectorAll('ul.books li').length === 0; });"},
-        {"label": "The full list does **not** show the empty message", "test": "return win.__node.request('GET', '/').then(function (r) { return !/Nothing to read yet/.test(r.body); });"}
+        {"label": "The full list does **not** show the empty message", "test": "return win.__node.request('GET', '/').then(function (r) { var d = new DOMParser().parseFromString(r.body, 'text/html'); return !/Nothing to read yet/.test(d.body.textContent); });"}
       ]
       </script>
     </div>
@@ -2817,8 +3042,11 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
             const name = event.queryStringParameters?.name || 'stranger';
             // Return the response as a plain object; the body must be a string
             return {
+              // 200 OK, written as a number
               statusCode: 200,
+              // Tell the browser the body is JSON
               headers: { 'Content-Type': 'application/json' },
+              // Turn the object into text first, because the body must be a string
               body: JSON.stringify({ message: `Hello, ${name}!` })
             };
           };
@@ -2829,10 +3057,13 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
         <p><strong>When you meet it.</strong> Sites that need very fast responses worldwide, redirects, small APIs, and "edge" logic in front of other servers.</p>
         <p><strong>Watch out.</strong> Not every Node module is available on the edge: there is no ordinary file system, so data lives in Cloudflare's own storage services.</p>
         <script type="text/plain" class="code" data-lang="js" data-title="src/index.js">
+          // Cloudflare looks for one exported object with a fetch method
           export default {
             // Called once per request, with the standard Request object
             async fetch(request) {
+              // Read ?name=… from the full URL, with a fallback
               const name = new URL(request.url).searchParams.get('name') || 'stranger';
+              // Build a plain-text Response and hand it back to the platform
               return new Response(`Hello, ${name}!`, { headers: { 'Content-Type': 'text/plain' } });
             }
           };
@@ -2857,6 +3088,7 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
     <h3>A classic use: hiding an API key</h3>
     <p>Chapter 10 warned that any API key in browser JavaScript is public: anyone can open DevTools and copy it. A tiny serverless function fixes that. The browser calls <em>your</em> function; the function, running on the platform's server, adds the secret key (stored as an environment variable in the platform's settings) and calls the real API. The key never reaches the visitor. This is called a <strong>proxy</strong>.</p>
     <script type="text/plain" class="code" data-lang="js" data-title="netlify/functions/weather.mjs">
+      // Runs on the platform's servers, never in the visitor's browser
       export default async (req) => {
         // Only the city comes from the visitor
         const city = new URL(req.url).searchParams.get('city') || 'Miami';
@@ -2864,7 +3096,9 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
         const key = process.env.WEATHER_API_KEY;
         // The function calls the real API (server to server: no CORS, key stays hidden)
         const api = await fetch(`https://api.example-weather.com/v1/now?q=${encodeURIComponent(city)}&key=${key}`);
+        // 502 Bad Gateway: the service behind this function had a problem
         if (!api.ok) return Response.json({ error: 'Weather service unavailable' }, { status: 502 });
+        // Read the weather service's JSON answer
         const data = await api.json();
         // Send the browser only what it needs
         return Response.json({ city, tempC: data.temp_c, sky: data.condition });
@@ -2873,6 +3107,7 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
     <script type="text/plain" class="code" data-lang="js" data-title="The page calls the function, not the weather API">
       // The browser never sees the key: it only knows this URL on your own site
       const res = await fetch('/.netlify/functions/weather?city=Orlando');
+      // An object such as { city, tempC, sky }, as the function built it
       const weather = await res.json();
     </script>
 
@@ -2906,6 +3141,7 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
     <h3>Backend as a Service, briefly</h3>
     <p>Sometimes you need no server code at all. A <strong>BaaS</strong> such as Supabase or Firebase gives your front end a hosted database, user sign-up and login, and file storage, through a JavaScript library you call straight from the browser. Instead of writing an Express route, you write <em>rules</em> on the service saying who may read or change which rows.</p>
     <script type="text/plain" class="code" data-lang="js" data-title="Reading a table with Supabase, from the browser">
+      // Supabase's browser library (npm install @supabase/supabase-js)
       import { createClient } from '@supabase/supabase-js';
       // The URL and the PUBLIC "anon" key are meant to be in browser code; the rules protect the data
       const supabase = createClient('https://xyzcompany.supabase.co', 'public-anon-key');
@@ -2925,6 +3161,7 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js" data-title="netlify/functions/daily-digest.mjs">
           // Run every day at 13:00 UTC
           export const config = { schedule: '0 13 * * *' };
+          // No request arrives: the schedule itself is the trigger
           export default async () => {
             // Gather yesterday's new books and email the club (details left out)
             console.log('Sending the daily digest');
@@ -2938,9 +3175,11 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js" data-title="AWS Lambda, triggered by S3">
           // AWS calls this with a list of the files that just arrived
           export const handler = async (event) => {
+            // One record per file (several can arrive together)
             for (const record of event.Records) {
               // Which file? e.g. "uploads/cat.jpg"
               const key = record.s3.object.key;
+              // A real function would make the thumbnail here
               console.log('New upload:', key, '→ making a thumbnail in thumbs/');
             }
           };
@@ -2951,10 +3190,13 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
         <p><strong>When you meet it.</strong> Sending a welcome email when a user signs up, updating a counter when a review is added.</p>
         <p><strong>Watch out.</strong> Triggers run separately from the request that changed the data, so the visitor's page does not wait for them, and errors in them do not reach the visitor. Log them.</p>
         <script type="text/plain" class="code" data-lang="js" data-title="Firebase Cloud Function">
+          // A trigger helper from Firebase's functions library
           const { onDocumentCreated } = require('firebase-functions/v2/firestore');
           // Runs whenever a new document appears in the "users" collection
           exports.welcome = onDocumentCreated('users/{userId}', async (event) => {
+            // The new document's fields, such as the user's name and email
             const user = event.data.data();
+            // A real app would send the email here
             console.log('Send a welcome email to', user.email);
           });
         </script>
@@ -2971,6 +3213,7 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
         <script type="text/plain" class="code" data-lang="js">
           // The host sets PORT; 3000 is only the fallback for your own computer
           const PORT = process.env.PORT || 3000;
+          // Listen on that port; the message shows up in the host's logs
           app.listen(PORT, () => console.log('Listening on ' + PORT));
         </script>
       </div>
@@ -2979,9 +3222,13 @@ app.listen(3000, () => console.log('Rendering on port 3000'));</textarea>
         <p><strong>When to choose it.</strong> A mostly static site that needs a few server jobs: a contact form, a payment, a hidden API key.</p>
         <p><strong>Watch out.</strong> Secrets go in the platform's "Environment variables" settings page, never in the repository. And remember that variables do not survive between requests.</p>
         <script type="text/plain" class="code" data-lang="shell">
+          # Install Netlify's command-line tool once, for the whole computer
           $ npm install -g netlify-cli
+          # Run the site and its functions on your own computer, like the real platform
           $ netlify dev
+          # The whole site, served on your computer
           ◈ Server now ready on http://localhost:8888
+          # Each file in netlify/functions becomes a URL like this one
           ◈ Loaded function hello at http://localhost:8888/.netlify/functions/hello
         </script>
       </div>
@@ -3141,24 +3388,33 @@ export default async (req) => {
       <li><strong>Everything else:</strong> a JSON 404 <code>{ "error": "No such endpoint" }</code>.</li>
     </ul>
     <div class="playground" data-runtime="node" data-title="Book club server" data-height="520" data-layout="stacked" data-challenge="Build the complete book club server">
-      <textarea data-lang="ejs" data-label="views/index.ejs"><h1>Book club</h1>
+      <textarea data-lang="ejs" data-label="views/index.ejs"><%# Plain HTML: the heading needs no data %>
+<h1>Book club</h1>
+<!-- A short instruction for visitors, shown as written -->
 <p>Vote with the API, then reload this page.</p>
 
 <!-- TODO: an <ol class="books"> with one <li> per book (books arrive already sorted),
      each like:  Dune (12 votes)
      Use the escaped output tag for the title and the votes. -->
 </textarea>
-      <textarea data-lang="js" data-label="server.js">const express = require('express');
-const app = express();
+      <textarea data-lang="js" data-label="server.js">// Load Express and create the app
+const express = require('express');
+const app = express();  // holds the middleware, settings and routes
 
 // TODO 1: read JSON bodies (express.json) and use the 'ejs' view engine
 
+// The data, kept in memory (it resets when the server restarts)
 let books = [
+  // Each book has an id, a title, a genre and a number of votes
   { id: 1, title: 'Dune', genre: 'sci-fi', votes: 12 },
+  // In this array the books are NOT in order of votes
   { id: 2, title: 'Pride and Prejudice', genre: 'classic', votes: 15 },
+  // Genres were typed by people, so upper and lower case vary
   { id: 3, title: 'The Martian', genre: 'Sci-Fi', votes: 9 }
 ];
+// The id the next new book will get
 let nextId = 4;
+// A helper: the book with this id, or undefined (ids from the URL are text)
 const findBook = (id) => books.find((b) => b.id === Number(id));
 
 // TODO 2: GET /  -> render 'index' with { books } sorted by votes, most first
@@ -3172,6 +3428,7 @@ const findBook = (id) => books.find((b) => b.id === Number(id));
 
 // TODO 8: a JSON 404 { error: 'No such endpoint' } for everything else
 
+// Start the server; the message appears once it is listening
 app.listen(3000, () => console.log('Book club on port 3000'));</textarea>
       <script type="text/plain" class="setup">__nodeFiles({ 'views/index.ejs': WD1_CODE.ejs || '' }); NODE_START_PATH = '/';</script>
       <script type="application/json" class="checks">

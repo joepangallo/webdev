@@ -335,9 +335,10 @@
           // The data
           let count = 0;
           // The elements that show it: you must remember all of them
-          const badge = document.querySelector('#badge');
-          const summary = document.querySelector('#summary');
+          const badge = document.querySelector('#badge');     // the number on the cart icon
+          const summary = document.querySelector('#summary'); // the sentence under the list
 
+          // Runs every time the Add button is clicked
           document.querySelector('#add').addEventListener('click', () => {
             // Step 1: change the data
             count = count + 1;
@@ -359,8 +360,11 @@
             const [count, setCount] = React.useState(0);
             // Describe the result; React works out which DOM nodes to change
             return (
+              // One outer <div> holds everything: JSX returns a single root
               <div>
+                {/* The badge shows the current count */}
                 <span id="badge">{count}</span>
+                {/* The summary reads the same count, so the two always agree */}
                 <p id="summary">{count} items in your cart</p>
                 {/* The click only changes the data */}
                 <button onClick={() => setCount(count + 1)}>Add</button>
@@ -374,28 +378,29 @@
     <h3>Your turn: draw the page from state, by hand</h3>
     <p>You can use the declarative idea without any framework at all, and doing it once makes React much easier to understand. The starter keeps the to-do list in one array, <code>tasks</code>. Write <code>render()</code> so that it redraws the list <em>and</em> the counter from the array, then make the button change the array and call <code>render()</code>. Nothing else may touch the page.</p>
     <div class="playground" data-title="Render a to-do list from state" data-height="400" data-challenge="Make the page a function of the tasks array">
-      <textarea data-lang="html"><h1>Today</h1>
-<p id="count"></p>
-<ul id="list"></ul>
-<form id="add">
-  <label for="task">New task</label>
-  <input id="task" name="task">
-  <button>Add</button>
+      <textarea data-lang="html"><h1>Today</h1>                <!-- the page heading -->
+<p id="count"></p>            <!-- the counter: render() keeps it up to date -->
+<ul id="list"></ul>           <!-- the list of tasks: render() draws it -->
+<form id="add">               <!-- submitting this form adds a task -->
+  <label for="task">New task</label>  <!-- the visible name of the input -->
+  <input id="task" name="task">       <!-- the box where a new task is typed -->
+  <button>Add</button>                <!-- a button inside a form submits it -->
 </form></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-#list li {
-  padding: 4px 0;
+#list li {                            /* every task in the list */
+  padding: 4px 0;                     /* a little space above and below */
 }</textarea>
       <textarea data-lang="js">// The state: the only place the tasks are stored
 const tasks = ['Read 11.1', 'Try the playground'];
 
-const list = document.querySelector('#list');
-const count = document.querySelector('#count');
-const form = document.querySelector('#add');
-const input = document.querySelector('#task');
+// The elements, found once when the script starts
+const list = document.querySelector('#list');   // the <ul> that shows the tasks
+const count = document.querySelector('#count'); // the <p> for the count
+const form = document.querySelector('#add');    // the form around the input
+const input = document.querySelector('#task');  // the text box
 
 // Draws the whole page from the tasks array
 function render() {
@@ -404,6 +409,7 @@ function render() {
   // TODO 3: set count's text to "2 tasks" (use tasks.length)
 }
 
+// Runs when the form is submitted (a click on Add, or Enter in the text box)
 form.addEventListener('submit', (event) => {
   // Keep the browser from reloading the page
   event.preventDefault();
@@ -549,10 +555,10 @@ render();</textarea>
           <script setup>
           // ref() makes a reactive value; changing count.value redraws the template
           import { ref } from 'vue';
-          const count = ref(0);
+          const count = ref(0);   // a reactive number that starts at 0
           <\/script>
 
-          <template>
+          <template>              <!-- the markup this component shows -->
             <!-- @click attaches a listener; {{ }} shows a value -->
             <button @click="count++">Clicked {{ count }} times</button>
           </template>
@@ -563,11 +569,13 @@ render();</textarea>
           // Angular: a TypeScript class with a decorator that holds its template
           import { Component, signal } from '@angular/core';
 
+          // The decorator: @Component(...) turns the class below into a component
           @Component({
-            selector: 'app-counter',
+            selector: 'app-counter',  // the tag that shows it on a page: <app-counter>
             // (click) attaches a listener; {{ }} shows a value
             template: `<button (click)="add()">Clicked {{ count() }} times</button>`
           })
+          // The class holds the data and the methods that the template uses
           export class CounterComponent {
             // A signal is Angular's reactive value
             count = signal(0);
@@ -635,11 +643,11 @@ render();</textarea>
     <h3>Your first React page</h3>
     <p>A React app needs three things: an HTML page with one empty element for React to fill (by convention <code>&lt;div id="root"&gt;</code>), the React library itself, and your code. The textbook starts the simplest way, by loading React from a CDN and letting a library called Babel translate JSX in the browser. That setup is fine for learning and terrible for real sites (it is slow and ships a translator to every visitor), which is why 11.4 moves to a proper build tool.</p>
     <script type="text/plain" class="code" data-lang="html" data-title="index.html (learning setup, loaded from a CDN)" data-result="off">
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <title>My first React page</title>
+      <!DOCTYPE html>                       <!-- a modern HTML page -->
+      <html lang="en">                      <!-- the page is in English -->
+      <head>                                <!-- information about the page -->
+        <meta charset="utf-8">              <!-- read the text as UTF-8 -->
+        <title>My first React page</title>  <!-- the text on the browser tab -->
         <!-- 1. React itself: components, JSX elements and Hooks -->
         <script src="https://unpkg.com/react@18/umd/react.development.js"><\/script>
         <!-- 2. ReactDOM: the part that draws components into a web page -->
@@ -647,7 +655,7 @@ render();</textarea>
         <!-- 3. Babel: translates JSX into plain JavaScript, in the browser (learning only) -->
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"><\/script>
       </head>
-      <body>
+      <body>                                <!-- the visible part of the page -->
         <!-- React draws the whole app inside this one empty element -->
         <div id="root"></div>
 
@@ -666,10 +674,11 @@ render();</textarea>
     <h3>Your turn: hello, React</h3>
     <p>Render a heading and a paragraph into <code>#root</code>. JSX needs a single outer element, so wrap the two in a <code>&lt;div&gt;</code> (or in <code>&lt;&gt; … &lt;/&gt;</code>, a fragment, which you will meet in a moment).</p>
     <div class="playground" data-runtime="react" data-title="Hello, React" data-height="300" data-challenge="Render your first React elements">
-      <textarea data-lang="html"><div id="root">Loading…</div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React takes over this div and replaces the Loading… text -->
+<div id="root">Loading…</div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }</textarea>
       <textarea data-lang="js" data-label="JSX" data-hl="jsx">// 1. Find the empty element and make it a React root
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -693,11 +702,13 @@ root.render(<p>Change me</p>);</textarea>
     <script type="text/plain" class="code" data-lang="jsx" data-title="What you write">
       // A JSX element with an attribute and a value from a variable
       const name = 'Ana';
+      // The <h1> tag is a value, so it can be stored in a variable
       const greeting = <h1 className="title">Hello, {name}!</h1>;
     </script>
     <script type="text/plain" class="code" data-lang="js" data-title="What actually runs">
       // The same line after translation: createElement(type, props, ...children)
       const name = 'Ana';
+      // Type 'h1', the props object, then the three pieces of text as children
       const greeting = React.createElement('h1', { className: 'title' }, 'Hello, ', name, '!');
     </script>
     <p>Because JSX turns into JavaScript, a few rules differ from HTML. Most of them come from one fact: attribute names become JavaScript property names.</p>
@@ -727,8 +738,11 @@ root.render(<p>Change me</p>);</textarea>
           const course = { code: 'COP 3830', seats: 24, taken: 21 };
           // Braces hold any expression: property access, math, method calls
           const card = (
+            // One outer element holds the rest
             <article>
+              {/* A method call: the code in capital letters */}
               <h2>{course.code.toUpperCase()}</h2>
+              {/* Math: 24 - 21 shows 3 */}
               <p>{course.seats - course.taken} seats left</p>
               {/* A ternary picks between two values */}
               <p>{course.taken >= course.seats ? 'Full' : 'Open'}</p>
@@ -745,6 +759,7 @@ root.render(<p>Change me</p>);</textarea>
           const percent = 65;
           // className instead of class; style is an object
           const bar = (
+            // The outer bar; the fill inside it grows with percent
             <div className="progress">
               {/* width comes from data, so an inline style makes sense here */}
               <div className="progress-fill" style={{ width: percent + '%', backgroundColor: 'teal' }} />
@@ -759,11 +774,14 @@ root.render(<p>Change me</p>);</textarea>
         <script type="text/plain" class="code" data-lang="jsx">
           // Two siblings need a wrapper; a fragment adds no extra element
           function Intro() {
-            return (
+            return (  // the parentheses let the JSX run over several lines
+              // <> opens the fragment: a wrapper that adds nothing to the page
               <>
+                {/* The heading and the paragraph end up side by side in the DOM */}
                 <h1>Web Development I</h1>
+                {/* No <div> appears around them */}
                 <p>Chapter 11: React</p>
-              </>
+              </>  // closes the fragment
             );
           }
         </script>
@@ -773,12 +791,17 @@ root.render(<p>Change me</p>);</textarea>
         <p><strong>When you meet it.</strong> Images, inputs and line breaks: <code>&lt;img src={url} alt="" /&gt;</code>, <code>&lt;input disabled /&gt;</code>.</p>
         <p><strong>Watch out.</strong> <code>&lt;input&gt;</code> without the slash is a syntax error in JSX (the translator thinks everything after it is inside the input). React lite reports it as "Unterminated JSX contents".</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // The data for the image: where it is and what it shows
           const photo = { url: 'campus.jpg', caption: 'The library at night' };
           // Empty elements close with />; disabled with no value means true
           const form = (
+            // The form holds three empty elements
             <form>
+              {/* Both attribute values come from the photo object */}
               <img src={photo.url} alt={photo.caption} />
+              {/* disabled on its own is the same as disabled={true} */}
               <input type="text" placeholder="Search" disabled />
+              {/* A line break has no children, so it closes itself */}
               <br />
             </form>
           );
@@ -815,18 +838,19 @@ root.render(<p>Change me</p>);</textarea>
     <h3>Your turn: fix the broken JSX</h3>
     <p>This component was written by someone who knows HTML but not JSX. It has six mistakes, all from the rules table above. Fix them one at a time: the console tells you about the first problem it finds, with its line number, and React prints a warning for the ones that do not stop the page.</p>
     <div class="playground" data-runtime="react" data-title="Fix the broken JSX" data-height="340" data-challenge="Turn the HTML habits into valid JSX">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React draws the component inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-.name {
-  margin-bottom: 4px;
+.name {                               /* the heading with the student's name */
+  margin-bottom: 4px;                 /* a small gap before the major */
 }</textarea>
-      <textarea data-lang="js" data-label="JSX" data-hl="jsx">function ProfileCard() {
-  const student = { name: 'Ana Lopez', major: 'Web Development' };
+      <textarea data-lang="js" data-label="JSX" data-hl="jsx">function ProfileCard() {   // a component: a function that returns JSX
+  const student = { name: 'Ana Lopez', major: 'Web Development' }; // data to show
   // Six JSX mistakes below. Fix them all.
-  return (
+  return (                  // everything up to the ) is the JSX to draw
     <h2 class="name">{student.name}</h2>
     <p style="color: teal">{student.major}</p>
     <hr>
@@ -835,6 +859,7 @@ root.render(<p>Change me</p>);</textarea>
   );
 }
 
+// Make #root a React root and draw the component inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</textarea>
       <script type="text/plain" class="setup">
         // Collect React's warnings so a check can see them
@@ -866,15 +891,19 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</t
         <script type="text/plain" class="code" data-lang="jsx">
           // A component: capitalized name, returns JSX
           function Welcome() {
-            return <h1>Welcome to the Campus Store</h1>;
+            return <h1>Welcome to the Campus Store</h1>;  // the same heading every time
           }
 
           // Another component that uses the first one twice, like a tag
           function App() {
-            return (
+            return (  // App's JSX: one <main> with three children
+              // The single root element
               <main>
+                {/* React calls Welcome() and puts its <h1> in this spot */}
                 <Welcome />
+                {/* Ordinary HTML elements and components mix freely */}
                 <p>Open 9 to 5.</p>
+                {/* The same component again: a second, separate copy */}
                 <Welcome />
               </main>
             );
@@ -894,8 +923,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</t
 
           // With a body: braces and an explicit return
           const Header = () => {
-            const today = new Date().toLocaleDateString();
-            return <header>Campus Store · {today}</header>;
+            const today = new Date().toLocaleDateString();  // today's date as text
+            return <header>Campus Store · {today}</header>; // {today} shows it
           };
         </script>
       </div>
@@ -906,14 +935,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</t
         <script type="text/plain" class="code" data-lang="jsx">
           // Not pure: changes a variable outside itself every time it renders
           let renders = 0;
-          function Bad() {
-            renders = renders + 1;
-            return <p>Rendered {renders} times</p>;
+          function Bad() {                           // a component, but not a pure one
+            renders = renders + 1;                   // changes data outside itself
+            return <p>Rendered {renders} times</p>;  // different on every call
           }
 
           // Pure: the output depends only on its input
           function Good({ price }) {
-            return <p>With tax: ${(price * 1.07).toFixed(2)}</p>;
+            return <p>With tax: ${(price * 1.07).toFixed(2)}</p>; // same price, same JSX
           }
         </script>
       </div>
@@ -940,16 +969,19 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</t
     <script type="text/plain" class="code" data-lang="jsx">
       // The data: one object per course
       const courses = [
-        { id: 'cop3830', title: 'Web Development I' },
-        { id: 'cop2800', title: 'Java Programming' },
-        { id: 'cts1131', title: 'Computer Hardware' }
+        { id: 'cop3830', title: 'Web Development I' },  // id: unique and never changes
+        { id: 'cop2800', title: 'Java Programming' },   // title: the text to show
+        { id: 'cts1131', title: 'Computer Hardware' }   // no comma after the last one
       ];
 
+      // A component that draws the whole array as a list
       function CourseList() {
-        return (
+        return (  // the JSX for the list
+          // One <ul> holds every item
           <ul>
             {/* map turns each object into an <li>; key says which course it is */}
             {courses.map((course) => (
+              // Runs once per course: the key from its id, the text from its title
               <li key={course.id}>{course.title}</li>
             ))}
           </ul>
@@ -998,10 +1030,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</t
         <p><strong>When you meet it.</strong> When a whole component looks different in some state: loading, empty, an error, or a user who is not logged in.</p>
         <p><strong>Watch out.</strong> Keep the branches readable; if each branch is big, make each one its own component.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // The parent passes the items array in as a prop
           function Cart({ items }) {
             // Nothing in the cart: show a message instead of an empty table
             if (items.length === 0) {
-              return <p>Your cart is empty.</p>;
+              return <p>Your cart is empty.</p>;  // return ends the function here
             }
             // Otherwise, the normal output
             return <p>You have {items.length} items.</p>;
@@ -1013,8 +1046,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</t
         <p><strong>When you meet it.</strong> Toggles: "Log in" or "Log out", "Show more" or "Show less", a class name that depends on state.</p>
         <p><strong>Watch out.</strong> Nested ternaries quickly become unreadable. Two levels is the limit; after that, use an <code>if</code> or a small component.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // isOpen is a true or false prop
           function Status({ isOpen }) {
-            return (
+            return (  // one paragraph whose class and text depend on isOpen
+              // A ternary picks the class name as well
               <p className={isOpen ? 'open' : 'closed'}>
                 {/* One of two pieces of JSX */}
                 {isOpen ? <strong>Open now</strong> : <em>Closed</em>}
@@ -1028,9 +1063,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</t
         <p><strong>When you meet it.</strong> Badges, warnings and optional extras: <code>{isNew &amp;&amp; &lt;span&gt;New&lt;/span&gt;}</code>.</p>
         <p><strong>Watch out.</strong> React does draw the number <code>0</code>. <code>{items.length &amp;&amp; &lt;List /&gt;}</code> shows a stray "0" when the array is empty. Compare explicitly: <code>{items.length &gt; 0 &amp;&amp; &lt;List /&gt;}</code>.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // unread is how many messages have not been read yet
           function Inbox({ unread }) {
-            return (
+            return (  // a heading with an optional badge
+              // The heading holds the word and the badge
               <h2>
+                {/* Plain text inside the heading */}
                 Inbox
                 {/* Wrong: shows "0" when unread is 0 */}
                 {unread && <span className="badge">{unread}</span>}
@@ -1046,28 +1084,29 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</t
     <h3>Your turn: render a menu from an array</h3>
     <p>The food truck's menu lives in an array. Draw one <code>&lt;li&gt;</code> per dish with a proper key, add a "Vegetarian" badge only to vegetarian dishes, and show a message instead of the list when the filter leaves nothing to show.</p>
     <div class="playground" data-runtime="react" data-title="Render the menu" data-height="440" data-layout="stacked" data-challenge="Lists, keys and conditional rendering">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-.dish {
-  padding: 6px 0;
-  border-bottom: 1px solid #ddd;
+.dish {                               /* each dish in a menu */
+  padding: 6px 0;                     /* space above and below the text */
+  border-bottom: 1px solid #ddd;      /* a thin light-grey line under it */
 }
-.badge {
-  margin-left: 8px;
-  padding: 1px 8px;
-  border-radius: 99px;
-  background: #d8f3dc;
-  font-size: 0.8em;
+.badge {                              /* the small Vegetarian label */
+  margin-left: 8px;                   /* a gap before the label */
+  padding: 1px 8px;                   /* room inside, mostly left and right */
+  border-radius: 99px;                /* fully rounded ends: a pill shape */
+  background: #d8f3dc;                /* pale green */
+  font-size: 0.8em;                   /* 80% of the size of the text around it */
 }</textarea>
       <textarea data-lang="js" data-label="JSX" data-hl="jsx">// The data: every dish has a unique id
 const dishes = [
-  { id: 'd1', name: 'Black bean tacos', price: 8.5, veg: true },
-  { id: 'd2', name: 'Fish tacos', price: 10, veg: false },
-  { id: 'd3', name: 'Elote cup', price: 5, veg: true },
-  { id: 'd4', name: 'Carnitas bowl', price: 12, veg: false }
+  { id: 'd1', name: 'Black bean tacos', price: 8.5, veg: true },  // vegetarian
+  { id: 'd2', name: 'Fish tacos', price: 10, veg: false },        // not vegetarian
+  { id: 'd3', name: 'Elote cup', price: 5, veg: true },           // vegetarian
+  { id: 'd4', name: 'Carnitas bowl', price: 12, veg: false }      // not vegetarian
 ];
 
 // Draws one menu. onlyVeg says whether to show vegetarian dishes only.
@@ -1077,7 +1116,8 @@ function Menu({ onlyVeg }) {
 
   // TODO 1: if shown is empty, return <p className="empty">Nothing to show.</p>
 
-  return (
+  return (  // the list of dishes
+    // One <ul> holds every dish
     <ul>
       {/* TODO 2: map shown to <li className="dish" key={...}>,
           showing the name and the price with two decimals, like "Fish tacos $10.00"
@@ -1088,18 +1128,26 @@ function Menu({ onlyVeg }) {
   );
 }
 
+// The whole page: a title and the same Menu component used twice
 function App() {
-  return (
+  return (  // several siblings, so they need one wrapper
+    // A fragment groups them without adding an element
     <>
+      {/* The name of the truck */}
       <h1>Taco Truck</h1>
+      {/* A heading for the first menu */}
       <h2>Full menu</h2>
+      {/* onlyVeg={false}: this Menu shows every dish */}
       <Menu onlyVeg={false} />
+      {/* A heading for the second menu */}
       <h2>Vegetarian</h2>
+      {/* onlyVeg={true}: this Menu keeps only the vegetarian dishes */}
       <Menu onlyVeg={true} />
-    </>
+    </>  // end of the fragment
   );
 }
 
+// Make #root a React root and draw App inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
       <script type="text/plain" class="setup">
         // Collect React's warnings so a check can see them
@@ -1162,9 +1210,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <script type="text/plain" class="code" data-lang="jsx">
           // The child reads its data from props
           function ProductCard(props) {
-            return (
+            return (  // one card for one product
+              // The card itself: an <article> with the class card
               <article className="card">
+                {/* props.name is whatever the parent wrote in name="..." */}
                 <h3>{props.name}</h3>
+                {/* A plain $ sign, then the price with two decimals */}
                 <p>${props.price.toFixed(2)}</p>
               </article>
             );
@@ -1172,11 +1223,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
 
           // The parent decides the data: same component, different props
           function App() {
-            return (
+            return (  // two cards, one after the other
+              // A fragment: no extra element around the cards
               <>
+                {/* This card receives { name: 'Hoodie', price: 39.99 } */}
                 <ProductCard name="Hoodie" price={39.99} />
+                {/* The same component with different data */}
                 <ProductCard name="Water bottle" price={18.25} />
-              </>
+              </>  // end of the fragment
             );
           }
         </script>
@@ -1188,9 +1242,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <script type="text/plain" class="code" data-lang="jsx">
           // Unpack the props you need; currency defaults to '$' when the parent leaves it out
           function Price({ amount, currency = '$', onSale = false }) {
-            return (
+            return (  // one paragraph for the price
+              // Two class names when the item is on sale, one otherwise
               <p className={onSale ? 'price sale' : 'price'}>
+                {/* Two values side by side: the symbol, then 12.00 */}
                 {currency}{amount.toFixed(2)}
+                {/* Shown only when onSale is true */}
                 {onSale && <strong> On sale!</strong>}
               </p>
             );
@@ -1207,8 +1264,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <script type="text/plain" class="code" data-lang="jsx">
           // A reusable frame: the content comes from whoever uses it
           function Panel({ title, children }) {
-            return (
+            return (  // the frame around the content
+              // The outer box of the panel
               <section className="panel">
+                {/* title arrives as an ordinary prop */}
                 <h2>{title}</h2>
                 {/* Draw whatever was placed between <Panel> and </Panel> */}
                 {children}
@@ -1216,9 +1275,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
             );
           }
 
+          // Using the frame: the two paragraphs become Panel's children
           const page = (
+            // title is a normal prop; everything between the tags is children
             <Panel title="Office hours">
+              {/* The first child */}
               <p>Tuesday and Thursday, 2 to 4 pm.</p>
+              {/* The second child */}
               <p>Room 214, or online by appointment.</p>
             </Panel>
           );
@@ -1230,14 +1293,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>Watch out.</strong> If a child needs to change data, the parent passes down a <em>function</em> as a prop, and the child calls it. You will do exactly that in "Lifting state up".</p>
         <script type="text/plain" class="code" data-lang="jsx">
           // Wrong: changing a prop. React will not redraw, and the parent's data is now out of sync
-          function Bad({ count }) {
-            count = count + 1;
-            return <p>{count}</p>;
+          function Bad({ count }) {  // count belongs to the parent
+            count = count + 1;       // changes only a local copy
+            return <p>{count}</p>;   // a number the parent knows nothing about
           }
 
           // Right: the child asks the parent to change the data, by calling a function prop
           function Good({ count, onAdd }) {
-            return <button onClick={onAdd}>{count}</button>;
+            return <button onClick={onAdd}>{count}</button>;  // a click calls onAdd
           }
         </script>
       </div>
@@ -1270,6 +1333,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
     <h3>State: data that changes</h3>
     <p>Props come from outside. When a component needs to <em>remember</em> something that changes, such as how many times a button was clicked, what is typed in a box, or whether a menu is open, it uses <strong>state</strong>. In function components you create state with the <code>useState</code> <strong>Hook</strong>. (A Hook is a special React function whose name starts with <code>use</code>; it lets a component "hook into" a React feature.)</p>
     <script type="text/plain" class="code" data-lang="jsx">
+      // A component that remembers a number between renders
       function Counter() {
         // useState(0) creates a piece of state that starts at 0.
         // It returns two things, unpacked with array destructuring:
@@ -1277,8 +1341,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         //   setCount: the function that changes it and asks React to redraw
         const [count, setCount] = React.useState(0);
 
-        return (
+        return (  // drawn again after every setCount
+          // One root element around the text and the button
           <div>
+            {/* count is the value for this render */}
             <p>You clicked {count} times</p>
             {/* Clicking calls setCount with the new value */}
             <button onClick={() => setCount(count + 1)}>Click me</button>
@@ -1354,12 +1420,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>When you meet it.</strong> Handlers that do more than one line of work. The usual naming convention is <code>handle</code> + event: <code>handleClick</code>, <code>handleSubmit</code>.</p>
         <p><strong>Watch out.</strong> <code>onClick={handleClick()}</code>, with parentheses, <em>calls</em> the function during rendering and passes its return value. If the function sets state, that causes another render, which calls it again: React stops with "Too many re-renders".</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // A button that counts its own likes
           function LikeButton() {
-            const [likes, setLikes] = React.useState(0);
+            const [likes, setLikes] = React.useState(0);  // likes starts at 0
 
             // Defined inside the component, so it can use likes and setLikes
             function handleClick() {
-              setLikes(likes + 1);
+              setLikes(likes + 1);  // one more like; React then redraws the button
             }
 
             // Pass the function itself: no parentheses
@@ -1372,11 +1439,16 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>When you meet it.</strong> In lists, where every row's button must say which row it belongs to.</p>
         <p><strong>Watch out.</strong> The arrow is what makes the difference. <code>onClick={remove(item.id)}</code> runs <code>remove</code> for every row the moment the list is drawn.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // tasks is the array to show; onRemove is a function from the parent
           function TaskList({ tasks, onRemove }) {
-            return (
+            return (  // the whole list
+              // One <ul> around every row
               <ul>
+                {/* map draws one <li> per task */}
                 {tasks.map((task) => (
+                  // One row; its key is the id of the task
                   <li key={task.id}>
+                    {/* The title of the task, as text */}
                     {task.title}
                     {/* The arrow waits for the click, then passes this task's id */}
                     <button onClick={() => onRemove(task.id)}>Remove</button>
@@ -1392,14 +1464,16 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>When you meet it.</strong> Reading what was typed (<code>event.target.value</code>), checking which key was pressed, and stopping a form from reloading the page.</p>
         <p><strong>Watch out.</strong> Returning <code>false</code> from a handler does nothing in React. Call <code>event.preventDefault()</code> explicitly.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // A search box that empties itself when Escape is pressed
           function SearchBox() {
             // Runs on every key press in the box
             function handleKeyDown(event) {
               // event.key works exactly as in Chapter 9
               if (event.key === 'Escape') {
-                event.target.value = '';
+                event.target.value = '';  // empty the box
               }
             }
+            // onKeyDown is camelCase, like every React event; it takes the function itself
             return <input type="search" onKeyDown={handleKeyDown} placeholder="Search…" />;
           }
         </script>
@@ -1409,33 +1483,37 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
     <h3>Your turn: a counter with a step</h3>
     <p>Build a reusable <code>Counter</code> component with its own state. Each counter on the page must keep its own count, so clicking one never changes the other, and the <code>step</code> prop sets how much each click adds.</p>
     <div class="playground" data-runtime="react" data-title="Counter with a step" data-height="400" data-challenge="Give each counter its own state">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-.counter {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
+.counter {                            /* one counter: a row of pieces */
+  display: flex;                      /* lay the children out side by side */
+  align-items: center;                /* line them up through their middles */
+  gap: 8px;                           /* space between neighbours */
+  margin-bottom: 12px;                /* space before the next counter */
 }
-.counter output {
-  min-width: 3ch;
-  font-weight: bold;
-  text-align: center;
+.counter output {                     /* the number */
+  min-width: 3ch;                     /* room for three digits */
+  font-weight: bold;                  /* bold text */
+  text-align: center;                 /* the number sits in the middle */
 }</textarea>
       <textarea data-lang="js" data-label="JSX" data-hl="jsx">// One counter. label is the text to show; step is how much each click adds (default 1).
 function Counter({ label, step = 1 }) {
   // TODO 1: create state called count that starts at 0
 
-  return (
+  return (  // the JSX for one counter
+    // One row: the label, the buttons and the number
     <div className="counter">
+      {/* The text that names this counter */}
       <span>{label}</span>
       {/* TODO 2: the − button subtracts step, the + button adds step */}
       <button className="minus">−</button>
       {/* TODO 3: show the count inside the output */}
       <output>0</output>
+      {/* The + button (see TODO 2) */}
       <button className="plus">+</button>
       {/* TODO 4: Reset sets the count to 0, and is disabled while the count is 0 */}
       <button className="reset">Reset</button>
@@ -1443,16 +1521,22 @@ function Counter({ label, step = 1 }) {
   );
 }
 
+// The page: a heading and the same Counter component used twice
 function App() {
-  return (
+  return (  // three siblings, so they need one wrapper
+    // A fragment groups them without adding an element
     <>
+      {/* The page heading */}
       <h1>Today</h1>
+      {/* No step prop, so step is 1 */}
       <Counter label="Cups of coffee" />
+      {/* step={5}: each click changes this counter by 5 */}
       <Counter label="Pages read" step={5} />
-    </>
+    </>  // end of the fragment
   );
 }
 
+// Make #root a React root and draw App inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
       <script type="application/json" class="checks">
       [
@@ -1495,24 +1579,28 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
     <script type="text/plain" class="code" data-lang="jsx">
       // The parent owns the state
       function App() {
-        const [query, setQuery] = React.useState('');
-        return (
+        const [query, setQuery] = React.useState('');  // the text typed so far
+        return (  // the two children, one after the other
+          // A fragment: no extra element around them
           <>
             {/* Down: the value. Up: the function the child calls */}
             <SearchBox query={query} onQueryChange={setQuery} />
+            {/* The sibling gets the same value, so the two always agree */}
             <ResultsList query={query} />
-          </>
+          </>  // end of the fragment
         );
       }
 
       // The child shows the value it was given and reports changes upward
       function SearchBox({ query, onQueryChange }) {
+        // Show the value from the parent; send every change back up to it
         return <input value={query} onChange={(e) => onQueryChange(e.target.value)} />;
       }
 
       // The other child only reads the value
       function ResultsList({ query }) {
-        const dishes = ['tacos', 'tamales', 'burritos'];
+        const dishes = ['tacos', 'tamales', 'burritos'];  // the items to search
+        // Keep the dishes that contain the query, then draw each one as an <li>
         return <ul>{dishes.filter((d) => d.includes(query)).map((d) => <li key={d}>{d}</li>)}</ul>;
       }
     </script>
@@ -1520,6 +1608,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
     <h3>Forms: controlled components</h3>
     <p>In Chapter 9 you read a form's values when it was submitted. React apps usually go one step further: each input's value lives in state, and the input shows whatever the state says. Typing calls <code>onChange</code>, which updates the state, which redraws the input with the new value. An input wired this way is a <strong>controlled component</strong>: React state is the single source of truth, so you always know the current value, and you can validate, format or limit it as the user types.</p>
     <script type="text/plain" class="code" data-lang="jsx">
+      // A form whose input is controlled by state
       function NameForm() {
         // The input's value lives in state
         const [name, setName] = React.useState('');
@@ -1528,15 +1617,19 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         function handleSubmit(event) {
           // Keep the browser from reloading the page
           event.preventDefault();
-          alert('Hello, ' + name);
+          alert('Hello, ' + name);  // name already holds what was typed
         }
 
-        return (
+        return (  // the whole form, drawn again after every keystroke
+          // onSubmit runs handleSubmit when the form is sent
           <form onSubmit={handleSubmit}>
+            {/* htmlFor ties the label to the input whose id is name */}
             <label htmlFor="name">Name</label>
             {/* value: show the state. onChange: update the state on every keystroke */}
             <input id="name" value={name} onChange={(event) => setName(event.target.value)} />
+            {/* Updates as you type; || shows 'stranger' while name is empty */}
             <p>Preview: Hello, {name || 'stranger'}</p>
+            {/* Turned off while the box is empty or holds only spaces */}
             <button disabled={name.trim() === ''}>Say hello</button>
           </form>
         );
@@ -1549,15 +1642,18 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>When you meet it.</strong> Every text field you want to read, validate or reset.</p>
         <p><strong>Watch out.</strong> Start the state with <code>''</code>, not <code>undefined</code>. An input whose value goes from <code>undefined</code> to a string switches from uncontrolled to controlled, and React warns about it.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // A text area with a live character counter
           function Feedback() {
             // Start with an empty string, never undefined
             const [text, setText] = React.useState('');
-            return (
+            return (  // the text area and the counter
+              // A fragment around the two siblings
               <>
+                {/* Controlled like an input; maxLength stops typing at 140 characters */}
                 <textarea value={text} onChange={(e) => setText(e.target.value)} maxLength={140} />
                 {/* Derived from state: no extra state needed for the counter */}
                 <p>{140 - text.length} characters left</p>
-              </>
+              </>  // end of the fragment
             );
           }
         </script>
@@ -1567,22 +1663,28 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>When you meet it.</strong> Dropdowns, settings, filters and "I agree" boxes.</p>
         <p><strong>Watch out.</strong> For a checkbox, <code>event.target.value</code> is the text "on", not true or false. Use <code>.checked</code>.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // A size menu and a gift-wrap checkbox, both controlled
           function Preferences() {
-            const [size, setSize] = React.useState('M');
-            const [gift, setGift] = React.useState(false);
-            return (
+            const [size, setSize] = React.useState('M');    // Medium at first
+            const [gift, setGift] = React.useState(false);  // checked or not
+            return (  // two controls side by side
+              // A fragment around them
               <>
                 {/* The select's value picks which option is shown */}
                 <select value={size} onChange={(e) => setSize(e.target.value)}>
+                  {/* value goes into state; the text is what people see */}
                   <option value="S">Small</option>
+                  {/* Shown at first, because size starts as 'M' */}
                   <option value="M">Medium</option>
+                  {/* Picking this one calls setSize('L') */}
                   <option value="L">Large</option>
                 </select>
                 {/* checked + event.target.checked for checkboxes */}
                 <label>
+                  {/* Inside the label, so a click on Gift wrap ticks the box too */}
                   <input type="checkbox" checked={gift} onChange={(e) => setGift(e.target.checked)} /> Gift wrap
                 </label>
-              </>
+              </>  // end of the fragment
             );
           }
         </script>
@@ -1592,19 +1694,23 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>When you meet it.</strong> Sign-up, checkout and settings forms with many fields.</p>
         <p><strong>Watch out.</strong> Copy first with <code>...form</code>; <code>[name]: value</code> in square brackets uses the variable's value as the key (a computed property name).</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // A sign-up form kept in one state object
           function SignUp() {
             // The whole form in one object
             const [form, setForm] = React.useState({ email: '', major: '' });
 
             // One handler: the input's name says which field to update
             function handleChange(event) {
-              const { name, value } = event.target;
-              setForm({ ...form, [name]: value });
+              const { name, value } = event.target;  // which field, and what it holds now
+              setForm({ ...form, [name]: value });   // a copy with that one field replaced
             }
 
-            return (
+            return (  // two inputs that share one handler
+              // The form element around the inputs
               <form>
+                {/* name="email" matches the key form.email */}
                 <input name="email" value={form.email} onChange={handleChange} />
+                {/* Same handler; here event.target.name is "major" */}
                 <input name="major" value={form.major} onChange={handleChange} />
               </form>
             );
@@ -1646,44 +1752,55 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
     <h3>Your turn: a tip calculator</h3>
     <p>Every field below is controlled. Wire each input to its state, then compute the share per person from the state. The result is <em>derived</em>: you calculate it during rendering instead of storing it in more state.</p>
     <div class="playground" data-runtime="react" data-title="Tip calculator" data-height="420" data-challenge="Controlled inputs and a derived result">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-label {
-  display: block;
-  margin: 10px 0 4px;
+label {                               /* every label */
+  display: block;                     /* on its own line, above its field */
+  margin: 10px 0 4px;                 /* 10px above, 4px below */
 }
-#result {
-  font-size: 1.4em;
-  font-weight: bold;
+#result {                             /* the share per person */
+  font-size: 1.4em;                   /* 1.4 times the normal text size */
+  font-weight: bold;                  /* bold text */
 }</textarea>
-      <textarea data-lang="js" data-label="JSX" data-hl="jsx">function TipCalculator() {
+      <textarea data-lang="js" data-label="JSX" data-hl="jsx">// A form with three fields and a result worked out from them
+function TipCalculator() {
   // The three inputs, kept as strings because that is what inputs give you
-  const [bill, setBill] = React.useState('');
-  const [tip, setTip] = React.useState('18');
-  const [people, setPeople] = React.useState('1');
+  const [bill, setBill] = React.useState('');       // the bill: empty at first
+  const [tip, setTip] = React.useState('18');       // the tip percent
+  const [people, setPeople] = React.useState('1');  // how many people share it
 
   // TODO 3: compute the share per person from the state:
   //   total = bill * (1 + tip / 100), each = total / people
   //   (Number(bill) turns the text into a number)
   const each = 0;
 
-  return (
+  return (  // the form, drawn again whenever the state changes
+    // onSubmit stops Enter from reloading the page
     <form onSubmit={(e) => e.preventDefault()}>
+      {/* The label for the bill box */}
       <label htmlFor="bill">Bill ($)</label>
       {/* TODO 1: make these three fields controlled: value={...} and onChange={...} */}
       <input id="bill" type="number" min="0" step="0.01" />
 
+      {/* The label for the tip menu */}
       <label htmlFor="tip">Tip</label>
+      {/* The second of the three fields: a drop-down menu */}
       <select id="tip">
+        {/* value is the text the code reads; 15% is what people see */}
         <option value="15">15%</option>
+        {/* tip / 100 turns 18 into 0.18 */}
         <option value="18">18%</option>
+        {/* For example, 20% of a $50 bill is $10 */}
         <option value="20">20%</option>
       </select>
 
+      {/* The label for the people box */}
       <label htmlFor="people">People</label>
+      {/* The third field; min="1" keeps the arrows from going below 1 */}
       <input id="people" type="number" min="1" />
 
       {/* TODO 2: show the share with two decimals, like "$30.00 each" */}
@@ -1692,6 +1809,7 @@ label {
   );
 }
 
+// Make #root a React root and draw the calculator inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<TipCalculator />);</textarea>
       <script type="application/json" class="checks">
       [
@@ -1711,9 +1829,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(<TipCalculator />);<
         <script type="text/plain" class="code" data-lang="jsx">
           // Props arrive as the parameter; state comes from useState
           function Counter({ label }) {
-            const [count, setCount] = React.useState(0);
-            return (
+            const [count, setCount] = React.useState(0);  // count starts at 0
+            return (  // one button
+              // Each click asks React for count + 1
               <button onClick={() => setCount(count + 1)}>
+                {/* The label prop, a colon, then the count */}
                 {label}: {count}
               </button>
             );
@@ -1724,7 +1844,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<TipCalculator />);<
         <script type="text/plain" class="code" data-lang="jsx">
           // A class that extends React.Component
           class Counter extends React.Component {
-            constructor(props) {
+            constructor(props) {  // runs once, when React creates the component
               // Always pass props to the parent class first
               super(props);
               // State is one object, set up in the constructor
@@ -1732,8 +1852,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(<TipCalculator />);<
             }
             // render() returns the JSX; props and state hang off this
             render() {
-              return (
+              return (  // the same button as the function version
+                // setState merges the new count into this.state, then React redraws
                 <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+                  {/* Props and state are both read through this */}
                   {this.props.label}: {this.state.count}
                 </button>
               );
@@ -1761,30 +1883,36 @@ ReactDOM.createRoot(document.getElementById('root')).render(<TipCalculator />);<
     <h3>Your turn: a shopping list with lifted state</h3>
     <p>Three components share one list. <code>App</code> owns the array. <code>AddItem</code> has its own controlled input (that text is private to it) and calls an <code>onAdd</code> prop when the form is submitted. <code>ItemList</code> draws the items and calls an <code>onRemove</code> prop. Fill in the TODOs so data flows down as props and changes flow up as function calls.</p>
     <div class="playground" data-runtime="react" data-title="Shopping list" data-height="460" data-layout="stacked" data-challenge="Lift the list into App and pass functions down">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-li {
-  margin: 4px 0;
+li {                                  /* every item in the list */
+  margin: 4px 0;                      /* a little space above and below */
 }
-li button {
-  margin-left: 8px;
+li button {                           /* the Remove buttons */
+  margin-left: 8px;                   /* a gap between the text and the button */
 }</textarea>
       <textarea data-lang="js" data-label="JSX" data-hl="jsx">// A form with its own controlled input. It reports new items with onAdd(text).
 function AddItem({ onAdd }) {
-  const [text, setText] = React.useState('');
+  const [text, setText] = React.useState('');  // private to this form
 
+  // Runs when the form is submitted
   function handleSubmit(event) {
-    event.preventDefault();
+    event.preventDefault();  // keep the browser from reloading the page
     // TODO 3: if text (trimmed) is not empty, call onAdd with it, then clear text
   }
 
-  return (
+  return (  // the form
+    // onSubmit runs handleSubmit after a click on Add or Enter in the box
     <form onSubmit={handleSubmit}>
+      {/* htmlFor ties the label to the input whose id is item */}
       <label htmlFor="item">Item</label>
+      {/* Controlled: the box always shows the text state; typing updates it */}
       <input id="item" value={text} onChange={(e) => setText(e.target.value)} />
+      {/* A button inside a form submits it */}
       <button>Add</button>
     </form>
   );
@@ -1792,10 +1920,14 @@ function AddItem({ onAdd }) {
 
 // Draws the items. Each Remove button calls onRemove(item.id).
 function ItemList({ items, onRemove }) {
-  return (
+  return (  // the list
+    // One <ul> around every row
     <ul>
+      {/* map draws one <li> per item */}
       {items.map((item) => (
+        // One row; its key is the id of the item
         <li key={item.id}>
+          {/* The name of the item, as text */}
           {item.text}
           {/* TODO 4: call onRemove with this item's id */}
           <button className="remove">Remove</button>
@@ -1805,13 +1937,15 @@ function ItemList({ items, onRemove }) {
   );
 }
 
+// The id for the next new item (1 and 2 are taken)
 let nextId = 3;
 
+// The common parent of AddItem and ItemList
 function App() {
   // The list lives here, in the common parent
   const [items, setItems] = React.useState([
-    { id: 1, text: 'Milk' },
-    { id: 2, text: 'Bread' }
+    { id: 1, text: 'Milk' },   // the first starting item
+    { id: 2, text: 'Bread' }   // the second one
   ]);
 
   // TODO 1: addItem(text) adds { id: nextId++, text } to the END of a NEW array
@@ -1820,18 +1954,22 @@ function App() {
   // TODO 2: removeItem(id) keeps every item whose id is not id (use filter)
   function removeItem(id) {}
 
-  return (
+  return (  // the whole page
+    // A fragment around the four siblings
     <>
+      {/* The page heading */}
       <h1>Shopping list</h1>
       {/* TODO 5: pass addItem down as onAdd, and items and removeItem down to ItemList */}
       <AddItem />
+      {/* For now the list gets an empty array (see TODO 5) */}
       <ItemList items={[]} />
       {/* TODO 6: show "2 items" from items.length */}
       <p id="count">0 items</p>
-    </>
+    </>  // end of the fragment
   );
 }
 
+// Make #root a React root and draw App inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
       <script type="application/json" class="checks">
       [
@@ -1884,9 +2022,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
     <h3>Node.js and npm</h3>
     <p>Every one of those tools is a JavaScript program, and they run on your computer, not in a browser. That is the job of <strong>Node.js</strong>, which runs JavaScript outside the browser (you will build servers with it in Chapter 13). Installing Node also installs <strong>npm</strong>, the Node Package Manager. npm downloads <strong>packages</strong> (libraries and tools other people publish, like React and Vite) from the public npm registry into your project, and runs the project's scripts. You talk to both through a <strong>terminal</strong> (Terminal on macOS, PowerShell or Windows Terminal on Windows, or the terminal panel built into VS Code).</p>
     <script type="text/plain" class="code" data-lang="shell" data-title="Terminal: check that Node and npm are installed">
+      # Ask Node which version is installed
       $ node -v
+      # Any version number means it worked (yours may be newer)
       v22.11.0
+      # npm was installed together with Node
       $ npm -v
+      # npm has its own version number, separate from Node's
       10.9.0
     </script>
     <p>Each project describes itself in a file called <code>package.json</code>: its name, the packages it needs, and short names for the commands you run. npm reads it, and so does every other tool.</p>
@@ -2021,15 +2163,16 @@ createRoot(document.getElementById('[[root]]')).[[render]](
         <script type="text/plain" class="code" data-lang="jsx" data-title="src/components/ProductCard.jsx">
           // The file's main export: no braces needed to import it
           export default function ProductCard({ name, price }) {
-            return <article><h3>{name}</h3><p>${price}</p></article>;
+            return <article><h3>{name}</h3><p>${price}</p></article>;  // one small card
           }
         </script>
         <script type="text/plain" class="code" data-lang="jsx" data-title="src/App.jsx">
           // Import the default export by a name of your choice
           import ProductCard from './components/ProductCard.jsx';
 
+          // App is the main export of this file
           export default function App() {
-            return <ProductCard name="Hoodie" price={39.99} />;
+            return <ProductCard name="Hoodie" price={39.99} />;  // used like a tag
           }
         </script>
       </div>
@@ -2039,15 +2182,16 @@ createRoot(document.getElementById('[[root]]')).[[render]](
         <p><strong>Watch out.</strong> The names must match exactly, and the braces matter: <code>import useState from 'react'</code> (no braces) asks for a default export React does not have.</p>
         <script type="text/plain" class="code" data-lang="jsx" data-title="src/utils/format.js">
           // Two named exports from one file
-          export function money(n) { return '$' + n.toFixed(2); }
-          export const TAX = 0.07;
+          export function money(n) { return '$' + n.toFixed(2); }  // 12 gives '$12.00'
+          export const TAX = 0.07;                                 // a 7% sales tax
         </script>
         <script type="text/plain" class="code" data-lang="jsx" data-title="src/components/Total.jsx">
           // Named imports use braces and the exported names
           import { money, TAX } from '../utils/format.js';
 
+          // Total is the main export of this file
           export default function Total({ subtotal }) {
-            return <p>Total: {money(subtotal * (1 + TAX))}</p>;
+            return <p>Total: {money(subtotal * (1 + TAX))}</p>;  // uses both imports
           }
         </script>
       </div>
@@ -2061,8 +2205,9 @@ createRoot(document.getElementById('[[root]]')).[[render]](
           // logo becomes the image's final URL, such as "/assets/logo-8d1f.png"
           import logo from './assets/logo.png';
 
+          // A header that shows the imported image
           export default function Header() {
-            return <img src={logo} alt="Campus Store" width="120" />;
+            return <img src={logo} alt="Campus Store" width="120" />;  // logo is the URL
           }
         </script>
       </div>
@@ -2105,16 +2250,25 @@ createRoot(document.getElementById('[[root]]')).[[render]](
 
     <h3>Building and deploying</h3>
     <script type="text/plain" class="code" data-lang="shell" data-title="Terminal: a production build">
+      # Run the "build" script from package.json
       $ npm run build
 
+      # npm names the project and the script it is running
       > campus-store@0.1.0 build
+      # The command behind that script name
       > vite build
 
+      # Vite starts the production build
       vite v6.0.5 building for production...
+      # Every file reached through the imports was transpiled
       ✓ 34 modules transformed.
+      # The finished files in dist/: size, then size after gzip compression
       dist/index.html                   0.46 kB │ gzip:  0.30 kB
+      # All the CSS in one file, with a content hash in its name
       dist/assets/index-n_ryQ3BS.css    1.39 kB │ gzip:  0.71 kB
+      # All the JavaScript, React included, bundled and minified
       dist/assets/index-DiwrgTda.js   143.36 kB │ gzip: 46.09 kB
+      # Finished: the dist folder is ready to upload
       ✓ built in 812ms
     </script>
     <p>The <code>dist</code> folder is a static website, so it can go anywhere you could put the course project: GitHub Pages, Netlify, Vercel, Cloudflare Pages, or any ordinary web server. Run <code>npm run preview</code> first to test the built files locally.</p>
@@ -2124,9 +2278,10 @@ createRoot(document.getElementById('[[root]]')).[[render]](
         <p><strong>When you meet it.</strong> When you want to publish a React project from the same GitHub account.</p>
         <p><strong>Watch out.</strong> Vite assumes the site lives at the root (<code>/</code>), so on a sub-folder every script and stylesheet 404s and you get a blank page. Set <code>base</code> in <code>vite.config.js</code> to <code>'/repo-name/'</code> before building, and publish the <em>contents</em> of <code>dist</code>.</p>
         <script type="text/plain" class="code" data-lang="js" data-title="vite.config.js">
-          import { defineConfig } from 'vite';
-          import react from '@vitejs/plugin-react';
+          import { defineConfig } from 'vite';       // Vite's helper for the settings
+          import react from '@vitejs/plugin-react';  // the official React plugin
 
+          // The settings Vite reads every time it starts or builds
           export default defineConfig({
             // React support: JSX and fast refresh
             plugins: [react()],
@@ -2220,6 +2375,7 @@ createRoot(document.getElementById('[[root]]')).[[render]](
 
     <h3>useEffect</h3>
     <script type="text/plain" class="code" data-lang="jsx">
+      // Keeps the title on the browser tab in step with the count
       function UnreadTitle({ count }) {
         // useEffect(setup, dependencies)
         React.useEffect(() => {
@@ -2227,7 +2383,7 @@ createRoot(document.getElementById('[[root]]')).[[render]](
           document.title = count > 0 ? '(' + count + ') Inbox' : 'Inbox';
         }, [count]); // The dependency array: run again only when count changes
 
-        return <p>{count} unread</p>;
+        return <p>{count} unread</p>;  // what the component shows on the page
       }
     </script>
     <p>An effect has up to three parts: the <strong>setup</strong> function (your code), an optional <strong>cleanup</strong> function that the setup returns, and a <strong>dependency array</strong> that lists every prop or state value the setup uses. The dependency array decides <em>when</em> the effect runs:</p>
@@ -2285,16 +2441,18 @@ createRoot(document.getElementById('[[root]]')).[[render]](
         <p><strong>When you meet it.</strong> Setting up something for the lifetime of the component: a timer, a window listener, a connection.</p>
         <p><strong>Watch out.</strong> If the setup uses a prop or state value, that value belongs in the array. Leave it out and the effect keeps using the value from the first render forever (a "stale" value).</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // Shows the width of the browser window, live
           function WindowWidth() {
+            // The width in pixels, starting with the width right now
             const [width, setWidth] = React.useState(window.innerWidth);
-            React.useEffect(() => {
+            React.useEffect(() => {  // runs after the first render
               // Setup: listen for resizes
               function handleResize() { setWidth(window.innerWidth); }
-              window.addEventListener('resize', handleResize);
+              window.addEventListener('resize', handleResize);  // on every resize
               // Cleanup: stop listening when the component unmounts
               return () => window.removeEventListener('resize', handleResize);
-            }, []);
-            return <p>The window is {width}px wide.</p>;
+            }, []);  // empty: set up once, clean up once at unmount
+            return <p>The window is {width}px wide.</p>;  // redraws with each width
           }
         </script>
       </div>
@@ -2303,12 +2461,13 @@ createRoot(document.getElementById('[[root]]')).[[render]](
         <p><strong>When you meet it.</strong> Loading data for whatever the user selected: a different user id, a different search term, a different page.</p>
         <p><strong>Watch out.</strong> A new object or array created during render is "different" every time (<code>Object.is</code> again), so an effect that depends on one runs after every render.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // Puts the name prop in the browser tab as well as on the page
           function Greeting({ name }) {
-            React.useEffect(() => {
+            React.useEffect(() => {  // the effect reads name, so name is a dependency
               // Runs after the first render and whenever name changes
-              document.title = 'Hello, ' + name;
-            }, [name]);
-            return <h1>Hello, {name}</h1>;
+              document.title = 'Hello, ' + name;  // the title is outside React
+            }, [name]);  // React compares name with its value from the last render
+            return <h1>Hello, {name}</h1>;  // the heading on the page
           }
         </script>
       </div>
@@ -2317,15 +2476,16 @@ createRoot(document.getElementById('[[root]]')).[[render]](
         <p><strong>When you meet it.</strong> Every effect that starts something that keeps going: <code>setInterval</code>, <code>addEventListener</code>, a WebSocket (Chapter 13), a subscription.</p>
         <p><strong>Watch out.</strong> A missing cleanup is a <strong>memory leak</strong>: open and close a page with a timer ten times and ten timers are running. In development, React's <code>StrictMode</code> deliberately runs every effect setup, cleanup, setup on mount, to expose missing cleanups early. If you see an effect run twice in development, that is why.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // Counts the seconds since it appeared on the page
           function Stopwatch() {
-            const [seconds, setSeconds] = React.useState(0);
-            React.useEffect(() => {
+            const [seconds, setSeconds] = React.useState(0);  // starts at 0
+            React.useEffect(() => {  // runs once, after the first render
               // Setup: start a timer; the updater form avoids a stale seconds value
               const id = setInterval(() => setSeconds((s) => s + 1), 1000);
               // Cleanup: stop that same timer
               return () => clearInterval(id);
-            }, []);
-            return <p>{seconds} s</p>;
+            }, []);  // one timer for the whole life of the component
+            return <p>{seconds} s</p>;  // redraws every second
           }
         </script>
       </div>
@@ -2334,32 +2494,35 @@ createRoot(document.getElementById('[[root]]')).[[render]](
         <p><strong>When you meet it.</strong> Any component that shows data from a server.</p>
         <p><strong>Watch out.</strong> The setup function itself must not be <code>async</code> (an async function returns a promise, and React expects a cleanup function or nothing). Define an async function inside the effect and call it.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // Loads one user from the server and shows the name
           function UserCard({ userId }) {
-            const [user, setUser] = React.useState(null);
-            const [error, setError] = React.useState(null);
+            const [user, setUser] = React.useState(null);    // null until the data arrives
+            const [error, setError] = React.useState(null);  // null unless something fails
 
-            React.useEffect(() => {
+            React.useEffect(() => {  // runs on mount and whenever userId changes
               // Set to true by the cleanup, if userId changes before the response arrives
               let ignore = false;
               // An async function inside the (non-async) effect
               async function load() {
-                try {
+                try {  // any error in here jumps to catch
+                  // Ask the server; await waits here until the response arrives
                   const response = await fetch('/api/users/' + userId);
+                  // A 404 or 500 does not make fetch fail, so throw an error by hand
                   if (!response.ok) throw new Error('HTTP ' + response.status);
-                  const data = await response.json();
+                  const data = await response.json();  // read the body as JSON
                   // Only use the answer if it is still the one we want
                   if (!ignore) setUser(data);
-                } catch (err) {
-                  if (!ignore) setError(err.message);
+                } catch (err) {  // anything in try failed
+                  if (!ignore) setError(err.message);  // keep the reason, unless outdated
                 }
               }
-              load();
-              return () => { ignore = true; };
-            }, [userId]);
+              load();                            // start loading now
+              return () => { ignore = true; };   // cleanup: this request is outdated
+            }, [userId]);                        // a new userId means a new request
 
-            if (error) return <p>Could not load: {error}</p>;
-            if (!user) return <p>Loading…</p>;
-            return <h2>{user.name}</h2>;
+            if (error) return <p>Could not load: {error}</p>;  // it failed
+            if (!user) return <p>Loading…</p>;                 // still waiting
+            return <h2>{user.name}</h2>;                       // the data is here
           }
         </script>
       </div>
@@ -2396,22 +2559,25 @@ createRoot(document.getElementById('[[root]]')).[[render]](
       </table>
     </div>
     <script type="text/plain" class="code" data-lang="jsx">
+      // A clock written as a class, with two lifecycle methods
       class Clock extends React.Component {
         // Mount: set up state
         state = { now: new Date() };
 
         // Mount: the DOM exists, so start the timer
         componentDidMount() {
+          // Every second, put a new Date in state; keep the id in this.timer
           this.timer = setInterval(() => this.setState({ now: new Date() }), 1000);
         }
 
         // Unmount: stop the timer
         componentWillUnmount() {
-          clearInterval(this.timer);
+          clearInterval(this.timer);  // the id saved in componentDidMount
         }
 
         // Every render
         render() {
+          // The time from state as text, such as 3:04:05 PM
           return <time>{this.state.now.toLocaleTimeString()}</time>;
         }
       }
@@ -2425,13 +2591,15 @@ createRoot(document.getElementById('[[root]]')).[[render]](
         <p><strong>When you meet it.</strong> A search box that should be ready to type in, or a dialog that moves focus to its first field when it opens.</p>
         <p><strong>Watch out.</strong> During render, <code>ref.current</code> is still <code>null</code> on the first render: the element does not exist yet. Read refs in effects and event handlers, which run after the commit.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // A search page whose box is ready to type in
           function SearchPage() {
             // A box that will hold the <input> element
             const inputRef = React.useRef(null);
             // After the first commit the element exists, so focus it
             React.useEffect(() => {
-              inputRef.current.focus();
-            }, []);
+              inputRef.current.focus();  // .current is the real <input> now
+            }, []);                      // only once, after the first commit
+            // ref={inputRef} tells React where to put the element
             return <input ref={inputRef} type="search" placeholder="Search courses" />;
           }
         </script>
@@ -2441,18 +2609,23 @@ createRoot(document.getElementById('[[root]]')).[[render]](
         <p><strong>When you meet it.</strong> Storing an interval id so a Stop button can clear it, or counting something for debugging.</p>
         <p><strong>Watch out.</strong> If the value appears on the page, it belongs in state. A ref change will not update the screen.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // A stopwatch with Start and Stop buttons
           function Stopwatch() {
-            const [seconds, setSeconds] = React.useState(0);
+            const [seconds, setSeconds] = React.useState(0);  // shown, so it is state
             // The interval id is not shown on the page, so a ref is enough
             const timerRef = React.useRef(null);
+            // Start: begin one timer, unless one is already running
             const start = () => {
-              if (timerRef.current) return;
+              if (timerRef.current) return;  // a timer is already running
+              // Keep the id in the ref; changing a ref does not redraw anything
               timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
             };
+            // Stop: clear the timer and empty the ref
             const stop = () => {
-              clearInterval(timerRef.current);
-              timerRef.current = null;
+              clearInterval(timerRef.current);  // stop the timer with the saved id
+              timerRef.current = null;          // so Start can begin a new one
             };
+            // The seconds, then two buttons that call start and stop
             return <p>{seconds} s <button onClick={start}>Start</button> <button onClick={stop}>Stop</button></p>;
           }
         </script>
@@ -2462,39 +2635,48 @@ createRoot(document.getElementById('[[root]]')).[[render]](
     <h3>Your turn: a clock that cleans up after itself</h3>
     <p>The button shows and hides a clock. Make the clock tick with an effect that starts one interval when the clock mounts and clears it when it unmounts. The checks count the timers that are actually running, so a missing cleanup will show up.</p>
     <div class="playground" data-runtime="react" data-title="A clock that cleans up" data-height="340" data-challenge="Start a timer on mount, stop it on unmount">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-#clock {
-  display: block;
-  margin: 12px 0;
-  font-size: 2em;
-  font-variant-numeric: tabular-nums;
+#clock {                              /* the time */
+  display: block;                     /* on its own line, like a paragraph */
+  margin: 12px 0;                     /* space above and below */
+  font-size: 2em;                     /* twice the normal text size */
+  font-variant-numeric: tabular-nums; /* digits of equal width: no wobble */
 }</textarea>
-      <textarea data-lang="js" data-label="JSX" data-hl="jsx">function Clock() {
-  const [now, setNow] = React.useState(new Date());
+      <textarea data-lang="js" data-label="JSX" data-hl="jsx">// A clock that should tick once a second
+function Clock() {
+  const [now, setNow] = React.useState(new Date());  // the time at mount
 
   // TODO 1: add an effect that runs once, on mount ([] dependencies):
   //   start setInterval(() => setNow(new Date()), 1000) and remember its id
   // TODO 2: return a cleanup function that calls clearInterval(id)
 
+  // Shows the time in now as text, such as 3:04:05 PM
   return <time id="clock">{now.toLocaleTimeString('en-US')}</time>;
 }
 
+// The button and, while show is true, the clock
 function App() {
-  const [show, setShow] = React.useState(true);
-  return (
+  const [show, setShow] = React.useState(true);  // is the clock on the page?
+  return (  // the button and, sometimes, the clock
+    // A fragment around the two siblings
     <>
+      {/* Each click flips show between true and false */}
       <button id="toggle" onClick={() => setShow(!show)}>
+        {/* The label depends on show */}
         {show ? 'Hide clock' : 'Show clock'}
       </button>
+      {/* && mounts Clock when show is true, and unmounts it when false */}
       {show && <Clock />}
-    </>
+    </>  // end of the fragment
   );
 }
 
+// Make #root a React root and draw App inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
       <script type="text/plain" class="setup">
         // Count the intervals that are really running, so the checks can see leaks
@@ -2524,20 +2706,22 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
     <h3>Your turn: load data with an effect</h3>
     <p>This component shows quotes from a small, built-in practice API (it answers like a real server, a little slowly, and works offline). The rendering is done. Write the effect: it must load <code>/api/quotes?topic=…</code> when the component mounts and again whenever <code>topic</code> changes, and it must handle a failed request.</p>
     <div class="playground" data-runtime="react" data-title="Load quotes with an effect" data-height="460" data-layout="stacked" data-challenge="Fetch on mount and when the topic changes">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-.error {
-  color: #b9322a;
+.error {                              /* the failure message */
+  color: #b9322a;                     /* dark red */
 }
-blockquote {
-  margin: 8px 0;
+blockquote {                          /* the text of each quote */
+  margin: 8px 0;                      /* small gaps above and below, no indent */
 }</textarea>
-      <textarea data-lang="js" data-label="JSX" data-hl="jsx">function Quotes() {
-  const [topic, setTopic] = React.useState('all');
-  const [quotes, setQuotes] = React.useState([]);
+      <textarea data-lang="js" data-label="JSX" data-hl="jsx">// Shows quotes for the chosen topic, loaded from the practice API
+function Quotes() {
+  const [topic, setTopic] = React.useState('all');  // the chosen topic
+  const [quotes, setQuotes] = React.useState([]);   // the quotes that arrived
   // 'loading', 'done' or 'error'
   const [status, setStatus] = React.useState('loading');
 
@@ -2549,25 +2733,37 @@ blockquote {
   //   5. if anything fails, setStatus('error')
   //   Bonus: use an ignore flag in a cleanup so an old, slow answer is dropped
 
-  return (
+  return (  // the menu, then a message or the list
+    // A fragment around the siblings
     <>
+      {/* The space after Topic keeps a gap before the menu */}
       <label htmlFor="topic">Topic </label>
+      {/* A controlled menu: picking an option changes topic */}
       <select id="topic" value={topic} onChange={(e) => setTopic(e.target.value)}>
+        {/* 'all' matches the starting state, so it is shown first */}
         <option value="all">All</option>
+        {/* value is what goes into topic */}
         <option value="code">Code</option>
+        {/* Picking this one sets topic to 'design' */}
         <option value="design">Design</option>
       </select>
+      {/* Shown only while status is 'loading' */}
       {status === 'loading' && <p id="status">Loading…</p>}
+      {/* Shown only after a failed request */}
       {status === 'error' && <p id="status" className="error">Could not load quotes.</p>}
+      {/* The list appears once the quotes have arrived */}
       {status === 'done' && (
+        // One <ul> around the quotes
         <ul id="quotes">
+          {/* One <li> per quote: the text in a blockquote, then the author */}
           {quotes.map((q) => <li key={q.id}><blockquote>{q.text}</blockquote>{q.author}</li>)}
         </ul>
       )}
-    </>
+    </>  // end of the fragment
   );
 }
 
+// Make #root a React root and draw Quotes inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<Quotes />);</textarea>
       <script type="text/plain" class="setup">
         // A practice API that answers /api/quotes?topic=all|code|design after 350 ms.
@@ -2612,18 +2808,20 @@ ReactDOM.createRoot(document.getElementById('root')).render(<Quotes />);</textar
     <h3>Your turn: the same idea as a class component</h3>
     <p>Older React code (and the textbook) handles timers with class lifecycle methods. Write a <code>Countdown</code> class that starts an interval in <code>componentDidMount</code>, counts down from its <code>from</code> prop, stops at zero, and clears the interval in <code>componentWillUnmount</code>. The checks watch the running timers again.</p>
     <div class="playground" data-runtime="react" data-title="Countdown as a class component" data-height="380" data-challenge="Start, stop and clean up with lifecycle methods">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-#left {
-  font-size: 2em;
-  font-variant-numeric: tabular-nums;
+#left {                               /* the seconds left */
+  font-size: 2em;                     /* twice the normal text size */
+  font-variant-numeric: tabular-nums; /* digits of equal width: no wobble */
 }</textarea>
-      <textarea data-lang="js" data-label="JSX" data-hl="jsx">class Countdown extends React.Component {
-  constructor(props) {
-    super(props);
+      <textarea data-lang="js" data-label="JSX" data-hl="jsx">// A countdown written as a class component
+class Countdown extends React.Component {
+  constructor(props) {  // runs once, when React creates the countdown
+    super(props);       // always first: hand props to React.Component
     // Seconds left, starting from the from prop
     this.state = { left: props.from };
   }
@@ -2637,24 +2835,31 @@ ReactDOM.createRoot(document.getElementById('root')).render(<Quotes />);</textar
 
   // TODO 3: componentWillUnmount(): clearInterval(this.timer)
 
-  render() {
-    const { left } = this.state;
+  render() {                      // runs on every render
+    const { left } = this.state;  // read left out of the state object
+    // The seconds while there are some left, then the final message
     return <p id="left">{left > 0 ? left + ' s left' : 'Time is up!'}</p>;
   }
 }
 
+// The countdown, and a button that removes it or brings it back
 function App() {
-  const [running, setRunning] = React.useState(true);
-  return (
+  const [running, setRunning] = React.useState(true);  // is it on the page?
+  return (  // the button and, sometimes, the countdown
+    // A fragment around the two siblings
     <>
+      {/* Each click flips running between true and false */}
       <button id="toggle" onClick={() => setRunning(!running)}>
+        {/* The label depends on running */}
         {running ? 'Cancel' : 'Start again'}
       </button>
+      {/* Mounted while running is true, unmounted when it turns false */}
       {running && <Countdown from={3} />}
-    </>
+    </>  // end of the fragment
   );
 }
 
+// Make #root a React root and draw App inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
       <script type="text/plain" class="setup">
         // Count the intervals that are really running, so the checks can see leaks
@@ -2731,22 +2936,28 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
       </div>
     </div>
     <script type="text/plain" class="code" data-lang="jsx" data-title="The same routes with React Router">
+      // Five pieces of the React Router package (installed with npm)
       import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom';
 
+      // The app: a menu at the top, then the page that matches the URL
       function App() {
-        return (
+        return (  // the whole app sits inside the router
           // BrowserRouter keeps the URL and the page in sync using the History API
           <BrowserRouter>
+            {/* The menu, shown on every page */}
             <nav>
               {/* Link changes the URL without a page load (an <a href> would reload) */}
               <Link to="/">Home</Link> <Link to="/courses">Courses</Link>
             </nav>
             {/* Routes shows the first Route whose path matches the URL */}
             <Routes>
+              {/* The home page, at the root of the site */}
               <Route path="/" element={<Home />} />
+              {/* element is the component to show for that path */}
               <Route path="/courses" element={<CourseList />} />
               {/* :id is a URL parameter: /courses/cop3830 gives id = "cop3830" */}
               <Route path="/courses/:id" element={<CourseDetail />} />
+              {/* A plain page with a fixed path */}
               <Route path="/about" element={<About />} />
               {/* * matches anything left over: the "not found" page */}
               <Route path="*" element={<NotFound />} />
@@ -2755,10 +2966,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         );
       }
 
+      // The page for one course, such as /courses/cop3830
       function CourseDetail() {
         // Read the :id part of the current URL
         const { id } = useParams();
-        return <h1>Course {id.toUpperCase()}</h1>;
+        return <h1>Course {id.toUpperCase()}</h1>;  // cop3830 becomes COP3830
       }
     </script>
 
@@ -2803,13 +3015,15 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>When you meet it.</strong> Near the top of the app, often in <code>App</code> or <code>main.jsx</code>. (React 19 also lets you write <code>&lt;ThemeContext value={…}&gt;</code> without <code>.Provider</code>.)</p>
         <p><strong>Watch out.</strong> To let readers <em>change</em> the value, put a function in the value too: <code>value={{ theme, toggleTheme }}</code>.</p>
         <script type="text/plain" class="code" data-lang="jsx">
+          // The top of the app owns the theme and provides it
           function App() {
-            const [theme, setTheme] = React.useState('light');
+            const [theme, setTheme] = React.useState('light');  // the current theme
             // A function readers can call to change the theme
             const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
-            return (
+            return (  // the provider wraps the rest of the app
               // Everything inside can read { theme, toggleTheme }
               <ThemeContext.Provider value={{ theme, toggleTheme }}>
+                {/* Layout, and every component inside it, however deep */}
                 <Layout />
               </ThemeContext.Provider>
             );
@@ -2823,7 +3037,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <script type="text/plain" class="code" data-lang="jsx">
           // Deep in the tree: no theme prop needed
           function ThemeToggle() {
+            // The value from the nearest provider above, unpacked
             const { theme, toggleTheme } = React.useContext(ThemeContext);
+            // A click calls the function from App; the text names the other theme
             return <button onClick={toggleTheme}>Switch to {theme === 'light' ? 'dark' : 'light'}</button>;
           }
         </script>
@@ -2833,28 +3049,29 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
     <h3>Your turn: a theme switch with Context</h3>
     <p>The button lives in <code>Toolbar</code> and the cards live in <code>Page</code>; neither of those middle components should know about the theme. Provide <code>{ theme, toggleTheme }</code> from <code>App</code> and read it with <code>useContext</code> where it is needed.</p>
     <div class="playground" data-runtime="react" data-title="Theme switch with Context" data-height="460" data-layout="stacked" data-challenge="Provide the theme once, read it deep in the tree">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 0;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 0;                          /* no gap: the app fills the preview */
 }
-.app {
-  padding: 16px;
-  min-height: 100vh;
+.app {                                /* the outer box of the app */
+  padding: 16px;                      /* space inside its edges */
+  min-height: 100vh;                  /* at least as tall as the preview */
 }
-.app.dark {
-  background: #161a23;
-  color: #f3f5f8;
+.app.dark {                           /* the app while the theme is dark */
+  background: #161a23;                /* a near-black background */
+  color: #f3f5f8;                     /* near-white text */
 }
-.card {
-  padding: 12px;
-  margin: 10px 0;
-  border: 1px solid #c9ced8;
-  border-radius: 8px;
+.card {                               /* each card */
+  padding: 12px;                      /* space inside the border */
+  margin: 10px 0;                     /* space above and below */
+  border: 1px solid #c9ced8;          /* a thin grey border */
+  border-radius: 8px;                 /* rounded corners */
 }
-.card.dark {
-  background: #252b38;
-  border-color: #3a4256;
+.card.dark {                          /* a card while the theme is dark */
+  background: #252b38;                /* a little lighter than the page */
+  border-color: #3a4256;              /* a border that still shows on dark */
 }</textarea>
       <textarea data-lang="js" data-label="JSX" data-hl="jsx">// The shared context. Its value will be { theme, toggleTheme }.
 const ThemeContext = React.createContext(null);
@@ -2874,30 +3091,38 @@ function Card({ title }) {
 
 // The middle components take NO theme prop
 function Toolbar() {
-  return <header><ThemeButton /></header>;
+  return <header><ThemeButton /></header>;  // only draws the button
 }
+// The other middle component: it only draws the cards
 function Page() {
-  return (
+  return (  // the main area of the page
+    // A <main> around the two cards
     <main>
+      {/* Each card gets only a title */}
       <Card title="Lecture notes" />
+      {/* The same component again, with another title */}
       <Card title="Homework" />
     </main>
   );
 }
 
+// The top of the app: it owns the theme
 function App() {
-  const [theme, setTheme] = React.useState('light');
+  const [theme, setTheme] = React.useState('light');  // starts light
   // TODO 1: write toggleTheme, which switches theme between 'light' and 'dark'
 
   // TODO 2: wrap everything in <ThemeContext.Provider value={{ theme, toggleTheme }}>
-  return (
+  return (  // the class of the outer box is 'app light' or 'app dark'
     <div className={'app ' + theme}>
+      {/* The header with the button */}
       <Toolbar />
+      {/* The main area with the cards */}
       <Page />
     </div>
   );
 }
 
+// Make #root a React root and draw App inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
       <script type="application/json" class="checks">
       [
@@ -2920,21 +3145,23 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <script type="text/plain" class="code" data-lang="jsx">
           // Every possible change, in one pure function
           function cartReducer(cart, action) {
-            switch (action.type) {
-              case 'add':
-                return [...cart, action.item];
-              case 'remove':
-                return cart.filter((item) => item.id !== action.id);
-              case 'clear':
-                return [];
-              default:
-                return cart;
+            switch (action.type) {    // which kind of change was asked for?
+              case 'add':             // put one more item in the cart
+                return [...cart, action.item];  // a new array: old items plus the new one
+              case 'remove':          // take one item out
+                return cart.filter((item) => item.id !== action.id);  // all but that id
+              case 'clear':           // empty the cart
+                return [];            // a new, empty array
+              default:                // an action this reducer does not know
+                return cart;          // the same cart: nothing changed
             }
           }
 
+          // A component that uses the reducer
           function Cart() {
             // [current state, dispatch] = useReducer(reducer, initial state)
             const [cart, dispatch] = React.useReducer(cartReducer, []);
+            // A click sends an action; the reducer works out the next cart
             return <button onClick={() => dispatch({ type: 'clear' })}>Empty cart ({cart.length})</button>;
           }
         </script>
@@ -2944,21 +3171,23 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>When you meet it.</strong> Large and older codebases, and teams that want strict, traceable state changes (Redux DevTools can replay every action).</p>
         <p><strong>Watch out.</strong> It adds concepts and files. Many apps that used Redux in 2018 would use Context, a lighter store, or a data-fetching library today.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // Two helpers from Redux Toolkit (installed with npm)
           import { createSlice, configureStore } from '@reduxjs/toolkit';
 
           // A "slice" bundles a piece of state with the reducers that change it
           const cartSlice = createSlice({
-            name: 'cart',
-            initialState: [],
-            reducers: {
+            name: 'cart',      // used in the action names, such as 'cart/add'
+            initialState: [],  // the cart starts empty
+            reducers: {        // one function per kind of change
               // Toolkit lets you write "mutating" code here; it makes a new copy for you
               add(state, action) { state.push(action.payload); },
-              clear() { return []; }
+              clear() { return []; }  // replace the whole state with an empty array
             }
           });
 
           // One store for the whole app
           export const store = configureStore({ reducer: { cart: cartSlice.reducer } });
+          // Toolkit also makes one action creator per reducer, for dispatch(add(item))
           export const { add, clear } = cartSlice.actions;
         </script>
       </div>
@@ -2967,18 +3196,20 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         <p><strong>When you meet it.</strong> Newer apps that want shared state without Redux's ceremony.</p>
         <p><strong>Watch out.</strong> Pick the slice of state each component needs (<code>useCart((s) =&gt; s.items)</code>) so it redraws only when that slice changes.</p>
         <script type="text/plain" class="code" data-lang="jsx">
-          import { create } from 'zustand';
+          import { create } from 'zustand';  // the one function the library needs
 
           // The store: state plus the functions that change it
           const useCart = create((set) => ({
-            items: [],
+            items: [],  // the shared state: an empty cart at first
+            // set makes the new state, and every component that reads it redraws
             add: (item) => set((state) => ({ items: [...state.items, item] }))
           }));
 
+          // Shows the number of items, from anywhere in the app
           function CartCount() {
             // Any component can read the store directly
             const count = useCart((state) => state.items.length);
-            return <span>Cart ({count})</span>;
+            return <span>Cart ({count})</span>;  // redraws when the count changes
           }
         </script>
       </div>
@@ -2987,62 +3218,80 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
     <h3>Your turn: a cart with useReducer</h3>
     <p>The buttons already <code>dispatch</code> actions. Your job is the reducer: a pure function that takes the current cart and one action, and returns the next cart without changing the old one. Adding a product that is already in the cart raises its quantity instead of adding a second line.</p>
     <div class="playground" data-runtime="react" data-title="A cart with useReducer" data-height="460" data-layout="stacked" data-challenge="Write a pure reducer for three actions">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
 }
-#cart li {
-  margin: 4px 0;
+#cart li {                            /* each line in the cart */
+  margin: 4px 0;                      /* a little space above and below */
 }
-#cart button {
-  margin-left: 8px;
+#cart button {                        /* the Remove buttons */
+  margin-left: 8px;                   /* a gap between the text and the button */
 }</textarea>
-      <textarea data-lang="js" data-label="JSX" data-hl="jsx">const PRODUCTS = [
-  { id: 'mug', name: 'Mug', price: 12 },
-  { id: 'tee', name: 'T-shirt', price: 20 }
+      <textarea data-lang="js" data-label="JSX" data-hl="jsx">// The products for sale: an id, a name and a price
+const PRODUCTS = [
+  { id: 'mug', name: 'Mug', price: 12 },     // the first product
+  { id: 'tee', name: 'T-shirt', price: 20 }  // the second one
 ];
 
 // cart is an array of { id, name, price, qty }. Return a NEW array every time.
 function cartReducer(cart, action) {
-  switch (action.type) {
+  switch (action.type) {  // which kind of change was asked for?
     // TODO 1: 'add' (action.product): if an item with that id is in the cart,
     //         return a new array where that item's qty is one more (use map);
     //         otherwise return [...cart, { ...action.product, qty: 1 }]
     // TODO 2: 'remove' (action.id): keep every item whose id is not action.id (use filter)
     // TODO 3: 'clear': return an empty array
-    default:
-      return cart;
+    default:        // any other action
+      return cart;  // the same cart: nothing changed
   }
 }
 
+// The shop page: product buttons, the cart and the total
 function Shop() {
-  const [cart, dispatch] = React.useReducer(cartReducer, []);
+  const [cart, dispatch] = React.useReducer(cartReducer, []);  // starts empty
+  // Worked out during render: price times quantity for each item, added up
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  return (
+  return (  // the whole shop
+    // A fragment around the siblings
     <>
+      {/* The page heading */}
       <h1>Campus Store</h1>
+      {/* One Add button per product */}
       {PRODUCTS.map((p) => (
+        // Each click sends an 'add' action that carries the product
         <button key={p.id} className={'add-' + p.id} onClick={() => dispatch({ type: 'add', product: p })}>
+          {/* The text on the button, such as Add Mug */}
           Add {p.name}
         </button>
       ))}
+      {/* A message while the cart is empty, otherwise the list */}
       {cart.length === 0 ? <p id="empty">Your cart is empty.</p> : (
+        // One <ul> around the lines of the cart
         <ul id="cart">
+          {/* One <li> per item in the cart */}
           {cart.map((item) => (
+            // One line; its key is the id of the product
             <li key={item.id}>
+              {/* The name and the quantity, such as Mug × 2 */}
               {item.name} × {item.qty}
+              {/* Sends a 'remove' action with the id of this item */}
               <button className="remove" onClick={() => dispatch({ type: 'remove', id: item.id })}>Remove</button>
             </li>
           ))}
         </ul>
       )}
+      {/* Sends a 'clear' action */}
       <button id="clear" onClick={() => dispatch({ type: 'clear' })}>Empty the cart</button>
+      {/* The total from above, with two decimals */}
       <p id="total">Total: ${total.toFixed(2)}</p>
-    </>
+    </>  // end of the fragment
   );
 }
 
+// Make #root a React root and draw Shop inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<Shop />);</textarea>
       <script type="application/json" class="checks">
       [
@@ -3076,11 +3325,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(<Shop />);</textarea
     <h3>Testing React components</h3>
     <p>Professional React code comes with automated tests: small programs that render a component, act like a user, and check the result, so a later change cannot silently break it. The usual pair is a test runner (<strong>Vitest</strong> or <strong>Jest</strong>) plus <strong>React Testing Library</strong>, which finds elements the way a user would: by their role and visible text.</p>
     <script type="text/plain" class="code" data-lang="jsx" data-title="Counter.test.jsx">
-      import { render, screen } from '@testing-library/react';
-      import userEvent from '@testing-library/user-event';
-      import { test, expect } from 'vitest';
-      import Counter from './Counter.jsx';
+      import { render, screen } from '@testing-library/react';  // render and search
+      import userEvent from '@testing-library/user-event';      // act like a user
+      import { test, expect } from 'vitest';                    // the test runner
+      import Counter from './Counter.jsx';                      // the component tested
 
+      // One test: a name that says what should happen, then the steps
       test('adds one on each click', async () => {
         // Render the component into a test page
         render(<Counter />);
@@ -3216,80 +3466,89 @@ ReactDOM.createRoot(document.getElementById('root')).render(<Shop />);</textarea
       <li><strong>Effects (11.5):</strong> an effect saves the tasks to <code>localStorage</code> under <code>study-tasks</code> whenever they change, so they survive a reload.</li>
     </ul>
     <div class="playground" data-runtime="react" data-title="Study planner" data-height="520" data-layout="stacked" data-challenge="Build the complete study planner">
-      <textarea data-lang="html"><div id="root"></div></textarea>
-      <textarea data-lang="css">body {
-  font-family: system-ui, sans-serif;
-  margin: 20px;
-  max-width: 560px;
+      <textarea data-lang="html"><!-- React draws the whole app inside this empty div -->
+<div id="root"></div></textarea>
+      <textarea data-lang="css">body {                               /* the whole page */
+  font-family: system-ui, sans-serif; /* the operating system's own font */
+  margin: 20px;                       /* space around the edge of the preview */
+  max-width: 560px;                   /* keep the planner from getting too wide */
 }
-form, .filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 12px 0;
+form, .filters {                      /* the form and the row of filter buttons */
+  display: flex;                      /* lay the children out side by side */
+  flex-wrap: wrap;                    /* wrap onto a new line if needed */
+  gap: 8px;                           /* space between neighbours */
+  margin: 12px 0;                     /* space above and below */
 }
-.filters button[aria-pressed="true"] {
-  background: #1f4fd1;
-  color: white;
+.filters button[aria-pressed="true"] { /* the filter that is chosen now */
+  background: #1f4fd1;                /* blue */
+  color: white;                       /* white text */
 }
-#tasks {
-  list-style: none;
-  padding: 0;
+#tasks {                              /* the list of tasks */
+  list-style: none;                   /* no bullets */
+  padding: 0;                         /* no indent */
 }
-#tasks li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 0;
-  border-bottom: 1px solid #ddd;
+#tasks li {                           /* each task */
+  display: flex;                      /* the pieces of the task in a row */
+  align-items: center;                /* line them up through their middles */
+  gap: 8px;                           /* space between them */
+  padding: 6px 0;                     /* space above and below */
+  border-bottom: 1px solid #ddd;      /* a thin light-grey line under it */
 }
-.subject {
-  color: #697184;
-  font-size: 0.85em;
+.subject {                            /* the subject name */
+  color: #697184;                     /* grey, so the title stands out */
+  font-size: 0.85em;                  /* a little smaller than the title */
 }
-.done .title {
-  text-decoration: line-through;
+.done .title {                        /* the title of a finished task */
+  text-decoration: line-through;      /* crossed out */
 }
-.delete {
-  margin-left: auto;
+.delete {                             /* the delete button */
+  margin-left: auto;                  /* pushes it to the right end of the row */
 }</textarea>
-      <textarea data-lang="js" data-label="JSX" data-hl="jsx">const SUBJECTS = ['Web Dev', 'Math', 'History'];
-const STORAGE_KEY = 'study-tasks';
+      <textarea data-lang="js" data-label="JSX" data-hl="jsx">const SUBJECTS = ['Web Dev', 'Math', 'History'];  // the choices in the menu
+const STORAGE_KEY = 'study-tasks';                // the localStorage key
+// The tasks to show the first time, before anything is saved
 const STARTER = [
-  { id: 1, title: 'Read 11.1', subject: 'Web Dev', done: true },
-  { id: 2, title: 'Problem set 4', subject: 'Math', done: false },
-  { id: 3, title: 'Essay outline', subject: 'History', done: false }
+  { id: 1, title: 'Read 11.1', subject: 'Web Dev', done: true },      // done
+  { id: 2, title: 'Problem set 4', subject: 'Math', done: false },    // to do
+  { id: 3, title: 'Essay outline', subject: 'History', done: false }  // to do
 ];
 
 // Saved tasks if there are any, otherwise the starter tasks
 function loadTasks() {
-  try {
+  try {  // JSON.parse throws an error if the saved text is damaged
+    // getItem gives null when nothing is saved yet, and parsing null gives null
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return Array.isArray(saved) ? saved : STARTER;
-  } catch (err) {
-    return STARTER;
+    return Array.isArray(saved) ? saved : STARTER;  // only if it is an array
+  } catch (err) {     // the saved text was not valid JSON
+    return STARTER;   // fall back to the starter tasks
   }
 }
 
 // A controlled form. Calls onAdd({ title, subject }) when submitted.
 function TaskForm({ onAdd }) {
-  const [title, setTitle] = React.useState('');
-  const [subject, setSubject] = React.useState(SUBJECTS[0]);
+  const [title, setTitle] = React.useState('');               // the text typed
+  const [subject, setSubject] = React.useState(SUBJECTS[0]); // Web Dev first
 
+  // Runs when the form is submitted
   function handleSubmit(event) {
-    event.preventDefault();
+    event.preventDefault();  // keep the browser from reloading the page
     // TODO 1: ignore a blank title; otherwise call onAdd({ title: title.trim(), subject })
     //         and clear the title
   }
 
-  return (
+  return (  // the form
+    // onSubmit runs handleSubmit after a click on Add or Enter in the box
     <form onSubmit={handleSubmit}>
+      {/* htmlFor ties the label to the input whose id is title */}
       <label htmlFor="title">Task</label>
       {/* TODO 2: make the input and the select controlled */}
       <input id="title" />
+      {/* The subject menu (see TODO 2) */}
       <select id="subject">
+        {/* One option per subject: it is the key, the value and the text */}
         {SUBJECTS.map((s) => <option key={s} value={s}>{s}</option>)}
       </select>
+      {/* A button inside a form submits it */}
       <button>Add</button>
     </form>
   );
@@ -3301,15 +3560,19 @@ function TaskForm({ onAdd }) {
 //     <span className="title">, <span className="subject">,
 //     and <button className="delete"> that calls onDelete(task.id)
 function TaskItem({ task, onToggle, onDelete }) {
-  return <li>{task.title}</li>;
+  return <li>{task.title}</li>;  // for now, only the title
 }
 
 // Already done: three buttons that choose the filter
 function FilterBar({ filter, onChange }) {
-  return (
+  return (  // a group of three buttons
+    // role="group" and aria-label tell screen readers what the buttons are for
     <div className="filters" role="group" aria-label="Show">
+      {/* One button per filter name */}
       {['all', 'active', 'done'].map((f) => (
+        // aria-pressed marks the chosen filter; a click reports f to the parent
         <button key={f} type="button" aria-pressed={filter === f} onClick={() => onChange(f)}>
+          {/* 'all' becomes 'All': the first letter in capitals, then the rest */}
           {f[0].toUpperCase() + f.slice(1)}
         </button>
       ))}
@@ -3317,19 +3580,22 @@ function FilterBar({ filter, onChange }) {
   );
 }
 
+// A first id that cannot clash with 1, 2 or 3: the time in milliseconds
 let nextId = Date.now();
 
+// The whole planner: it owns the tasks and the filter
 function App() {
+  // loadTasks without (): React calls it once, on the first render only
   const [tasks, setTasks] = React.useState(loadTasks);
-  const [filter, setFilter] = React.useState('all');
+  const [filter, setFilter] = React.useState('all');  // which tasks to show
 
   // TODO 4: an effect that saves tasks with
   //         localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)) whenever tasks change
 
   // TODO 5: addTask, toggleTask and deleteTask, each making a NEW array
-  function addTask({ title, subject }) {}
-  function toggleTask(id) {}
-  function deleteTask(id) {}
+  function addTask({ title, subject }) {}  // runs when the form is submitted
+  function toggleTask(id) {}              // runs when a checkbox is clicked
+  function deleteTask(id) {}              // runs when a delete button is clicked
 
   // TODO 6: the tasks to show: all, only not-done ('active'), or only done
   const visible = tasks;
@@ -3337,21 +3603,30 @@ function App() {
   // TODO 7: how many tasks are done
   const doneCount = 0;
 
-  return (
+  return (  // the whole planner
+    // A fragment around the siblings
     <>
+      {/* The page heading */}
       <h1>Study planner</h1>
+      {/* The form reports each new task through onAdd */}
       <TaskForm onAdd={addTask} />
+      {/* The filter buttons show the filter and change it */}
       <FilterBar filter={filter} onChange={setFilter} />
+      {/* The list of tasks */}
       <ul id="tasks">
+        {/* One TaskItem per visible task */}
         {visible.map((task) => (
+          // Each item gets its task and the two functions it may call
           <TaskItem key={task.id} task={task} onToggle={toggleTask} onDelete={deleteTask} />
         ))}
       </ul>
+      {/* The summary, such as 1 of 3 tasks done */}
       <p id="summary">{doneCount} of {tasks.length} tasks done</p>
-    </>
+    </>  // end of the fragment
   );
 }
 
+// Make #root a React root and draw App inside it
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
       <script type="application/json" class="checks">
       [

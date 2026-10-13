@@ -372,13 +372,21 @@
     <script type="text/plain" class="code" data-lang="js">
       // An array of objects: the shape most real data arrives in
       const movies = [
+        // Item 0: the shortest movie (96 minutes)
         { title: 'Inside Out 2', year: 2024, minutes: 96, genre: 'Animation', rating: 4.4 },
+        // Item 1: the first movie longer than 150 minutes
         { title: 'Dune: Part Two', year: 2024, minutes: 166, genre: 'Sci-fi', rating: 4.6 },
+        // Item 2: the first 2023 movie, and the first title from A to Z
         { title: 'Barbie', year: 2023, minutes: 114, genre: 'Comedy', rating: 3.9 },
+        // Item 3: the highest rating in the list (4.7)
         { title: 'Spider-Verse', year: 2023, minutes: 140, genre: 'Animation', rating: 4.7 },
+        // Item 4: the longest movie (180 minutes)
         { title: 'Oppenheimer', year: 2023, minutes: 180, genre: 'Drama', rating: 4.5 },
+        // Item 5: the lowest rating (3.8)
         { title: 'Wonka', year: 2023, minutes: 116, genre: 'Comedy', rating: 3.8 },
+        // Item 6: the only musical
         { title: 'Wicked', year: 2024, minutes: 160, genre: 'Musical', rating: 4.2 },
+        // Item 7: the last item, so its index is movies.length - 1
         { title: 'The Wild Robot', year: 2024, minutes: 102, genre: 'Animation', rating: 4.6 }
       ];
     </script>
@@ -401,6 +409,7 @@
       <script type="text/plain" class="code" data-lang="js" data-title="With array functions">
         // filter keeps the items whose callback returns true
         const animated = movies
+          // Keep only the animated movies (3 of the 8)
           .filter((movie) => movie.genre === 'Animation')
           // map turns each kept movie into its title
           .map((movie) => movie.title);
@@ -472,7 +481,7 @@
           console.log(recent.length); // 4
           // With braces you must write return yourself
           const short = movies.filter((m) => {
-            return m.minutes < 120;
+            return m.minutes < 120;  // true keeps the movie
           });
           console.log(short.length); // 4
           // The original array still has all 8 movies
@@ -511,7 +520,7 @@
             counts[m.genre] = (counts[m.genre] ?? 0) + 1;
             // Always return the accumulator for the next call
             return counts;
-          }, {});
+          }, {});  // {} is the starting value: an empty object
           console.log(perGenre); // { Animation: 3, Sci-fi: 1, Comedy: 2, Drama: 1, Musical: 1 }
         </script>
       </div>
@@ -680,13 +689,14 @@ const seven = products.[[find]]((p) => p.id === 7);
     <h3>Your turn: class statistics without a single loop</h3>
     <p>Your instructor's grade book is an array of objects. Answer five questions about it using only array functions: no <code>for</code> and no <code>while</code>. Each TODO says which method fits. The console shows your answers, and the checks update as you type.</p>
     <div class="playground" data-preview="false" data-layout="stacked" data-title="Class statistics" data-height="440" data-challenge="Answer every question with array functions">
-      <textarea data-lang="js">const students = [
-  { name: 'Ana', score: 92, submitted: true },
-  { name: 'Ben', score: 67, submitted: true },
-  { name: 'Chloe', score: 78, submitted: true },
-  { name: 'Dev', score: 55, submitted: false },
-  { name: 'Emma', score: 88, submitted: true },
-  { name: 'Femi', score: 71, submitted: true }
+      <textarea data-lang="js">// The grade book: one object per student
+const students = [
+  { name: 'Ana', score: 92, submitted: true },    // the top score
+  { name: 'Ben', score: 67, submitted: true },    // below 70
+  { name: 'Chloe', score: 78, submitted: true },  // a passing score
+  { name: 'Dev', score: 55, submitted: false },   // not handed in yet
+  { name: 'Emma', score: 88, submitted: true },   // second-highest
+  { name: 'Femi', score: 71, submitted: true }    // passes by one point
 ];
 
 // TODO 1 (filter + map): the NAMES of everyone who scored 70 or more
@@ -706,11 +716,12 @@ const allSubmitted = true;
 //         Do not change the order of students itself!
 const ranked = [];
 
-console.log('Passing:', passingNames);
-console.log('Average:', average);
-console.log('First A:', firstA);
-console.log('All submitted?', allSubmitted);
-console.log('Ranked:', ranked);</textarea>
+// Show each answer in the console below, labeled so you can find it
+console.log('Passing:', passingNames);        // TODO 1
+console.log('Average:', average);             // TODO 2
+console.log('First A:', firstA);              // TODO 3
+console.log('All submitted?', allSubmitted);  // TODO 4
+console.log('Ranked:', ranked);               // TODO 5</textarea>
       <script type="application/json" class="checks">
       [
         {"label": "`passingNames` is `['Ana', 'Chloe', 'Emma', 'Femi']`", "test": "var v=win.eval('passingNames'); return Array.isArray(v) && JSON.stringify(v)==='[\"Ana\",\"Chloe\",\"Emma\",\"Femi\"]';"},
@@ -726,35 +737,42 @@ console.log('Ranked:', ranked);</textarea>
     <h3>Your turn: a menu with filters and sorting</h3>
     <p>Array functions really pay off when a page has to redraw itself as the user changes their mind. This café menu has a sort menu and a "Vegetarian only" checkbox. Write one <code>render()</code> function that works out what to show with <code>filter</code> and <code>toSorted</code>, draws it, and writes a summary with <code>reduce</code>. The listeners that call <code>render()</code> are already written.</p>
     <div class="playground" data-title="Café menu filters" data-height="420" data-layout="stacked" data-challenge="Filter, sort and summarize the menu">
-      <textarea data-lang="html"><h1>Corner Café</h1>
-<label>Sort by
+      <textarea data-lang="html"><h1>Corner Café</h1>  <!-- the page heading -->
+<label>Sort by        <!-- the words beside the menu -->
+  <!-- A drop-down: JS reads the value of the option that is picked -->
   <select id="sort">
-    <option value="name">Name (A to Z)</option>
-    <option value="low">Price (low to high)</option>
-    <option value="high">Price (high to low)</option>
+    <option value="name">Name (A to Z)</option>        <!-- shown first -->
+    <option value="low">Price (low to high)</option>   <!-- value "low" -->
+    <option value="high">Price (high to low)</option>  <!-- value "high" -->
   </select>
 </label>
+<!-- A checkbox: JS reads .checked (true or false) -->
 <label><input type="checkbox" id="veg"> Vegetarian only</label>
-<ul id="menu"></ul>
-<p id="summary"></p></textarea>
-      <textarea data-lang="css">body { font-family: system-ui, sans-serif; margin: 20px; }
-label { margin-right: 14px; }
-#menu { list-style: none; padding: 0; }
+<ul id="menu"></ul>   <!-- empty: render() fills it -->
+<p id="summary"></p>  <!-- the summary line goes here --></textarea>
+      <textarea data-lang="css">/* The whole page: a plain font and some space around the edges */
+body { font-family: system-ui, sans-serif; margin: 20px; }
+label { margin-right: 14px; }            /* a gap after each control */
+#menu { list-style: none; padding: 0; }  /* no bullets, no indent */
+/* Each dish becomes a rounded box with space between boxes */
 #menu li { padding: 8px 12px; margin: 6px 0; border: 1px solid #c9ced8; border-radius: 8px; }
-#summary { color: #454d5e; }</textarea>
-      <textarea data-lang="js">const items = [
-  { name: 'Bagel', price: 3.25, veg: true },
-  { name: 'Turkey club', price: 9.5, veg: false },
-  { name: 'Tomato soup', price: 5.75, veg: true },
-  { name: 'Chicken wrap', price: 8.25, veg: false },
-  { name: 'Avocado toast', price: 7, veg: true },
-  { name: 'Latte', price: 4.5, veg: true }
+#summary { color: #454d5e; }  /* gray, quieter text */</textarea>
+      <textarea data-lang="js">// The menu data: one object per dish (price is a number of dollars)
+const items = [
+  { name: 'Bagel', price: 3.25, veg: true },          // the cheapest dish
+  { name: 'Turkey club', price: 9.5, veg: false },    // the most expensive
+  { name: 'Tomato soup', price: 5.75, veg: true },    // vegetarian
+  { name: 'Chicken wrap', price: 8.25, veg: false },  // not vegetarian
+  { name: 'Avocado toast', price: 7, veg: true },     // first from A to Z
+  { name: 'Latte', price: 4.5, veg: true }            // the last item
 ];
-const sortMenu = document.querySelector('#sort');
-const vegBox = document.querySelector('#veg');
-const list = document.querySelector('#menu');
-const summary = document.querySelector('#summary');
+// Find each element once, when the page loads, and keep it in a constant
+const sortMenu = document.querySelector('#sort');    // the sort drop-down
+const vegBox = document.querySelector('#veg');       // the checkbox
+const list = document.querySelector('#menu');        // the empty list
+const summary = document.querySelector('#summary');  // the summary line
 
+// Works out what to show, then redraws the list
 function render() {
   // TODO 1: start from items; if vegBox.checked, keep only the items with veg: true (filter)
   // TODO 2: order them with toSorted, using sortMenu.value:
@@ -767,9 +785,9 @@ function render() {
 }
 
 // Already wired for you: redraw whenever a control changes, and once at the start
-sortMenu.addEventListener('change', render);
-vegBox.addEventListener('change', render);
-render();</textarea>
+sortMenu.addEventListener('change', render);  // a new sort choice
+vegBox.addEventListener('change', render);    // ticked or unticked
+render();                                     // draw the menu once now</textarea>
       <script type="application/json" class="checks">
       [
         {"label": "At the start, all 6 items are listed A to Z (Avocado toast first, Turkey club last)", "test": "var s=$('#sort'), v=$('#veg'); s.value='name'; v.checked=false; s.dispatchEvent(new Event('change')); var li=$$('#menu li'); return li.length===6 && /^Avocado toast/.test(li[0].textContent.trim()) && /^Turkey club/.test(li[5].textContent.trim());"},
@@ -809,14 +827,14 @@ render();</textarea>
       // A blueprint for books. The capital B says "call me with new"
       function Book(title, author, pages) {
         // this is the new, empty object that new created for us
-        this.title = title;
-        this.author = author;
-        this.pages = pages;
+        this.title = title;    // the title passed in becomes a property
+        this.author = author;  // so does the author
+        this.pages = pages;    // and the page count
         // No return needed: new gives back the object automatically
       }
       // Stamp out two separate objects from one blueprint
       const a = new Book('Kindred', 'Octavia Butler', 264);
-      const b = new Book('Piranesi', 'Susanna Clarke', 272);
+      const b = new Book('Piranesi', 'Susanna Clarke', 272);  // a second book
       console.log(a.title, b.title); // "Kindred" "Piranesi"
       // Each object remembers which blueprint built it
       console.log(a instanceof Book); // true
@@ -917,12 +935,13 @@ render();</textarea>
       class Book {
         // constructor runs once for each new Book, like the function did
         constructor(title, author, pages) {
-          this.title = title;
-          this.author = author;
-          this.pages = pages;
+          this.title = title;    // this is the new book, as before
+          this.author = author;  // one property per argument
+          this.pages = pages;    // and the page count
         }
         // A method: stored once on Book.prototype, shared by every book
         describe() {
+          // Builds one sentence from this book's own properties
           return `${this.title} by ${this.author}, ${this.pages} pages`;
         }
       }
@@ -954,28 +973,32 @@ render();</textarea>
         <p><strong>When you use them.</strong> Derived values that must never go out of date (a full name built from first and last, a total built from a list), and guarding values (a rating must be 1 to 5).</p>
         <p><strong>Watch out.</strong> A setter must store the value under a <em>different</em> name than itself. <code>set rating(v) { this.rating = v; }</code> calls itself forever and crashes with "Maximum call stack size exceeded". Store it in a private field such as <code>#rating</code> instead.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // A blueprint with one worked-out value (hours) and one guarded value (rating)
           class Movie {
             // A private field (see the "Private fields" tab) holds the real value
             #rating = 0;
+            // Runs once for each new Movie and stores the two arguments
             constructor(title, minutes) {
-              this.title = title;
-              this.minutes = minutes;
+              this.title = title;      // e.g. 'Wicked'
+              this.minutes = minutes;  // e.g. 160
             }
             // Read like a property: movie.hours, never movie.hours()
             get hours() {
+              // Worked out fresh on every read, so it is never out of date
               return Math.round((this.minutes / 60) * 10) / 10;
             }
             // Runs on movie.rating = value: refuse anything outside 1 to 5
             set rating(value) {
+              // throw stops the setter here, so a bad value is never stored
               if (value < 1 || value > 5) throw new RangeError('Rating must be 1 to 5');
-              this.#rating = value;
+              this.#rating = value;  // a good value: keep it
             }
             // A getter with the same name lets people read it back
             get rating() {
-              return this.#rating;
+              return this.#rating;  // hand back the stored value
             }
           }
-          const m = new Movie('Wicked', 160);
+          const m = new Movie('Wicked', 160);  // the constructor runs here
           console.log(m.hours); // 2.7
           m.rating = 4;         // the setter runs and stores 4
           console.log(m.rating); // 4
@@ -986,21 +1009,25 @@ render();</textarea>
         <p><strong>When you use it.</strong> Helpers that create objects in a special way (often called <strong>factory methods</strong>: build a <code>Book</code> from JSON that came back from a server), and values shared by the whole class, such as a counter of how many objects exist. You already use built-in statics: <code>Array.isArray()</code>, <code>Number.parseFloat()</code> and <code>Object.keys()</code>.</p>
         <p><strong>Watch out.</strong> Inside a static method, <code>this</code> is the class, not an object, so <code>this.title</code> is <code>undefined</code> there.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // The Book class again, now with two static members
           class Book {
             // A static property: one value shared by the whole class
             static count = 0;
+            // Runs once for each new Book, as before
             constructor(title, author, pages) {
-              this.title = title;
-              this.author = author;
-              this.pages = pages;
+              this.title = title;    // these three belong to
+              this.author = author;  // each book object, not
+              this.pages = pages;    // to the class
               // Count every book ever made, on the class itself
               Book.count += 1;
             }
             // A factory: turn plain data from a server into a real Book
             static fromJSON(data) {
+              // Number() turns the text '264' into the number 264
               return new Book(data.title, data.author, Number(data.pages));
             }
           }
+          // Called on the class name; pages arrives as text, as server data often does
           const fromServer = Book.fromJSON({ title: 'Kindred', author: 'Octavia Butler', pages: '264' });
           console.log(fromServer.pages); // 264 (a real number now)
           console.log(Book.count);       // 1
@@ -1011,7 +1038,9 @@ render();</textarea>
         <p><strong>When you use it.</strong> When one kind of thing is a special case of another: an ebook is a book with a file size, an admin is a user with extra powers. Keep chains short: one or two levels is plenty.</p>
         <p><strong>Watch out.</strong> Using <code>this</code> before <code>super()</code> throws "Must call super constructor in derived class before accessing 'this'".</p>
         <script type="text/plain" class="code" data-lang="js">
+          // An Ebook is a Book with one extra property
           class Ebook extends Book {
+            // Takes Book's three arguments plus the file size
             constructor(title, author, pages, megabytes) {
               // Run Book's constructor first: it sets title, author and pages
               super(title, author, pages);
@@ -1024,6 +1053,7 @@ render();</textarea>
               return `${super.describe()} (ebook, ${this.megabytes} MB)`;
             }
           }
+          // Four arguments: Book's three, then the size in megabytes
           const e = new Ebook('Piranesi', 'Susanna Clarke', 272, 3.1);
           console.log(e.describe());        // "Piranesi by Susanna Clarke, 272 pages (ebook, 3.1 MB)"
           console.log(e instanceof Book);   // true: an Ebook is also a Book
@@ -1034,22 +1064,24 @@ render();</textarea>
         <p><strong>When you use it.</strong> To protect values that must only change in controlled ways. A bank balance should change through <code>deposit()</code> and <code>withdraw()</code>, which can check the amount, never by someone writing <code>account.balance = 1000000</code>.</p>
         <p><strong>Watch out.</strong> Private fields must be declared at the top of the class body (<code>#balance = 0;</code>) before you use them. Reading <code>account.#balance</code> from outside is a <code>SyntaxError</code> before your code even starts.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // A bank account whose balance can only change through deposit()
           class Account {
             // Declared up front; only code inside Account can use it
             #balance = 0;
+            // The one way in: adds money after checking the amount
             deposit(amount) {
               // The class can refuse bad changes
               if (amount <= 0) return false;
-              this.#balance += amount;
-              return true;
+              this.#balance += amount;  // inside the class, #balance works
+              return true;              // tell the caller it worked
             }
             // Outside code may READ the balance through a getter, but not set it
             get balance() {
-              return this.#balance;
+              return this.#balance;     // outside code can read it
             }
           }
-          const acct = new Account();
-          acct.deposit(50);
+          const acct = new Account();   // starts with a balance of 0
+          acct.deposit(50);             // accepted: the balance is now 50
           acct.deposit(-500);           // refused: returns false
           console.log(acct.balance);    // 50
           acct.balance = 1000000;       // ignored: there is no setter
@@ -1061,13 +1093,15 @@ render();</textarea>
         <p><strong>When you meet it.</strong> The moment a class method sets up a timer or a listener. It is one of the most common class bugs.</p>
         <p><strong>Watch out.</strong> The fix is almost always "use an arrow function for the callback".</p>
         <script type="text/plain" class="code" data-lang="js">
+          // A stopwatch object that counts seconds once started
           class Timer {
-            constructor() { this.seconds = 0; }
+            constructor() { this.seconds = 0; }  // every new Timer starts at 0
+            // Call timer.start() to begin counting
             start() {
               // Arrow function: this is still the Timer, so this.seconds works
               setInterval(() => {
-                this.seconds += 1;
-              }, 1000);
+                this.seconds += 1;               // runs once every second
+              }, 1000);                          // 1000 milliseconds = 1 second
               // A regular function here would get a different this,
               // and this.seconds += 1 would produce NaN or an error
             }
@@ -1107,7 +1141,8 @@ class Ebook [[extends]] Book {
     <h3>Your turn: a product class and a sale subclass</h3>
     <p>A campus store needs a blueprint for its products. Build the <code>Product</code> class step by step, then a <code>SaleProduct</code> subclass that reuses it. Use the class features from the table: a method, a getter, a static factory method, a private field and <code>extends</code> with <code>super</code>. The console at the bottom tries your classes out.</p>
     <div class="playground" data-preview="false" data-layout="stacked" data-title="Product and SaleProduct classes" data-height="500" data-challenge="Build both classes">
-      <textarea data-lang="js">class Product {
+      <textarea data-lang="js">// The blueprint for every product the store sells
+class Product {
   // TODO 5: declare a private field #stock that starts at 0
 
   // TODO 1: a constructor(name, price) that stores both on this
@@ -1133,14 +1168,14 @@ class Ebook [[extends]] Book {
 
 // Try it out. The try/catch stops one unfinished piece from hiding the rest.
 try {
-  const pen = new Product('Pen', 1.5);
-  console.log(pen.label());
-  console.log(pen.priceWithTax);
-  console.log(Product.fromText('Mug|8.25'));
-  const hoodie = new SaleProduct('Hoodie', 40, 25);
-  console.log(hoodie.label());
-} catch (err) {
-  console.log('Not finished yet:', err.message);
+  const pen = new Product('Pen', 1.5);               // runs your constructor
+  console.log(pen.label());                          // TODO 1
+  console.log(pen.priceWithTax);                     // TODO 2: read with no ()
+  console.log(Product.fromText('Mug|8.25'));         // TODO 3: on the class
+  const hoodie = new SaleProduct('Hoodie', 40, 25);  // TODO 4: 25% off $40
+  console.log(hoodie.label());                       // TODO 4: overridden label
+} catch (err) {                                      // a piece threw an error
+  console.log('Not finished yet:', err.message);     // show what went wrong
 }</textarea>
       <script type="application/json" class="checks">
       [
@@ -1164,6 +1199,7 @@ try {
           // Add every number, starting from 0
           return numbers.reduce((total, n) => total + n, 0);
         }
+        // A second named export; it can call sum because both live in this file
         export function average(numbers) {
           // Guard against an empty array (dividing by 0 gives NaN)
           return numbers.length ? sum(numbers) / numbers.length : 0;
@@ -1208,6 +1244,7 @@ try {
         <script type="text/plain" class="code" data-lang="js">
           // cart.js (a module)
           const items = [];          // private to cart.js
+          // Exported, so other files can add items without touching the array
           export function add(item) { items.push(item); }
           // wishlist.js (another module) can ALSO declare its own items:
           // const items = new Set();  // no clash: different module, different scope
@@ -1226,8 +1263,8 @@ try {
         <p><strong>Watch out.</strong> The order is "dependencies first": if <code>main.js</code> imports <code>math.js</code>, then <code>math.js</code> runs completely before the first line of <code>main.js</code>.</p>
         <script type="text/plain" class="code" data-lang="js">
           // counter.js: runs once, no matter how many files import it
-          export let clicks = 0;
-          export function addClick() { clicks += 1; }
+          export let clicks = 0;                       // created once, shared by all
+          export function addClick() { clicks += 1; }  // every importer changes it
           // header.js and footer.js both import addClick: they change the SAME clicks
         </script>
       </div>
@@ -1423,7 +1460,7 @@ try {
         <script type="text/plain" class="code" data-lang="js">
           Promise.resolve(2)                 // a promise that is already fulfilled with 2
             .then((n) => n * 10)             // returns 20, so the next then gets 20
-            .then((n) => {
+            .then((n) => {                   // braces: return is not automatic
               console.log(n);                // 20
               // no return here, so the next step gets undefined
             })
@@ -1449,6 +1486,7 @@ try {
         <script type="text/plain" class="code" data-lang="js">
           // A promise-based pause: fulfills after ms milliseconds
           function wait(ms) {
+            // Hand back a new promise; this arrow function runs straight away
             return new Promise((resolve) => {
               // setTimeout calls resolve when the time is up
               setTimeout(resolve, ms);
@@ -1466,8 +1504,8 @@ try {
           // Start three requests at the same moment
           const [profile, alerts, prefs] = await Promise.all([
             fetchJSON('/api/profile'),       // each of these returns a promise
-            fetchJSON('/api/alerts'),
-            fetchJSON('/api/prefs')
+            fetchJSON('/api/alerts'),        // all three are already on their way
+            fetchJSON('/api/prefs')          // before await starts waiting
           ]);
           // Results come back in the same order as the array, whichever finished first
         </script>
@@ -1510,16 +1548,16 @@ try {
     <script type="text/plain" class="code" data-lang="js" data-title="The same steps with async/await">
       // async: this function can use await, and it always returns a promise
       async function showFirstOrder() {
-        try {
+        try {                         // run these steps, ready for a failure
           // Each await pauses here until that promise fulfills, then gives the value
           const user = await getUser(7);
-          const orders = await getOrders(user.id);
-          const items = await getItems(orders[0].id);
-          render(items);
-        } catch (err) {
+          const orders = await getOrders(user.id);     // needs user, so it waits
+          const items = await getItems(orders[0].id);  // needs orders, so it waits
+          render(items);                               // all three steps are done
+        } catch (err) {               // err is the reason the step failed
           // A rejection at ANY await above jumps straight here
           showError(err);
-        } finally {
+        } finally {                   // clean-up for both paths
           // Runs either way, like .finally()
           spinner.hidden = true;
         }
@@ -1533,7 +1571,7 @@ try {
         <p><strong>What it means.</strong> An <code>async</code> function always gives back a promise. If it returns <code>5</code>, callers get a promise that fulfills with <code>5</code>; if it throws, they get a rejected promise.</p>
         <p><strong>Watch out.</strong> Logging the call without <code>await</code> shows <code>Promise {&lt;pending&gt;}</code>, not your value. The caller must <code>await</code> it (or use <code>.then</code>).</p>
         <script type="text/plain" class="code" data-lang="js">
-          async function getAnswer() {
+          async function getAnswer() {      // async: always returns a promise
             return 42;                      // wrapped in a promise automatically
           }
           console.log(getAnswer());          // Promise {<pending>}
@@ -1548,7 +1586,7 @@ try {
           button.addEventListener('click', async () => {
             // Pauses only this listener; the page stays responsive
             const data = await loadData();
-            show(data);
+            show(data);                     // runs once the data has arrived
           });
         </script>
       </div>
@@ -1558,8 +1596,8 @@ try {
         <script type="text/plain" class="code" data-lang="js">
           // One after another: each await finishes before the next item starts
           for (const id of [1, 2, 3]) {
-            const post = await getPost(id);
-            console.log(post.title);
+            const post = await getPost(id);  // the loop waits here each time
+            console.log(post.title);         // then logs before moving on
           }
           console.log('All three done'); // really is last
         </script>
@@ -1568,11 +1606,11 @@ try {
         <p><strong>What it means.</strong> When an awaited promise rejects, <code>await</code> throws its reason right there, as if that line had a <code>throw</code> statement. Without a <code>try</code>/<code>catch</code>, the error rejects the <code>async</code> function's own promise and shows up as "Uncaught (in promise)".</p>
         <p><strong>Watch out.</strong> Wrap the risky awaits, and put clean-up in <code>finally</code> so it runs on both paths.</p>
         <script type="text/plain" class="code" data-lang="js">
-          async function save(note) {
-            try {
+          async function save(note) {         // async, so await is allowed
+            try {                             // the risky part goes in try
               await sendToServer(note);       // if this rejects…
               status.textContent = 'Saved';   // …this line is skipped…
-            } catch (err) {
+            } catch (err) {                   // err is the rejection reason
               status.textContent = 'Not saved: ' + err.message; // …and this runs
             }
           }
@@ -1592,13 +1630,13 @@ try {
       <script type="text/plain" class="code" data-lang="js" data-title="Sequential: total = a + b + c">
         // Each request starts only after the previous one has finished
         const weather = await getWeather();
-        const news = await getNews();
-        const scores = await getScores();
+        const news = await getNews();        // starts after weather arrives
+        const scores = await getScores();    // starts after news arrives
       </script>
       <script type="text/plain" class="code" data-lang="js" data-title="Parallel: total = the longest one">
         // All three start immediately; await waits for the slowest
         const [weather, news, scores] = await Promise.all([
-          getWeather(), getNews(), getScores()
+          getWeather(), getNews(), getScores()   // three calls, no await between
         ]);
       </script>
     </div>
@@ -1617,6 +1655,7 @@ try {
     <h3>Fetching data with <code>fetch()</code></h3>
     <p>The asynchronous job you will do most is asking a server for data. <code>fetch(url)</code> sends an HTTP request (the same requests you met in Chapter 2) and returns a promise. That promise fulfills with a <strong>Response</strong> object as soon as the server's headers arrive. The body may still be downloading, so reading it is a second asynchronous step: <code>response.json()</code> returns another promise, which fulfills with the parsed data.</p>
     <script type="text/plain" class="code" data-lang="js">
+      // async, so this function can await, and callers get back a promise
       async function loadPosts() {
         // Step 1: send the request; wait for the response headers
         const response = await fetch('/api/posts');
@@ -1629,7 +1668,7 @@ try {
         const posts = await response.json();
         // posts is now an ordinary array of objects
         console.log(posts.length, 'posts');
-        return posts;
+        return posts;   // the caller's await receives this array
       }
     </script>
     <div class="table-wrap">
@@ -1651,11 +1690,11 @@ try {
         <p><strong>What to know.</strong> <code>fetch</code> rejects only when no response arrives at all: the user is offline, the server cannot be reached, the address is wrong, or the browser blocked the response for security reasons (10.5). A server that answers <code>404 Not Found</code> or <code>500 Internal Server Error</code> still sent a response, so the promise <em>fulfills</em>.</p>
         <p><strong>Watch out.</strong> Skipping the <code>ok</code> check means trying to read an error page as data. A 404 page is HTML, so <code>json()</code> fails with <em>"Unexpected token '&lt;', "&lt;!DOCTYPE "… is not valid JSON"</em>. That message almost always means "the server sent an error page".</p>
         <script type="text/plain" class="code" data-lang="js">
-          try {
+          try {                                         // catch below handles any throw
             const res = await fetch('/api/posts/999');  // the server answers 404
             console.log(res.ok, res.status);              // false 404: no exception!
             if (!res.ok) throw new Error(`HTTP ${res.status}`); // so throw one yourself
-          } catch (err) {
+          } catch (err) {                               // the Error thrown above
             console.log('Failed:', err.message);          // "Failed: HTTP 404"
           }
         </script>
@@ -1665,6 +1704,7 @@ try {
         <p><strong>When you use it.</strong> Saving a form, posting a comment, adding an item to a cart. Chapter 13 builds the server side of exactly this.</p>
         <p><strong>Watch out.</strong> Forgetting <code>JSON.stringify</code> sends the text <code>"[object Object]"</code>.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // The second argument is an object that describes the request
           const response = await fetch('/api/notes', {
             method: 'POST',                                   // create something new
             headers: { 'Content-Type': 'application/json' },  // the body is JSON
@@ -1678,15 +1718,15 @@ try {
         <p><strong>What it is.</strong> A request can take seconds, or fail. Good interfaces always show three states: <strong>loading</strong> (a message or spinner, and a disabled button so it cannot be clicked twice), <strong>success</strong> (the data), and <strong>error</strong> (a clear, human message and a way to try again). An empty result ("No posts yet") is a fourth state worth handling.</p>
         <p><strong>Watch out.</strong> Re-enable the button in <code>finally</code>, so it comes back after an error too.</p>
         <script type="text/plain" class="code" data-lang="js">
-          async function refresh() {
+          async function refresh() {                 // loads the posts again
             status.textContent = 'Loading…';         // 1. loading state
             button.disabled = true;                   // no double clicks
-            try {
-              const posts = await loadPosts();
+            try {                                     // the request may fail
+              const posts = await loadPosts();        // the loadPosts from above
               status.textContent = posts.length ? '' : 'No posts yet'; // 2. success (or empty)
-            } catch (err) {
+            } catch (err) {                           // loadPosts threw or rejected
               status.textContent = 'Could not load posts. Try again.'; // 3. error state
-            } finally {
+            } finally {                               // runs after try or catch
               button.disabled = false;                // back on, whatever happened
             }
           }
@@ -1696,11 +1736,11 @@ try {
         <p><strong>What it is.</strong> <code>fetch</code> has no time limit of its own, so a stuck request can hang for a long time. An <code>AbortController</code> lets you cancel a request; <code>AbortSignal.timeout(ms)</code> builds one that cancels itself.</p>
         <p><strong>When you use it.</strong> Searches that are replaced by a newer search, and any request where waiting forever would be worse than an error message.</p>
         <script type="text/plain" class="code" data-lang="js">
-          try {
+          try {                       // a timeout lands in catch, like any failure
             // Cancel automatically if no response arrives within 5 seconds
             const res = await fetch('/api/slow-report', { signal: AbortSignal.timeout(5000) });
-            show(await res.json());
-          } catch (err) {
+            show(await res.json());   // in time: read the body and show it
+          } catch (err) {             // cancelled, or no connection
             // A cancelled request rejects with a TimeoutError or AbortError
             status.textContent = 'That took too long. Please try again.';
           }
@@ -1735,11 +1775,12 @@ function orderAll(drinks) {
 
 // Try them out (until your functions are async, these print undefined)
 async function tryThem() {
-  console.log('1:', await orderOne('latte'));
-  console.log('2:', await safeOrder('tea'));
+  console.log('1:', await orderOne('latte'));  // one drink from the menu
+  console.log('2:', await safeOrder('tea'));   // a drink the shop does not make
+  // Three drinks in one array
   console.log('3:', await orderAll(['latte', 'mocha', 'espresso']));
 }
-tryThem();</textarea>
+tryThem();  // start the tries as soon as the code runs</textarea>
       <script type="text/plain" class="setup">
         // A pretend coffee machine: each drink takes 100 ms to brew
         window.brewCalls = [];
@@ -1768,25 +1809,32 @@ tryThem();</textarea>
     <h3>Your turn: load posts with loading and error states</h3>
     <p>This page talks to a practice server built into the preview (it works offline). Pick an address from the menu and press <strong>Load posts</strong>. Make all three states work: while loading, the status says <code>Loading…</code> and the button is disabled; on success, each post's title is a list item and the status says <code>Loaded 3 posts</code>; on failure, the status says <code>Could not load posts (HTTP 500)</code> or <code>Could not load posts (Failed to fetch)</code>. The console works like a tiny Network panel.</p>
     <div class="playground" data-runtime="fetch" data-title="Load the posts" data-height="440" data-layout="stacked" data-challenge="Handle loading, success and every kind of failure">
-      <textarea data-lang="html"><h1>Club news</h1>
-<label>Address
+      <textarea data-lang="html"><h1>Club news</h1>  <!-- the page heading -->
+<label>Address      <!-- the label for the menu -->
+  <!-- Each option's value is an address on the practice server -->
   <select id="source">
+    <!-- Answers with status 200 and three posts -->
     <option value="/api/posts">/api/posts (works)</option>
+    <!-- Answers, but with status 500 -->
     <option value="/api/broken">/api/broken (server error 500)</option>
+    <!-- Never answers: no response arrives at all -->
     <option value="/api/offline">/api/offline (no connection)</option>
   </select>
 </label>
+<!-- Each click runs loadPosts (wired up at the end of the JS) -->
 <button id="load" type="button">Load posts</button>
-<p id="status"></p>
-<ul id="posts"></ul></textarea>
-      <textarea data-lang="css">body { font-family: system-ui, sans-serif; margin: 20px; }
-button { font: inherit; padding: 6px 12px; }
-button:disabled { opacity: .5; }
-#status { color: #454d5e; min-height: 1.4em; }</textarea>
-      <textarea data-lang="js">const source = document.querySelector('#source');
-const button = document.querySelector('#load');
-const status = document.querySelector('#status');
-const list = document.querySelector('#posts');
+<p id="status"></p>   <!-- the message for each state -->
+<ul id="posts"></ul>  <!-- empty until posts arrive --></textarea>
+      <textarea data-lang="css">/* The whole page: a plain font and some space around the edges */
+body { font-family: system-ui, sans-serif; margin: 20px; }
+button { font: inherit; padding: 6px 12px; }    /* same font as the page */
+button:disabled { opacity: .5; }                /* faded while disabled */
+#status { color: #454d5e; min-height: 1.4em; }  /* height kept when empty */</textarea>
+      <textarea data-lang="js">// Find the four elements once, when the page loads
+const source = document.querySelector('#source');  // the address menu
+const button = document.querySelector('#load');    // the Load posts button
+const status = document.querySelector('#status');  // the message line
+const list = document.querySelector('#posts');     // the empty list
 
 // TODO: make loadPosts an async function that:
 //   1. sets status to 'Loading…', disables the button, and empties the list
@@ -1797,9 +1845,10 @@ const list = document.querySelector('#posts');
 //   5. catch: status 'Could not load posts (' + err.message + ')'
 //   6. finally: enables the button again
 function loadPosts() {
-  console.log('Loading from', source.value);
+  console.log('Loading from', source.value);  // shows the address you picked
 }
 
+// Already wired for you: every click on the button runs loadPosts
 button.addEventListener('click', loadPosts);</textarea>
       <script type="text/plain" class="setup">
         // The practice server's routes for this exercise
@@ -1867,7 +1916,7 @@ button.addEventListener('click', loadPosts);</textarea>
       <script type="text/plain" class="code" data-lang="js">
         // Only offer the "Find me" button if this browser has the Geolocation API
         if ('geolocation' in navigator) {
-          findMeButton.hidden = false;
+          findMeButton.hidden = false;  // the button starts hidden; show it
         }
       </script>
     </aside>
@@ -1909,6 +1958,7 @@ button.addEventListener('click', loadPosts);</textarea>
         <p><strong>When you use it.</strong> Saving anything with more than one value: settings objects, a list of favorites, a shopping cart.</p>
         <p><strong>Watch out.</strong> Saving an object directly stores the useless text <code>"[object Object]"</code>. And <code>JSON.parse</code> throws on broken text (an old format, someone editing it by hand), so wrap it in <code>try</code>/<code>catch</code> and fall back to defaults.</p>
         <script type="text/plain" class="code" data-lang="js">
+          // A settings object with two values
           const prefs = { theme: 'dark', fontSize: 18 };
           // Wrong: stores the text "[object Object]"
           localStorage.setItem('prefs', prefs);
@@ -1916,10 +1966,10 @@ button.addEventListener('click', loadPosts);</textarea>
           localStorage.setItem('prefs', JSON.stringify(prefs));
           // Reading: parse the text back into an object, safely
           function loadPrefs() {
-            try {
+            try {            // JSON.parse below can throw
               // getItem gives null if nothing is saved; JSON.parse(null) is null
               return JSON.parse(localStorage.getItem('prefs')) ?? { theme: 'light', fontSize: 16 };
-            } catch (err) {
+            } catch (err) {  // the saved text was not valid JSON
               // Broken JSON: start over with the defaults
               return { theme: 'light', fontSize: 16 };
             }
@@ -1935,7 +1985,7 @@ button.addEventListener('click', loadPosts);</textarea>
           localStorage.removeItem('theme');
           // List every key this site has stored
           for (let i = 0; i < localStorage.length; i++) {
-            console.log(localStorage.key(i));
+            console.log(localStorage.key(i));  // the name of key number i
           }
         </script>
       </div>
@@ -1984,30 +2034,39 @@ button.addEventListener('click', loadPosts);</textarea>
     <h3>Your turn: remember the visitor's settings</h3>
     <p>This study timer forgets everything on reload. Make it remember: save the settings as JSON when the form is submitted, load them when the page starts (falling back to the defaults if nothing is saved, or if what is saved is broken), and apply them to the page. After the checks pass, change the settings, press Save, then edit any line of code: the preview reloads and your settings are still there.</p>
     <div class="playground" data-title="Remember my settings" data-height="460" data-layout="stacked" data-challenge="Save, load and apply settings with localStorage">
-      <textarea data-lang="html"><h1>Study timer</h1>
+      <textarea data-lang="html"><h1>Study timer</h1>  <!-- the page heading -->
+<!-- The settings form: pressing Save submits it -->
 <form id="settings">
-  <label>Your name <input id="name"></label>
-  <label>Theme
-    <select id="theme">
-      <option value="light">Light</option>
-      <option value="dark">Dark</option>
+  <label>Your name <input id="name"></label>  <!-- a text box -->
+  <label>Theme                                <!-- the label for the menu -->
+    <select id="theme">                       <!-- light or dark -->
+      <option value="light">Light</option>    <!-- listed first -->
+      <option value="dark">Dark</option>      <!-- value "dark" -->
     </select>
   </label>
+  <!-- A number box: the form will not submit a value outside 5 to 90 -->
   <label>Minutes per session <input id="minutes" type="number" min="5" max="90"></label>
-  <button>Save</button>
+  <button>Save</button>  <!-- inside a form, so a click submits it -->
 </form>
-<p id="greeting"></p></textarea>
-      <textarea data-lang="css">body { font-family: system-ui, sans-serif; margin: 20px; background: #fff; color: #1a1a1a; }
+<p id="greeting"></p>  <!-- the welcome message --></textarea>
+      <textarea data-lang="css">/* Light colors, used unless <body> has the class dark */
+body { font-family: system-ui, sans-serif; margin: 20px; background: #fff; color: #1a1a1a; }
+/* Dark colors, used only while <body> has the class dark */
 body.dark { background: #16181d; color: #eef0f4; }
+/* A grid: one control per row, with a gap between rows */
 form { display: grid; gap: 10px; max-width: 320px; }
+/* Form controls use the page's font instead of the browser's own */
 input, select, button { font: inherit; padding: 4px 6px; }</textarea>
-      <textarea data-lang="js">const KEY = 'study-settings';
+      <textarea data-lang="js">// The storage key: the name the settings are saved under
+const KEY = 'study-settings';
+// The settings to use when nothing has been saved yet
 const DEFAULTS = { name: '', theme: 'light', minutes: 25 };
-const form = document.querySelector('#settings');
-const nameInput = document.querySelector('#name');
-const themeSelect = document.querySelector('#theme');
-const minutesInput = document.querySelector('#minutes');
-const greeting = document.querySelector('#greeting');
+// Find the form and its controls once, when the page loads
+const form = document.querySelector('#settings');         // the whole form
+const nameInput = document.querySelector('#name');        // the name box
+const themeSelect = document.querySelector('#theme');     // the theme menu
+const minutesInput = document.querySelector('#minutes');  // the minutes box
+const greeting = document.querySelector('#greeting');     // the welcome line
 
 // TODO 1: save the settings object under KEY, as JSON text
 function saveSettings(settings) {
@@ -2016,7 +2075,7 @@ function saveSettings(settings) {
 // TODO 2: read KEY and JSON.parse it. If nothing is saved (null), or the text
 //         is broken JSON (use try/catch), return a copy of DEFAULTS: { ...DEFAULTS }
 function loadSettings() {
-  return { ...DEFAULTS };
+  return { ...DEFAULTS };  // for now: a copy of the defaults, every time
 }
 
 // TODO 3: put the settings on the page:
@@ -2030,14 +2089,15 @@ function applySettings(settings) {
 
 // Already wired: on Save, collect the form into an object, save it, apply it
 form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const settings = {
-    name: nameInput.value.trim(),
-    theme: themeSelect.value,
+  event.preventDefault();          // stay on this page: no reload
+  const settings = {               // one object for all three values
+    name: nameInput.value.trim(),  // trim drops spaces at the ends
+    theme: themeSelect.value,      // 'light' or 'dark'
+    // The box holds text: turn it into a number, or use 25 if it is empty
     minutes: Number(minutesInput.value) || DEFAULTS.minutes
   };
-  saveSettings(settings);
-  applySettings(settings);
+  saveSettings(settings);   // your TODO 1
+  applySettings(settings);  // your TODO 3
 });
 
 // When the page starts: show whatever was saved last time
@@ -2068,14 +2128,18 @@ applySettings(loadSettings());</textarea>
     <script type="text/plain" class="code" data-lang="js">
       // Feature detection: not every browser (or setting) allows it
       if ('geolocation' in navigator) {
+        // Ask for the position; the answer arrives later, in a callback
         navigator.geolocation.getCurrentPosition(
           // Success: called with a position once the visitor allows it
           (position) => {
+            // Unpack the three numbers we need from position.coords
             const { latitude, longitude, accuracy } = position.coords;
+            // Three decimal places is about 100 m; accuracy is in meters
             console.log(`You are near ${latitude.toFixed(3)}, ${longitude.toFixed(3)} (±${Math.round(accuracy)} m)`);
           },
           // Failure: code 1 = denied, 2 = unavailable, 3 = took too long
           (error) => {
+            // message is the browser's own short explanation
             console.log('No location:', error.code, error.message);
           },
           // Options: give up after 10 seconds; a cached answer up to a minute old is fine
@@ -2186,10 +2250,11 @@ applySettings(loadSettings());</textarea>
           <script type="text/plain" class="code" data-lang="js">
             // writeText returns a promise: await it, and catch a refusal
             try {
+              // Copy the text box's value; wait until the browser has done it
               await navigator.clipboard.writeText(input.value);
-              status.textContent = 'Copied!';
-            } catch (err) {
-              status.textContent = 'Copying is not allowed here';
+              status.textContent = 'Copied!';                      // it worked
+            } catch (err) {                                        // the browser refused
+              status.textContent = 'Copying is not allowed here';  // say so politely
             }
           </script>
         </div>
@@ -2200,11 +2265,12 @@ applySettings(loadSettings());</textarea>
           <script type="text/plain" class="code" data-lang="js">
             // Call back whenever a watched card is at least 60% visible (or stops being)
             const observer = new IntersectionObserver((entries) => {
+              // entries: one entry for each card that has come into or gone out of view
               entries.forEach((entry) => {
                 // isIntersecting is true while the card is in view
                 entry.target.classList.toggle('is-visible', entry.isIntersecting);
               });
-            }, { threshold: 0.6 });
+            }, { threshold: 0.6 });  // options: 0.6 means 60% visible
             // Watch every card
             document.querySelectorAll('.card').forEach((card) => observer.observe(card));
           </script>
@@ -2221,7 +2287,7 @@ applySettings(loadSettings());</textarea>
             const ctx = canvas.getContext('2d');
             // Pick a fill color, then draw a filled rectangle: x, y, width, height
             ctx.fillStyle = 'teal';
-            ctx.fillRect(20, 120, 40, 60);
+            ctx.fillRect(20, 120, 40, 60);  // y is measured down from the top
             // Text: the string, then the x and y of its baseline
             ctx.fillText('Mon', 26, 195);
           </script>
@@ -2237,7 +2303,8 @@ applySettings(loadSettings());</textarea>
           <script type="text/plain" class="code" data-lang="js">
             // Ask (in response to a click); the answer is "granted", "denied" or "default"
             const answer = await Notification.requestPermission();
-            if (answer === 'granted') {
+            if (answer === 'granted') {  // only notify if the visitor said yes
+              // Shows outside the page: a title, then the smaller body text
               new Notification('Study break!', { body: 'Your 25-minute session is over.' });
             }
           </script>
@@ -2298,6 +2365,7 @@ applySettings(loadSettings());</textarea>
       const bad = `https://api.weather.example/v1/current?city=${city}`;
       // Right: URLSearchParams encodes every value safely
       const params = new URLSearchParams({ city, units: 'metric' });
+      // Inside ${}, params turns itself into the encoded query string
       const url = `https://api.weather.example/v1/current?${params}`;
       console.log(url); // …current?city=S%C3%A3o+Paulo+%26+Rio&units=metric
     </script>
@@ -2393,16 +2461,18 @@ const events = await res.[[json]]();
       <script type="text/plain" class="code" data-lang="js" data-title="Never: a secret key in the browser">
         // Anyone can read this line in DevTools, and use your account
         const SECRET = 'sk_live_51H…';
+        // The browser calls the payment API directly…
         fetch('https://api.payments.example/v1/charges', {
+          // …so the key travels in a header that the Network panel shows
           headers: { Authorization: `Bearer ${SECRET}` }
         });
       </script>
       <script type="text/plain" class="code" data-lang="js" data-title="Instead: ask your own server">
         // The browser only talks to your server…
         const res = await fetch('/api/checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ cartId: 42 })
+          method: 'POST',                                   // ask for a new charge
+          headers: { 'Content-Type': 'application/json' },  // the body is JSON
+          body: JSON.stringify({ cartId: 42 })              // only the cart id: no key
         });
         // …and your server, which keeps the secret key, calls the payment API
       </script>
@@ -2472,8 +2542,8 @@ const events = await res.[[json]]();
         const map = L.map('map').setView([26.12, -80.14], 16); // latitude, longitude, zoom
         // Draw the street tiles (OpenStreetMap asks for this credit line)
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+          attribution: '© OpenStreetMap contributors'  // shown in the corner
+        }).addTo(map);                                  // put the tiles on our map
         // A pin with a popup
         L.marker([26.12, -80.14]).addTo(map).bindPopup('Library');
       </script>
@@ -2481,7 +2551,7 @@ const events = await res.[[json]]();
         // Chart is the global object from Chart.js; 'chart' is a <canvas id="chart">
         new Chart(document.querySelector('#chart'), {
           type: 'bar',                                   // bar, line, pie, …
-          data: {
+          data: {                                        // what to draw
             labels: ['Music', 'Talks', 'Sports'],        // one label per bar
             datasets: [{ label: 'Events', data: [12, 7, 9] }] // the numbers
           }
@@ -2507,20 +2577,23 @@ const events = await res.[[json]]();
     <h3>Your turn: a weather card</h3>
     <p>Build a weather search on top of a practice weather API (built into this preview, so it works offline). Read its documentation in the comments at the top of the JavaScript, then make the form work for every case the checks list: a normal city, a city with a space in its name, a city the API does not know, an empty search, and a server that is down.</p>
     <div class="playground" data-runtime="fetch" data-title="Weather card" data-height="460" data-layout="stacked" data-challenge="Call the weather API and handle every answer">
-      <textarea data-lang="html"><h1>Campus weather</h1>
+      <textarea data-lang="html"><h1>Campus weather</h1>  <!-- the page heading -->
+<!-- The search form: pressing Enter or the button submits it -->
 <form id="search">
-  <label for="city">City</label>
-  <input id="city" autocomplete="off">
-  <button>Search</button>
+  <label for="city">City</label>        <!-- for="city" ties it to the box -->
+  <input id="city" autocomplete="off">  <!-- no browser suggestions -->
+  <button>Search</button>               <!-- submits the form -->
 </form>
-<p id="status"></p>
-<div id="card"></div></textarea>
-      <textarea data-lang="css">body { font-family: system-ui, sans-serif; margin: 20px; }
-input, button { font: inherit; padding: 4px 8px; }
-#card { margin-top: 12px; }
-#card h2 { margin: 0; }
+<p id="status"></p>    <!-- loading and error messages -->
+<div id="card"></div>  <!-- the weather card goes here --></textarea>
+      <textarea data-lang="css">/* The whole page: a plain font and some space around the edges */
+body { font-family: system-ui, sans-serif; margin: 20px; }
+input, button { font: inherit; padding: 4px 8px; }  /* match the page font */
+#card { margin-top: 12px; }                         /* space above the card */
+#card h2 { margin: 0; }                             /* the city name, no gaps */
+/* The temperature: big and bold */
 .temp { font-size: 2.4rem; font-weight: 700; margin: 4px 0; }
-#status { color: #454d5e; min-height: 1.4em; }</textarea>
+#status { color: #454d5e; min-height: 1.4em; }  /* height kept when empty */</textarea>
       <textarea data-lang="js">/* Practice Weather API documentation
    GET https://api.weather.example/v1/current
    Query parameters:
@@ -2530,17 +2603,20 @@ input, button { font: inherit; padding: 4px 8px; }
    200 → { "city": "Miami", "temp": 84.6, "conditions": "Partly cloudy" }
    404 → { "error": "City not found" }     (the API does not know that city)
    503 → { "error": "Service unavailable" } (try the city "Gotham") */
+// The endpoint and the key, copied from the documentation above
 const BASE = 'https://api.weather.example/v1/current';
-const KEY = 'pk_demo_2468';
-const form = document.querySelector('#search');
-const cityInput = document.querySelector('#city');
-const status = document.querySelector('#status');
-const card = document.querySelector('#card');
+const KEY = 'pk_demo_2468';  // public, so it may sit in front-end code
+// Find the form, the text box and the two output areas once
+const form = document.querySelector('#search');     // the search form
+const cityInput = document.querySelector('#city');  // the text box
+const status = document.querySelector('#status');   // the message line
+const card = document.querySelector('#card');       // where the card goes
 
+// An async listener: runs on every search, and may use await inside
 form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const city = cityInput.value.trim();
-  card.replaceChildren(); // clear the last result
+  event.preventDefault();               // no page reload
+  const city = cityInput.value.trim();  // the text, minus outer spaces
+  card.replaceChildren();               // clear the last result
 
   // TODO 1: if city is empty, set status to 'Type a city name' and stop (return)
 
@@ -2674,33 +2750,42 @@ form.addEventListener('submit', async (event) => {
       <li><strong>Storage (10.4):</strong> the ☆ button toggles a favorite; favorite ids are saved as a JSON array under <code>event-favs</code>.</li>
     </ul>
     <div class="playground" data-runtime="fetch" data-title="Campus events dashboard" data-height="500" data-layout="stacked" data-challenge="Build the complete dashboard">
-      <textarea data-lang="html"><h1>This week on campus</h1>
+      <textarea data-lang="html"><h1>This week on campus</h1>  <!-- the page heading -->
+<!-- The two controls, side by side (see .controls in the CSS) -->
 <div class="controls">
-  <label>Category
-    <select id="category">
-      <option value="all">All</option>
-      <option value="music">Music</option>
-      <option value="talks">Talks</option>
-      <option value="sports">Sports</option>
+  <label>Category                             <!-- the label for the menu -->
+    <select id="category">                    <!-- JS reads its value -->
+      <option value="all">All</option>        <!-- picked at the start -->
+      <option value="music">Music</option>    <!-- category: 'music' -->
+      <option value="talks">Talks</option>    <!-- category: 'talks' -->
+      <option value="sports">Sports</option>  <!-- category: 'sports' -->
     </select>
   </label>
+  <!-- A checkbox: JS reads .checked (true or false) -->
   <label><input type="checkbox" id="favsOnly"> Favorites only</label>
 </div>
-<p id="status"></p>
-<ul id="events"></ul>
-<p id="summary"></p></textarea>
-      <textarea data-lang="css">body { font-family: system-ui, sans-serif; margin: 20px; }
+<p id="status"></p>    <!-- loading and error messages -->
+<ul id="events"></ul>  <!-- one <li> per event goes here -->
+<p id="summary"></p>   <!-- the summary line --></textarea>
+      <textarea data-lang="css">/* The whole page: a plain font and some space around the edges */
+body { font-family: system-ui, sans-serif; margin: 20px; }
+/* The controls sit in a row, and wrap onto a new line when space runs out */
 .controls { display: flex; gap: 16px; flex-wrap: wrap; }
-#events { list-style: none; padding: 0; }
+#events { list-style: none; padding: 0; }  /* no bullets, no indent */
+/* Each event is a row: its text on the left, the star button on the right */
 #events li { display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  /* Space inside and between the rows, and a thin rounded border */
   padding: 8px 12px; margin: 6px 0; border: 1px solid #c9ced8; border-radius: 8px; }
-#events li.full { opacity: .6; }
+#events li.full { opacity: .6; }  /* full events look faded */
+/* ::after adds the word "Full" at the end of a full event's row */
 #events li.full::after { content: "Full"; font-size: .8rem; color: #b9322a; }
+/* The star button: no border or background, only a bigger character */
 .fav { font: inherit; border: 0; background: none; font-size: 1.2rem; cursor: pointer; }
-#status, #summary { color: #454d5e; }</textarea>
+#status, #summary { color: #454d5e; }  /* quieter gray text */</textarea>
       <textarea data-lang="js">// Each event from the server looks like:
 // { id: 2, title: 'Careers in UX', category: 'talks', date: 'Oct 14', day: 14, seats: 12 }
 
+// The blueprint that turns each plain object from the server into a real event
 class CampusEvent {
   // TODO 1: constructor taking ONE object, storing id, title, category, date, day, seats
   // TODO 1: label() → "Careers in UX (Oct 14)"
@@ -2708,19 +2793,21 @@ class CampusEvent {
   // TODO 1: static fromJSON(data) → new CampusEvent(data)
 }
 
+// The localStorage key that holds the favorite ids
 const FAV_KEY = 'event-favs';
-const categorySelect = document.querySelector('#category');
-const favsBox = document.querySelector('#favsOnly');
-const status = document.querySelector('#status');
-const list = document.querySelector('#events');
-const summary = document.querySelector('#summary');
+// Find the controls and the output areas once, when the page loads
+const categorySelect = document.querySelector('#category');  // the menu
+const favsBox = document.querySelector('#favsOnly');         // the checkbox
+const status = document.querySelector('#status');            // the message line
+const list = document.querySelector('#events');              // the event list
+const summary = document.querySelector('#summary');          // the summary line
 let events = [];                 // CampusEvent objects, once loaded
 let favorites = loadFavorites(); // a Set of favorite ids
 
 // TODO 2: read FAV_KEY from localStorage (JSON array of ids) and return new Set(...)
 //         Return an empty Set if nothing is saved or the JSON is broken.
 function loadFavorites() {
-  return new Set();
+  return new Set();  // for now: always an empty Set
 }
 
 // TODO 3: save the favorites Set as a JSON array: JSON.stringify([...favorites])
@@ -2746,9 +2833,10 @@ async function loadEvents() {
 //         clicked, add or remove its id (Number(button.dataset.id)) from favorites,
 //         save, and render again.
 
-categorySelect.addEventListener('change', render);
-favsBox.addEventListener('change', render);
-loadEvents();</textarea>
+// Already wired for you: redraw whenever a control changes
+categorySelect.addEventListener('change', render);  // a new category
+favsBox.addEventListener('change', render);         // ticked or unticked
+loadEvents();                                       // fetch once, at the start</textarea>
       <script type="text/plain" class="setup">
         mockApi.delay = 90;
         mockApi.route('GET', '/api/events', function () {

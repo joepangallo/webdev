@@ -292,11 +292,12 @@
         <p><strong>When you meet it.</strong> WordPress sites, news sites, online stores, government forms, and most of the web's older pages. It is simple, works without JavaScript, and search engines read it easily.</p>
         <p><strong>Watch out.</strong> Every click is a full round trip to the server, so very interactive screens (a drag-and-drop planner, a chat) feel slow if built this way alone. Sprinkle in JavaScript for those parts.</p>
         <script type="text/plain" class="code" data-lang="php" data-title="menu.php: the server sends finished HTML">
+          <!-- the PHP on the next line runs on the server: it stores data and prints nothing -->
           <?php $items = ['Latte', 'Mocha']; ?>
-          <ul>
-            <?php foreach ($items as $item): ?>
+          <ul>                                    <!-- plain HTML is sent exactly as written -->
+            <?php foreach ($items as $item): ?>   <!-- repeat the next line once per item -->
               <li><?= $item ?></li>   <!-- the browser receives <li>Latte</li><li>Mocha</li> -->
-            <?php endforeach; ?>
+            <?php endforeach; ?>                  <!-- end of the loop -->
           </ul>
         </script>
       </div>
@@ -305,7 +306,7 @@
         <p><strong>When you meet it.</strong> Single-page applications such as Gmail or Trello, and mobile apps, which talk to the same API as the website.</p>
         <p><strong>Watch out.</strong> The server still does every check that matters. The JavaScript can hide a button, but only the API can refuse a request.</p>
         <script type="text/plain" class="code" data-lang="php" data-title="api/menu.php: the server sends only data">
-          <?php
+          <?php                                        // a file of pure PHP: no HTML at all
           header('Content-Type: application/json');   // "this is JSON, not HTML"
           echo json_encode(['Latte', 'Mocha']);        // ["Latte","Mocha"]
           // In the browser: fetch('api/menu.php').then(r => r.json()) builds the list
@@ -318,7 +319,7 @@
         <script type="text/plain" class="code" data-lang="html" data-title="contact.html (static) sends to a PHP script" data-result="off">
           <!-- The page itself is a plain HTML file... -->
           <form method="post" action="https://forms.example.com/contact.php">
-            <input name="email" type="email" required>
+            <input name="email" type="email" required>   <!-- the server receives it as email=... -->
             <button>Send</button>   <!-- ...but submitting runs PHP on a server -->
           </form>
         </script>
@@ -343,10 +344,13 @@
         <script type="text/plain" class="code" data-lang="shell" data-title="Terminal">
           # Check that PHP is installed, and which version
           $ php -v
+          # PHP answers with its version: this chapter needs 8 or newer
           PHP 8.3.12 (cli) (built: Sep 24 2026 10:12:44) (NTS)
           # Serve the current folder at http://localhost:8000
           $ php -S localhost:8000
+          # The server says it has started, and keeps running until you close the terminal
           [Mon Oct 12 14:30:00 2026] PHP 8.3.12 Development Server (http://localhost:8000) started
+          # Each request adds a line: who asked, the status code (200 means OK) and the file
           [Mon Oct 12 14:30:05 2026] 127.0.0.1:52144 [200]: GET /index.php
         </script>
       </div>
@@ -359,6 +363,7 @@
           $ sudo apt install apache2 php libapache2-mod-php
           # Files in this folder are served at http://your-server/
           $ ls /var/www/html
+          # so this file is the page at http://your-server/index.php
           index.php
         </script>
       </div>
@@ -378,7 +383,7 @@
         <p><strong>When you meet it.</strong> When a site has to be public: a portfolio with a working contact form, a club site with sign-ups, a WordPress blog.</p>
         <p><strong>Watch out.</strong> Check the PHP version your host runs (this chapter uses PHP 8 features) and keep it updated. Old, unsupported PHP versions stop receiving security fixes.</p>
         <script type="text/plain" class="code" data-lang="php" data-title="info.php">
-          <?php
+          <?php   // the whole file is PHP, so it has no closing tag
           // Shows which PHP version and settings this server has.
           // Upload it, open it once, then DELETE it: it reveals details attackers love.
           echo 'PHP version: ' . phpversion();
@@ -410,22 +415,22 @@
     <h3>Your turn: your first PHP page</h3>
     <p>A PHP file is an HTML file with PHP code mixed in. Here the café's name and today's date come from PHP. Fill in the TODOs, then press <strong>Send</strong> (or just keep typing: the page re-runs as you edit). Open "Response headers" under the preview to see what the server sent with your page.</p>
     <div class="playground" data-runtime="php" data-title="Campus Café home page" data-height="420" data-layout="stacked" data-challenge="Build the page with PHP">
-      <textarea data-lang="php"><?php
+      <textarea data-lang="php"><?php   // the opening tag switches PHP on
 // This block runs on the server before any HTML is sent.
 // TODO 1: store the text "Campus Café" in a variable named $cafe
 // TODO 2: store today's date in $today, using date('l, F j, Y')
 //         (that format gives, for example, "Monday, October 12, 2026")
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Campus Café</title>
+<!DOCTYPE html>                <!-- from here on, plain HTML sent as written -->
+<html lang="en">               <!-- the page is in English -->
+<head>                         <!-- details about the page, not shown in it -->
+  <meta charset="utf-8">       <!-- lets the é in Café display correctly -->
+  <title>Campus Café</title>   <!-- the text on the browser tab -->
 </head>
-<body>
+<body>                         <!-- everything the visitor sees -->
   <!-- TODO 3: make the heading read "Welcome to Campus Café"
        by printing $cafe after the word "Welcome to " -->
-  <h1>Welcome</h1>
+  <h1>Welcome</h1>   <!-- the heading visitors see first -->
 
   <!-- TODO 4: print $today inside this paragraph with the short echo tag -->
   <p id="today">Today is ...</p>
@@ -441,7 +446,7 @@
         {"label": "`#today` shows today's date in the `l, F j, Y` format", "test": "var d=new Date(); var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; var months=['January','February','March','April','May','June','July','August','September','October','November','December']; var want=days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear(); var p=$('#today'); return !!p && p.textContent.indexOf(want)>=0 && /date\\s*\\(/.test(code.php);"},
         {"label": "`#year` shows the current year, printed with `date('Y')`", "test": "var p=$('#year'); return !!p && p.textContent.indexOf(String(new Date().getFullYear()))>=0 && p.textContent.indexOf('2025')<0 && /date\\s*\\(\\s*['\"]Y['\"]\\s*\\)/.test(code.php);"},
         {"label": "Uses the short echo tag `<?=` at least once", "test": "return /<\\?=/.test(code.php);"},
-        {"label": "The browser received no PHP code at all", "test": "return !!server.response && !/<\\?php|<\\?=|\\$cafe|\\$today/.test(server.response.html) && server.response.status===200;"}
+        {"label": "The browser received no PHP code at all", "test": "return !!server.response && !/<\\?php|<\\?=|\\$cafe|\\$today/.test(server.response.html.replace(/<!--[\\s\\S]*?-->/g, '')) && server.response.status===200;"}
       ]
       </script>
     </div>
@@ -466,7 +471,7 @@
     <h2>PHP Language Fundamentals</h2>
     <p>PHP looks a lot like the JavaScript you already know: statements end with semicolons, blocks sit inside curly braces, and <code>if</code>, <code>for</code> and <code>while</code> work almost the same way. The differences are small but they bite, so this section concentrates on them. The biggest one is visible on every line: <strong>every variable name starts with a dollar sign</strong>.</p>
     <script type="text/plain" class="code" data-lang="php" data-title="hello.php">
-      <?php
+      <?php                         // the opening tag: PHP starts here
       // A one-line comment, exactly like JavaScript
       # Another one-line comment, PHP's older style
       /* A comment that can
@@ -479,13 +484,13 @@
 
     <p>Try it. This playground is a free sandbox with no checks: change the values, add lines, make mistakes on purpose and read what PHP says. The page re-runs as you type.</p>
     <div class="playground" data-runtime="php" data-title="Try it: a PHP sandbox" data-height="300" data-layout="stacked">
-      <textarea data-lang="php"><?php
+      <textarea data-lang="php"><?php   // a page made only of PHP: what it echoes is the page
 $name = 'Ana';                 // try your own name
-$visits = 3;
+$visits = 3;                   // a number, so no quotes
 $visits = $visits + 1;         // a variable can change
-echo "<h1>Hello, $name!</h1>";
-echo '<p>Visit number ' . $visits . '</p>';
-echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
+echo "<h1>Hello, $name!</h1>";                // double quotes fill in $name
+echo '<p>Visit number ' . $visits . '</p>';   // the dot joins the pieces
+echo '<p>Next year is ' . (date('Y') + 1) . '</p>';  // date('Y') is this year
 // Try: remove a semicolon, misspell $name, or echo "Hi" + 1</textarea>
     </div>
 
@@ -508,7 +513,7 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
 
     <p>Comments work as in JavaScript, plus the <code>#</code> style. A special block comment that starts with <code>/**</code>, called a <strong>DocBlock</strong>, describes a function for other developers; editors such as VS Code read it and show it as a tooltip wherever the function is used.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
+      <?php   // the DocBlock below sits directly above the function it describes
       /**
        * Works out the price after a discount.     (a DocBlock: what the function does)
        * @param float $price    the price before the discount
@@ -523,7 +528,7 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
     <h3>Variables</h3>
     <p>A <strong>variable</strong> is created the moment you assign to it; there is no <code>let</code>, <code>const</code> or <code>var</code>. The name is a dollar sign followed by a letter or underscore, then any mix of letters, digits and underscores. Variable names are <strong>case-sensitive</strong> (<code>$Total</code> and <code>$total</code> are two different variables), although keywords and function names are not (<code>ECHO</code> works, but please do not). PHP is <strong>dynamically typed</strong>: a variable has no fixed type, and the value it holds decides its type.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
+      <?php                  // PHP from here to the end of the file
       $price = 4.5;          // a float
       $price = 'free';       // allowed: the same variable now holds a string
       $item_count = 3;       // snake_case is common in PHP...
@@ -581,9 +586,9 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
         <p><strong>When you meet it.</strong> Totals, taxes, averages, page counts: any calculation on a server.</p>
         <p><strong>Watch out.</strong> Dividing by zero is not <code>Infinity</code> as in JavaScript: PHP 8 throws a <code>DivisionByZeroError</code> and stops, so check a divisor that comes from input.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $items = 7;
-          $perPage = 3;
+          <?php                           // how many pages does a list need?
+          $items = 7;                     // seven menu items to show
+          $perPage = 3;                   // three items fit on one page
           echo $items / $perPage;         // 2.3333333333333 (a float)
           echo intdiv($items, $perPage);  // 2: whole pages, remainder dropped
           echo $items % $perPage;         // 1: the remainder (one item left over)
@@ -596,8 +601,8 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
         <p><strong>When you meet it.</strong> Every time a price or a statistic is shown to a person.</p>
         <p><strong>Watch out.</strong> <code>number_format</code> returns a string, so do all your arithmetic first and format only when printing. Doing math on <code>'1,234.50'</code> fails.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $total = 1234.5678;
+          <?php                            // each echo prints its result
+          $total = 1234.5678;              // a raw result with too many decimals
           echo round($total, 2);           // 1234.57
           echo floor(7.9), ceil(7.1);      // 78
           echo number_format($total, 2);   // 1,234.57 (a string, for display)
@@ -609,8 +614,8 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
         <p><strong>When you meet it.</strong> When comparing money calculations with <code>==</code>, or when a total ends in ...0000001.</p>
         <p><strong>Watch out.</strong> Never compare floats for exact equality. Round both sides first, or store money in whole cents as ints.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $sum = 0.1 + 0.2;
+          <?php                           // a float surprise, step by step
+          $sum = 0.1 + 0.2;               // both numbers are stored slightly wrong
           echo $sum;                      // 0.3 (rounded for display)
           var_dump($sum);                 // float(0.30000000000000004)
           var_dump($sum == 0.3);          // bool(false)!
@@ -623,7 +628,7 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
         <p><strong>When you meet it.</strong> With input, which always arrives as text: <code>(int) $_GET['page']</code> turns <code>'3'</code> into <code>3</code>.</p>
         <p><strong>Watch out.</strong> Casts never complain. <code>(int) 'abc'</code> is quietly <code>0</code> and <code>(int) '12 apples'</code> is <code>12</code>. To reject bad input instead of guessing, validate it with <code>filter_var</code> (12.7) or <code>is_numeric()</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                          // var_dump shows the type and value
           var_dump((int) '42');          // int(42)
           var_dump((int) '3.99');        // int(3): the decimals are cut off, not rounded
           var_dump((int) 'abc');         // int(0): no complaint at all
@@ -642,8 +647,8 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
         <p><strong>When you meet it.</strong> For any fixed text with no variables in it: HTML snippets, array keys, messages. Many teams use single quotes by default because what you see is exactly what you get.</p>
         <p><strong>Watch out.</strong> Variables are <em>not</em> filled in, which is the most common beginner surprise in PHP.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $name = 'Ana';
+          <?php                    // single quotes: what you type is what you get
+          $name = 'Ana';           // a variable that will NOT be filled in below
           echo 'Hello, $name\n';   // prints Hello, $name\n  (exactly as typed)
           echo 'It\'s 5 o\'clock'; // \' puts a quote inside single quotes
         </script>
@@ -653,9 +658,9 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
         <p><strong>When you meet it.</strong> When a message mixes text and variables: <code>"Hello, $name"</code> is easier to read than a chain of dots. For array items and object properties, wrap the expression in curly braces: <code>"{$order['qty']} items"</code>.</p>
         <p><strong>Watch out.</strong> PHP grabs the longest variable name it can, so <code>"$sizecm"</code> looks for a variable called <code>$sizecm</code>. Write <code>"{$size}cm"</code> instead. To print a real dollar sign, escape it: <code>"\$5"</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $name = 'Ana';
-          $order = ['qty' => 3, 'item' => 'tea'];
+          <?php                                           // double quotes, three ways
+          $name = 'Ana';                                  // a plain variable
+          $order = ['qty' => 3, 'item' => 'tea'];         // an array with named keys (12.5)
           echo "Hello, $name!\n";                         // Hello, Ana! and a newline
           echo "{$order['qty']} cups of {$order['item']}"; // 3 cups of tea
           echo "That costs \$5";                          // \$ prints a dollar sign
@@ -666,13 +671,13 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
         <p><strong>When you meet it.</strong> Constantly, especially when building HTML a piece at a time inside a loop.</p>
         <p><strong>Watch out.</strong> <code>"5" + "5"</code> is the number <code>10</code>, while <code>"5" . "5"</code> is the string <code>"55"</code>: the opposite of JavaScript. Using <code>+</code> on text that is not a number, such as <code>'Total: ' + 5</code>, stops the script with <code>TypeError: Unsupported operand types</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $first = 'Ada';
-          $last = 'Lovelace';
+          <?php                           // joining strings with the dot
+          $first = 'Ada';                 // a first name
+          $last = 'Lovelace';             // a last name
           $full = $first . ' ' . $last;   // "Ada Lovelace"
-          $html = '<ul>';
+          $html = '<ul>';                 // start the HTML as a string
           $html .= '<li>' . $full . '</li>';  // add to the end of $html
-          $html .= '</ul>';
+          $html .= '</ul>';               // add the closing tag last
           echo $html;                     // <ul><li>Ada Lovelace</li></ul>
         </script>
       </div>
@@ -681,14 +686,14 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
         <p><strong>When you meet it.</strong> For blocks of HTML or email text with a few variables in them.</p>
         <p><strong>Watch out.</strong> The closing label must be the only thing on its line (a semicolon may follow it). Indentation in front of the closing label is removed from every line.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $name = 'Ana';
+          <?php                         // <<<HTML below starts a heredoc string
+          $name = 'Ana';                // filled in below, as in double quotes
           $card = <<<HTML
               <div class="card">
                 <h2>Welcome, $name</h2>
               </div>
               HTML;       // the label HTML ends it; its indentation is stripped
-          echo $card;
+          echo $card;                   // prints the card with "Welcome, Ana" inside
         </script>
       </div>
     </div>
@@ -719,7 +724,7 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
     <h3>Constants</h3>
     <p>A <strong>constant</strong> is a name for a value that never changes while the script runs, such as a tax rate or a site name. Constants have no dollar sign and, by convention, are written in UPPER_CASE. You can create one with <code>const</code> (at the top level of a file or inside a class) or with the <code>define()</code> function (anywhere, even inside an <code>if</code>). PHP also has many built-in constants and some "magic" ones that change depending on where they are written.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
+      <?php                               // line 1: count from here for __LINE__
       const TAX_RATE = 0.07;              // a constant: no $, written in capitals
       define('SITE_NAME', 'Campus Café'); // another way to create one
       echo SITE_NAME;                     // Campus Café
@@ -797,27 +802,27 @@ echo '<p>Next year is ' . (date('Y') + 1) . '</p>';
     <h3>Your turn: fix the receipt</h3>
     <p>This receipt has three bugs, and the first one stops the script completely: read the <strong>Fatal error</strong> in the preview and the console, including its line number. Fix them one at a time; the checks list what the finished receipt must show.</p>
     <div class="playground" data-runtime="php" data-title="Fix the café receipt" data-height="430" data-layout="stacked" data-challenge="Make the receipt correct and error-free">
-      <textarea data-lang="php"><?php
+      <textarea data-lang="php"><?php   // this part runs on the server, before any HTML is sent
 // A receipt for one order at Campus Café. It has three bugs.
 
 // Bug 1: the tax rate never changes, so make it a constant
 //        named TAX_RATE (use const or define) instead of a variable
 $taxRate = 0.07;
 
-$item = 'Iced latte';
-$price = 3.50;   // price of one drink
-$qty = 2;        // how many were ordered
+$item = 'Iced latte';   // the name of the drink
+$price = 3.50;          // price of one drink
+$qty = 2;               // how many were ordered
 
-$subtotal = $price * $qty;
-$tax = $subtotal * $taxRate;
-$total = $subtotal + $tax;
+$subtotal = $price * $qty;     // the cost of all the drinks, before tax
+$tax = $subtotal * $taxRate;   // the tax on that cost
+$total = $subtotal + $tax;     // what the customer pays
 ?>
-<h1>Receipt</h1>
+<h1>Receipt</h1>   <!-- plain HTML, sent as written -->
 <!-- Bug 2: single quotes do not fill in variables -->
 <p id="line"><?php echo '$qty x $item'; ?></p>
 <!-- Bug 3: + only adds numbers; PHP joins strings with a dot -->
 <p id="subtotal"><?php echo 'Subtotal: $' + number_format($subtotal, 2); ?></p>
-<p id="tax">Tax: $<?= number_format($tax, 2) ?></p>
+<p id="tax">Tax: $<?= number_format($tax, 2) ?></p>   <!-- the tax, with two decimals -->
 <!-- Also: show the total with exactly two decimals, like the other lines -->
 <p id="total">Total: $<?= $total ?></p></textarea>
       <script type="application/json" class="checks">
@@ -873,14 +878,14 @@ $total = $subtotal + $tax;
         <p><strong>When you meet it.</strong> Everywhere: checking form input, choosing which message to show, deciding whether a visitor may see a page.</p>
         <p><strong>Watch out.</strong> Order matters. Put the narrowest test first: if <code>$score &gt;= 60</code> came before <code>$score &gt;= 90</code>, every passing student would get a D.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $score = 84;
+          <?php                        // the decision runs on the server
+          $score = 84;                 // the value being tested
           if ($score >= 90) {          // checked first
-            $grade = 'A';
+            $grade = 'A';              // skipped: 84 is not >= 90
           } elseif ($score >= 80) {    // only checked if the first was false
             $grade = 'B';              // this one runs: 84 >= 80
           } else {                     // runs when nothing above matched
-            $grade = 'C or below';
+            $grade = 'C or below';     // skipped, because a block already ran
           }
           echo $grade;                 // B
         </script>
@@ -890,15 +895,15 @@ $total = $subtotal + $tax;
         <p><strong>When you meet it.</strong> When one variable can take several known values, such as a day of the week or a menu choice. Stacking cases with no code between them lets several values share one block.</p>
         <p><strong>Watch out.</strong> A forgotten <code>break</code> makes PHP "fall through" into the next case and run its code too. And because <code>switch</code> uses <code>==</code>, <code>case 1</code> also matches the string <code>'1'</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $day = 'sat';
-          switch ($day) {
+          <?php                        // pick the opening hours for one day
+          $day = 'sat';                // the value to compare
+          switch ($day) {              // compare $day with each case, top down
             case 'sat':                // two labels share one block
-            case 'sun':
-              echo 'Weekend hours: 9 to 3';
+            case 'sun':                // 'sat' falls through to here too
+              echo 'Weekend hours: 9 to 3';   // this runs for 'sat'
               break;                   // leave the switch
             default:                   // when no case matches
-              echo 'Weekday hours: 7 to 7';
+              echo 'Weekday hours: 7 to 7';   // any other day
           }
         </script>
       </div>
@@ -907,19 +912,19 @@ $total = $subtotal + $tax;
         <p><strong>When you meet it.</strong> When you are turning one value into another: a status code into a message, a score into a grade, a size into a price. Writing <code>match (true)</code> lets each arm be a condition.</p>
         <p><strong>Watch out.</strong> If no arm matches and there is no <code>default</code>, PHP throws an <code>UnhandledMatchError</code>. Strict comparison means <code>match ('1')</code> does not match an arm of <code>1</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $size = 'M';
+          <?php                        // two match expressions
+          $size = 'M';                 // the value to look up
           $price = match ($size) {     // match produces a value
-            'S' => 2.50,
+            'S' => 2.50,               // an arm: value => result
             'M', 'L' => 3.25,          // several values can share an arm
-            default => 4.00,
+            default => 4.00,           // anything else
           };
-          $score = 77;
+          $score = 77;                 // a quiz score
           $grade = match (true) {      // each arm is a condition
-            $score >= 90 => 'A',
-            $score >= 80 => 'B',
-            $score >= 70 => 'C',
-            default => 'F',
+            $score >= 90 => 'A',       // false, so PHP moves on
+            $score >= 80 => 'B',       // false as well
+            $score >= 70 => 'C',       // the first true arm wins: 'C'
+            default => 'F',            // used only when no arm is true
           };
           echo "$price $grade";        // 3.25 C
         </script>
@@ -929,8 +934,8 @@ $total = $subtotal + $tax;
         <p><strong>When you meet it.</strong> <code>??</code> is the standard way to read optional input: <code>$_GET['page'] ?? 1</code>. The ternary is handy for small choices such as plural endings.</p>
         <p><strong>Watch out.</strong> Do not nest ternaries without parentheses; PHP 8 refuses to guess what you meant. For more than two outcomes, use <code>match</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $count = 1;
+          <?php                         // short decisions inside expressions
+          $count = 1;                   // how many items are in the cart
           echo $count . ' item' . ($count === 1 ? '' : 's');  // 1 item
           $page = $_GET['page'] ?? 1;   // 1 when the URL has no ?page=
           $nick = $user['nickname'] ?? $user['name'] ?? 'Guest';  // the first one that exists
@@ -966,10 +971,10 @@ $total = $subtotal + $tax;
         <p><strong>When you meet it.</strong> Constantly: printing a list of products, building table rows from database results, checking every field of a form.</p>
         <p><strong>Watch out.</strong> <code>$value</code> is a copy, so changing it does not change the array. To change elements in place, use <code>$array[$key] = …</code> inside the loop (or a reference, 12.4).</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $prices = ['Latte' => 3.25, 'Mocha' => 3.75, 'Tea' => 2.00];
+          <?php                                     // print one line per drink
+          $prices = ['Latte' => 3.25, 'Mocha' => 3.75, 'Tea' => 2.00];  // name => price
           foreach ($prices as $drink => $price) {   // $drink is the key, $price the value
-            echo "$drink: \$" . number_format($price, 2) . "\n";
+            echo "$drink: \$" . number_format($price, 2) . "\n";      // one line per drink
           }
           // Latte: $3.25
           // Mocha: $3.75
@@ -981,10 +986,10 @@ $total = $subtotal + $tax;
         <p><strong>When you meet it.</strong> For a fixed number of repeats (a table with 12 months, the numbers on a page selector) and for walking positions <code>0</code> to <code>count($list) - 1</code>.</p>
         <p><strong>Watch out.</strong> Off-by-one errors: <code>$i &lt; 5</code> from 0 runs five times; <code>$i &lt;= 5</code> runs six. When you only need the elements, <code>foreach</code> cannot get the boundaries wrong.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php   // the links are built on the server, then sent as HTML
           // Page links 1 to 5 for a search results page
           for ($page = 1; $page <= 5; $page++) {
-            echo "<a href=\"?page=$page\">$page</a> ";
+            echo "<a href=\"?page=$page\">$page</a> ";   // one link per pass: 1, 2, 3, 4, 5
           }
         </script>
       </div>
@@ -993,12 +998,12 @@ $total = $subtotal + $tax;
         <p><strong>When you meet it.</strong> When you cannot know the number of passes in advance. In Chapter 14 you will loop <code>while ($row = $result-&gt;fetch())</code> to read database rows until there are none left.</p>
         <p><strong>Watch out.</strong> Something in the body must eventually make the condition false. An infinite loop on a server keeps a worker busy until PHP's time limit kills the request (this page stops it after a few hundred thousand steps).</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $balance = 1000;
-          $years = 0;
+          <?php                          // a loop with an unknown number of passes
+          $balance = 1000;               // the starting amount
+          $years = 0;                    // a counter that starts at zero
           while ($balance < 2000) {      // until the money doubles
             $balance *= 1.05;            // 5% interest: this makes the loop end
-            $years++;
+            $years++;                    // one more year has passed
           }
           echo "Doubled after $years years";  // Doubled after 15 years
         </script>
@@ -1008,12 +1013,12 @@ $total = $subtotal + $tax;
         <p><strong>When you meet it.</strong> Rarely. A classic use is generating a value, then trying again if it is not acceptable, such as a random code that must not already be taken.</p>
         <p><strong>Watch out.</strong> It ends with a semicolon after <code>while (…)</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $taken = ['A7', 'B2'];
-          do {
+          <?php                                       // make a code nobody has yet
+          $taken = ['A7', 'B2'];                      // codes that are already in use
+          do {                                        // run the body first, check after
             $code = chr(rand(65, 67)) . rand(1, 9);   // a letter A to C, then a digit
           } while (in_array($code, $taken));         // try again if it is already used
-          echo $code;
+          echo $code;                                 // for example C4: never A7 or B2
         </script>
       </div>
     </div>
@@ -1037,26 +1042,29 @@ $total = $subtotal + $tax;
     <p>On a real page, loops and conditions mostly decide which HTML to send. You can echo every tag from inside PHP, but long strings of HTML in quotes are hard to read and easy to break. The better way is to step out of PHP for the HTML and back in for the logic. To make that readable, PHP has an <strong>alternative syntax</strong>: replace the opening brace with a colon and the closing brace with <code>endif;</code>, <code>endforeach;</code>, <code>endfor;</code>, <code>endwhile;</code> or <code>endswitch;</code>. Both versions below send exactly the same HTML.</p>
     <div class="grid-2">
       <script type="text/plain" class="code" data-lang="php" data-title="Echoing HTML (harder to read)">
-        <?php
+        <?php                           // PHP from top to bottom
+        // every tag is a PHP string, in quotes
         echo '<ul>';
-        foreach ($menu as $item) {
-          if ($item['soldOut']) {
+        foreach ($menu as $item) {      // once per item
+          if ($item['soldOut']) {       // sold out?
+            // yes: a list item with class="out"
             echo '<li class="out">' . $item['name'] . '</li>';
-          } else {
+          } else {                      // otherwise
+            // no: a plain list item
             echo '<li>' . $item['name'] . '</li>';
           }
         }
-        echo '</ul>';
+        echo '</ul>';                   // close the list
       </script>
       <script type="text/plain" class="code" data-lang="php" data-title="Alternative syntax (a template)">
-        <ul>
-        <?php foreach ($menu as $item): ?>
-          <?php if ($item['soldOut']): ?>
-            <li class="out"><?= $item['name'] ?></li>
-          <?php else: ?>
-            <li><?= $item['name'] ?></li>
-          <?php endif; ?>
-        <?php endforeach; ?>
+        <ul>                                 <!-- plain HTML -->
+        <?php foreach ($menu as $item): ?>   <!-- the colon opens the loop -->
+          <?php if ($item['soldOut']): ?>    <!-- the colon opens the if -->
+            <li class="out"><?= $item['name'] ?></li>   <!-- sold out -->
+          <?php else: ?>                     <!-- otherwise -->
+            <li><?= $item['name'] ?></li>    <!-- in stock -->
+          <?php endif; ?>                    <!-- closes the if -->
+        <?php endforeach; ?>                 <!-- closes the loop -->
         </ul>
       </script>
     </div>
@@ -1128,14 +1136,15 @@ $total = $subtotal + $tax;
             styles.css
       </script>
       <script type="text/plain" class="code" data-lang="php" data-title="menu.php">
-        <?php
+        <?php                                    // the shared pieces load first
         require_once 'includes/config.php';      // must exist: stop if missing
         require_once 'includes/functions.php';   // defines functions: load once
         $title = 'Menu';                         // header.php prints it in <title>
-        include 'includes/header.php';
+        include 'includes/header.php';           // the <head>, logo and nav appear here
         ?>
-        <h1>Our menu</h1>
-        <p>Latte: <?= formatPrice(3.25) ?></p>
+        <h1>Our menu</h1>                        <!-- this page's own content -->
+        <p>Latte: <?= formatPrice(3.25) ?></p>   <!-- a helper from functions.php -->
+        <!-- the shared footer and the closing tags come last -->
         <?php include 'includes/footer.php'; ?>
       </script>
     </div>
@@ -1144,19 +1153,21 @@ $total = $subtotal + $tax;
     <h3>Your turn: a grade report</h3>
     <p>Turn an array of quiz scores into an HTML table with a loop in the alternative syntax. The data is already there; your job is the logic and the template. A check makes sure the page is really built from the array: each name may appear in your code only once.</p>
     <div class="playground" data-runtime="php" data-title="Quiz results table" data-height="440" data-layout="stacked" data-challenge="Build the table from the array">
-      <textarea data-lang="php"><?php
+      <textarea data-lang="php"><?php   // the data, set up on the server
 // Scores for one quiz, keyed by student name
 $scores = ['Ana' => 94, 'Ben' => 81, 'Cara' => 67, 'Dev' => 88, 'Eli' => 52];
 ?>
+<!-- CSS for the table: thin borders on every cell, a pink background for class="fail" -->
 <style>
   table { border-collapse: collapse; }
   th, td { border: 1px solid #ccd; padding: 4px 10px; }
   .fail { background: #fde4e1; }
 </style>
-<h1>Quiz 3 results</h1>
-<table>
+<h1>Quiz 3 results</h1>   <!-- the page heading -->
+<table>                   <!-- a table with a header row and a body -->
+  <!-- the header row: one title per column -->
   <thead><tr><th>Student</th><th>Score</th><th>Grade</th></tr></thead>
-  <tbody>
+  <tbody>                 <!-- the body of the table, where the student rows go -->
   <!-- TODO 1: loop over $scores with  foreach (...):  and  endforeach;
        printing one <tr> per student with three <td> cells:
        the name, the score and the letter grade -->
@@ -1167,7 +1178,7 @@ $scores = ['Ana' => 94, 'Ben' => 81, 'Cara' => 67, 'Dev' => 88, 'Eli' => 52];
 </table>
 <!-- TODO 4: count the scores of 60 or more and print
      "Passed: 4 of 5" (use count($scores) for the 5) -->
-<p id="summary">Passed: ? of ?</p></textarea>
+<p id="summary">Passed: ? of ?</p>   <!-- the summary line --></textarea>
       <script type="application/json" class="checks">
       [
         {"label": "The table body has one row per student (5 rows, 3 cells each)", "test": "var r=$$('tbody tr'); return r.length===5 && r.every(function(tr){return tr.querySelectorAll('td').length===3;});"},
@@ -1200,7 +1211,7 @@ $scores = ['Ana' => 94, 'Ben' => 81, 'Cara' => 67, 'Dev' => 88, 'Eli' => 52];
     <h2>Functions</h2>
     <p>A <strong>function</strong> is a named block of code you can run whenever you need it, with different inputs each time. You have already used dozens of PHP's <strong>built-in functions</strong>: <code>date()</code>, <code>number_format()</code>, <code>strtoupper()</code>. PHP ships with thousands of them, all documented at <code>php.net</code>, where typing a function name into the search box takes you to its page. In this section you write your own <strong>user-defined functions</strong>, so a rule such as "how a price is displayed" lives in exactly one place.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
+      <?php                                   // a user-defined function, then two calls
       // Define it once...
       function formatPrice($amount) {         // $amount is a parameter
         return '$' . number_format($amount, 2); // send a value back to the caller
@@ -1219,9 +1230,9 @@ $scores = ['Ana' => 94, 'Ben' => 81, 'Cara' => 67, 'Dev' => 88, 'Eli' => 52];
         <p><strong>When you meet it.</strong> For settings that are usually the same: a currency symbol, a number of decimal places, a page size.</p>
         <p><strong>Watch out.</strong> Parameters with defaults must come after the ones without. Skipping a middle argument used to be impossible; named arguments (next tab) fix that.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                          // a parameter with a default
           function greet($name, $greeting = 'Hello') {   // $greeting is optional
-            return "$greeting, $name!";
+            return "$greeting, $name!";                  // builds the message and hands it back
           }
           echo greet('Ana');           // Hello, Ana!
           echo greet('Ana', 'Hi');     // Hi, Ana!
@@ -1232,9 +1243,9 @@ $scores = ['Ana' => 94, 'Ben' => 81, 'Cara' => 67, 'Dev' => 88, 'Eli' => 52];
         <p><strong>When you meet it.</strong> With functions that have several optional parameters, where <code>htmlspecialchars($s, double_encode: false)</code> is clearer than a list of positional values.</p>
         <p><strong>Watch out.</strong> Renaming a parameter now breaks callers that used its name. In this course's playground, named arguments work for your own functions but not for PHP's built-in ones.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          function ticket($name, $seat = 'any', $vip = false) {
-            return "$name, seat $seat" . ($vip ? ' (VIP)' : '');
+          <?php                            // a call can name the arguments it passes
+          function ticket($name, $seat = 'any', $vip = false) {   // $seat and $vip are optional
+            return "$name, seat $seat" . ($vip ? ' (VIP)' : '');   // adds (VIP) when $vip is true
           }
           echo ticket('Ana', vip: true);   // Ana, seat any (VIP): $seat keeps its default
         </script>
@@ -1244,8 +1255,8 @@ $scores = ['Ana' => 94, 'Ben' => 81, 'Cara' => 67, 'Dev' => 88, 'Eli' => 52];
         <p><strong>When you meet it.</strong> Almost every function you write should return its result rather than echo it. A function that returns can be used anywhere: inside a string, in a condition, in another function call.</p>
         <p><strong>Watch out.</strong> Code after a <code>return</code> never runs. To hand back two results, return an array and unpack it with <code>[$a, $b] = …</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          function minMax($numbers) {
+          <?php                                      // returning two results at once
+          function minMax($numbers) {                // takes an array of numbers
             return [min($numbers), max($numbers)];   // two results in one array
           }
           [$low, $high] = minMax([7, 2, 9]);         // unpack into two variables
@@ -1257,12 +1268,12 @@ $scores = ['Ana' => 94, 'Ben' => 81, 'Cara' => 67, 'Dev' => 88, 'Eli' => 52];
         <p><strong>When you meet it.</strong> For functions such as "add up any number of prices" or "log any number of messages".</p>
         <p><strong>Watch out.</strong> The variadic parameter must be the last one.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                            // any number of arguments
           function total(...$prices) {     // $prices is an array of every argument
-            return array_sum($prices);
+            return array_sum($prices);     // adds up everything in the array
           }
           echo total(3.25, 2, 4.75);       // 10
-          $cart = [1, 2, 3];
+          $cart = [1, 2, 3];               // three numbers already in an array
           echo total(...$cart);            // 6: the array spread into three arguments
         </script>
       </div>
@@ -1281,15 +1292,15 @@ echo greet('Ana');   // Hello, Ana!
     <h3>Type declarations</h3>
     <p>PHP lets you declare what type each parameter must be, and what type the function returns. If a caller passes something that cannot be used as that type, PHP stops with a <code>TypeError</code> that names the function, the argument and the line of the call. Declarations catch mistakes early and document what a function expects.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
+      <?php                                                 // the types sit before each name
       function area(float $width, float $height): float {   // two floats in, a float out
-        return $width * $height;
+        return $width * $height;                            // a float, as promised
       }
       function findUser(int $id): ?array {   // ?array: an array, or null when not found
-        return null;
+        return null;                         // allowed, thanks to the ? in ?array
       }
       function logVisit(string $page): void { // void: returns nothing
-        error_log("Visited $page");
+        error_log("Visited $page");           // writes to the server's log file, not the page
       }
     </script>
     <p>By default PHP works in <strong>coercive mode</strong>: if a value can be converted sensibly, it is. The string <code>"5"</code> passed to an <code>int</code> parameter arrives as the int <code>5</code>, which is handy because form input is always a string. Add <code>declare(strict_types=1);</code> as the very first statement of a file and PHP switches to <strong>strict mode</strong> for calls made in that file: types must match exactly (the only exception is that an int is accepted where a float is expected). Try it in the tester.</p>
@@ -1356,30 +1367,30 @@ echo greet('Ana');   // Hello, Ana!
     <h3>Your turn: fix the scope bug</h3>
     <p>The café's loyalty program gives 10 points per dollar, and members earn half as much again. The function below was written as if it could see the settings at the top of the script. It cannot: read the warnings in the preview. Fix it without using <code>global</code>.</p>
     <div class="playground" data-runtime="php" data-title="Loyalty points" data-height="400" data-layout="stacked" data-challenge="Make the function work without global">
-      <textarea data-lang="php"><?php
+      <textarea data-lang="php"><?php   // the settings and the function, on the server
 // The program's settings. They never change while the script runs.
 // TODO 1: turn both into constants, POINTS_PER_DOLLAR and MEMBER_BONUS,
 //         so the function can use them (and delete the two variables)
 $pointsPerDollar = 10;
-$memberBonus = 1.5;
+$memberBonus = 1.5;        // members earn half as much again
 
 // TODO 2: add type declarations:
 //         points(float $spent, bool $member = false): int
 // TODO 3: return a whole number of points, rounded: (int) round(...)
 function points($spent, $member) {
-  $points = $spent * $pointsPerDollar;
-  if ($member) {
-    $points = $points * $memberBonus;
+  $points = $spent * $pointsPerDollar;   // points for the money spent
+  if ($member) {                         // only for members
+    $points = $points * $memberBonus;    // add the member bonus
   }
-  return $points;
+  return $points;                        // hand the result back to the caller
 }
 ?>
-<h1>Loyalty points</h1>
-<ul id="tests">
-  <li><?= points(20, false) ?></li>
-  <li><?= points(20, true) ?></li>
-  <li><?= points(7.5, true) ?></li>
-  <li><?= points(4.99) ?></li>
+<h1>Loyalty points</h1>             <!-- plain HTML -->
+<ul id="tests">                     <!-- each list item calls the function once -->
+  <li><?= points(20, false) ?></li>   <!-- should show 200 -->
+  <li><?= points(20, true) ?></li>    <!-- should show 300 -->
+  <li><?= points(7.5, true) ?></li>   <!-- should show 113 -->
+  <li><?= points(4.99) ?></li>        <!-- should show 50 -->
 </ul></textarea>
       <script type="application/json" class="checks">
       [
@@ -1394,15 +1405,15 @@ function points($spent, $member) {
     <h3>Anonymous functions and arrow functions</h3>
     <p>Functions are values in PHP, just as in JavaScript. An <strong>anonymous function</strong> (also called a <strong>closure</strong>) has no name and can be stored in a variable or passed to another function. Because of PHP's scope rule, a closure must list the outside variables it wants in a <code>use</code> clause. <strong>Arrow functions</strong>, written <code>fn($x) =&gt; expression</code>, are the short form: one expression, returned automatically, and they can read outside variables without <code>use</code>.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      $rate = 0.07;
+      <?php                                        // functions stored in variables
+      $rate = 0.07;                                // a variable outside any function
       $withTax = function ($price) use ($rate) {   // use ($rate) copies $rate in
-        return $price * (1 + $rate);
+        return $price * (1 + $rate);               // the price plus 7%
       };
       echo $withTax(10);                           // 10.7
 
       $short = fn($price) => $price * (1 + $rate); // arrow function: sees $rate automatically
-      $prices = [10, 20, 30];
+      $prices = [10, 20, 30];                      // three prices to work on
       print_r(array_map($short, $prices));         // [10.7, 21.4, 32.1]
       usort($prices, fn($a, $b) => $b <=> $a);     // sort from highest to lowest
     </script>
@@ -1477,7 +1488,7 @@ function points($spent, $member) {
       </table>
     </div>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
+      <?php                                            // dates are made on the server
       date_default_timezone_set('America/New_York');   // which clock to use
       echo date('Y-m-d');                  // 2026-10-12: the format databases use
       echo date('l, F jS');                // Monday, October 12th
@@ -1490,36 +1501,36 @@ function points($spent, $member) {
     <h3>Your turn: price helpers</h3>
     <p>The café wants every price on the site formatted the same way. Write the three helper functions, with type declarations. The list at the bottom calls each function with different arguments and acts as your tests.</p>
     <div class="playground" data-runtime="php" data-title="Write the price helpers" data-height="460" data-layout="stacked" data-challenge="Make every test line correct">
-      <textarea data-lang="php"><?php
+      <textarea data-lang="php"><?php   // three helper functions, then a page that tests them
 // TODO 1: formatPrice(float $amount, string $symbol = '$'): string
 //   returns the symbol, then the amount with 2 decimals and thousands
 //   separators: formatPrice(1234.5, '€') returns "€1,234.50"
 function formatPrice($amount, $symbol = '$') {
-  return '';
+  return '';   // a placeholder so the page runs: replace it
 }
 
 // TODO 2: discount(float $price, int $percent = 10): float
 //   returns the price after taking off that percentage:
 //   discount(20, 25) returns 15.0
 function discount($price, $percent = 10) {
-  return 0;
+  return 0;    // a placeholder so the page runs: replace it
 }
 
 // TODO 3: plural(int $count, string $word): string
 //   returns "1 cookie" for one, and adds an s otherwise: "3 cookies"
 function plural($count, $word) {
-  return '';
+  return '';   // a placeholder so the page runs: replace it
 }
 ?>
-<h1>Price helper tests</h1>
-<ol id="tests">
-  <li><?= formatPrice(3.5) ?></li>
-  <li><?= formatPrice(1234.5, '€') ?></li>
-  <li><?= formatPrice(discount(20, 25)) ?></li>
-  <li><?= formatPrice(discount(20)) ?></li>
-  <li><?= plural(1, 'cookie') ?></li>
-  <li><?= plural(3, 'cookie') ?></li>
-  <li><?= plural(0, 'muffin') ?></li>
+<h1>Price helper tests</h1>   <!-- plain HTML -->
+<ol id="tests">               <!-- each item prints what one call returns -->
+  <li><?= formatPrice(3.5) ?></li>                 <!-- should show $3.50 -->
+  <li><?= formatPrice(1234.5, '€') ?></li>         <!-- should show €1,234.50 -->
+  <li><?= formatPrice(discount(20, 25)) ?></li>    <!-- should show $15.00 -->
+  <li><?= formatPrice(discount(20)) ?></li>        <!-- should show $18.00 -->
+  <li><?= plural(1, 'cookie') ?></li>              <!-- should show 1 cookie -->
+  <li><?= plural(3, 'cookie') ?></li>              <!-- should show 3 cookies -->
+  <li><?= plural(0, 'muffin') ?></li>              <!-- should show 0 muffins -->
 </ol></textarea>
       <script type="application/json" class="checks">
       [
@@ -1556,7 +1567,7 @@ function plural($count, $word) {
     <h3>Indexed arrays</h3>
     <p>An <strong>indexed array</strong> has whole-number keys that PHP assigns for you, starting at 0. Create one with square brackets (or the older <code>array()</code> syntax), read an element with its key in brackets, and add to the end with empty brackets.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
+      <?php                                  // a list of drinks, numbered from 0
       $drinks = ['Latte', 'Mocha', 'Tea'];   // keys 0, 1 and 2 are assigned for you
       $old = array('Latte', 'Mocha');        // the same thing, older syntax
       echo $drinks[0];                       // Latte: the first element is at key 0
@@ -1570,11 +1581,11 @@ function plural($count, $word) {
     <h3>Associative arrays</h3>
     <p>An <strong>associative array</strong> uses keys you choose, usually strings, written with the double arrow <code>=&gt;</code>. It describes one thing by its named parts, the way a JavaScript object does. You will meet associative arrays everywhere on the server: <code>$_GET</code>, <code>$_POST</code> and <code>$_SERVER</code> are all associative arrays (12.7), and a database row arrives as one too.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      $drink = [
+      <?php                        // one drink, described by its named parts
+      $drink = [                   // an associative array: key => value
         'name'  => 'Latte',        // key 'name', value 'Latte'
-        'price' => 3.25,
-        'hot'   => true,
+        'price' => 3.25,           // key 'price', a float value
+        'hot'   => true,           // key 'hot', a bool value
       ];                           // a trailing comma is allowed and common
       echo $drink['name'];         // Latte
       $drink['size'] = 'large';    // add a new key and value
@@ -1634,14 +1645,17 @@ function plural($count, $word) {
     <h3>Multidimensional arrays</h3>
     <p>A value in an array can be another array. A list of associative arrays is the most common shape of data on the server: it is exactly what a database query gives you, one associative array per row. Read deeper values with more brackets, and loop over rows with <code>foreach</code>.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      $menu = [
+      <?php                           // a list of rows, like a database result
+      $menu = [                       // an indexed array of associative arrays
+        // row 0: a hot drink whose 'tags' value is itself an array
         ['name' => 'Latte', 'price' => 3.25, 'tags' => ['hot', 'milk']],
+        // row 1: a cold drink with a single tag
         ['name' => 'Cold brew', 'price' => 3.75, 'tags' => ['cold']],
       ];
       echo $menu[1]['name'];          // Cold brew: row 1, key 'name'
       echo $menu[0]['tags'][1];       // milk: row 0, key 'tags', element 1
       foreach ($menu as $item) {      // one pass per row
+        // prints "Latte: $3.25", then "Cold brew: $3.75", each on its own line
         echo $item['name'] . ': $' . number_format($item['price'], 2) . "\n";
       }
       print_r($menu);                 // shows the whole structure (wrap in <pre> to keep the layout)
@@ -1656,11 +1670,11 @@ function plural($count, $word) {
         <p><strong>When you meet it.</strong> Most of the time: printing a list, adding up a total, checking each item.</p>
         <p><strong>Watch out.</strong> The loop works on a copy of the array, so adding elements inside the loop does not make it run longer, and changing <code>$value</code> does not change the array.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $cart = [4.99, 12.50, 3.25];
-          $total = 0;
+          <?php                         // add up a shopping cart
+          $cart = [4.99, 12.50, 3.25];  // three prices in an indexed array
+          $total = 0;                   // the running total starts at zero
           foreach ($cart as $price) {   // 4.99, then 12.50, then 3.25
-            $total += $price;
+            $total += $price;           // add this price to the total
           }
           echo number_format($total, 2);   // 20.74 (array_sum($cart) does the same)
         </script>
@@ -1670,9 +1684,10 @@ function plural($count, $word) {
         <p><strong>When you meet it.</strong> Printing labels and values (<code>Name: Ana</code>), building <code>&lt;option value="key"&gt;</code> lists, numbering rows.</p>
         <p><strong>Watch out.</strong> The names <code>$key</code> and <code>$value</code> are your choice; pick ones that say what they hold, such as <code>$drink =&gt; $price</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                    // build the options of a <select>
+          // the keys are short codes, the values are what a person reads
           $sizes = ['S' => 'Small', 'M' => 'Medium', 'L' => 'Large'];
-          foreach ($sizes as $code => $label) {
+          foreach ($sizes as $code => $label) {    // $code gets the key, $label the value
             echo "<option value=\"$code\">$label</option>\n";   // <option value="S">Small</option> ...
           }
         </script>
@@ -1682,14 +1697,15 @@ function plural($count, $word) {
         <p><strong>When you meet it.</strong> Turning a list of rows into an HTML table, or a menu of categories into headings with items under each.</p>
         <p><strong>Watch out.</strong> Use different variable names at each level, or the inner loop overwrites the outer one's variables.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                         // one heading and list per category
+          // each key is a category, and its value is a list of items
           $menu = ['Drinks' => ['Latte', 'Tea'], 'Food' => ['Bagel']];
           foreach ($menu as $category => $items) {      // outer: each category
-            echo "<h2>$category</h2><ul>";
+            echo "<h2>$category</h2><ul>";              // the heading, then open its list
             foreach ($items as $item) {                 // inner: each item in it
-              echo "<li>$item</li>";
+              echo "<li>$item</li>";                    // one list item per item
             }
-            echo '</ul>';
+            echo '</ul>';                               // close this category's list
           }
         </script>
       </div>
@@ -1698,10 +1714,10 @@ function plural($count, $word) {
         <p><strong>When you meet it.</strong> When you need the position for arithmetic, such as "every other row" or "compare each element with the next one".</p>
         <p><strong>Watch out.</strong> It only works for indexed arrays with no gaps. After an <code>unset()</code> or with string keys, use <code>foreach</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          $temps = [61, 64, 70, 68];
+          <?php                                          // compare each day with the day before
+          $temps = [61, 64, 70, 68];                     // four days of temperatures
           for ($i = 1; $i < count($temps); $i++) {       // start at 1 to compare with the day before
-            $change = $temps[$i] - $temps[$i - 1];
+            $change = $temps[$i] - $temps[$i - 1];       // today minus yesterday
             echo "Day $i: " . ($change >= 0 ? '+' : '') . $change . "\n";   // Day 1: +3 ...
           }
         </script>
@@ -1711,8 +1727,8 @@ function plural($count, $word) {
     <h3>Arrays are copied, objects are shared</h3>
     <p>One more difference from JavaScript, and an important one. Assigning an array to another variable, or passing it to a function, makes a <strong>copy</strong>. Changing the copy never changes the original. (Objects, in 12.6, behave like JavaScript objects: assignment shares the same object.)</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      $a = [1, 2, 3];
+      <?php             // arrays are copied on assignment
+      $a = [1, 2, 3];   // the original array
       $b = $a;          // $b is a separate copy
       $b[] = 4;         // only $b grows
       echo count($a);   // 3
@@ -1735,10 +1751,11 @@ function plural($count, $word) {
       </table>
     </div>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      $scores = ['Ana' => 88, 'Ben' => 95, 'Cara' => 72];
+      <?php                                    // each sort changes the array itself
+      $scores = ['Ana' => 88, 'Ben' => 95, 'Cara' => 72];   // name => score
       arsort($scores);                         // highest first, names kept
       print_r($scores);                        // [Ben] => 95, [Ana] => 88, [Cara] => 72
+      // two rows; usort() needs your own rule to compare whole rows
       $menu = [['name' => 'Tea', 'price' => 2], ['name' => 'Mocha', 'price' => 3.75]];
       usort($menu, fn($a, $b) => $a['price'] <=> $b['price']);  // cheapest first
     </script>
@@ -1794,12 +1811,12 @@ $cheap = [[array_filter]]($menu, fn($m) => $m['price'] < 3);
     <h3>Your turn: a gradebook</h3>
     <p>Each student has three quiz scores. Work out each average, rank the class, and list the honors students. Everything must come from the array: a check makes sure each name appears in your code only once.</p>
     <div class="playground" data-runtime="php" data-title="Rank the class" data-height="470" data-layout="stacked" data-challenge="Build the ranking from the data">
-      <textarea data-lang="php"><?php
-$students = [
-  'Ana'  => [92, 88, 95],
-  'Ben'  => [75, 64, 80],
-  'Cara' => [58, 71, 62],
-  'Dev'  => [88, 91, 79],
+      <textarea data-lang="php"><?php   // the data and the logic, before the HTML
+$students = [             // each name => three quiz scores
+  'Ana'  => [92, 88, 95], // average 91.7
+  'Ben'  => [75, 64, 80], // average 73
+  'Cara' => [58, 71, 62], // average 63.7
+  'Dev'  => [88, 91, 79], // average 86
 ];
 
 // TODO 1: build $averages, an associative array of name => average,
@@ -1812,7 +1829,7 @@ $averages = [];
 //         (array_filter, then array_keys)
 $honors = [];
 ?>
-<h1>Class ranking</h1>
+<h1>Class ranking</h1>   <!-- plain HTML -->
 <!-- TODO 4: one <li> per student in ranked order, like "Ana: 91.7" -->
 <ol id="ranking"></ol>
 
@@ -1869,17 +1886,19 @@ $honors = [];
 
     <h3>Defining a class and creating objects</h3>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      class Book {
+      <?php                                      // a class, then two objects built from it
+      class Book {                               // the blueprint for every book
         public string $title;                    // properties: every Book has these
-        public float $price;
+        public float $price;                     // a float, so 9.99 and 7.5 both fit
 
+        // the constructor runs by itself each time new Book(...) is called
         public function __construct(string $title, float $price) {
           $this->title = $title;                 // $this is the Book being built
-          $this->price = $price;
+          $this->price = $price;                 // store the second argument too
         }
 
         public function label(): string {        // a method
+          // builds "Dune ($9.99)" from this book's own properties
           return $this->title . ' ($' . number_format($this->price, 2) . ')';
         }
       }
@@ -1901,22 +1920,23 @@ $honors = [];
     <p>Writing every property three times (declare it, list it as a parameter, assign it) gets tedious. PHP 8 lets you put the visibility keyword in front of a constructor parameter, and PHP declares and fills in the property for you. These two classes are identical:</p>
     <div class="grid-2">
       <script type="text/plain" class="code" data-lang="php" data-title="The long way">
-        <?php
-        class Drink {
-          public string $name;
-          private float $price;
+        <?php                      // the same class, written out in full
+        class Drink {              // a blueprint for drinks
+          public string $name;     // 1. declare each property
+          private float $price;    // (only Drink's own code may use it)
+          // 2. list them again as parameters
           public function __construct(string $name, float $price) {
-            $this->name = $name;
-            $this->price = $price;
+            $this->name = $name;   // 3. assign each one
+            $this->price = $price; // three mentions per property
           }
         }
       </script>
       <script type="text/plain" class="code" data-lang="php" data-title="With promotion (PHP 8)">
-        <?php
-        class Drink {
-          public function __construct(
+        <?php                        // the PHP 8 shortcut
+        class Drink {                // the same blueprint
+          public function __construct(   // each parameter is also a property
             public string $name,     // declared and assigned in one go
-            private float $price,
+            private float $price,    // private works the same way
           ) {}                       // nothing left to do in the body
         }
       </script>
@@ -1969,20 +1989,21 @@ $honors = [];
     <h3>Static members and class constants</h3>
     <p>Sometimes data belongs to the class as a whole rather than to each object: a count of how many books exist, or a tax rate every book shares. Mark a property or method <code>static</code>, or declare a <code>const</code>, and it lives on the class. Reach it with the double colon <code>::</code> (PHP calls it the scope resolution operator): <code>ClassName::member</code> from outside, <code>self::member</code> from inside.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      class Ticket {
+      <?php                                 // data that belongs to the class itself
+      class Ticket {                        // every ticket costs the same
         const PRICE = 12.50;                // a class constant: no $
         public static int $sold = 0;        // one counter shared by the whole class
 
+        // runs once per new ticket; $holder is a promoted property
         public function __construct(public string $holder) {
           self::$sold++;                    // self:: means "this class"
         }
         public static function revenue(): float {   // called on the class, no object needed
-          return self::$sold * self::PRICE;
+          return self::$sold * self::PRICE;         // tickets sold times the price
         }
       }
-      new Ticket('Ana');
-      new Ticket('Ben');
+      new Ticket('Ana');           // the counter goes up to 1
+      new Ticket('Ben');           // and then to 2
       echo Ticket::$sold;          // 2
       echo Ticket::revenue();      // 25
       echo Ticket::PRICE;          // 12.5
@@ -1991,14 +2012,16 @@ $honors = [];
     <h3>Inheritance</h3>
     <p>A class can <strong>extend</strong> another. The new <strong>subclass</strong> (child) gets every public and protected property and method of its <strong>parent</strong>, and can add more or <strong>override</strong> a method by defining one with the same name. <code>parent::method()</code> calls the parent's version, which is how a child constructor sets up the parent's part of the object.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      class Product {
+      <?php                                            // a parent class and a child class
+      class Product {                                  // the parent
+        // protected: Product and its children may use these, outside code may not
         public function __construct(protected string $name, protected float $price) {}
-        public function label(): string {
-          return $this->name . ' $' . number_format($this->price, 2);
+        public function label(): string {              // for example "Muffin $2.75"
+          return $this->name . ' $' . number_format($this->price, 2);   // name, then price
         }
       }
       class Drink extends Product {                    // a Drink is a Product
+        // the same two values, plus a size that only drinks have
         public function __construct(string $name, float $price, private string $size) {
           parent::__construct($name, $price);          // let Product store name and price
         }
@@ -2006,8 +2029,9 @@ $honors = [];
           return $this->size . ' ' . parent::label();  // ...and reuse it
         }
       }
+      // one array can hold both kinds of object
       $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large')];
-      foreach ($items as $item) {
+      foreach ($items as $item) {      // the same code for every object
         echo $item->label() . "\n";    // each object uses its own version of label()
       }
       // Muffin $2.75
@@ -2022,15 +2046,17 @@ $honors = [];
         <p><strong>When you meet it.</strong> When several classes share most of their code but each must supply one piece, such as how a shape works out its area.</p>
         <p><strong>Watch out.</strong> A child that forgets an abstract method is a fatal error the moment the class is declared, which is the point: the mistake shows up immediately, not when a customer finds it.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          abstract class Shape {
+          <?php                                          // an unfinished blueprint and a finished one
+          abstract class Shape {                         // abstract: no new Shape() allowed
             abstract public function area(): float;      // no body: children must write it
             public function describe(): string {         // shared by every shape
+              // static::class is the real class name, such as Circle
               return static::class . ' with area ' . round($this->area(), 2);
             }
           }
-          class Circle extends Shape {
-            public function __construct(private float $r) {}
+          class Circle extends Shape {                   // a finished shape
+            public function __construct(private float $r) {}   // stores the radius
+            // the missing piece: pi times the radius squared
             public function area(): float { return M_PI * $this->r ** 2; }
           }
           echo (new Circle(2))->describe();   // Circle with area 12.57
@@ -2042,14 +2068,15 @@ $honors = [];
         <p><strong>When you meet it.</strong> When unrelated classes must work in the same place: a shop can print a receipt for anything that implements <code>HasPrice</code>, whether it is a drink, a gift card or a gym membership.</p>
         <p><strong>Watch out.</strong> Interface methods must be public, and the implementing class must match their parameters and return types.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          interface HasPrice {
+          <?php                                           // a promise, and a class that keeps it
+          interface HasPrice {                            // any class can make this promise
             public function price(): float;               // a promise, no code
           }
-          class Membership implements HasPrice {
-            public function price(): float { return 30.0; }
+          class Membership implements HasPrice {          // promises to have price()
+            public function price(): float { return 30.0; }   // and keeps the promise
           }
           function receiptLine(HasPrice $thing): string { // accepts ANY class that keeps the promise
+            // get_class() gives the object's class name, here "Membership"
             return get_class($thing) . ': $' . number_format($thing->price(), 2);
           }
           echo receiptLine(new Membership());             // Membership: $30.00
@@ -2060,11 +2087,11 @@ $honors = [];
         <p><strong>When you meet it.</strong> In every framework. A tool called <strong>Composer</strong>, PHP's package manager (like npm for JavaScript), loads each class file automatically the first time the class is used, so you never write long lists of <code>require</code> lines.</p>
         <p><strong>Watch out.</strong> This page keeps everything in one file so you can see it all at once. That is fine for learning and for small scripts, and not how larger projects are organized.</p>
         <script type="text/plain" class="code" data-lang="php" data-title="src/Models/Book.php">
-          <?php
+          <?php                           // one class per file, named after it
           namespace App\Models;           // this file's "folder" of names
 
           class Book {                    // its full name is App\Models\Book
-            public function __construct(public string $title) {}
+            public function __construct(public string $title) {}   // a promoted property
           }
           // In another file:  use App\Models\Book;  then  new Book('Dune');
         </script>
@@ -2074,13 +2101,13 @@ $honors = [];
     <h3>Your turn: extend a class</h3>
     <p>The café sells three kinds of product. A plain <code>Product</code> already works. Write two subclasses that reuse it: a <code>Drink</code> that also has a size, and a <code>GiftCard</code> that is never taxed. The test lines at the bottom treat all three the same way, which is the point of polymorphism.</p>
     <div class="playground" data-runtime="php" data-title="Products, drinks and gift cards" data-height="480" data-layout="stacked" data-challenge="Reuse Product through inheritance">
-      <textarea data-lang="php"><?php
-class Product {
+      <textarea data-lang="php"><?php   // the classes first, then the tests that use them
+class Product {   // the parent class, already working: it stores a name and a price
   public function __construct(protected string $name, protected float $price) {}
-  public function label(): string {
-    return $this->name . ' $' . number_format($this->price, 2);
+  public function label(): string {          // for example "Muffin $2.75"
+    return $this->name . ' $' . number_format($this->price, 2);   // name, then price
   }
-  public function priceWithTax(): float {
+  public function priceWithTax(): float {    // what the customer pays
     return round($this->price * 1.07, 2);   // 7% sales tax
   }
 }
@@ -2097,16 +2124,17 @@ class Product {
 // ---- Tests: leave everything below this line alone ----
 $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large'), new GiftCard('Gift card', 25)];
 ?>
-<ul id="labels">
-<?php foreach ($items as $item): ?>
-  <li><?= $item->label() ?></li>
-<?php endforeach; ?>
+<ul id="labels">                      <!-- test 1: one label per item -->
+<?php foreach ($items as $item): ?>   <!-- the same code for every object -->
+  <li><?= $item->label() ?></li>      <!-- each object answers with its own label() -->
+<?php endforeach; ?>                  <!-- end of the loop -->
 </ul>
-<ul id="taxed">
-<?php foreach ($items as $item): ?>
-  <li><?= number_format($item->priceWithTax(), 2) ?></li>
-<?php endforeach; ?>
+<ul id="taxed">                       <!-- test 2: each price with tax -->
+<?php foreach ($items as $item): ?>   <!-- the same code for every object -->
+  <li><?= number_format($item->priceWithTax(), 2) ?></li>   <!-- two decimals -->
+<?php endforeach; ?>                  <!-- end of the loop -->
 </ul>
+<!-- test 3: prints Product for each item that is an instance of Product -->
 <p id="types"><?= implode(' ', array_map(fn($i) => $i instanceof Product ? 'Product' : 'other', $items)) ?></p></textarea>
       <script type="application/json" class="checks">
       [
@@ -2122,10 +2150,12 @@ $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large'), new Gi
     <h3>Arrays of objects</h3>
     <p>Real programs rarely have one object. They have a list of them: every product, every order, every student. All the array tools from 12.5 work on arrays of objects; inside the callbacks, you reach into each object with <code>-&gt;</code>.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      class Book {
+      <?php                         // array tools work on lists of objects too
+      class Book {                  // a small class that only holds data
+        // three promoted properties: a title, a price and a year
         public function __construct(public string $title, public float $price, public int $year) {}
       }
+      // three Book objects in one indexed array
       $books = [new Book('Dune', 9.99, 1965), new Book('Emma', 7.50, 1815), new Book('Kindred', 12.00, 1979)];
 
       usort($books, fn($a, $b) => $a->price <=> $b->price);           // cheapest first
@@ -2138,13 +2168,13 @@ $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large'), new Gi
     <h3>Objects are shared, not copied</h3>
     <p>Remember that assigning an array copies it. Objects work the other way, like JavaScript objects: a variable holds a <strong>handle</strong> to the object, so assigning it to a second variable gives two names for one object. Use <code>clone</code> when you really want a copy.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      $a = new Book('Dune', 9.99);
+      <?php                  // assignment shares an object, clone copies it
+      $a = new Book('Dune', 9.99);   // $a holds a handle to a new Book
       $b = $a;               // two names, ONE object
-      $b->price = 5;
+      $b->price = 5;         // change the price through $b
       echo $a->price;        // 5: the change shows through $a too
       $c = clone $a;         // a separate copy
-      $c->price = 1;
+      $c->price = 1;         // changes only the copy
       echo $a->price;        // still 5
     </script>
 
@@ -2156,14 +2186,14 @@ $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large'), new Gi
         <p><strong>When you meet it.</strong> For objects with an obvious text form: a price, a person's name, a date.</p>
         <p><strong>Watch out.</strong> Without it, <code>echo $book;</code> stops the script with <code>Object of class Book could not be converted to string</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          class Money {
-            public function __construct(private float $amount) {}
+          <?php                                             // an object that knows how to print itself
+          class Money {                                     // an amount of money
+            public function __construct(private float $amount) {}   // stores the amount
             public function __toString(): string {          // PHP calls this for you
-              return '$' . number_format($this->amount, 2);
+              return '$' . number_format($this->amount, 2); // the object's text form
             }
           }
-          $tip = new Money(4.5);
+          $tip = new Money(4.5);   // the object keeps 4.5 inside
           echo "Tip: $tip";        // Tip: $4.50
         </script>
       </div>
@@ -2172,14 +2202,14 @@ $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large'), new Gi
         <p><strong>When you meet it.</strong> In frameworks, where a database row object lets you write <code>$user-&gt;email</code> even though <code>email</code> is really stored in an internal array.</p>
         <p><strong>Watch out.</strong> They hide what a class really contains, which makes code harder to follow. Prefer ordinary properties and methods in your own classes.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          class Row {
-            private array $data = ['email' => 'ana@example.com'];
+          <?php                                            // a property that is really an array key
+          class Row {                                      // like a row from a database
+            private array $data = ['email' => 'ana@example.com'];   // the real storage
             public function __get(string $name) {          // reading a missing property
-              return $this->data[$name] ?? null;
+              return $this->data[$name] ?? null;           // look the name up in $data
             }
           }
-          $user = new Row();
+          $user = new Row();       // it has no public email property
           echo $user->email;       // ana@example.com, found through __get
         </script>
       </div>
@@ -2188,16 +2218,16 @@ $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large'), new Gi
         <p><strong>When you meet it.</strong> When an object holds other objects. <code>clone</code> copies only the outer object; the inner objects would still be shared unless <code>__clone</code> clones them too.</p>
         <p><strong>Watch out.</strong> It runs on the copy, not the original: <code>$this</code> inside it is the new object.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
-          class Order {
-            public array $items = [];
-            public int $number = 1;
+          <?php                                // a copy that adjusts itself
+          class Order {                        // a café order
+            public array $items = [];          // starts empty
+            public int $number = 1;            // the order number
             public function __clone() {        // runs on the fresh copy
               $this->number++;                 // a copied order gets the next number
             }
           }
-          $a = new Order();
-          $b = clone $a;
+          $a = new Order();                    // order number 1
+          $b = clone $a;                       // copy it: __clone runs on $b
           echo $a->number, ' ', $b->number;    // 1 2
         </script>
       </div>
@@ -2206,21 +2236,21 @@ $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large'), new Gi
     <h3>Exceptions: when a method cannot do its job</h3>
     <p>A method sometimes cannot do what it was asked: a negative deposit, a book that does not exist. Instead of returning a strange value, it can <strong>throw an exception</strong>: an object (of class <code>Exception</code> or one of its children) carrying a message. Throwing stops the method immediately. Code that expects a problem wraps the call in <code>try</code> and handles it in <code>catch</code>; if nobody catches it, PHP stops the script with "Fatal error: Uncaught …". PHP's own errors work the same way, which is why you can catch a <code>TypeError</code> or a <code>DivisionByZeroError</code>.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      class Account {
-        private float $balance = 0;
-        public function deposit(float $amount): void {
-          if ($amount <= 0) {
+      <?php                                  // throw in the method, catch in the caller
+      class Account {                        // a bank account
+        private float $balance = 0;          // private: only Account can change it
+        public function deposit(float $amount): void {   // adds money, returns nothing
+          if ($amount <= 0) {                // a deposit that makes no sense
             throw new InvalidArgumentException('Deposit must be positive');  // stop here
           }
-          $this->balance += $amount;
+          $this->balance += $amount;         // only reached when the amount is valid
         }
       }
-      $acct = new Account();
-      try {
+      $acct = new Account();                 // a new account, balance 0
+      try {                                  // try code that might throw
         $acct->deposit(-20);                 // throws
         echo 'Deposited';                    // never runs
-      } catch (InvalidArgumentException $e) {
+      } catch (InvalidArgumentException $e) {   // the exception lands here, in $e
         echo 'Sorry: ' . $e->getMessage();   // Sorry: Deposit must be positive
       }
     </script>
@@ -2228,7 +2258,7 @@ $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large'), new Gi
     <h3>Your turn: a bank account class</h3>
     <p>Write a <code>BankAccount</code> class that protects its balance. The test code below the TODOs already uses the class; at first it stops with <code>Class "BankAccount" not found</code>. Leave the test lines alone and make every check pass.</p>
     <div class="playground" data-runtime="php" data-title="Encapsulate a bank account" data-height="500" data-layout="stacked" data-challenge="Make the class pass every test">
-      <textarea data-lang="php"><?php
+      <textarea data-lang="php"><?php   // your class goes here, above the tests
 // TODO 1: class BankAccount with
 //   - a class constant BANK = 'Campus Credit Union'
 //   - a public string property $owner, set by the constructor
@@ -2244,30 +2274,32 @@ $items = [new Product('Muffin', 2.75), new Drink('Latte', 3.25, 'Large'), new Gi
 
 // ---- Tests: leave everything below this line alone ----
 $acct = new BankAccount('Ana');
-$acct->deposit(100);
-$acct->deposit(25.5);
-$ok = $acct->withdraw(40);
-$tooMuch = $acct->withdraw(1000);
+$acct->deposit(100);                 // the balance is now 100
+$acct->deposit(25.5);                // and now 125.50
+$ok = $acct->withdraw(40);           // enough money: true, leaving 85.50
+$tooMuch = $acct->withdraw(1000);    // not enough: false, nothing changes
 ?>
-<h1><?= BankAccount::BANK ?></h1>
-<p id="owner"><?= $acct->owner ?></p>
+<h1><?= BankAccount::BANK ?></h1>    <!-- a class constant, read with :: -->
+<p id="owner"><?= $acct->owner ?></p>   <!-- a public property -->
+<!-- the balance, read through a method because the property is hidden -->
 <p id="balance"><?= number_format($acct->getBalance(), 2) ?></p>
+<!-- var_export() prints true or false as words -->
 <p id="results"><?= var_export($ok, true) ?> / <?= var_export($tooMuch, true) ?></p>
-<p id="guard"><?php
-try {
-  $acct->deposit(-5);
-  echo 'no error';
-} catch (InvalidArgumentException $e) {
-  echo $e->getMessage();
+<p id="guard"><?php   // a negative deposit must be refused
+try {                                // run code that may throw
+  $acct->deposit(-5);                // this should throw
+  echo 'no error';                   // printed only if nothing was thrown
+} catch (InvalidArgumentException $e) {   // the exception arrives in $e
+  echo $e->getMessage();             // print its message
 }
-?></p>
-<p id="private"><?php
-try {
-  echo $acct->balance;
-} catch (Error $e) {
-  echo 'private';
+?></p>   <!-- end of this test -->
+<p id="private"><?php   // outside code must not be able to read the balance
+try {                                // run code that may fail
+  echo $acct->balance;               // reaching in from outside the class
+} catch (Error $e) {                 // PHP throws an Error when that is not allowed
+  echo 'private';                    // so this is printed instead
 }
-?></p></textarea>
+?></p>   <!-- end of this test --></textarea>
       <script type="application/json" class="checks">
       [
         {"label": "The heading shows `BankAccount::BANK`: `Campus Credit Union`", "test": "var h=$('h1'); return !!h && h.textContent.trim()==='Campus Credit Union';"},
@@ -2389,12 +2421,12 @@ try {
         <p><strong>When you meet it.</strong> Names, emails, comments, quantities.</p>
         <p><strong>Watch out.</strong> An empty box sends <code>''</code>, not nothing, so <code>isset()</code> is true even though the visitor typed nothing. Use <code>trim($v) === ''</code> to test for "empty". A <code>type="number"</code> field still arrives as a string such as <code>'3'</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                // runs after the form below is posted
           // <input name="qty" type="number">   left empty, then submitted
           var_dump(isset($_POST['qty']));      // bool(true): the field was sent...
           var_dump($_POST['qty']);             // string(0) "": ...but empty
-          $qty = trim($_POST['qty'] ?? '');
-          if ($qty === '') { echo 'Please enter a quantity'; }
+          $qty = trim($_POST['qty'] ?? '');    // '' when missing or blank, spaces removed
+          if ($qty === '') { echo 'Please enter a quantity'; }   // the real "empty" test
         </script>
       </div>
       <div data-tab="One checkbox">
@@ -2402,10 +2434,10 @@ try {
         <p><strong>When you meet it.</strong> "Subscribe to the newsletter", "I agree to the terms".</p>
         <p><strong>Watch out.</strong> Because an unticked box is missing, test it with <code>isset()</code>; reading it directly gives a warning when it is unticked.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                       // reading one checkbox safely
           // <input type="checkbox" name="newsletter" value="yes">
           $wantsNews = isset($_POST['newsletter']);   // true only when ticked
-          echo $wantsNews ? 'Subscribed' : 'No newsletter';
+          echo $wantsNews ? 'Subscribed' : 'No newsletter';   // no warning either way
         </script>
       </div>
       <div data-tab="Checkbox group">
@@ -2413,11 +2445,12 @@ try {
         <p><strong>When you meet it.</strong> Toppings, interests, days of the week: any "choose all that apply" question.</p>
         <p><strong>Watch out.</strong> If nothing is ticked, the name is missing entirely, so default to an empty array. Then check every value against the allowed list, because a visitor can send values your form never offered.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                                   // a group of checkboxes
           // <input type="checkbox" name="extras[]" value="whip">  (and more like it)
           $allowed = ['whip', 'shot', 'oat'];
           $extras = $_POST['extras'] ?? [];                       // [] when none ticked
           $extras = array_intersect($extras, $allowed);           // drop anything unexpected
+          // for example "2 extras: whip, oat", escaped before it is printed
           echo count($extras) . ' extras: ' . htmlspecialchars(implode(', ', $extras));
         </script>
       </div>
@@ -2426,11 +2459,11 @@ try {
         <p><strong>When you meet it.</strong> Sizes, shipping options, a country, a rating.</p>
         <p><strong>Watch out.</strong> A radio group with nothing selected sends nothing. And a visitor can edit the page and send <code>size=XXL</code>, so always check the value is one you offered with <code>in_array(…, true)</code>.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                        // one choice from a list
           // <input type="radio" name="size" value="S"> ... value="M" ... value="L"
           $size = $_POST['size'] ?? '';
-          if (!in_array($size, ['S', 'M', 'L'], true)) {
-            $errors['size'] = 'Please choose a size.';
+          if (!in_array($size, ['S', 'M', 'L'], true)) {   // not one of the offered values?
+            $errors['size'] = 'Please choose a size.';     // remember the problem for later
           }
         </script>
       </div>
@@ -2439,7 +2472,7 @@ try {
         <p><strong>When you meet it.</strong> To carry an ID through a form, such as which product a review is for.</p>
         <p><strong>Watch out.</strong> "Hidden" only means "not displayed". Anyone can see it in View Source and change it in DevTools, so never put a price, a permission or anything secret in a hidden field. Look prices up on the server from the ID.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                       // treat a hidden field like any input
           // <input type="hidden" name="product_id" value="7">
           $id = filter_var($_POST['product_id'] ?? '', FILTER_VALIDATE_INT);
           $price = $products[$id]['price'] ?? null;   // the price comes from the server, never the form
@@ -2450,7 +2483,7 @@ try {
     <h3>Reading input safely</h3>
     <p>The first rule of reading input: <strong>never assume a key exists</strong>. The first time someone opens <code>search.php</code> there is no <code>?q=</code> in the URL at all, and reading <code>$_GET['q']</code> gives a warning (<code>Undefined array key "q"</code>) plus <code>null</code>. Check first, or give a default:</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
+      <?php                                  // each line reads input a different way
       $q = $_GET['q'];                       // Warning when the URL has no ?q=
       $q = $_GET['q'] ?? '';                 // '' when missing: no warning
       $page = (int) ($_GET['page'] ?? 1);    // a whole number, 1 by default
@@ -2476,12 +2509,13 @@ try {
     </div>
     <p>A common pattern is a page that does two jobs. When it is requested with <code>GET</code>, it shows an empty form. When the form posts back to the same page, it checks the input; if something is wrong it shows the form again with error messages and the values already filled in, and if everything is fine it does the work. The form's <code>action</code> is the page itself.</p>
     <script type="text/plain" class="code" data-lang="php" data-title="signup.php: one script, two jobs">
-      <?php
-      $errors = [];
-      $email = '';
+      <?php                                             // the PHP part runs first, every time
+      $errors = [];                                     // no problems found yet
+      $email = '';                                      // empty for a first visit
       if ($_SERVER['REQUEST_METHOD'] === 'POST') {       // job 2: the form came back
         $email = trim($_POST['email'] ?? '');           // trim away stray spaces
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {   // not a real address?
+          // store a message under the field's name, to show next to it
           $errors['email'] = 'Please enter a valid email address.';
         }
         if (!$errors) {                                 // an empty array is falsy
@@ -2491,10 +2525,10 @@ try {
       ?>
       <form method="post" action="signup.php">            <!-- job 1: show the form -->
         <input name="email" value="<?= htmlspecialchars($email) ?>">  <!-- sticky -->
-        <?php if (isset($errors['email'])): ?>
-          <p class="error"><?= $errors['email'] ?></p>
-        <?php endif; ?>
-        <button>Sign up</button>
+        <?php if (isset($errors['email'])): ?>         <!-- only when there is an error -->
+          <p class="error"><?= $errors['email'] ?></p>  <!-- the message for this field -->
+        <?php endif; ?>                                 <!-- end of the if -->
+        <button>Sign up</button>                        <!-- posts back to this page -->
       </form>
     </script>
 
@@ -2547,18 +2581,20 @@ try {
     <p>When several controls share a name ending in <code>[]</code>, PHP collects their values into an array. Names with a key in brackets build an associative array. That is how a form sends a list of choices or a group of related fields.</p>
     <div class="grid-2">
       <script type="text/plain" class="code" data-lang="html" data-title="The form" data-result="off">
-        <form method="post" action="order.php">
+        <form method="post" action="order.php">   <!-- sends the fields to order.php -->
+          <!-- the same name with [] on both: PHP makes $_POST['extras'] an array -->
           <label><input type="checkbox" name="extras[]" value="whip"> Whip</label>
+          <!-- ticking both sends extras[]=whip and extras[]=shot -->
           <label><input type="checkbox" name="extras[]" value="shot"> Extra shot</label>
-          <input name="address[city]" value="Miami">
-          <input name="address[zip]" value="33101">
-          <button>Order</button>
+          <input name="address[city]" value="Miami">   <!-- key 'city' -->
+          <input name="address[zip]" value="33101">    <!-- key 'zip', same array -->
+          <button>Order</button>                       <!-- submits the form -->
         </form>
       </script>
       <script type="text/plain" class="code" data-lang="php" data-title="order.php">
-        <?php
+        <?php                                // runs when the form is posted
         $extras = $_POST['extras'] ?? [];    // [] when no box was ticked
-        foreach ($extras as $extra) {
+        foreach ($extras as $extra) {        // one pass per ticked box
           echo htmlspecialchars($extra) . ' ';  // whip shot
         }
         echo $_POST['address']['city'];       // Miami
@@ -2594,20 +2630,21 @@ try {
       </ol>
     </div>
     <script type="text/plain" class="code" data-lang="php" data-title="order.php: the PRG pattern">
-      <?php
-      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      <?php                                       // nothing may be printed before header()
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {   // Post: the order form was sent
+        // a whole number of at least 1, or false
         $qty = filter_var($_POST['qty'] ?? '', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-        if ($qty !== false) {
+        if ($qty !== false) {                     // the input is valid
           // save the order here (Chapter 14), then:
           header('Location: order.php?done=1');   // Redirect...
           exit;                                   // ...and stop: send nothing else
         }
-        $error = 'Please choose a quantity of at least 1.';
+        $error = 'Please choose a quantity of at least 1.';   // invalid: show the form again
       }
       ?>
-      <?php if (isset($_GET['done'])): ?>
+      <?php if (isset($_GET['done'])): ?>         <!-- the redirected GET has ?done=1 -->
         <p>Thanks! Your order is in.</p>         <!-- ...then Get -->
-      <?php endif; ?>
+      <?php endif; ?>                             <!-- end of the if -->
     </script>
 
     <h3>A form-handling security checklist</h3>
@@ -2632,8 +2669,8 @@ try {
     <h3>Your turn: filter the menu with GET</h3>
     <p>Make the menu respond to its query string. Click the links in the preview: each one sends a new GET request to your script, and the address bar above the preview shows it. The checks send their own requests too, with different query strings.</p>
     <div class="playground" data-runtime="php" data-title="Menu filter" data-height="460" data-layout="stacked" data-challenge="Filter with the query string, safely">
-      <textarea data-lang="php"><?php
-$menu = [
+      <textarea data-lang="php"><?php   // runs again for every request, with that request's query string
+$menu = [   // the whole menu: one associative array per item
   ['name' => 'Latte',    'type' => 'drink', 'price' => 3.25],
   ['name' => 'Iced tea', 'type' => 'drink', 'price' => 2.50],
   ['name' => 'Bagel',    'type' => 'food',  'price' => 2.75],
@@ -2651,21 +2688,22 @@ $type = 'all';
 //         cost no more than the max, using array_filter
 $shown = $menu;
 ?>
-<h1>Menu</h1>
-<nav>
-  <a href="?type=all">All</a> |
-  <a href="?type=drink">Drinks</a> |
-  <a href="?type=food">Food</a> |
-  <a href="?type=food&max=3">Food under $3</a>
+<h1>Menu</h1>                          <!-- plain HTML -->
+<nav>                                  <!-- each link requests this page again -->
+  <a href="?type=all">All</a> |        <!-- the query string type=all -->
+  <a href="?type=drink">Drinks</a> |   <!-- the query string type=drink -->
+  <a href="?type=food">Food</a> |      <!-- the query string type=food -->
+  <a href="?type=food&max=3">Food under $3</a>   <!-- two values, joined by & -->
 </nav>
 <!-- TODO 4: print $type here, escaped with htmlspecialchars -->
 <p id="showing">Showing: all</p>
-<ul id="items">
-<?php foreach ($shown as $item): ?>
+<ul id="items">                        <!-- the items that are shown -->
+<?php foreach ($shown as $item): ?>    <!-- one pass per item in $shown -->
+  <!-- the name, then the price with two decimals -->
   <li><?= $item['name'] ?> ($<?= number_format($item['price'], 2) ?>)</li>
-<?php endforeach; ?>
+<?php endforeach; ?>                   <!-- end of the loop -->
 </ul>
-<p id="count"><?= count($shown) ?> items</p></textarea>
+<p id="count"><?= count($shown) ?> items</p>   <!-- how many items are shown --></textarea>
       <script type="application/json" class="checks">
       [
         {"label": "No query string: all 5 items, and no warnings", "test": "var r=server.request('GET','/index.php'); var d=new DOMParser().parseFromString(r.html,'text/html'); return d.querySelectorAll('#items li').length===5 && !/Warning<\\/b>/.test(r.html);"},
@@ -2681,11 +2719,11 @@ $shown = $menu;
     <h3>Your turn: a contact form with POST</h3>
     <p>Now the full pattern: show the form, validate what comes back, keep the visitor's values in the fields, escape everything you print, and redirect after success. Submit the form in the preview to watch your script handle real POST requests; the request bar switches to <code>POST</code> and shows the body.</p>
     <div class="playground" data-runtime="php" data-title="Validate the contact form" data-height="520" data-layout="stacked" data-challenge="Validate, keep values, escape, then redirect">
-      <textarea data-lang="php"><?php
-$errors = [];
-$name = '';
-$email = '';
-$message = '';
+      <textarea data-lang="php"><?php   // the PHP part runs first, for GET and for POST
+$errors = [];     // field name => message; stays empty when all is well
+$name = '';       // what was typed, so the form can show it again
+$email = '';      // empty on a first visit
+$message = '';    // empty on a first visit
 
 // TODO 1: only when the form was posted ($_SERVER['REQUEST_METHOD'] === 'POST'):
 //   - read name, email and message from $_POST (use ?? '') and trim() each one
@@ -2697,27 +2735,30 @@ $message = '';
 //   - no errors at all? Post/Redirect/Get:
 //        header('Location: index.php?sent=1'); then exit;
 ?>
+<!-- CSS: each label on its own line, and error messages in red -->
 <style>
   label { display: block; margin: 8px 0 2px; }
   .error { color: #b00020; margin: 2px 0; }
 </style>
-<h1>Contact Campus Café</h1>
-<?php if (isset($_GET['sent'])): ?>
-  <p id="thanks">Thanks! We will reply soon.</p>
-<?php endif; ?>
+<h1>Contact Campus Café</h1>                     <!-- plain HTML -->
+<?php if (isset($_GET['sent'])): ?>             <!-- only when the URL has ?sent=1 -->
+  <p id="thanks">Thanks! We will reply soon.</p>   <!-- the thank-you message -->
+<?php endif; ?>                                  <!-- end of the if -->
+<!-- posts back to this same page -->
+<!-- novalidate switches off the browser's own checks, so the server's checks get tested -->
 <form method="post" action="index.php" novalidate>
   <!-- TODO 2: make each field sticky: its value attribute (or the textarea's
        content) should print the matching variable through htmlspecialchars -->
   <!-- TODO 3: after each field, when there is an error for it, print
        <p class="error" id="name-error">the message</p>
        (ids: name-error, email-error, message-error) -->
-  <label for="name">Name</label>
-  <input id="name" name="name" value="">
-  <label for="email">Email</label>
-  <input id="email" name="email" value="">
-  <label for="message">Message</label>
-  <textarea id="message" name="message">&lt;/textarea>
-  <p><button>Send</button></p>
+  <label for="name">Name</label>                   <!-- for="name" matches the input's id -->
+  <input id="name" name="name" value="">           <!-- arrives as $_POST['name'] -->
+  <label for="email">Email</label>                 <!-- the label for the email box -->
+  <input id="email" name="email" value="">         <!-- arrives as $_POST['email'] -->
+  <label for="message">Message</label>             <!-- the label for the textarea -->
+  <textarea id="message" name="message">&lt;/textarea>   <!-- arrives as $_POST['message'] -->
+  <p><button>Send</button></p>                     <!-- sends a POST request to this page -->
 </form></textarea>
       <script type="application/json" class="checks">
       [
@@ -2762,9 +2803,9 @@ $message = '';
     <h3>The header() function, and the one rule</h3>
     <p><code>header('Name: value')</code> adds a header to the response (or replaces one with the same name). The rule you must never forget comes from the shape of the response itself: <strong>headers go before the body</strong>. The moment your script outputs anything (one character of HTML, a space before <code>&lt;?php</code>, an <code>echo</code>, even a warning message), PHP has to send the status line and headers so that the body can begin. After that it is too late, and <code>header()</code> fails with a warning you will see many times in your career:</p>
     <script type="text/plain" class="code" data-lang="php">
-      <p>Saving your order…</p>
-      <?php
-      header('Location: thanks.php');
+      <p>Saving your order…</p>         <!-- output: the body has begun -->
+      <?php                             // so the headers were sent with line 1
+      header('Location: thanks.php');   // too late: this header cannot be added
       // Warning: Cannot modify header information - headers already sent by
       // (output started at /index.php:1) in /index.php on line 3
     </script>
@@ -2785,14 +2826,14 @@ $message = '';
     <h3>Redirects</h3>
     <p>A redirect tells the browser "what you want is over there". Send a <code>Location</code> header and PHP automatically sets the status to <code>302 Found</code>; the browser then requests the new address on its own. Always follow the header with <code>exit</code>: <code>header()</code> only adds a header, it does not stop your script, and code that keeps running after a redirect (still printing a secret page, still saving data) is a classic security bug.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      if (!isset($_COOKIE['member'])) {
+      <?php                                      // at the very top, before any output
+      if (!isset($_COOKIE['member'])) {          // a visitor who is not signed in
         header('Location: login.php');           // 302: go to the login page...
         exit;                                    // ...and stop. Nothing below runs.
       }
       // Moved for good? Say so, and search engines update their links:
       header('Location: /menu.php', true, 301);   // 301 Moved Permanently
-      exit;
+      exit;                                       // stop here as well
     </script>
 
     <div class="table-wrap">
@@ -2811,12 +2852,12 @@ $message = '';
     <h3>Status codes</h3>
     <p>The status code is the server's one-number summary of what happened. Browsers, search engines and JavaScript's <code>fetch()</code> all read it, so an error page should say it is an error. Set it with <code>http_response_code()</code> (or with a third argument to <code>header()</code>).</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
-      $id = (int) ($_GET['id'] ?? 0);
-      if (!isset($products[$id])) {
+      <?php                                      // product.php?id=7, for example
+      $id = (int) ($_GET['id'] ?? 0);            // the id from the URL, as a whole number
+      if (!isset($products[$id])) {              // no product with that id
         http_response_code(404);                 // a real "not found", not a 200
-        echo '<h1>Sorry, that product does not exist</h1>';
-        exit;
+        echo '<h1>Sorry, that product does not exist</h1>';   // a page for people
+        exit;                                    // stop: nothing else is sent
       }
     </script>
     <div class="match" data-title="Match each status code to when a PHP script sends it">
@@ -2908,12 +2949,13 @@ $message = '';
         <p><strong>When you meet it.</strong> "Export to CSV" buttons, downloadable invoices, reports.</p>
         <p><strong>Watch out.</strong> Nothing else may be printed: any stray HTML or warning ends up inside the downloaded file.</p>
         <script type="text/plain" class="code" data-lang="php" data-title="export.php">
-          <?php
-          $orders = [[7, 'Latte', 3.25], [8, 'Bagel', 2.75]];
-          header('Content-Type: text/csv');
+          <?php                                        // no HTML: the body is the file itself
+          $orders = [[7, 'Latte', 3.25], [8, 'Bagel', 2.75]];   // two rows of data
+          header('Content-Type: text/csv');            // the body is a spreadsheet file
+          // save it as orders.csv instead of showing it
           header('Content-Disposition: attachment; filename="orders.csv"');
           echo "id,item,price\n";                      // the header row
-          foreach ($orders as [$id, $item, $price]) {
+          foreach ($orders as [$id, $item, $price]) {  // unpack each row into three variables
             echo "$id,$item,$price\n";                 // one line per order
           }
         </script>
@@ -2923,7 +2965,7 @@ $message = '';
         <p><strong>When you meet it.</strong> Pages that rarely change can be cached to make a site much faster; pages with private or live data (an account page, a cart) should not be.</p>
         <p><strong>Watch out.</strong> Cache too aggressively and visitors see yesterday's prices. A related status, <code>304 Not Modified</code>, lets a server answer "you already have the latest version" with no body at all.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                // headers first, before any output
           // The menu changes once a day: let browsers reuse it for an hour
           header('Cache-Control: public, max-age=3600');
           // An account page: never keep a copy
@@ -2935,7 +2977,7 @@ $message = '';
         <p><strong>When you meet it.</strong> On every professional site, usually set once for the whole site by the web server or framework.</p>
         <p><strong>Watch out.</strong> A strict policy can block scripts your own page needs, so add one carefully and test every page.</p>
         <script type="text/plain" class="code" data-lang="php">
-          <?php
+          <?php                                                      // usually sent on every page
           header('X-Frame-Options: DENY');                           // no framing by other sites
           header("Content-Security-Policy: script-src 'self'");     // scripts only from this site
         </script>
@@ -2945,7 +2987,8 @@ $message = '';
     <h3>Cookies</h3>
     <p>HTTP has no memory: every request arrives as if from a stranger. A <strong>cookie</strong> is a small named value the server asks the browser to store and send back with every later request to the same site. That is how a site remembers your theme, your cart, or that you are signed in. Cookies travel in headers: <code>setcookie()</code> adds a <code>Set-Cookie</code> header to the response, so like <code>header()</code> it must be called before any output. On the next request the browser sends the cookie back and PHP puts it in <code>$_COOKIE</code>.</p>
     <script type="text/plain" class="code" data-lang="php">
-      <?php
+      <?php                                         // before any output, like header()
+      // ask the browser to store theme=dark, with these options
       setcookie('theme', 'dark', [
         'expires'  => time() + 60 * 60 * 24 * 30,   // 30 days from now (a timestamp)
         'path'     => '/',                          // sent for every page on the site
@@ -2961,8 +3004,8 @@ $message = '';
     <h3>Your turn: a JSON API</h3>
     <p>Turn the book list into a tiny API. It must answer with JSON, give one book when asked by ID, and return a real 404 for books that do not exist. Use the request bar to try <code>/index.php</code>, <code>/index.php?id=2</code> and <code>/index.php?id=9</code>; the preview shows JSON as plain text, as a browser would.</p>
     <div class="playground" data-runtime="php" data-title="Book API" data-height="430" data-layout="stacked" data-challenge="Answer with JSON and the right status codes">
-      <textarea data-lang="php"><?php
-$books = [
+      <textarea data-lang="php"><?php   // pure PHP: whatever it prints is the whole response
+$books = [   // id => book: the keys 1, 2 and 3 are the ids
   1 => ['title' => 'Dune', 'author' => 'Frank Herbert', 'year' => 1965],
   2 => ['title' => 'Emma', 'author' => 'Jane Austen', 'year' => 1815],
   3 => ['title' => 'Kindred', 'author' => 'Octavia E. Butler', 'year' => 1979],
@@ -2978,7 +3021,7 @@ $books = [
 // TODO 4: with an id that does not exist, or is not a number,
 //         set the status to 404 and print  {"error":"Book not found"}
 
-echo 'TODO';</textarea>
+echo 'TODO';   // a placeholder: replace it with your answers</textarea>
       <script type="application/json" class="checks">
       [
         {"label": "Every answer is sent as `Content-Type: application/json`", "test": "return ['/index.php','/index.php?id=2','/index.php?id=9'].every(function(u){return /^application\\/json/.test(server.request('GET',u).contentType);});"},
@@ -2993,8 +3036,8 @@ echo 'TODO';</textarea>
     <h3>Your turn: remember a theme with a cookie</h3>
     <p>Let visitors pick a light or dark theme that sticks. Clicking a theme link sends <code>?theme=dark</code>; the script stores the choice in a cookie and redirects back to the plain page, which reads the cookie. Click the links in the preview: this playground keeps cookies between requests, like a browser.</p>
     <div class="playground" data-runtime="php" data-title="Theme switcher" data-height="440" data-layout="stacked" data-challenge="Store the choice in a cookie and use it">
-      <textarea data-lang="php"><?php
-$themes = ['light', 'dark'];
+      <textarea data-lang="php"><?php   // runs before any output, so it can still set headers
+$themes = ['light', 'dark'];   // the only themes allowed
 
 // TODO 1: when $_GET['theme'] is set AND is one of $themes (in_array):
 //   - setcookie('theme', ...) for 30 days: time() + 60 * 60 * 24 * 30
@@ -3005,14 +3048,16 @@ $themes = ['light', 'dark'];
 //   there is none. Ignore a cookie that is not in $themes, too.
 $theme = 'light';
 ?>
+<!-- CSS: one look for class="light" and another for class="dark" -->
 <style>
   body.light { background: #ffffff; color: #1a1a1a; }
   body.dark  { background: #16181d; color: #eeeeee; }
   a { color: inherit; }
 </style>
-<body class="<?= $theme ?>">
-  <h1>Campus Café</h1>
-  <p id="current">Theme: <?= $theme ?></p>
+<body class="<?= $theme ?>">                 <!-- the theme's name becomes the class -->
+  <h1>Campus Café</h1>                       <!-- plain HTML -->
+  <p id="current">Theme: <?= $theme ?></p>   <!-- says which theme is in use -->
+  <!-- each link requests this page again, with ?theme= in the URL -->
   <p><a href="?theme=light">Light</a> | <a href="?theme=dark">Dark</a></p>
 </body></textarea>
       <script type="application/json" class="checks">
@@ -3116,13 +3161,13 @@ $theme = 'light';
       <li><strong>POST, validation and PRG (12.7):</strong> the order form is validated, sticky, escaped, and redirects after success to a confirmation.</li>
     </ul>
     <div class="playground" data-runtime="php" data-title="Campus Café orders" data-height="560" data-layout="stacked" data-challenge="Build the complete order page">
-      <textarea data-lang="php"><?php
+      <textarea data-lang="php"><?php   // all the logic first, before any output
 // ---------- Data: [id, name, category, price] ----------
 $rows = [
-  [1, 'Latte', 'drink', 3.25],
-  [2, 'Iced tea', 'drink', 2.50],
-  [3, 'Bagel', 'food', 2.75],
-  [4, 'Panini', 'food', 7.95],
+  [1, 'Latte', 'drink', 3.25],      // its label: Latte ($3.25)
+  [2, 'Iced tea', 'drink', 2.50],   // its label: Iced tea ($2.50)
+  [3, 'Bagel', 'food', 2.75],       // its label: Bagel ($2.75)
+  [4, 'Panini', 'food', 7.95],      // its label: Panini ($7.95)
 ];
 
 // TODO 1 (12.6): class MenuItem with promoted public properties
@@ -3153,18 +3198,20 @@ $shown = $menu;
 //   - no errors? redirect to  index.php?ordered=ID&qty=QTY&for=NAME
 //     (urlencode the name), then exit
 $errors = [];
-$name = '';
+$name = '';       // the name, kept so the form can show it again
 ?>
+<!-- CSS: a readable font, one label per line, and errors in red -->
 <style>
   body { font-family: system-ui, sans-serif; margin: 16px; }
   label { display: block; margin: 6px 0; }
   #errors { color: #b00020; }
 </style>
-<h1>Campus Café</h1>
+<h1>Campus Café</h1>   <!-- plain HTML -->
 <!-- TODO 6: when ?ordered= is a valid item id, print
      <p id="confirm">Thanks, NAME! QTY x ITEM is on its way.</p>
      for example "Thanks, Ana! 2 x Latte is on its way." (escape the name) -->
 
+<!-- three category links, plus one that asks this page for JSON -->
 <nav><a href="?cat=all">All</a> | <a href="?cat=drink">Drinks</a> | <a href="?cat=food">Food</a> | <a href="?format=json">JSON</a></nav>
 
 <!-- TODO 7: one <li> per shown item, printing its label() escaped -->
@@ -3173,16 +3220,17 @@ $name = '';
 <!-- TODO 8: when there are errors, print each one as an <li> inside
      <ul id="errors"> ... </ul> -->
 
-<form method="post" action="index.php">
+<form method="post" action="index.php">   <!-- posts the order back to this page -->
   <!-- TODO 9: make the name sticky (escaped) -->
   <label>Your name <input name="name" value=""></label>
-  <label>Item
-    <select name="item">
+  <label>Item                               <!-- a label can wrap its control -->
+    <select name="item">                    <!-- sends the value of the chosen option -->
       <!-- TODO 10: one <option value="ID">label</option> per menu item -->
     </select>
   </label>
+  <!-- arrives as a string such as '2', even with type="number" -->
   <label>Quantity <input name="qty" type="number" value="1"></label>
-  <button>Order</button>
+  <button>Order</button>                    <!-- sends a POST request -->
 </form></textarea>
       <script type="application/json" class="checks">
       [
