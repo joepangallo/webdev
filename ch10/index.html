@@ -726,8 +726,8 @@ console.log('Ranked:', ranked);               // TODO 5</textarea>
       [
         {"label": "`passingNames` is `['Ana', 'Chloe', 'Emma', 'Femi']`", "test": "var v=win.eval('passingNames'); return Array.isArray(v) && JSON.stringify(v)==='[\"Ana\",\"Chloe\",\"Emma\",\"Femi\"]';"},
         {"label": "`average` is `75.2`", "test": "return win.eval('average') === 75.2;"},
-        {"label": "`firstA` is Ana's object (the original object, found with `find`)", "test": "var s=win.eval('students'); return win.eval('firstA') === s.filter(function(x){return x.name==='Ana';})[0] && /\\.find\\s*\\(/.test(code.js.replace(/\\/\\/.*$/gm,''));"},
-        {"label": "`allSubmitted` is `false`, worked out with `every`", "test": "return win.eval('allSubmitted') === false && /\\.every\\s*\\(/.test(code.js.replace(/\\/\\/.*$/gm,''));"},
+        {"label": "`firstA` is Ana's object (the original object, found with `find`)", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); var s=win.eval('students'); return win.eval('firstA') === s.filter(function(x){return x.name==='Ana';})[0] && /\\.find\\s*\\(/.test(c);"},
+        {"label": "`allSubmitted` is `false`, worked out with `every`", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return win.eval('allSubmitted') === false && /\\.every\\s*\\(/.test(c);"},
         {"label": "`ranked` is `['Ana', 'Emma', 'Chloe', 'Femi', 'Ben', 'Dev']` and `students` keeps its original order", "test": "var v=win.eval('ranked'); var s=win.eval('students'); return Array.isArray(v) && JSON.stringify(v)==='[\"Ana\",\"Emma\",\"Chloe\",\"Femi\",\"Ben\",\"Dev\"]' && s.map(function(x){return x.name;}).join()==='Ana,Ben,Chloe,Dev,Emma,Femi';"},
         {"label": "Uses `filter`, `map` and `reduce`, and no `for` or `while` loops", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); return /\\.filter\\s*\\(/.test(c) && /\\.map\\s*\\(/.test(c) && /\\.reduce\\s*\\(/.test(c) && !/\\b(for|while)\\s*\\(/.test(c);"}
       ]

@@ -425,7 +425,7 @@ render();</textarea>
         {"label": "`#count` says `2 tasks`", "test": "return /^\\s*2 tasks\\s*$/.test(($('#count')||{}).textContent||'');"},
         {"label": "Adding a task adds one `<li>` and the count says `3 tasks`", "test": "var i=$('#task'), f=$('#add'); if(!i||!f) return false; var n=$$('#list li').length; i.value='Check task'; f.requestSubmit(); var ok=$$('#list li').length===n+1 && $$('#list li')[n].textContent.trim()==='Check task' && new RegExp('^\\\\s*'+(n+1)+' tasks\\\\s*$').test($('#count').textContent); return ok;"},
         {"label": "The input is cleared after adding, and an empty task is not added", "test": "var i=$('#task'), f=$('#add'); if(!i||!f) return false; i.value='Another'; f.requestSubmit(); if(i.value!=='') return false; var n=$$('#list li').length; f.requestSubmit(); return $$('#list li').length===n;"},
-        {"label": "The submit handler calls `render()` instead of changing the list itself", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); var m=js.match(/addEventListener\\s*\\(\\s*['\"]submit['\"][\\s\\S]*?\\n\\}\\);/); return !!m && /render\\s*\\(\\s*\\)/.test(m[0]) && !/\\.(append|appendChild|prepend|replaceChildren)\\s*\\(|createElement/.test(m[0]);"}
+        {"label": "The submit handler calls `render()` instead of changing the list itself", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); var m=c.match(/addEventListener\\s*\\(\\s*['\"]submit['\"][\\s\\S]*?\\n\\}\\);/); return !!m && /render\\s*\\(\\s*\\)/.test(m[0]) && !/\\.(append|appendChild|prepend|replaceChildren)\\s*\\(|createElement/.test(m[0]);"}
       ]
       </script>
     </div>
@@ -692,7 +692,7 @@ root.render(<p>Change me</p>);</textarea>
         {"label": "`#root` contains an `<h1>` that says `Hello, React!`", "test": "var h=$('#root h1'); return !!h && h.textContent.trim()==='Hello, React!';"},
         {"label": "It also contains a `<p>` that says `My first component is next.`", "test": "var p=$('#root p'); return !!p && p.textContent.trim()==='My first component is next.';"},
         {"label": "The \"Loading…\" text is gone (React replaced it)", "test": "return !/Loading/.test($('#root').textContent);"},
-        {"label": "Uses `createRoot` and `render` with JSX (no `innerHTML`)", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); return /createRoot\\s*\\(/.test(js) && /\\.render\\s*\\(\\s*</.test(js) && !/innerHTML/.test(js);"}
+        {"label": "Uses `createRoot` and `render` with JSX (no `innerHTML`)", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return /createRoot\\s*\\(/.test(c) && /\\.render\\s*\\(\\s*</.test(c) && !/innerHTML/.test(c);"}
       ]
       </script>
     </div>
@@ -873,9 +873,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ProfileCard />);</t
       <script type="application/json" class="checks">
       [
         {"label": "The page renders: an `<h2 class=\"name\">` shows `Ana Lopez`", "test": "var h2=$('#root h2'); return !!h2 && h2.className==='name' && h2.textContent==='Ana Lopez';"},
-        {"label": "The major is teal, set with a style object", "test": "var p=$('#root p'); return !!p && style(p,'color')==='rgb(0, 128, 128)' && /style=\\{\\{/.test(code.js);"},
-        {"label": "The `<hr>` and `<input>` are closed with `/>`", "test": "return !!$('#root hr') && !!$('#root input#msg') && /<hr\\s*\\/>/.test(code.js) && /<input[^>]*\\/>/.test(code.js);"},
-        {"label": "The label points at the input (`htmlFor`)", "test": "var l=$('#root label'); return !!l && l.getAttribute('for')==='msg' && /htmlFor=/.test(code.js);"},
+        {"label": "The major is teal, set with a style object", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); var p=$('#root p'); return !!p && style(p,'color')==='rgb(0, 128, 128)' && /style=\\{\\{/.test(c);"},
+        {"label": "The `<hr>` and `<input>` are closed with `/>`", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return !!$('#root hr') && !!$('#root input#msg') && /<hr\\s*\\/>/.test(c) && /<input[^>]*\\/>/.test(c);"},
+        {"label": "The label points at the input (`htmlFor`)", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); var l=$('#root label'); return !!l && l.getAttribute('for')==='msg' && /htmlFor=/.test(c);"},
         {"label": "React printed no warnings (no `class` or `for` left), and the six elements are inside one wrapper", "test": "return !!$('#root h2') && !!$('#root input') && !(win.__warnings||[]).some(function(w){return /Warning/.test(w);});"}
       ]
       </script>
@@ -1164,7 +1164,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         {"label": "Each item shows its name and a two-decimal price (`Fish tacos $10.00`)", "test": "var li=$$('ul')[0]; if(!li) return false; var t=Array.from(li.querySelectorAll('li.dish')).map(function(x){return x.textContent;}); return t.length===4 && /Black bean tacos/.test(t[0]) && /\\$8\\.50/.test(t[0]) && /Fish tacos/.test(t[1]) && /\\$10\\.00/.test(t[1]) && /\\$12\\.00/.test(t[3]);"},
         {"label": "Only vegetarian dishes have a `.badge` that says `Vegetarian`", "test": "var li=$$('ul')[0]; if(!li) return false; var items=Array.from(li.querySelectorAll('li.dish')); var want=[true,false,true,false]; return items.length===4 && items.every(function(x,i){var b=x.querySelector('.badge'); return want[i] ? (!!b && b.textContent.trim()==='Vegetarian') : !b;});"},
         {"label": "The vegetarian menu shows two dishes", "test": "var u=$$('ul'); return u.length===2 && u[1].querySelectorAll('li.dish').length===2;"},
-        {"label": "Every list item has a stable key, not the index (React printed no key warning)", "test": "return $$('li.dish').length>0 && !(win.__warnings||[]).some(function(w){return /unique \"key\"/.test(w);}) && /key\\s*=\\s*\\{/.test(code.js) && !/key\\s*=\\s*\\{\\s*(i|index|idx)\\s*\\}/.test(code.js);"},
+        {"label": "Every list item has a stable key, not the index (React printed no key warning)", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return $$('li.dish').length>0 && !(win.__warnings||[]).some(function(w){return /unique \"key\"/.test(w);}) && /key\\s*=\\s*\\{/.test(c) && !/key\\s*=\\s*\\{\\s*(i|index|idx)\\s*\\}/.test(c);"},
         {"label": "When nothing matches, `<Menu>` shows `<p class=\"empty\">Nothing to show.</p>` and no list", "test": "var M=win.Menu, d; try { d=win.eval('dishes'); } catch(e) { return false; } if(typeof M!=='function'||!Array.isArray(d)) return false; var saved=d.splice(0, d.length); var box=doc.createElement('div'); doc.body.appendChild(box); var ok=false; try { win.ReactDOM.createRoot(box).render(win.React.createElement(M, {onlyVeg:false})); var p=box.querySelector('p.empty'); ok=!!p && p.textContent.trim()==='Nothing to show.' && !box.querySelector('ul'); } catch(e) { ok=false; } finally { d.push.apply(d, saved); box.remove(); } return ok;"}
       ]
       </script>
@@ -1545,7 +1545,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         {"label": "The second counter adds its `step` of 5", "test": "var c=$$('.counter')[1]; if(!c) return false; c.querySelector('.plus').click(); c.querySelector('.plus').click(); var a=c.querySelector('output').textContent.trim(); c.querySelector('.reset').click(); return a==='10';"},
         {"label": "Each counter keeps its own count", "test": "var c=$$('.counter'); if(c.length<2) return false; c[0].querySelector('.plus').click(); var ok=c[0].querySelector('output').textContent.trim()==='1' && c[1].querySelector('output').textContent.trim()==='0'; c[0].querySelector('.reset').click(); return ok;"},
         {"label": "Reset goes back to 0 and is disabled while the count is 0", "test": "var c=$$('.counter')[0]; if(!c) return false; var r=c.querySelector('.reset'); var d0=r.disabled; c.querySelector('.plus').click(); var d1=r.disabled; r.click(); return d0===true && d1===false && c.querySelector('output').textContent.trim()==='0' && r.disabled===true;"},
-        {"label": "Uses `useState`", "test": "return /useState\\s*\\(/.test(code.js.replace(/\\/\\/.*$/gm,''));"}
+        {"label": "Uses `useState`", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return /useState\\s*\\(/.test(c);"}
       ]
       </script>
     </div>
@@ -1816,8 +1816,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(<TipCalculator />);<
         {"label": "The fields start at bill empty, tip `18` and people `1`", "test": "return $('#bill').value==='' && $('#tip').value==='18' && $('#people').value==='1';"},
         {"label": "A $50 bill at 20% split 2 ways shows `$30.00 each`", "test": "function set(id,v,ev){var el=$(id); el.value=v; el.dispatchEvent(new win.Event(ev||'input',{bubbles:true}));} set('#bill','50'); set('#tip','20','change'); set('#people','2'); var ok=/^\\s*\\$30\\.00 each\\s*$/.test($('#result').textContent); set('#bill',''); set('#tip','18','change'); set('#people','1'); return ok;"},
         {"label": "A $40 bill at 15% split 3 ways shows `$15.33 each`", "test": "function set(id,v,ev){var el=$(id); el.value=v; el.dispatchEvent(new win.Event(ev||'input',{bubbles:true}));} set('#bill','40'); set('#tip','15','change'); set('#people','3'); var ok=/^\\s*\\$15\\.33 each\\s*$/.test($('#result').textContent); set('#bill',''); set('#tip','18','change'); set('#people','1'); return ok;"},
-        {"label": "The fields are controlled: each has `value` and `onChange`", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\{\\s*\\/\\*[\\s\\S]*?\\*\\/\\s*\\}/g,'').replace(/\\/\\/.*$/gm,''); return (js.match(/value=\\{\\s*(bill|tip|people)\\s*\\}/g)||[]).length===3 && (js.match(/onChange=\\{/g)||[]).length>=3;"},
-        {"label": "The result is derived during render, not stored in more state", "test": "return (code.js.match(/useState\\s*\\(/g)||[]).length===3;"}
+        {"label": "The fields are controlled: each has `value` and `onChange`", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return (c.match(/value=\\{\\s*(bill|tip|people)\\s*\\}/g)||[]).length===3 && (c.match(/onChange=\\{/g)||[]).length>=3;"},
+        {"label": "The result is derived during render, not stored in more state", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return (c.match(/useState\\s*\\(/g)||[]).length===3;"}
       ]
       </script>
     </div>
@@ -1977,8 +1977,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         {"label": "Submitting the form adds the item to the end and clears the box", "test": "var i=$('#item'); i.value='Eggs'; i.dispatchEvent(new win.Event('input',{bubbles:true})); $('form').requestSubmit(); var li=$$('li'); return li.length===3 && /Eggs/.test(li[2].textContent) && i.value==='' && /^\\s*3 items\\s*$/.test($('#count').textContent);"},
         {"label": "An empty or blank item is not added", "test": "var n=$$('li').length; var i=$('#item'); i.value='   '; i.dispatchEvent(new win.Event('input',{bubbles:true})); $('form').requestSubmit(); var ok=$$('li').length===n; i.value=''; i.dispatchEvent(new win.Event('input',{bubbles:true})); return ok;"},
         {"label": "Remove deletes only that item", "test": "var li=$$('li'); var b=li.length && li[0].querySelector('.remove'); if(!b) return false; var second=li[1] ? li[1].textContent : ''; b.click(); var after=$$('li'); return after.length===li.length-1 && after[0].textContent===second;"},
-        {"label": "`App` owns the list; `AddItem` and `ItemList` get it through props", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); return /<AddItem[^>]*onAdd=\\{\\s*addItem\\s*\\}/.test(js) && /<ItemList[^>]*items=\\{\\s*items\\s*\\}/.test(js) && /onRemove=\\{\\s*removeItem\\s*\\}/.test(js);"},
-        {"label": "Updates make new arrays (no `push` or `splice`)", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); return !/\\.push\\s*\\(|\\.splice\\s*\\(/.test(js) && /\\.filter\\s*\\(/.test(js);"}
+        {"label": "`App` owns the list; `AddItem` and `ItemList` get it through props", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return /<AddItem[^>]*onAdd=\\{\\s*addItem\\s*\\}/.test(c) && /<ItemList[^>]*items=\\{\\s*items\\s*\\}/.test(c) && /onRemove=\\{\\s*removeItem\\s*\\}/.test(c);"},
+        {"label": "Updates make new arrays (no `push` or `splice`)", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return !/\\.push\\s*\\(|\\.splice\\s*\\(/.test(c) && /\\.filter\\s*\\(/.test(c);"}
       ]
       </script>
     </div>
@@ -2698,7 +2698,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         {"label": "The time changes every second", "test": "var c=$('#clock'); if(!c) return false; var t=c.textContent; return until(function(){ var n=$('#clock'); return !!n && n.textContent!==t; }, 2500);"},
         {"label": "Exactly one interval runs while the clock is shown", "test": "return !!$('#clock') && win.__timers.size===1;"},
         {"label": "Hiding the clock removes it and clears its interval; showing it starts exactly one again", "test": "var b=$('#toggle'); if(!b||!$('#clock')) return false; b.click(); var gone=!$('#clock') && win.__timers.size===0; b.click(); return gone && !!$('#clock') && win.__timers.size===1;"},
-        {"label": "Uses `useEffect` with an empty dependency array", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); return /useEffect\\s*\\(/.test(js) && /\\[\\s*\\]\\s*\\)/.test(js);"}
+        {"label": "Uses `useEffect` with an empty dependency array", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return /useEffect\\s*\\(/.test(c) && /\\[\\s*\\]\\s*\\)/.test(c);"}
       ]
       </script>
     </div>
@@ -2881,7 +2881,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         {"label": "One second later it says `2 s left`", "test": "return until(function(){ var p=$('#left'); return !!p && p.textContent.trim()==='2 s left'; }, 1800);"},
         {"label": "Cancel removes it and clears the interval; Start again begins at 3 with exactly one interval", "test": "var b=$('#toggle'); if(!b||!$('#left')) return false; b.click(); var gone=!$('#left') && win.__timers.size===0; b.click(); var p=$('#left'); return gone && !!p && p.textContent.trim()==='3 s left' && win.__timers.size===1;"},
         {"label": "At zero it says `Time is up!` and no interval is left running", "test": "return until(function(){ var p=$('#left'); return !!p && p.textContent.trim()==='Time is up!' && win.__timers.size===0; }, 3900);"},
-        {"label": "Uses `componentDidMount` and `componentWillUnmount` in the class", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); return /componentDidMount\\s*\\(\\s*\\)\\s*\\{/.test(js) && /componentWillUnmount\\s*\\(\\s*\\)\\s*\\{/.test(js) && /clearInterval\\s*\\(/.test(js);"}
+        {"label": "Uses `componentDidMount` and `componentWillUnmount` in the class", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return /componentDidMount\\s*\\(\\s*\\)\\s*\\{/.test(c) && /componentWillUnmount\\s*\\(\\s*\\)\\s*\\{/.test(c) && /clearInterval\\s*\\(/.test(c);"}
       ]
       </script>
     </div>
@@ -3129,8 +3129,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         {"label": "It starts light: the button says `Switch to dark` and both cards have the class `light`", "test": "var b=$('#theme'), c=$$('.card'); return !!b && b.textContent.trim()==='Switch to dark' && c.length===2 && c.every(function(x){return x.classList.contains('light') && !x.classList.contains('dark');});"},
         {"label": "Clicking makes the app and both cards dark, and the button says `Switch to light`", "test": "var b=$('#theme'); if(!b) return false; b.click(); var c=$$('.card'); var ok=$('.app').classList.contains('dark') && c.length===2 && c.every(function(x){return x.classList.contains('dark');}) && b.textContent.trim()==='Switch to light'; b.click(); return ok;"},
         {"label": "Clicking again switches back to light", "test": "var b=$('#theme'); if(!b) return false; b.click(); b.click(); return $('.app').classList.contains('light') && $$('.card.light').length===2 && b.textContent.trim()==='Switch to dark';"},
-        {"label": "`App` provides the value with `ThemeContext.Provider`; the readers use `useContext(ThemeContext)`", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); return /<ThemeContext\\.Provider\\s+value=\\{/.test(js) && (js.match(/useContext\\s*\\(\\s*ThemeContext\\s*\\)/g)||[]).length>=2;"},
-        {"label": "`Toolbar` and `Page` still take no theme prop", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); return /function\\s+Toolbar\\s*\\(\\s*\\)/.test(js) && /function\\s+Page\\s*\\(\\s*\\)/.test(js) && /<Toolbar\\s*\\/>/.test(js) && /<Page\\s*\\/>/.test(js);"}
+        {"label": "`App` provides the value with `ThemeContext.Provider`; the readers use `useContext(ThemeContext)`", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return /<ThemeContext\\.Provider\\s+value=\\{/.test(c) && (c.match(/useContext\\s*\\(\\s*ThemeContext\\s*\\)/g)||[]).length>=2;"},
+        {"label": "`Toolbar` and `Page` still take no theme prop", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return /function\\s+Toolbar\\s*\\(\\s*\\)/.test(c) && /function\\s+Page\\s*\\(\\s*\\)/.test(c) && /<Toolbar\\s*\\/>/.test(c) && /<Page\\s*\\/>/.test(c);"}
       ]
       </script>
     </div>
@@ -3636,7 +3636,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);</textarea>
         {"label": "Ticking a task marks it done and updates the summary, like `2 of 4 tasks done`", "test": "var li=$$('#tasks li').filter(function(x){ return /Check: flashcards/.test(x.textContent); })[0]; if(!li) return false; var total=$$('#tasks li').length, before=$$('#tasks li input[type=checkbox]').filter(function(c){return c.checked;}).length; li.querySelector('input[type=checkbox]').click(); var again=$$('#tasks li').filter(function(x){ return /Check: flashcards/.test(x.textContent); })[0]; return !!again && again.querySelector('input[type=checkbox]').checked && again.classList.contains('done') && new RegExp('^\\\\s*'+(before+1)+' of '+total+' tasks done\\\\s*$').test($('#summary').textContent);"},
         {"label": "Done shows only ticked tasks, Active only unticked ones, and All shows everything", "test": "var b=$$('.filters button'); if(b.length!==3) return false; var total=$$('#tasks li').length; b[2].click(); var d=$$('#tasks li'); var okD=d.length>0 && d.every(function(x){ return x.querySelector('input[type=checkbox]').checked; }); b[1].click(); var a=$$('#tasks li'); var okA=a.every(function(x){ return !x.querySelector('input[type=checkbox]').checked; }) && a.length+d.length===total; b[0].click(); return okD && okA && $$('#tasks li').length===total;"},
         {"label": "Delete removes that task from the list and from `localStorage`", "test": "var li=$$('#tasks li').filter(function(x){ return /Check: flashcards/.test(x.textContent); })[0]; if(!li) return false; var n=$$('#tasks li').length; li.querySelector('button.delete').click(); var saved=null; try { saved=JSON.parse(win.localStorage.getItem('study-tasks')); } catch(e) {} return $$('#tasks li').length===n-1 && !$$('#tasks li').some(function(x){ return /Check: flashcards/.test(x.textContent); }) && Array.isArray(saved) && !saved.some(function(x){ return x.title==='Check: flashcards'; });"},
-        {"label": "Uses `useEffect` with `[tasks]`, keyed `TaskItem`s, and new arrays (no `push` or `splice`)", "test": "var js=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/\\/\\/.*$/gm,''); return /useEffect\\s*\\([\\s\\S]*localStorage\\.setItem[\\s\\S]*\\[\\s*tasks\\s*\\]\\s*\\)/.test(js) && /<TaskItem[^>]*key=\\{/.test(js) && !/\\.push\\s*\\(|\\.splice\\s*\\(/.test(js);"}
+        {"label": "Uses `useEffect` with `[tasks]`, keyed `TaskItem`s, and new arrays (no `push` or `splice`)", "test": "var c=code.js.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/(^|[^:])\\/\\/.*$/gm,'$1'); return /useEffect\\s*\\([\\s\\S]*localStorage\\.setItem[\\s\\S]*\\[\\s*tasks\\s*\\]\\s*\\)/.test(c) && /<TaskItem[^>]*key=\\{/.test(c) && !/\\.push\\s*\\(|\\.splice\\s*\\(/.test(c);"}
       ]
       </script>
     </div>
