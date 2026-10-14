@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Homework 8: Modules 10, 11 and 13 · Web Dev I</title>
+  <meta name="description" content="Short interactive practice for Modules 10, 11 and 13: loading data with fetch and async/await and summarizing it with array functions, a React component with props, state and controlled inputs, and a small Express API in Node.js.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/course.css">
+  <script src="../assets/js/course.js"></script>
+  <!-- An offline practice API, an offline React and a simulated Node.js: the playgrounds need no internet and no install. -->
+  <script src="../assets/js/fake-fetch.js"></script>
+  <script src="../assets/js/react-lite.js"></script>
+  <script src="../assets/js/node-lite.js"></script>
+  <style>
+    /* ---------- Homework 8 page (hw8-) ---------- */
+    body[data-page="homework"] { --mod: var(--ch13); }
+    html { scroll-padding-top: calc(var(--topbar-h) + 20px); }
+
+    /* Part badge above each h2 */
+    .hw8-part { display: inline-block; font-family: var(--font-mono); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mod); font-weight: 700; margin: 0 0 6px; }
+
+    /* Jump links */
+    .hw8-jump { list-style: none; padding: 0; margin: 8px 0 0; font-size: .9rem; }
+    .hw8-jump li { display: inline-block; margin: 0 6px 8px 0; }
+    .hw8-jump a {
+      display: inline-block; padding: 5px 12px; border-radius: 99px;
+      background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); text-decoration: none;
+    }
+    .hw8-jump a:hover { border-color: var(--mod); color: var(--ink); }
+
+    /* Name box */
+    .hw8-me label { display: block; font-weight: 700; margin-bottom: 6px; }
+    .hw8-me input { max-width: 28rem; font-size: 1.05rem; }
+    .hw8-me p { margin: 8px 0 0; }
+
+    /* Progress card */
+    .hw8-meters { list-style: none; padding: 0; margin: 0 0 12px; }
+    .hw8-meters li { margin: 0 0 12px; }
+    .hw8-meter-label { font-weight: 700; }
+    .hw8-meter-count { float: right; font-family: var(--font-mono); font-size: .9rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+    .hw8-bar { display: block; clear: both; height: 8px; margin-top: 6px; border-radius: 99px; background: var(--surface-3); overflow: hidden; }
+    .hw8-bar > span { display: block; height: 100%; width: 0; background: var(--visited); transition: width .4s ease; }
+    .hw8-sub { font-family: var(--font-display); font-size: 1rem; margin: 18px 0 8px; }
+    .hw8-chips { list-style: none; padding: 0; margin: 0; }
+    .hw8-chips li { display: inline-block; margin: 0 6px 8px 0; }
+    .hw8-chips a {
+      display: inline-block; min-width: 4.2em; padding: 4px 10px; border-radius: 99px; text-align: center;
+      border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2);
+      font-family: var(--font-mono); font-size: .82rem; text-decoration: none;
+    }
+    .hw8-chips a.done { background: var(--visited-soft); border-color: var(--visited); color: var(--visited); font-weight: 700; }
+    .hw8-chips a.done::before { content: "\2713\00a0"; }
+    .hw8-chips a.partial { border-color: var(--warn); color: var(--warn); }
+    .hw8-chips a.partial::before { content: "\2026\00a0"; }
+
+    /* Challenge blocks */
+    .hw8-ch { margin-top: 2.2em; padding-top: 18px; border-top: 1px dashed var(--line-2); }
+    .hw8-ch-num { display: block; font-family: var(--font-mono); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mod); font-weight: 700; margin-bottom: 2px; }
+    .hw8-label { font-weight: 700; color: var(--ink); }
+    .hw8-task > li { margin-bottom: 6px; }
+
+    /* Explain it */
+    .hw8-written label { display: block; font-weight: 700; margin-bottom: 8px; }
+    .hw8-written textarea { min-height: 8em; resize: vertical; line-height: 1.5; }
+    .hw8-written .hw8-saved { margin: 6px 0 0; }
+    .hw8-written .hw8-saved.done { color: var(--visited); }
+
+    /* Steps */
+    .hw8-steps { list-style: none; padding-left: 0; counter-reset: hw8-step; }
+    .hw8-steps > li { counter-increment: hw8-step; position: relative; padding-left: 46px; margin: 0 0 1em; }
+    .hw8-steps > li::before {
+      content: counter(hw8-step);
+      position: absolute; left: 0; top: 0;
+      width: 30px; height: 30px; line-height: 28px; text-align: center; border-radius: 50%;
+      background: var(--surface); border: 1.5px solid var(--mod); color: var(--mod);
+      font-family: var(--font-mono); font-weight: 700; font-size: .85rem;
+    }
+    .hw8-steps > li > :last-child { margin-bottom: 0; }
+
+    /* Download */
+    .hw8-status { margin: 12px 0 0; }
+    .hw8-status:empty { display: none; }
+
+    /* Submit box */
+    .hw8-submit {
+      padding: 20px 22px; border-radius: var(--radius);
+      background: var(--accent-soft); border: 2px solid var(--accent);
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink);
+    }
+    .hw8-submit p { margin: 0; }
+  </style>
+</head>
+<body data-page="homework">
+<main id="main">
+  <header class="module-hero">
+    <p class="eyebrow"><span class="tag">Homework 8</span><span>Chapters 10, 11 and 13 · JavaScript 3, React and Node.js</span></p>
+    <h1>Homework 8: Modules 10, 11 and 13</h1>
+    <p class="lede">A short tour of one small app from both sides, in three challenges. First, the browser asks a server for the tool library's list of tools and turns it into a report with array functions and <code>async</code>/<code>await</code>. Next, a React component lets a visitor search and filter those tools, with the page following its state. Last, you write the Express server that answers the browser's requests.</p>
+  </header>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="start">
+    <h2>Before you begin</h2>
+    <p>This homework happens inside this page. Each <strong>challenge</strong> is a live code editor with a list of checks underneath. The checks do not just read your code; they run it. They call your functions with data of their own, type into your fields, tick your checkboxes and send requests to your server, then compare what happened with what should happen. So a challenge only counts when your code really works, not just for the one example in the starter. Each part also has a short quiz and one <strong>Explain it</strong> box that asks you to put an idea into your own words.</p>
+    <p>Everything you type is saved in this browser as you go, so you can close the tab and come back later. When you are done, <a href="#download">Download my work</a> packs your code, your results and your answers into one file, and <a href="#submit">Submitting</a> shows how to put that file on GitHub.</p>
+    <aside class="callout warn"><strong>Stay in one browser on one computer</strong> Your work lives in this browser's storage, not online. If you switch computers or browsers, or clear your browsing data, you start over. Download your work at the end of every session and keep the file.</aside>
+
+    <div class="widget hw8-me" data-kind="Start here" data-title="Your name">
+      <label for="hw8-name">Your full name, as it should appear on your work</label>
+      <input type="text" id="hw8-name" autocomplete="name" spellcheck="false" aria-describedby="hw8-name-help">
+      <p class="small muted" id="hw8-name-help">Saved in this browser. It goes at the top of your downloaded file and into its file name.</p>
+    </div>
+
+    <div class="widget" id="hw8-progress" data-kind="Progress" data-title="Your progress">
+      <ul class="hw8-meters">
+        <li><span class="hw8-meter-label">Challenges complete</span> <span class="hw8-meter-count" id="hw8-count-challenges">0 of 0</span><span class="hw8-bar"><span id="hw8-bar-challenges"></span></span></li>
+        <li><span class="hw8-meter-label">Quizzes finished</span> <span class="hw8-meter-count" id="hw8-count-quizzes">0 of 0</span><span class="hw8-bar"><span id="hw8-bar-quizzes"></span></span></li>
+        <li><span class="hw8-meter-label">Written answers</span> <span class="hw8-meter-count" id="hw8-count-written">0 of 0</span><span class="hw8-bar"><span id="hw8-bar-written"></span></span></li>
+      </ul>
+      <p class="small muted">A challenge counts when every one of its checks passes. A quiz counts once you have answered all its questions; retry it as often as you like. A written answer counts once it has a sentence or two (at least 40 characters).</p>
+      <h3 class="hw8-sub">Challenges</h3>
+      <!-- One chip per challenge, built by the page script from the challenges below -->
+      <ol class="hw8-chips" id="hw8-chips" aria-label="Challenges"></ol>
+      <h3 class="hw8-sub">On this page</h3>
+      <!-- One link per part, built by the page script from the part headings below -->
+      <ul class="hw8-jump" id="hw8-jump"></ul>
+    </div>
+
+    <aside class="callout tip"><strong>How the playgrounds work</strong> Each playground has one tab per file. In Part 1 the only tab is <strong>JS</strong>, and there is no page to show: everything your code prints with <code>console.log()</code> appears in the <strong>Console</strong> under it, along with any error, in red. In Part 2 the HTML and CSS are finished and your work is in the <strong>JSX</strong> tab: JavaScript with HTML-like tags in it, exactly as a React project would have, which the page turns into React elements for you. In Part 3 the tab is called <strong>server.js</strong>, and under it sits a pretend HTTP client, like Postman, for sending requests to your server. An error ends with the line it happened on, such as <code>(JS line 6)</code>, counted from the top of the tab. The preview, the console and the checks update a moment after you stop typing.</aside>
+    <aside class="callout tip"><strong>Nothing here needs the internet</strong> The server that Part 1 talks to is a practice API that lives inside this page. It answers like a real one: a little slower than instant, with real status codes and real JSON, and with failures when a check asks for one. Every request it receives is listed in the Console. The Node.js server in Part 3 is simulated inside the page too, and behaves like Express 5, the version <code>npm install express</code> gives you today.</aside>
+    <aside class="callout tip"><strong>Working in the editor</strong> Every line of starter code has a comment that says what it is, and the <code>TODO</code> comments tell you what to write. Press <kbd>Tab</kbd> to indent; press <kbd>Esc</kbd> and then <kbd>Tab</kbd> to move out of the editor with the keyboard. <strong>Reset</strong> brings back the starter code and erases your changes, so use it only when you want a fresh start.</aside>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-1" data-short="Data from an API">
+    <p class="hw8-part">Part 1 · 10.1, 10.3 and 10.5</p>
+    <h2>Data from an API, summarized with array functions</h2>
+    <p>Chapter 10 replaced most loops with <strong>array functions</strong>, which each do one job and give back a new value instead of changing the array: <code>filter</code> keeps the items that pass a test, <code>map</code> turns each item into something else, <code>reduce</code> folds a whole array into a single value such as a total, and <code>toSorted</code> gives back a sorted copy (plain <code>sort</code> reorders the original array in place). Because each one returns a new value, they chain into something that reads like a sentence: <code>tools.filter(isAvailable).map(getName).toSorted()</code> means "the available tools, as names, in order".</p>
+    <p>Data from a server takes time to arrive, so <code>fetch(url)</code> does not wait for it: it returns a <strong>promise</strong>, a placeholder for an answer that will arrive later. Inside a function marked <code>async</code>, the word <code>await</code> pauses that function, and only that function, until the promise settles, while the rest of the page keeps responding. Two details catch everyone out. First, <code>fetch</code> rejects only when no answer arrives at all, such as when the connection drops; a <code>404</code> or a <code>500</code> is still an answer, so the promise resolves and you must check <code>res.ok</code>, which is <code>true</code> only for statuses from 200 to 299. Second, reading the body is asynchronous too, so the data comes from <code>await res.json()</code>.</p>
+
+    <h3 class="hw8-ch" id="c10"><span class="hw8-ch-num">Challenge 10</span>The tool report</h3>
+    <p><span class="hw8-label">The skill.</span> Most front-end code does two jobs over and over: it asks a server for data, and it boils that data down to the few facts a page needs. Doing the first job carefully, so that a server error or a dropped connection gives a clear message instead of a crash, and the second job clearly, one array function per step, is the heart of Chapter 10.</p>
+    <p><span class="hw8-label">Your task.</span> The Elm Street Tool Library lends tools the way a library lends books. Its practice API is described at the top of the JS tab. Finish <code>getReport()</code> so that it:</p>
+    <ol class="hw8-task">
+      <li>Fetches <code>/api/tools</code>, and returns <code>{ error: 'Could not reach the library server.' }</code> when no answer arrives at all.</li>
+      <li>Returns <code>{ error: 'The library server answered 500.' }</code>, with the real status, when the answer is not <code>ok</code>.</li>
+      <li>Otherwise returns an object with four properties: <code>available</code>, the names of the tools on the shelf from A to Z; <code>onLoan</code>, how many tools are out; <code>totalLoans</code>, every tool's <code>loans</code> added up; and <code>busiest</code>, the name of the tool with the most loans, or <code>null</code> when there are no tools.</li>
+      <li>Uses <code>filter</code>, <code>map</code> and <code>reduce</code>, with no <code>for</code> or <code>while</code> loop.</li>
+    </ol>
+    <p>The last line of the starter prints your report in the Console. The checks call <code>getReport()</code> themselves, with other tools, an empty list, server errors and a dropped connection, so it must work for any answer.</p>
+    <div class="playground" data-id="hw8-c10" data-title="Challenge 10: The tool report" data-height="520" data-layout="stacked" data-preview="false" data-runtime="fetch">
+      <textarea data-lang="js">
+// The library's API (you cannot see the server, so here are its docs):
+//   GET /api/tools   200, a JSON array: [{ id, name, category, available, loans }, ...]
+//   available is true while a tool is on the shelf; loans counts how often it was borrowed.
+// Like any real server, it can also answer with an error status, or not answer at all.
+
+const OFFLINE = 'Could not reach the library server.'; // the error to give when no answer arrives
+
+// TODO: finish getReport(). In order, it:
+//   1. awaits fetch('/api/tools'). fetch() rejects only when no answer arrives at all,
+//      so put that line in try/catch, and in the catch return { error: OFFLINE }
+//   2. checks res.ok. When it is false, return
+//      { error: `The library server answered ${res.status}.` } with the real status
+//   3. awaits res.json() to get the array of tools
+//   4. returns an object with four properties, worked out with array functions (no loops):
+//        available:  the names of the available tools, A to Z (filter, then map, then toSorted)
+//        onLoan:     how many tools are on loan, which means available is false
+//        totalLoans: every tool's loans added up (reduce)
+//        busiest:    the name of the tool with the most loans, or null when there are no tools
+async function getReport() {
+  return { error: 'TODO: build the report' }; // a placeholder: replace it with the steps above
+} // end of getReport
+
+// Already written: ask for the report, wait for it, and print it in the Console below
+getReport().then((report) => console.log(report));</textarea>
+      <script type="text/plain" class="setup">
+// Hidden setup: the library's practice API. The checks change LIBRARY to try other answers:
+// mode 'ok' answers normally, 'server' answers with the error code in LIBRARY.status,
+// and 'network' never answers at all, like a dropped connection.
+window.LIBRARY = {
+  mode: 'ok',
+  status: 500,
+  tools: [
+    { id: 1, name: 'Cordless drill', category: 'Power tools', available: false, loans: 14 },
+    { id: 2, name: 'Hedge trimmer', category: 'Garden', available: true, loans: 9 },
+    { id: 3, name: 'Socket set', category: 'Hand tools', available: true, loans: 21 },
+    { id: 4, name: 'Sewing machine', category: 'Sewing', available: false, loans: 6 },
+    { id: 5, name: 'Circular saw', category: 'Power tools', available: true, loans: 11 },
+    { id: 6, name: 'Pressure washer', category: 'Garden', available: true, loans: 17 }
+  ]
+};
+mockApi.route('GET', '/api/tools', function () {
+  const L = window.LIBRARY;
+  if (L.mode === 'network') return { fail: 'network' };
+  if (L.mode === 'server') return { status: L.status, body: { error: 'The library server is having a bad day.' } };
+  return { body: L.tools, delay: 60 };
+});
+      </script>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "With the library's six tools, `available` is `['Circular saw', 'Hedge trimmer', 'Pressure washer', 'Socket set']`: the names of the tools on the shelf, A to Z",
+    "test": "return (async function(){ var L=win.LIBRARY; if(!L) return false; var f; try { f=win.eval('typeof getReport===\"function\" ? getReport : null'); } catch(e) { f=null; } if(!f) return false; var keep=L.tools.slice(); var reset=function(){ L.mode='ok'; L.status=500; L.tools=keep; }; var same=function(a,b){ return JSON.stringify(a)===JSON.stringify(b); }; try { var r=await f(); return !!r && same(r.available, ['Circular saw','Hedge trimmer','Pressure washer','Socket set']); } finally { reset(); } })();"
+  },
+  {
+    "label": "`onLoan` is `2` and `totalLoans` is `78`",
+    "test": "return (async function(){ var L=win.LIBRARY; if(!L) return false; var f; try { f=win.eval('typeof getReport===\"function\" ? getReport : null'); } catch(e) { f=null; } if(!f) return false; var keep=L.tools.slice(); var reset=function(){ L.mode='ok'; L.status=500; L.tools=keep; }; var same=function(a,b){ return JSON.stringify(a)===JSON.stringify(b); }; try { var r=await f(); return !!r && r.onLoan===2 && r.totalLoans===78; } finally { reset(); } })();"
+  },
+  {
+    "label": "`busiest` is `'Socket set'`, the tool with the most loans",
+    "test": "return (async function(){ var L=win.LIBRARY; if(!L) return false; var f; try { f=win.eval('typeof getReport===\"function\" ? getReport : null'); } catch(e) { f=null; } if(!f) return false; var keep=L.tools.slice(); var reset=function(){ L.mode='ok'; L.status=500; L.tools=keep; }; var same=function(a,b){ return JSON.stringify(a)===JSON.stringify(b); }; try { var r=await f(); return !!r && r.busiest==='Socket set'; } finally { reset(); } })();"
+  },
+  {
+    "label": "It works for any tools: three other tools give their own report, and an empty list gives `[]`, `0`, `0` and `busiest: null`",
+    "test": "return (async function(){ var L=win.LIBRARY; if(!L) return false; var f; try { f=win.eval('typeof getReport===\"function\" ? getReport : null'); } catch(e) { f=null; } if(!f) return false; var keep=L.tools.slice(); var reset=function(){ L.mode='ok'; L.status=500; L.tools=keep; }; var same=function(a,b){ return JSON.stringify(a)===JSON.stringify(b); }; try { L.tools=[{id:7,name:'Wheelbarrow',category:'Garden',available:false,loans:30},{id:8,name:'Bolt cutter',category:'Hand tools',available:true,loans:12},{id:9,name:'Angle grinder',category:'Power tools',available:true,loans:4}]; var a=await f(); L.tools=[]; var b=await f(); return !!a && same(a.available,['Angle grinder','Bolt cutter']) && a.onLoan===1 && a.totalLoans===46 && a.busiest==='Wheelbarrow' && !!b && same(b.available,[]) && b.onLoan===0 && b.totalLoans===0 && b.busiest===null; } finally { reset(); } })();"
+  },
+  {
+    "label": "A server error returns `{ error: 'The library server answered 500.' }`, with the real status (`503` for a 503)",
+    "test": "return (async function(){ var L=win.LIBRARY; if(!L) return false; var f; try { f=win.eval('typeof getReport===\"function\" ? getReport : null'); } catch(e) { f=null; } if(!f) return false; var keep=L.tools.slice(); var reset=function(){ L.mode='ok'; L.status=500; L.tools=keep; }; var same=function(a,b){ return JSON.stringify(a)===JSON.stringify(b); }; try { L.mode='server'; L.status=500; var a=await f(); L.status=503; var b=await f(); return !!a && a.error==='The library server answered 500.' && !!b && b.error==='The library server answered 503.'; } finally { reset(); } })();"
+  },
+  {
+    "label": "When no answer arrives at all, it returns `{ error: 'Could not reach the library server.' }`",
+    "test": "return (async function(){ var L=win.LIBRARY; if(!L) return false; var f; try { f=win.eval('typeof getReport===\"function\" ? getReport : null'); } catch(e) { f=null; } if(!f) return false; var keep=L.tools.slice(); var reset=function(){ L.mode='ok'; L.status=500; L.tools=keep; }; var same=function(a,b){ return JSON.stringify(a)===JSON.stringify(b); }; try { L.mode='network'; var a=await f(); return !!a && a.error==='Could not reach the library server.'; } finally { reset(); } })();"
+  },
+  {
+    "label": "Uses `await`, checks `res.ok`, and uses `filter`, `map` and `reduce`, with no `for` or `while` loop",
+    "test": "var c=window.HW8.src(code.js); return /\\bawait\\b/.test(c) && /\\.ok\\b/.test(c) && /\\.filter\\s*\\(/.test(c) && /\\.map\\s*\\(/.test(c) && /\\.reduce\\s*\\(/.test(c) && !/\\b(for|while)\\s*\\(/.test(c);"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 10</summary>
+      <p>Declare <code>let res;</code> before the <code>try</code>, so it still exists after the block: <code>try { res = await fetch('/api/tools'); } catch (error) { return { error: OFFLINE }; }</code>. Then <code>if (!res.ok) return { … };</code> and <code>const tools = await res.json();</code>. Each property is one chain: <code>tools.filter((t) =&gt; t.available).map((t) =&gt; t.name).toSorted()</code> for the names, and <code>.length</code> of a filter for a count. <code>reduce</code> needs a starting value: <code>tools.reduce((sum, t) =&gt; sum + t.loans, 0)</code>. For <code>busiest</code>, return <code>null</code> first when <code>tools.length === 0</code>; then <code>reduce</code> can keep whichever of two tools has more loans, and you take <code>.name</code> of the winner.</p>
+    </details>
+
+    <div class="quiz" data-id="hw8-quiz-10" data-hw8-quiz data-title="Quiz: array functions and asynchronous code">
+      <script type="application/json">
+[
+  {
+    "q": "What does `[14, 9, 21].reduce((sum, n) => sum + n, 0)` give?",
+    "choices": [
+      "`44`, the three numbers added together, starting from 0",
+      "`[14, 9, 21]`, because `reduce` returns the array it was called on",
+      "`21`, because `reduce` keeps only the largest of the numbers it is given",
+      "`'14921'`, because the numbers are joined into one piece of text"
+    ],
+    "answer": 0,
+    "shuffle": true,
+    "explain": "`reduce` folds an array into one value. It starts with the value after the comma (`0`), then calls the function once per item with the running result and the item: 0 + 14, then 14 + 9, then 23 + 21."
+  },
+  {
+    "q": "`fetch('/api/tools')` gets an answer with the status `503 Service Unavailable`. What does the promise from `fetch` do?",
+    "choices": [
+      "It rejects, so the code jumps straight to the `catch` block of the `try`",
+      "It resolves with a response whose `ok` is `false` and whose `status` is `503`",
+      "It resolves with `null`, because the server did not send any tools",
+      "It keeps waiting until the server is ready and answers with a `200`"
+    ],
+    "answer": 1,
+    "shuffle": true,
+    "explain": "`fetch` rejects only when no answer arrives at all. Any answer from the server, error statuses included, resolves the promise, which is why the code must check `res.ok`."
+  },
+  {
+    "q": "Inside an `async` function, what does `await fetch(url)` do while the request travels?",
+    "choices": [
+      "It freezes the whole page, so nothing can be clicked until the answer arrives",
+      "It pauses only this function; the rest of the page keeps running and responding",
+      "It runs the rest of the function at once, and then checks for the answer later",
+      "It sends the request again and again, until the server finally answers it"
+    ],
+    "answer": 1,
+    "shuffle": true,
+    "explain": "`await` hands control back to the browser while the promise is pending, so clicks, typing and other code keep working. The function continues from the same line once the promise settles."
+  },
+  {
+    "q": "True or false: `names.toSorted()` puts the original `names` array in alphabetical order.",
+    "answer": false,
+    "explain": "`toSorted()` returns a new, sorted array and leaves the original as it was. The older `sort()` is the one that reorders the original array in place."
+  }
+]
+      </script>
+    </div>
+
+    <div class="widget hw8-written" data-kind="Explain it" data-title="Three ways a request can end">
+      <label for="hw8-w-fetch">Your <code>getReport()</code> can end in three different ways. Describe each one: what happened between the browser and the server, how your code noticed it, and what it returned. Then explain why a <code>500</code> answer does not make <code>fetch</code> jump to your <code>catch</code> block.</label>
+      <textarea class="input" id="hw8-w-fetch" data-hw8-written="hw8-written-fetch" rows="5" aria-describedby="hw8-w-fetch-st"></textarea>
+      <p class="small muted hw8-saved" id="hw8-w-fetch-st">Saved in this browser as you type.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-2" data-short="React state">
+    <p class="hw8-part">Part 2 · 11.2 and 11.3</p>
+    <h2>A React component that follows its state</h2>
+    <p>In React you do not change the page step by step. You write <strong>components</strong>: functions that receive data and return a description of what the page should look like, written in <strong>JSX</strong>. A parent passes data down to a child as <strong>props</strong>, like attributes: <code>&lt;ToolCard tool={drill} /&gt;</code> hands the card one tool, which the card reads but never changes. A component that draws a list turns an array into elements with <code>map()</code>, and gives each element a <code>key</code> taken from the item's id, so React can tell the items apart when the list changes.</p>
+    <p>Data that changes while the page is open, such as what a visitor types in a search box, is <strong>state</strong>. <code>const [query, setQuery] = useState('');</code> gives the component the current value and a <strong>setter</strong>. Calling the setter tells React to run the component again, and the new JSX it returns becomes the new page. A form field whose value comes from state is <strong>controlled</strong>: <code>value={query}</code> shows the state, and <code>onChange={(e) =&gt; setQuery(e.target.value)}</code> stores each keystroke. Anything that can be worked out from state and props, such as the list of tools that match the search, is calculated during the render. Keeping a second copy of it in state would give the page two versions of the truth that can fall out of step.</p>
+
+    <h3 class="hw8-ch" id="c11"><span class="hw8-ch-num">Challenge 11</span>Search the tool shelf</h3>
+    <p><span class="hw8-label">The skill.</span> A search box and a filter are the smallest complete example of React's model: two pieces of state, two controlled inputs, and one list worked out from them on every render. Once this pattern is familiar, sorting, paging and tabs are the same idea with different rules.</p>
+    <p><span class="hw8-label">Your task.</span> The data, the page and the <code>App</code> component are ready. In the JSX tab, finish the two components so that:</p>
+    <ol class="hw8-task">
+      <li><code>ToolCard</code> draws one <code>&lt;li className="tool"&gt;</code>, with the extra class <code>on-loan</code> for a tool that is out, holding the name in an <code>&lt;h2&gt;</code> and a <code>&lt;p className="meta"&gt;</code> that reads like <code>Garden · Available</code> or <code>Power tools · On loan</code>.</li>
+      <li><code>ToolBrowser</code> keeps two pieces of state: the search text and whether <strong>Available only</strong> is ticked. Both controls are controlled inputs.</li>
+      <li>The tools shown are worked out during the render: names that contain the search text, ignoring upper and lower case and spaces at either end, and only available tools while the box is ticked.</li>
+      <li>A <code>&lt;p className="summary"&gt;</code> reads like <code>Showing 4 of 6 tools</code>, followed by a <code>&lt;ul className="tools"&gt;</code> with one <code>&lt;ToolCard&gt;</code> per tool shown, each with <code>key={tool.id}</code>, or <code>&lt;p className="empty"&gt;No tools match.&lt;/p&gt;</code> when nothing matches.</li>
+    </ol>
+    <p>Everything is drawn with JSX: no <code>innerHTML</code>, <code>append</code> or <code>querySelector</code>. The checks also draw <code>ToolBrowser</code> with tools of their own, and type and tick in that copy, so it must work for any array.</p>
+    <div class="playground" data-id="hw8-c11" data-title="Challenge 11: Search the tool shelf" data-height="560" data-layout="stacked" data-runtime="react">
+      <textarea data-lang="html">
+<div id="root"></div> <!-- empty: React draws the whole page inside this element --></textarea>
+      <textarea data-lang="css">
+body { font-family: system-ui, sans-serif; margin: 16px; } /* a clean font and some room */
+.controls { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; } /* the search box and the checkbox side by side */
+.tools { list-style: none; padding: 0; display: grid; gap: 10px; } /* the cards, one under another, with no bullets */
+.tool { border: 1px solid #c9ced8; border-radius: 10px; padding: 10px 14px; } /* one tool's card */
+.tool h2 { margin: 0 0 4px; font-size: 1.1rem; } /* the tool's name */
+.meta { margin: 0; color: #4a5262; } /* 'Garden · Available' */
+.on-loan { opacity: 0.6; } /* a tool that is out on loan looks faded */
+.summary { color: #4a5262; } /* 'Showing 4 of 6 tools' */
+.empty { color: #4a5262; font-style: italic; } /* the message when nothing matches */</textarea>
+      <textarea data-lang="js" data-label="JSX" data-hl="jsx">
+import { useState } from 'react'; // the Hook that gives a component data that can change
+import { createRoot } from 'react-dom/client'; // connects React to a real element on the page
+
+// The library's tools: the data the whole page is drawn from.
+const tools = [
+  { id: 1, name: 'Cordless drill', category: 'Power tools', available: false }, // out on loan
+  { id: 2, name: 'Hedge trimmer', category: 'Garden', available: true }, // on the shelf
+  { id: 3, name: 'Socket set', category: 'Hand tools', available: true }, // on the shelf
+  { id: 4, name: 'Sewing machine', category: 'Sewing', available: false }, // out on loan
+  { id: 5, name: 'Circular saw', category: 'Power tools', available: true }, // on the shelf
+  { id: 6, name: 'Pressure washer', category: 'Garden', available: true } // on the shelf
+];
+
+// One tool's card. It receives ONE tool object through its props.
+function ToolCard({ tool }) {
+  // TODO 1: return an <li> whose className is 'tool', or 'tool on-loan' when
+  //         tool.available is false. Inside it put an <h2> with the tool's name and
+  //         a <p className="meta"> that reads like 'Garden · Available' or
+  //         'Power tools · On loan'.
+  return <li className="tool">{tool.name}</li>; // a placeholder: replace it
+}
+
+// The controls, the summary and the cards. It receives the ARRAY of tools through its props.
+function ToolBrowser({ tools }) {
+  // TODO 2: create two pieces of state with useState: query, the text in the search box
+  //         ('' to start), and onlyAvailable, whether the checkbox is ticked (false to start).
+
+  // TODO 3: work out shown, the tools to draw, right here during the render (not in state):
+  //         keep a tool when its name contains the query, ignoring upper and lower case and
+  //         spaces at either end of the query, and, while onlyAvailable is true, only when
+  //         the tool is available.
+  const shown = tools; // every tool, for now
+
+  return (
+    // One <section> holds the controls, the summary and the list
+    <section>
+      {/* TODO 4: make both controls controlled. Give the search box value={query} and an
+          onChange that stores e.target.value; give the checkbox checked={onlyAvailable}
+          and an onChange that stores e.target.checked. */}
+      <p className="controls">
+        <label>Search <input className="search" type="search" /></label>
+        <label><input className="only-available" type="checkbox" /> Available only</label>
+      </p>
+      {/* TODO 5: a <p className="summary"> that reads like 'Showing 4 of 6 tools' */}
+      {/* TODO 6: one <ToolCard> per tool in shown inside this list, each with key={tool.id}.
+          When shown is empty, draw <p className="empty">No tools match.</p> instead of the list. */}
+      <ul className="tools"></ul>
+    </section>
+  );
+}
+
+// The whole page: a heading and the browser, drawn from the tools array above
+function App() {
+  return (
+    // <main> wraps the whole page
+    <main>
+      {/* The library's name, then the browser with every tool */}
+      <h1>Elm Street Tool Library</h1>
+      <ToolBrowser tools={tools} />
+    </main>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />); // draw App inside <div id="root"></textarea>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "The page shows the six tools in order, each an `<li class=\"tool\">` with its name in an `<h2>`",
+    "test": "var names=function(root){ return root.map(function(x){ var h=x.querySelector('h2'); return h ? h.textContent.trim() : ''; }).join('|'); }; return names($$('#root li.tool'))==='Cordless drill|Hedge trimmer|Socket set|Sewing machine|Circular saw|Pressure washer';"
+  },
+  {
+    "label": "Each card's line reads like `Garden · Available` or `Power tools · On loan`, and only the two tools on loan have the class `on-loan`",
+    "test": "var R=window.HW8R; var li=$$('#root li.tool'); if(li.length!==6) return false; var want=[true,false,false,true,false,false]; return li.map(function(x){ return R.text(x.querySelector('p.meta')); }).join('|')==='Power tools · On loan|Garden · Available|Hand tools · Available|Sewing · On loan|Power tools · Available|Garden · Available' && li.every(function(x,i){ return x.classList.contains('on-loan')===want[i]; });"
+  },
+  {
+    "label": "The summary starts as `Showing 6 of 6 tools`",
+    "test": "return window.HW8R.text($('#root p.summary'))==='Showing 6 of 6 tools';"
+  },
+  {
+    "label": "Typing in the search box filters by name, ignoring upper and lower case and spaces at either end (`  SAW ` finds both saws), and the summary follows",
+    "test": "return (async function(){ var R=window.HW8R, TB=R.get(win,'ToolBrowser'); if(!TB) return false; var data=[{id:'a',name:'Circular saw',category:'Power tools',available:true},{id:'b',name:'Hand saw',category:'Hand tools',available:false},{id:'c',name:'Ladder',category:'Ladders',available:true}]; var m; var names=function(root){ return root.map(function(x){ var h=x.querySelector('h2'); return h ? h.textContent.trim() : ''; }).join('|'); }; try { m=R.mount(win,TB,{tools:data}); var shown=function(){ return names(m.$$('li.tool')); }; var sum=function(){ return R.text(m.$('p.summary')); }; var box=m.$('input.search'), only=m.$('input.only-available'); if(!box||!only) return false;  var first=shown()==='Circular saw|Hand saw|Ladder' && sum()==='Showing 3 of 3 tools'; R.type(win,box,'  SAW '); var a=await until(function(){ return shown()==='Circular saw|Hand saw' && sum()==='Showing 2 of 3 tools'; },1500); R.type(win,box,'lad'); var b=await until(function(){ return shown()==='Ladder' && sum()==='Showing 1 of 3 tools'; },1500); R.type(win,box,''); var c=await until(function(){ return shown()==='Circular saw|Hand saw|Ladder' && sum()==='Showing 3 of 3 tools'; },1500); return first && !!a && !!b && !!c; } finally { if(m) m.unmount(); } })();"
+  },
+  {
+    "label": "Ticking `Available only` hides the tools on loan, works together with the search, and unticking shows them again",
+    "test": "return (async function(){ var R=window.HW8R, TB=R.get(win,'ToolBrowser'); if(!TB) return false; var data=[{id:'a',name:'Circular saw',category:'Power tools',available:true},{id:'b',name:'Hand saw',category:'Hand tools',available:false},{id:'c',name:'Ladder',category:'Ladders',available:true}]; var m; var names=function(root){ return root.map(function(x){ var h=x.querySelector('h2'); return h ? h.textContent.trim() : ''; }).join('|'); }; try { m=R.mount(win,TB,{tools:data}); var shown=function(){ return names(m.$$('li.tool')); }; var sum=function(){ return R.text(m.$('p.summary')); }; var box=m.$('input.search'), only=m.$('input.only-available'); if(!box||!only) return false;  only.click(); var a=await until(function(){ return shown()==='Circular saw|Ladder' && sum()==='Showing 2 of 3 tools'; },1500); var ticked=only.checked===true; R.type(win,box,'saw'); var b=await until(function(){ return shown()==='Circular saw' && sum()==='Showing 1 of 3 tools'; },1500); only.click(); var c=await until(function(){ return shown()==='Circular saw|Hand saw' && sum()==='Showing 2 of 3 tools'; },1500); return !!a && ticked && !!b && !!c && only.checked===false; } finally { if(m) m.unmount(); } })();"
+  },
+  {
+    "label": "When nothing matches, it shows `No tools match.` with no list, and the summary says `Showing 0 of 3 tools`",
+    "test": "return (async function(){ var R=window.HW8R, TB=R.get(win,'ToolBrowser'); if(!TB) return false; var data=[{id:'a',name:'Circular saw',category:'Power tools',available:true},{id:'b',name:'Hand saw',category:'Hand tools',available:false},{id:'c',name:'Ladder',category:'Ladders',available:true}]; var m; var names=function(root){ return root.map(function(x){ var h=x.querySelector('h2'); return h ? h.textContent.trim() : ''; }).join('|'); }; try { m=R.mount(win,TB,{tools:data}); var shown=function(){ return names(m.$$('li.tool')); }; var sum=function(){ return R.text(m.$('p.summary')); }; var box=m.$('input.search'), only=m.$('input.only-available'); if(!box||!only) return false;  R.type(win,box,'zzz'); var a=await until(function(){ var p=m.$('p.empty'); return !!p && R.text(p)==='No tools match.' && !m.$('ul') && m.$$('li').length===0 && sum()==='Showing 0 of 3 tools'; },1500); return !!a; } finally { if(m) m.unmount(); } })();"
+  },
+  {
+    "label": "Keeps exactly two pieces of state, makes both controls controlled (`value` and `checked`, each with `onChange`), and gives each card `key={tool.id}`",
+    "test": "var c=window.HW8.src(code.js); return (c.match(/\\buseState\\s*\\(/g)||[]).length===2 && /\\bvalue\\s*=\\s*\\{/.test(c) && /\\bchecked\\s*=\\s*\\{/.test(c) && (c.match(/\\bonChange\\s*=\\s*\\{/g)||[]).length>=2 && /\\bkey\\s*=\\s*\\{\\s*[\\w$]+\\s*\\.\\s*id\\s*\\}/.test(c);"
+  },
+  {
+    "label": "Draws everything with JSX: no `innerHTML`, `append`, `appendChild`, `document.createElement` or `querySelector`",
+    "test": "var c=window.HW8.src(code.js); return !/\\.innerHTML\\b|\\.(appendChild|append|prepend|insertBefore)\\s*\\(|querySelector(All)?\\s*\\(|document\\s*\\.\\s*createElement/.test(c);"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 11</summary>
+      <p>A class name can be chosen with a ternary: <code>className={tool.available ? 'tool' : 'tool on-loan'}</code>, and text mixes with expressions: <code>&lt;p className="meta"&gt;{tool.category} · {tool.available ? 'Available' : 'On loan'}&lt;/p&gt;</code>. For the search, tidy the query once with <code>query.trim().toLowerCase()</code>, then keep a tool when <code>tool.name.toLowerCase().includes(…)</code> is true and <code>(!onlyAvailable || tool.available)</code> is true too. A checkbox stores <code>e.target.checked</code>, not <code>e.target.value</code>. To choose between the list and the message, use a ternary inside the JSX: <code>{shown.length === 0 ? &lt;p …&gt;…&lt;/p&gt; : &lt;ul …&gt;…&lt;/ul&gt;}</code>.</p>
+    </details>
+
+    <div class="quiz" data-id="hw8-quiz-11" data-hw8-quiz data-title="Quiz: props, state and controlled inputs">
+      <script type="application/json">
+[
+  {
+    "q": "`ToolBrowser` draws `<ToolCard tool={drill} />`. Inside `ToolCard`, what is `tool`?",
+    "choices": [
+      "A prop: a value its parent passed in, which the card reads but must not change",
+      "State: a value the card owns, and changes with a setter that `useState` gave it",
+      "A global variable, which every component in the app can read and change",
+      "An HTML attribute, which React copies onto the card's `<li>` element as it is"
+    ],
+    "answer": 0,
+    "shuffle": true,
+    "explain": "Props flow down from a parent to a child and are read-only for the child. A value that has to change over time belongs in state, in the component that owns it."
+  },
+  {
+    "q": "The search box's `onChange` calls `setQuery('saw')`. What does React do next?",
+    "choices": [
+      "It changes only the text inside the search box, and leaves the rest of the page alone",
+      "It runs `ToolBrowser` again with the new query and updates the parts of the page that changed",
+      "It reloads the whole page, so that every component starts again from the beginning",
+      "Nothing, until the component calls a separate `render()` function to show the change"
+    ],
+    "answer": 1,
+    "shuffle": true,
+    "explain": "Calling a state setter schedules a new render. React calls the component again, compares the JSX it returns with the previous result, and changes only the elements that are now different."
+  },
+  {
+    "q": "Why is the list of matching tools worked out during the render instead of being kept in its own state?",
+    "choices": [
+      "Because it can be calculated from the tools and the two pieces of state, and a second copy could fall out of step with them",
+      "Because `useState` can hold only text and numbers, so an array of tool objects cannot be kept in state",
+      "Because a component may have only one piece of state, and the search text is already using it",
+      "Because state is reset every time the component draws, so a list kept in state would always be empty"
+    ],
+    "answer": 0,
+    "shuffle": true,
+    "explain": "State is for data that cannot be worked out from anything else. Anything derived from props and state is recalculated on every render, so it is always correct; a stored copy has to be updated by hand everywhere, and a forgotten update leaves the page wrong."
+  },
+  {
+    "q": "A classmate writes `<input value={query} />` with no `onChange`. What happens when a visitor types in it?",
+    "choices": [
+      "The text appears as usual, and React stores it in `query` without any extra code",
+      "Nothing appears: the field always shows `query`, which never changes, and React warns about a read-only field",
+      "The page crashes with an error as soon as the visitor presses the first key",
+      "The text appears, but it disappears again as soon as the visitor clicks elsewhere"
+    ],
+    "answer": 1,
+    "shuffle": true,
+    "explain": "A controlled input always shows its `value`. Without an `onChange` that updates the state, the state never changes, so the field keeps showing the same text, and React warns that it is read-only."
+  }
+]
+      </script>
+    </div>
+
+    <div class="widget hw8-written" data-kind="Explain it" data-title="Why the list is not kept in state">
+      <label for="hw8-w-state">Your <code>ToolBrowser</code> keeps the search text in state but works out the list of tools to show during the render. A classmate suggests storing that list in a third piece of state and updating it in the search box's <code>onChange</code>. Explain what React does when the search text changes, and what could go wrong with the classmate's version.</label>
+      <textarea class="input" id="hw8-w-state" data-hw8-written="hw8-written-state" rows="5" aria-describedby="hw8-w-state-st"></textarea>
+      <p class="small muted hw8-saved" id="hw8-w-state-st">Saved in this browser as you type.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="part-3" data-short="An Express API">
+    <p class="hw8-part">Part 3 · 13.3 and 13.4</p>
+    <h2>The other side: an API in Node.js and Express</h2>
+    <p>Parts 1 and 2 ran in the browser. Part 3 is the other end of the request: the server that answers <code>/api/tools</code>. In Node.js with the Express framework, each <strong>route</strong> pairs an HTTP method and a path with a function that Express calls for every matching request: <code>app.get('/api/tools/:id', (req, res) =&gt; { … })</code>. The function reads the request from <code>req</code> and answers through <code>res</code>. Three parts of a request are read in three different ways. A <strong>route parameter</strong> such as <code>:id</code> arrives in <code>req.params.id</code>, always as text. The <strong>query string</strong>, everything after <code>?</code> in the URL, arrives in <code>req.query</code>. The <strong>body</strong> of a <code>POST</code>, where a client sends the details of something new, arrives in <code>req.body</code>, but only after <code>app.use(express.json())</code> has turned its JSON text into an object.</p>
+    <p>A good API also answers with the right <strong>status code</strong>, because clients decide what to do from it: <code>200 OK</code> for a normal answer, <code>201 Created</code> when the request made something new, <code>400 Bad Request</code> when the request is missing something, and <code>404 Not Found</code> when there is nothing at that address. The <code>res.ok</code> test you wrote in Part 1 depends on exactly these codes. The server must also check every request itself, because anyone can send any request with a tool such as <code>curl</code>, without ever opening your web page.</p>
+
+    <h3 class="hw8-ch" id="c13"><span class="hw8-ch-num">Challenge 13</span>The tool library API</h3>
+    <p><span class="hw8-label">The skill.</span> Reading the three parts of a request, answering with the right status, and refusing bad input are what every API route does, whatever it is about. These three routes are the core of the CRUD API from Chapter 13.</p>
+    <p><span class="hw8-label">Your task.</span> In the <strong>server.js</strong> tab, add the JSON body parser and three routes:</p>
+    <ol class="hw8-task">
+      <li><code>GET /api/tools</code> sends every tool as JSON, or only the available ones for <code>GET /api/tools?available=true</code>.</li>
+      <li><code>GET /api/tools/:id</code> sends the tool with that id, or answers <code>404</code> with <code>{ "error": "Tool not found" }</code>.</li>
+      <li><code>POST /api/tools</code> answers <code>400</code> with <code>{ "error": "name is required" }</code> when the body has no name or a blank one. Otherwise it adds a new tool with the next id (one more than the highest), the name without spaces at either end, the category sent (or <code>'Other'</code> when none is sent), <code>available: true</code> and <code>loans: 0</code>, and answers <code>201</code> with that tool.</li>
+    </ol>
+    <p>Try each route with the pretend client under the code. To send a <code>POST</code>, choose it as the method and type a JSON body such as <code>{ "name": "Tile cutter", "category": "Hand tools" }</code>. The checks send their own requests, including bad ones.</p>
+    <div class="playground" data-id="hw8-c13" data-title="Challenge 13: The tool library API" data-height="560" data-layout="stacked" data-runtime="node">
+      <textarea data-lang="js" data-label="server.js">
+const express = require('express'); // load Express, the web framework from Chapter 13
+const app = express(); // the app: every middleware function and route is added to it
+
+// TODO 1: add app.use(express.json()) on the next line, ABOVE the routes, so that the JSON
+//         body of a POST request is turned into an object in req.body. Without it,
+//         req.body is undefined.
+
+// The library's tools. The server keeps them in memory, so a restart brings back these six.
+const tools = [
+  { id: 1, name: 'Cordless drill', category: 'Power tools', available: false, loans: 14 }, // out on loan
+  { id: 2, name: 'Hedge trimmer', category: 'Garden', available: true, loans: 9 }, // on the shelf
+  { id: 3, name: 'Socket set', category: 'Hand tools', available: true, loans: 21 }, // on the shelf
+  { id: 4, name: 'Sewing machine', category: 'Sewing', available: false, loans: 6 }, // out on loan
+  { id: 5, name: 'Circular saw', category: 'Power tools', available: true, loans: 11 }, // on the shelf
+  { id: 6, name: 'Pressure washer', category: 'Garden', available: true, loans: 17 } // on the shelf
+];
+
+// TODO 2: GET /api/tools
+//         Send every tool with res.json(). When req.query.available is the text 'true',
+//         send only the tools whose available is true.
+
+// TODO 3: GET /api/tools/:id
+//         req.params.id is text, such as '3', so turn it into a number with Number()
+//         before comparing it with the ids. When no tool has that id, answer
+//         res.status(404).json({ error: 'Tool not found' }). Otherwise send the tool.
+
+// TODO 4: POST /api/tools
+//         The new tool's details arrive in req.body. When req.body.name is missing or
+//         blank, answer 400 with { error: 'name is required' }. Otherwise build the tool:
+//           id: one more than the highest id in tools
+//           name: the name with the spaces at either end trimmed off
+//           category: req.body.category, or 'Other' when none was sent
+//           available: true, and loans: 0
+//         push it into tools, and answer res.status(201).json(...) with the new tool.
+
+// Start the server; the message appears in the Console once it is listening
+app.listen(3000, () => console.log('Tool library API on port 3000'));</textarea>
+      <script type="text/plain" class="setup">NODE_START_PATH = '/api/tools';</script>
+      <script type="application/json" class="checks">
+[
+  {
+    "label": "`GET /api/tools` answers 200 with all six tools as JSON",
+    "test": "return (async function(){ var N=win.__node; if(!N) return false; var r=await N.request('GET','/api/tools'); return r.status===200 && Array.isArray(r.json) && r.json.map(function(t){ return t && t.name; }).join('|')==='Cordless drill|Hedge trimmer|Socket set|Sewing machine|Circular saw|Pressure washer'; })();"
+  },
+  {
+    "label": "`GET /api/tools?available=true` sends only the four tools on the shelf",
+    "test": "return (async function(){ var N=win.__node; if(!N) return false; var r=await N.request('GET','/api/tools?available=true'); return r.status===200 && Array.isArray(r.json) && r.json.length===4 && r.json.every(function(t){ return t && t.available===true; }); })();"
+  },
+  {
+    "label": "`GET /api/tools/3` sends the Socket set, and `GET /api/tools/99` answers 404 with `{ \"error\": \"Tool not found\" }`",
+    "test": "return (async function(){ var N=win.__node; if(!N) return false; var a=await N.request('GET','/api/tools/3'); var b=await N.request('GET','/api/tools/99'); return a.status===200 && !!a.json && a.json.name==='Socket set' && b.status===404 && !!b.json && b.json.error==='Tool not found'; })();"
+  },
+  {
+    "label": "`POST /api/tools` with `{ \"name\": \"  Tile cutter \", \"category\": \"Hand tools\" }` answers 201 with the new tool (the next id, the trimmed name, `available: true`, `loans: 0`), which can then be fetched by its id",
+    "test": "return (async function(){ var N=win.__node; if(!N) return false; var before=await N.request('GET','/api/tools'); var next=Array.isArray(before.json) && before.json.length ? Math.max.apply(null, before.json.map(function(t){ return t.id; }))+1 : 7; var p=await N.request('POST','/api/tools',{ name:'  Tile cutter ', category:'Hand tools' }); var t=p.json||{}; var g=await N.request('GET','/api/tools/'+next); return p.status===201 && t.id===next && t.name==='Tile cutter' && t.category==='Hand tools' && t.available===true && t.loans===0 && g.status===200 && !!g.json && g.json.name==='Tile cutter'; })();"
+  },
+  {
+    "label": "A tool sent without a `category` gets `'Other'`, and each new tool's id is one more than the last",
+    "test": "return (async function(){ var N=win.__node; if(!N) return false; var a=await N.request('POST','/api/tools',{ name:'Stud finder' }); var b=await N.request('POST','/api/tools',{ name:'Tile saw', category:'Power tools' }); return a.status===201 && !!a.json && a.json.category==='Other' && b.status===201 && !!b.json && typeof a.json.id==='number' && b.json.id===a.json.id+1; })();"
+  },
+  {
+    "label": "A missing or blank `name` answers 400 with `{ \"error\": \"name is required\" }`, and nothing is added",
+    "test": "return (async function(){ var N=win.__node; if(!N) return false; var before=await N.request('GET','/api/tools'); var n=Array.isArray(before.json) ? before.json.length : -1; var x=await N.request('POST','/api/tools',{ category:'Garden' }); var y=await N.request('POST','/api/tools',{ name:'   ', category:'Garden' }); var after=await N.request('GET','/api/tools'); return x.status===400 && !!x.json && x.json.error==='name is required' && y.status===400 && !!y.json && y.json.error==='name is required' && n>=0 && Array.isArray(after.json) && after.json.length===n; })();"
+  },
+  {
+    "label": "Uses `express.json()`, `req.params`, `req.query` and `res.status()`",
+    "test": "var c=window.HW8.src(code.js); return /express\\s*\\.\\s*json\\s*\\(\\s*\\)/.test(c) && /req\\s*\\.\\s*params\\b/.test(c) && /req\\s*\\.\\s*query\\b/.test(c) && /\\.\\s*status\\s*\\(/.test(c);"
+  }
+]
+      </script>
+    </div>
+    <details class="reveal">
+      <summary>Hint for Challenge 13</summary>
+      <p>Start the list route with <code>let list = tools;</code> and replace it with a filtered copy when <code>req.query.available === 'true'</code>. In the id route, <code>const tool = tools.find((t) =&gt; t.id === Number(req.params.id));</code> gives <code>undefined</code> when nothing matches, and <code>return res.status(404).json(…)</code> stops the function there. In the POST route, <code>const name = (req.body.name || '').trim();</code> turns a missing name into an empty string, so one <code>if (!name)</code> catches both cases. The next id is <code>Math.max(...tools.map((t) =&gt; t.id)) + 1</code>, and <code>req.body.category || 'Other'</code> supplies the default.</p>
+    </details>
+
+    <div class="quiz" data-id="hw8-quiz-13" data-hw8-quiz data-title="Quiz: Node.js and Express">
+      <script type="application/json">
+[
+  {
+    "q": "A request for `/api/tools/3` reaches `app.get('/api/tools/:id', ...)`. What is `req.params.id`?",
+    "choices": [
+      "The text `'3'`, which is why the route converts it with `Number()` before comparing",
+      "The number `3`, because Express converts route parameters that look like numbers",
+      "The whole tool object whose id is 3, looked up by Express before the route runs",
+      "`undefined`, because route parameters are only filled in for `POST` requests"
+    ],
+    "answer": 0,
+    "shuffle": true,
+    "explain": "Everything in a URL is text, so route parameters always arrive as strings. `'3' === 3` is false, so the id must be converted before it is compared with the numbers in the array."
+  },
+  {
+    "q": "Which status code fits a `POST` that successfully added a new tool?",
+    "choices": [
+      "`200 OK`",
+      "`201 Created`",
+      "`204 No Content`",
+      "`302 Found`"
+    ],
+    "answer": 1,
+    "shuffle": true,
+    "explain": "`201 Created` says the request made something new, and the body usually holds the new item with the id the server gave it. `200` is for a normal answer, and `204` means success with an empty body."
+  },
+  {
+    "q": "A `POST` route reads `req.body.name`, but the app never calls `app.use(express.json())`. What happens?",
+    "choices": [
+      "It works anyway, because Express always reads JSON bodies by itself",
+      "`req.body` is `undefined`, so reading `req.body.name` throws an error",
+      "`req.body` holds the raw JSON text, so `req.body.name` is the whole text",
+      "Express answers the request with `400 Bad Request` before the route runs"
+    ],
+    "answer": 1,
+    "shuffle": true,
+    "explain": "In Express 5, nothing reads the body until a body parser does. `express.json()` turns the JSON text into an object in `req.body`; without it, `req.body` stays `undefined`."
+  },
+  {
+    "q": "True or false: a `console.log()` inside an Express route prints in the browser's DevTools console.",
+    "answer": false,
+    "explain": "Route code runs on the server, so its `console.log` output appears in the terminal that is running `node` (here, the Console under the playground), never in the visitor's browser."
+  }
+]
+      </script>
+    </div>
+
+    <div class="widget hw8-written" data-kind="Explain it" data-title="One request, both sides">
+      <label for="hw8-w-server">Follow one request from start to finish: a browser runs <code>fetch('/api/tools/3')</code> against the server you wrote in Challenge 13. Describe what the server receives, how Express chooses your route, what <code>req.params.id</code> holds and why you converted it, and what the browser's code gets back. Then explain why the server checks that a new tool has a name, even if the web page's form already does.</label>
+      <textarea class="input" id="hw8-w-server" data-hw8-written="hw8-written-server" rows="5" aria-describedby="hw8-w-server-st"></textarea>
+      <p class="small muted hw8-saved" id="hw8-w-server-st">Saved in this browser as you type.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="download">
+    <h2>Download my work</h2>
+    <p>This button builds one file with everything you did: your name and the date, every challenge with its checks re-run, your code, what it printed to the console, and a working preview of each page, plus your quiz results and your written answers. It runs entirely in your browser; nothing is uploaded.</p>
+    <div class="widget" data-kind="Your file" data-title="Download my work">
+      <p>The file is named after you, for example <code>hw8-ana-ruiz.html</code>. Open it after it downloads to check that it shows your code and your answers. You can download again at any time; hand in the newest file.</p>
+      <div class="btn-row">
+        <button type="button" class="btn primary" id="hw8-download">Download my work</button>
+      </div>
+      <p class="hw8-status" id="hw8-download-status" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section class="lesson" id="submit">
+    <h2>Submitting</h2>
+    <p>You hand in this homework by putting the downloaded file in a public GitHub repository named <code>web-homework</code>. If you already made that repository for an earlier homework, use the same one and just add the new file.</p>
+    <ol class="hw8-steps">
+      <li><p><strong>Download your file.</strong> Use <a href="#download">Download my work</a> above, and open the file once to make sure it shows your work.</p></li>
+      <li><p><strong>Put the file in your <code>web-homework</code> repository</strong>, in whichever of these two ways you prefer.</p></li>
+    </ol>
+    <div class="tabs">
+      <div data-tab="On github.com">
+        <ol class="hw8-steps">
+          <li><p>Sign in at <a href="https://github.com/">github.com</a>.</p></li>
+          <li><p>If you do not have a <code>web-homework</code> repository yet, create it: open the <strong>+</strong> menu at the top right and choose <strong>New repository</strong>. Type <code>web-homework</code> as the name, choose <strong>Public</strong> so it can be opened from its link, tick <strong>Add a README file</strong>, and press <strong>Create repository</strong>. The README matters: it gives the empty repository a first commit, so the upload buttons appear. If the repository already exists from an earlier homework, just open it.</p></li>
+          <li><p>On the repository's main page, choose <strong>Add file</strong> and then <strong>Upload files</strong>.</p></li>
+          <li><p>Drag your <code>hw8-</code> file onto the page, or use <strong>choose your files</strong> to find it.</p></li>
+          <li><p>Type a short message such as <code>Add Homework 8</code> and press <strong>Commit changes</strong>. The file now appears in the list on the repository's main page.</p></li>
+        </ol>
+      </div>
+      <div data-tab="With Git">
+        <p>If you prefer the terminal, use the usual Git cycle: clone, add, commit, push. Create the <code>web-homework</code> repository on github.com first, as described in the other tab, if it does not exist yet.</p>
+        <ol class="hw8-steps">
+          <li><p>The first time only, download the repository to your computer with <code>git clone https://github.com/&lt;username&gt;/web-homework.git</code>, replacing <code>&lt;username&gt;</code> with your GitHub username. If you already cloned it for an earlier homework, run <code>git pull</code> inside it instead.</p></li>
+          <li><p>Copy your <code>hw8-</code> file into the <code>web-homework</code> folder, and open a terminal in that folder.</p></li>
+          <li><p>Stage the file with <code>git add .</code> and save a snapshot with <code>git commit -m "Add Homework 8"</code>.</p></li>
+          <li><p>Upload it with <code>git push</code>, then reload the repository's page on github.com to see the file there.</p></li>
+        </ol>
+      </div>
+    </div>
+    <div class="hw8-submit">
+      <p>Submit your GitHub repo link.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+  /* Runs before course.js mounts the components (it mounts on DOMContentLoaded),
+     so each playground's checks and settings are still in the page and can be kept for the download. */
+  window.HW8 = { pgs: [] };
+  // The code a source check reads: comments removed, so a word in a comment never counts as code.
+  // A // that follows a colon or a quote (as in 'https://...') is part of a string and is kept.
+  window.HW8.src = function (js) { return String(js || '').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:\\'"])\/\/.*$/gm, '$1'); };
+  document.querySelectorAll('.playground[data-id]').forEach(function (pg) {
+    var s = pg.querySelector(':scope > script.checks');
+    var checks = [];
+    try { checks = s ? JSON.parse(s.textContent) : []; } catch (e) { checks = []; }
+    var langs = Array.prototype.map.call(pg.querySelectorAll(':scope > textarea[data-lang]'), function (t) { return t.dataset.lang; });
+    var labels = {};
+    Array.prototype.forEach.call(pg.querySelectorAll(':scope > textarea[data-lang]'), function (t) { if (t.dataset.label) labels[t.dataset.lang] = t.dataset.label; });
+    // A hidden setup script and a runtime (the practice API, React, Node) are needed to re-run the checks for the download.
+    var setupEl = pg.querySelector(':scope > script.setup');
+    var setup = setupEl ? setupEl.textContent.replace(/<\\\/script/gi, '<\/script') : '';
+    window.HW8.pgs.push({ id: pg.dataset.id, title: pg.dataset.title || pg.dataset.id, checks: checks, langs: langs, labels: labels,
+      preview: pg.dataset.preview !== 'false', runtime: pg.dataset.runtime || '', setup: setup });
+  });
+
+  /* Helpers for the checks of the React challenge. A check mounts a fresh copy of a component in
+     its own box at the end of the preview, so it never shares state with the page the student is
+     looking at, and it always removes the box again afterwards. */
+  window.HW8R = {
+    // The student's top-level function with this name (a function declaration or a const), or null.
+    get: function (win, name) {
+      try { return win.eval('typeof ' + name + ' === "function" ? ' + name + ' : null'); } catch (e) { return null; }
+    },
+    // Renders <type {...props} /> into a new box. Returns $ and $$ for that box and unmount() to take it off the page.
+    mount: function (win, type, props) {
+      var doc = win.document, box = doc.createElement('div');
+      box.setAttribute('data-hw8-check', '');
+      box.style.cssText = 'position:absolute;left:-12000px;top:0;width:600px;';
+      doc.body.appendChild(box);
+      var root = win.ReactDOM.createRoot(box);
+      var api = {
+        box: box,
+        $: function (s) { return box.querySelector(s); },
+        $$: function (s) { return Array.prototype.slice.call(box.querySelectorAll(s)); },
+        unmount: function () { try { root.unmount(); } catch (e) { /* already gone */ } box.remove(); }
+      };
+      try { root.render(win.React.createElement(type, props || null)); } catch (e) { api.unmount(); throw e; }
+      return api;
+    },
+    // Types into a box the way a person does: set the value, then fire an input event.
+    type: function (win, el, value) { if (!el) return; el.value = value; el.dispatchEvent(new win.Event('input', { bubbles: true })); },
+    // An element's text with every run of spaces and line breaks collapsed to one space.
+    text: function (el) { return el ? el.textContent.replace(/\s+/g, ' ').trim() : ''; }
+  };
+</script>
+<script>
+  WD1.ready(() => {
+    const { $, $$, esc, store } = WD1;
+    const NS = 'custom';
+    const MIN_WRITTEN = 40;
+    // Saved values could have been edited by hand, so accept only the shape each one should have.
+    const savedText = (key) => { const v = store.get(NS, key); return typeof v === 'string' ? v : ''; };
+    const savedObject = (key) => { const v = store.get(NS, key); return v && typeof v === 'object' && !Array.isArray(v) ? v : {}; };
+
+    /* ---------- Challenge chips and page links, built from the page itself ---------- */
+    // One chip per challenge: data-id "hw8-c10" links to the heading with id "c10".
+    const chipList = $('#hw8-chips');
+    window.HW8.pgs.forEach((p) => {
+      const anchor = p.id.replace(/^hw8-/, '');
+      const num = (/Challenge\s+([\d.]+)/.exec(p.title) || [])[1] || anchor;
+      chipList.appendChild(WD1.h('li', null, WD1.h('a', { href: '#' + anchor, dataset: { pg: p.id }, text: num })));
+    });
+    // One link per part (a section's data-short gives a shorter label), then Download and Submitting.
+    const jump = $('#hw8-jump');
+    $$('section.lesson[id^="part-"]').forEach((sec, i) => {
+      const h2 = $('h2', sec);
+      jump.appendChild(WD1.h('li', null, WD1.h('a', { href: '#' + sec.id, text: (i + 1) + '. ' + (sec.dataset.short || (h2 ? h2.textContent : sec.id)) })));
+    });
+    jump.appendChild(WD1.h('li', null, WD1.h('a', { href: '#download', text: 'Download my work' })));
+    jump.appendChild(WD1.h('li', null, WD1.h('a', { href: '#submit', text: 'Submitting' })));
+
+    /* ---------- Name ---------- */
+    const nameInput = $('#hw8-name');
+    nameInput.value = savedText('hw8-name');
+    nameInput.addEventListener('input', () => store.set(NS, 'hw8-name', nameInput.value));
+
+    /* ---------- Written answers ---------- */
+    const written = $$('[data-hw8-written]');
+    const writtenStatus = (ta) => {
+      const st = document.getElementById(ta.getAttribute('aria-describedby'));
+      const n = ta.value.trim().length;
+      if (!st) return;
+      st.classList.toggle('done', n >= MIN_WRITTEN);
+      st.textContent = n === 0 ? 'Saved in this browser as you type.'
+        : n < MIN_WRITTEN ? 'Saved. Keep going: a sentence or two counts as complete.'
+        : 'Saved. This answer counts as complete.';
+    };
+    written.forEach((ta) => {
+      ta.value = savedText(ta.dataset.hw8Written);
+      writtenStatus(ta);
+      let t = null;
+      ta.addEventListener('input', () => {
+        clearTimeout(t);
+        t = setTimeout(() => { store.set(NS, ta.dataset.hw8Written, ta.value); writtenStatus(ta); render(); }, 300);
+      });
+    });
+
+    /* ---------- Challenge results (latest checks event per playground) ---------- */
+    const pgEls = $$('.playground[data-id]');
+    const checkRecords = () => savedObject('hw8-checks');
+    const challengeState = (id) => {
+      const rec = checkRecords()[id];
+      if (rec && typeof rec === 'object') return rec.passed === rec.total && rec.total > 0 ? 'done' : rec.passed > 0 ? 'partial' : 'none';
+      return store.get('challenge', id) ? 'done' : 'none';
+    };
+    document.addEventListener('checks', (e) => {
+      const pg = e.target.closest('.playground[data-id]');
+      if (!pg || !e.detail) return;
+      const all = checkRecords();
+      all[pg.dataset.id] = { passed: e.detail.passed, total: e.detail.total, at: Date.now() };
+      store.set(NS, 'hw8-checks', all);
+      render();
+    });
+
+    /* ---------- Quiz results ---------- */
+    const quizEls = $$('[data-hw8-quiz]');
+    const quizRecords = () => savedObject('hw8-quizzes');
+    document.addEventListener('quizdone', (e) => {
+      const q = e.target.closest('[data-hw8-quiz]');
+      if (!q || !e.detail) return;
+      const all = quizRecords();
+      const prev = all[q.dataset.id] && typeof all[q.dataset.id] === 'object' ? all[q.dataset.id] : {};
+      all[q.dataset.id] = {
+        correct: e.detail.correct, total: e.detail.total,
+        best: Math.max(e.detail.correct, Number.isInteger(prev.best) ? prev.best : 0),
+        attempts: (Number.isInteger(prev.attempts) && prev.attempts >= 0 ? prev.attempts : 0) + 1, at: Date.now()
+      };
+      store.set(NS, 'hw8-quizzes', all);
+      render();
+    });
+
+    /* ---------- Progress card ---------- */
+    function meter(key, n, total) {
+      $('#hw8-count-' + key).textContent = n + ' of ' + total;
+      $('#hw8-bar-' + key).style.width = (total ? Math.round((n / total) * 100) : 0) + '%';
+    }
+    function render() {
+      let done = 0;
+      $$('.hw8-chips a[data-pg]').forEach((a) => {
+        const st = challengeState(a.dataset.pg);
+        if (st === 'done') done++;
+        a.classList.toggle('done', st === 'done');
+        a.classList.toggle('partial', st === 'partial');
+        const label = 'Challenge ' + a.textContent.replace(/[^\d.]/g, '');
+        a.setAttribute('aria-label', label + (st === 'done' ? ', complete' : st === 'partial' ? ', some checks pass' : ', no checks pass yet'));
+      });
+      meter('challenges', done, pgEls.length);
+      const qr = quizRecords();
+      meter('quizzes', quizEls.filter((q) => qr[q.dataset.id]).length, quizEls.length);
+      meter('written', written.filter((ta) => ta.value.trim().length >= MIN_WRITTEN).length, written.length);
+    }
+    render();
+
+    /* ---------- Download my work ---------- */
+    const statusEl = $('#hw8-download-status');
+    const dlBtn = $('#hw8-download');
+    let runCount = 0;
+
+    // Re-run one playground's checks against the given code in an offscreen preview,
+    // and keep what the code printed to the console while the page loaded. Checks may be
+    // async (they return a promise), so each one is awaited in turn, as the playground does.
+    const previewOpts = (p) => ({ runtime: p.runtime ? WD1.runtimes[p.runtime] || null : null, setup: p.setup ? WD1.dedent(p.setup) : '' });
+    function runChecks(code, p) {
+      const checks = p.checks;
+      return new Promise((resolve) => {
+        const pgId = 'hw8-dl-' + (++runCount) + '-' + Date.now();
+        const logs = [];
+        const onMsg = (e) => {
+          const d = e.data;
+          if (d && typeof d === 'object' && d.wd1pg === pgId && d.type !== 'nav' && logs.length < 300) logs.push({ type: d.type, text: (d.args || []).join(' ') });
+        };
+        window.addEventListener('message', onMsg);
+        const f = document.createElement('iframe');
+        f.setAttribute('aria-hidden', 'true');
+        f.tabIndex = -1;
+        f.title = 'Checking your work';
+        f.style.cssText = 'position:absolute;left:-12000px;top:0;width:1000px;height:800px;border:0;visibility:hidden;';
+        let settled = false;
+        const finish = (val) => { if (settled) return; settled = true; window.removeEventListener('message', onMsg); f.remove(); resolve(val); };
+        const wait = (ms) => new Promise((r) => setTimeout(r, ms || 0));
+        const until = async (fn, ms) => {
+          const end = Date.now() + (ms || 2000);
+          for (;;) {
+            let v = false;
+            try { v = fn(); } catch (e) { v = false; }
+            if (v) return v;
+            if (Date.now() > end) return false;
+            await wait(25);
+          }
+        };
+        f.addEventListener('load', () => setTimeout(async () => {
+          try {
+            const doc = f.contentDocument, win = f.contentWindow;
+            const q = (s) => doc.querySelector(s);
+            const qa = (s) => Array.from(doc.querySelectorAll(s));
+            const style = (s, pr) => { const n = typeof s === 'string' ? q(s) : s; return n ? win.getComputedStyle(n).getPropertyValue(pr).trim() : ''; };
+            const printed = logs.slice();
+            const list = [];
+            for (const c of checks) {
+              let ok = false;
+              try {
+                let r = new Function('doc', 'win', '$', '$$', 'style', 'code', 'wait', 'until', 'server', c.test)(doc, win, q, qa, style, code, wait, until, null);
+                if (r && typeof r.then === 'function') r = await Promise.race([r, wait(4000).then(() => false)]);
+                ok = !!r;
+              } catch (e) { ok = false; }
+              list.push({ label: c.label, ok });
+            }
+            finish({ passed: list.filter((x) => x.ok).length, total: list.length, list, logs: printed });
+          } catch (e) { finish({ passed: 0, total: checks.length, list: null, logs: logs.slice() }); }
+        }, 300));
+        setTimeout(() => finish(null), 6000 + checks.length * 4000);
+        f.srcdoc = WD1.buildPreviewDoc(code, pgId, previewOpts(p));
+        document.body.appendChild(f);
+      });
+    }
+
+    const slug = (s) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'student';
+
+    const LANG = { html: 'HTML', css: 'CSS', js: 'JavaScript' };
+    const LOG_TYPES = ['log', 'info', 'warn', 'error'];
+
+    // Records saved in this browser could have been edited, so a count only counts
+    // when it is a finite, non-negative integer; anything else becomes 0.
+    const count = (v) => (typeof v === 'number' && Number.isInteger(v) && v >= 0 ? v : 0);
+    // A quiz record is "finished" only when its numbers make sense together.
+    const cleanQuiz = (r) => {
+      if (!r || typeof r !== 'object') return null;
+      const total = count(r.total);
+      if (total < 1) return null;
+      return { correct: Math.min(count(r.correct), total), total, best: Math.min(count(r.best), total), attempts: count(r.attempts) };
+    };
+    const num = (v) => esc(String(count(v)));
+
+    function reportHTML(name, when, challenges, quizzes, answers) {
+      const css = [
+        'body{margin:0;padding:24px 16px;background:#fff;color:#1d2330;font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}',
+        'header,main{max-width:980px;margin:0 auto}',
+        'h1{font-size:1.9rem;line-height:1.2;margin:0 0 .3em}',
+        'h2{font-size:1.4rem;margin:2.2em 0 .7em;padding-bottom:.3em;border-bottom:2px solid #d5dae3}',
+        'h3{font-size:1.15rem;margin:0 0 .3em}',
+        'h4{font-size:.95rem;margin:1.2em 0 .4em;color:#4a5262}',
+        '.meta{margin:0;color:#4a5262}',
+        '.card{border:1px solid #d5dae3;border-radius:10px;padding:16px 18px;margin:0 0 22px}',
+        '.st{font-weight:700;margin:0 0 8px}.st.ok{color:#1b7a3a}.st.no{color:#b3261e}',
+        'ul.checks{list-style:none;padding:0;margin:0}ul.checks li{padding:3px 0}',
+        '.mk{display:inline-block;min-width:6.5em;font-weight:700}.ok .mk{color:#1b7a3a}.no .mk{color:#b3261e}',
+        'pre{margin:0;background:#f4f6f9;border:1px solid #d5dae3;border-radius:8px;padding:12px;overflow:auto;max-height:440px;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre}',
+        'pre.console{background:#161a23;color:#e8ecf3;border-color:#161a23;max-height:300px}',
+        '.console .error{color:#ff9b93}.console .warn{color:#f2c46d}.console .info{color:#9ec5ff}',
+        'code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em}',
+        'iframe{display:block;width:100%;height:420px;border:1px solid #c3c9d4;border-radius:8px;background:#fff}',
+        'table{border-collapse:collapse;width:100%}caption{text-align:left;font-weight:700;padding-bottom:6px}',
+        'th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #d5dae3;vertical-align:top}thead th{background:#eef1f6}',
+        '.q{font-weight:700;margin:0 0 6px}',
+        '.answer{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f6f9;border-left:4px solid #237089;padding:10px 14px;border-radius:6px;margin:0}',
+        '.empty{color:#8a5a00;font-style:italic}',
+        '.note{color:#4a5262;font-size:.9rem;margin:.4em 0 0}',
+        '.sum li{margin:2px 0}'
+      ].join('\n');
+      const done = challenges.filter((c) => c.res.total && c.res.passed === c.res.total).length;
+      const quizDone = quizzes.filter((q) => q.rec).length;
+      const ansDone = answers.filter((a) => a.text.trim().length >= MIN_WRITTEN).length;
+      const mark = { log: '', error: '✖ ', warn: '⚠ ', info: '› ' };
+      const chHTML = challenges.map((c, i) => {
+        const all = c.res.total && c.res.passed === c.res.total;
+        const list = c.res.list
+          ? '<ul class="checks">' + c.res.list.map((x) => '<li class="' + (x.ok ? 'ok' : 'no') + '"><span class="mk">' + (x.ok ? '&#10003; Pass' : '&#10007; Not yet') + '</span> ' + WD1.fmt(x.label) + '</li>').join('') + '</ul>'
+          : '<p class="empty">These checks could not be re-run while the file was made; the count above is the latest result saved in the browser.</p>';
+        const codeHTML = c.langs.map((l) => '<h4>' + esc((c.labels && c.labels[l]) || LANG[l] || l) + '</h4>\n<pre><code>' + esc(c.code[l] || '') + '</code></pre>\n').join('');
+        const logs = c.res.logs;
+        const consoleHTML = c.langs.indexOf('js') >= 0 || (logs && logs.length)
+          ? '<h4>Console output</h4>\n' + (logs && logs.length
+            ? '<pre class="console">' + logs.map((x) => { const t = LOG_TYPES.indexOf(x.type) >= 0 ? x.type : 'log'; return '<span class="' + t + '">' + esc(mark[t] + String(x.text)) + '</span>'; }).join('\n') + '</pre>\n'
+            : '<p class="empty">' + (logs ? 'Nothing was printed to the console while the page loaded.' : 'The console output could not be recorded.') + '</p>\n')
+          : '';
+        const previewHTML = c.preview
+          ? '<h4>Preview</h4>\n<iframe title="Preview of ' + esc(c.title) + '" sandbox="allow-scripts" srcdoc="' + esc(WD1.buildPreviewDoc(c.code, 'hw8-report', c.opts)) + '"></iframe>\n<p class="note">The preview runs the code above, so it can be clicked and typed into.</p>\n'
+          : '';
+        return '<section class="card" id="challenge-' + (i + 1) + '">\n<h3>' + esc(c.title) + '</h3>\n' +
+          '<p class="st ' + (all ? 'ok' : 'no') + '">' + num(c.res.passed) + ' of ' + num(c.res.total) + ' checks pass</p>\n' + list + '\n' +
+          codeHTML + consoleHTML + previewHTML + '</section>';
+      }).join('\n');
+      const qRows = quizzes.map((q) => '<tr><th scope="row">' + esc(q.title) + '</th>' + (q.rec
+        ? '<td>' + num(q.rec.correct) + ' of ' + num(q.rec.total) + '</td><td>' + num(q.rec.best) + ' of ' + num(q.rec.total) + '</td><td>' + num(q.rec.attempts) + '</td>'
+        : '<td colspan="3" class="empty">Not finished</td>') + '</tr>').join('\n');
+      const aHTML = answers.map((a) => '<div class="card">\n<p class="q">' + esc(a.question) + '</p>\n' +
+        (a.text.trim() ? '<p class="answer">' + esc(a.text.trim()) + '</p>' : '<p class="empty">No answer written.</p>') + '\n</div>').join('\n');
+      return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+        '<title>Homework 8 · ' + esc(name) + '</title>\n<style>\n' + css + '\n</style>\n</head>\n<body>\n' +
+        '<header>\n<h1>Homework 8: Modules 10, 11 and 13</h1>\n<p class="meta">Name: <strong>' + esc(name) + '</strong></p>\n<p class="meta">Downloaded: ' + esc(when) + '</p>\n</header>\n<main>\n' +
+        '<h2>Summary</h2>\n<ul class="sum">\n<li>Challenges complete: ' + num(done) + ' of ' + num(challenges.length) + '</li>\n<li>Quizzes finished: ' + num(quizDone) + ' of ' + num(quizzes.length) + '</li>\n<li>Written answers: ' + num(ansDone) + ' of ' + num(answers.length) + '</li>\n</ul>\n' +
+        '<h2>Challenges</h2>\n' + chHTML + '\n' +
+        '<h2>Quizzes</h2>\n<table>\n<caption>Quiz results recorded in the browser</caption>\n<thead><tr><th scope="col">Quiz</th><th scope="col">Latest</th><th scope="col">Best</th><th scope="col">Attempts</th></tr></thead>\n<tbody>\n' + qRows + '\n</tbody>\n</table>\n' +
+        '<h2>Written answers</h2>\n' + aHTML + '\n</main>\n</body>\n</html>\n';
+    }
+
+    dlBtn.addEventListener('click', async () => {
+      const name = nameInput.value.trim();
+      if (!name) {
+        statusEl.className = 'hw8-status feedback warn';
+        statusEl.textContent = 'Type your name in the box at the top of the page first, so the file says whose work it is.';
+        nameInput.scrollIntoView({ block: 'center' });
+        nameInput.focus();
+        return;
+      }
+      dlBtn.disabled = true;
+      statusEl.className = 'hw8-status feedback info';
+      statusEl.textContent = 'Re-running every check and building your file...';
+      try {
+        const recs = checkRecords();
+        const challenges = [];
+        for (const p of window.HW8.pgs) {
+          const el = document.querySelector('.playground[data-id="' + p.id + '"]');
+          const code = el && el.wd1 ? el.wd1.get() : Object.assign({}, store.get('pg', p.id) || {});
+          let res = await runChecks(code, p);
+          if (!res) { const r = recs[p.id]; res = { passed: Math.min(count(r && r.passed), p.checks.length), total: p.checks.length, list: null, logs: null }; }
+          challenges.push({ title: p.title, code, langs: p.langs, labels: p.labels, preview: p.preview, opts: previewOpts(p), res });
+        }
+        const qr = quizRecords();
+        const quizzes = quizEls.map((q) => ({ title: q.dataset.title || q.dataset.id, rec: cleanQuiz(qr[q.dataset.id]) }));
+        const answers = written.map((ta) => {
+          const lab = document.querySelector('label[for="' + ta.id + '"]');
+          return { question: lab ? lab.textContent.replace(/\s+/g, ' ').trim() : ta.id, text: ta.value };
+        });
+        const when = new Date().toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' });
+        const file = 'hw8-' + slug(name) + '.html';
+        const blob = new Blob([reportHTML(name, when, challenges, quizzes, answers)], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = file;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+        const done = challenges.filter((c) => c.res.total && c.res.passed === c.res.total).length;
+        statusEl.className = 'hw8-status feedback good';
+        statusEl.textContent = 'Downloaded ' + file + ' with ' + done + ' of ' + challenges.length + ' challenges complete. Open it to check it, then follow the steps in Submitting.';
+      } catch (err) {
+        statusEl.className = 'hw8-status feedback bad';
+        statusEl.textContent = 'Something went wrong while building the file. Reload the page and try again; your work is still saved.';
+        console.error('[hw8] download', err);
+      } finally {
+        dlBtn.disabled = false;
+      }
+    });
+  });
+</script>
+</body>
+</html>
